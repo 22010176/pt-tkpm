@@ -1,20 +1,13 @@
-import SideNavbar from '../../components/layouts/sideBar'
-
-import styles from './style.module.css'
+import PageTemplateB from '../../components/layouts/pageB'
 
 function TrangChu() {
+
   return (
-    <main className={["container-fluid vw-100 vh-100 p-0 bg-primary-subtle"].join(" ")}>
-      <div className='row h-100 w-100'>
-        <div className='col-auto' style={{ width: "25%" }}>
-          <SideNavbar />
-        </div>
-
-        <div className='col-auto'>
-
-        </div>
+    <PageTemplateB>
+      <div className='w-100 h-100 bg-dark'>
+        <h1 className='text-light'>Trang chu</h1>
       </div>
-    </main>
+    </PageTemplateB>
   )
 }
 

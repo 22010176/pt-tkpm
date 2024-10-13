@@ -1,7 +1,5 @@
-
 import Accordion from 'react-bootstrap/Accordion'
 import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
-import Card from 'react-bootstrap/Card'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faWarehouse, faAngleRight, faRightFromBracket, faHandshakeSimple } from '@fortawesome/free-solid-svg-icons';
@@ -31,6 +29,7 @@ function NavLinks({ icon, link, eventKey, title, links = [] }) {
 
   return (
     <Accordion.Item className='bg-light'>
+      {/* header */}
       <div className={[styles.nav_header, "collapsed px-4 py-2"].join(" ")} onClick={onClick}>
         <FontAwesomeIcon className={styles.nav_icon} icon={icon} />
         {links.length
@@ -40,6 +39,8 @@ function NavLinks({ icon, link, eventKey, title, links = [] }) {
           </>
           : <a href={link} className="fs-5 text-decoration-none fw-semibold">{title}</a>}
       </div>
+
+      {/* hidden nav-links */}
       {!!links.length && <Accordion.Collapse eventKey={eventKey}>
         <ul className='mx-3'>
           {links?.map(({ href, content }, j) => (
@@ -53,7 +54,7 @@ function NavLinks({ icon, link, eventKey, title, links = [] }) {
   );
 }
 
-export default function SideNavbar({ navItem = navLinks, bottom = [], account }) {
+export default function SideNavbar({ navItem = navLinks, account }) {
   return (
     <div className={["bg-light p-0 h-100"].join(" ")}>
       {/* Tài khoản */}
@@ -69,7 +70,8 @@ export default function SideNavbar({ navItem = navLinks, bottom = [], account })
 
       {/* Trang chủ */}
       <div className={[styles.nav_container, "d-flex flex-column justify-content-between"].join(" ")}>
-        <Accordion defaultActiveKey="0" flush>
+        {/* nav link */}
+        <Accordion flush>
           {navItem.map((i, j) => <NavLinks {...i} key={j} />)}
         </Accordion>
 
