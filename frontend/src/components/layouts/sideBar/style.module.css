@@ -1,0 +1,28 @@
+.account_sec {
+  height: 10%;
+}
+
+.account_sec .avatar {
+  width: 65px;
+  height: 65px;
+}
+
+.nav_container {
+  height: 90%
+}
+
+.nav_header {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+}
+
+.nav_header .nav_icon {
+  height: auto;
+  width: 30px;
+}
+
+.nav_header .arrow_icon {
+  transition: all .5s;
+}
