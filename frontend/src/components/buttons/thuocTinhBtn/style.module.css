@@ -1,6 +1,7 @@
 .btn {
-  padding: 80px 50px;
-  opacity: .85;
+  padding: 5% 3%;
+  margin: 0px 4%;
+  opacity: .80;
   transition: all .5s;
 }
 

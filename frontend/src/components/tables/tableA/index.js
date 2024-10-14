@@ -5,9 +5,10 @@ import styles from './style.module.css'
 const TableA = function ({ index, onClick, data = [], headers = [] }) {
   function rowOnClick(e) {
     e.stopPropagation()
-    const elem = e.target.parentElement
     TableA.clearSelect(e, onClick)
-    elem.classList.add("table-active")
+
+    const elem = e.target.parentElement
+    setTimeout(() => elem.classList.add("table-active"), 0)
 
     if (typeof onClick != 'function') return
     onClick(Object.fromEntries([...elem.querySelectorAll("td")].map(i => [i.getAttribute("data-key"), i.getAttribute("data-value")])))

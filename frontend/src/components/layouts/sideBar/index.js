@@ -1,10 +1,13 @@
+import { useState, useContext } from 'react';
 import Accordion from 'react-bootstrap/Accordion'
 import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
+import { AccordionContext } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faWarehouse, faAngleRight, faRightFromBracket, faHandshakeSimple } from '@fortawesome/free-solid-svg-icons';
+
 import styles from './style.module.css'
-import { useState } from 'react';
+
 
 const navLinks = [
   { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, links: [] },
@@ -24,18 +27,19 @@ const navLinks = [
 
 
 function NavLinks({ icon, link, eventKey, title, links = [] }) {
-  const [rotation, setRotation] = useState(0);
-  const onClick = useAccordionButton(eventKey, setRotation.bind({}, rotation === 90 ? 0 : 90))
+  const { activeEventKey } = useContext(AccordionContext);
+  const onClick = useAccordionButton(eventKey, null)
 
   return (
     <Accordion.Item className='bg-light'>
       {/* header */}
-      <div className={[styles.nav_header, "collapsed px-4 py-2"].join(" ")} onClick={onClick}>
+      <div className={[styles.nav_header, "px-4 py-2"].join(" ")} onClick={onClick}>
         <FontAwesomeIcon className={styles.nav_icon} icon={icon} />
+
         {links.length
           ? <>
             <p className="fs-5 fw-semibold my-0">{title}</p>
-            <FontAwesomeIcon className={styles.arrow_icon} icon={faAngleRight} rotation={rotation} />
+            <FontAwesomeIcon className={styles.arrow_icon} icon={faAngleRight} rotation={activeEventKey !== eventKey ? 0 : 90} />
           </>
           : <a href={link} className="fs-5 text-decoration-none fw-semibold">{title}</a>}
       </div>
