@@ -16,7 +16,6 @@ function App() {
         <Route path='/nha-cung-cap' element={<NhaCungCap />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 

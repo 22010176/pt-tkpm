@@ -2,14 +2,14 @@ import { forwardRef, useEffect } from 'react';
 
 
 import LayoutA from '../layoutA';
-import TableB from '../../tables/tableA';
+import TableA from '../../tables/tableA';
 import SideNavbar from '../sideBar';
 
 import styles from './style.module.css'
 
 const PageTemplateA = function ({ children, navLinks, account }) {
   useEffect(function () {
-    document.body.addEventListener("click", TableB.clearSelect)
+    document.body.addEventListener("click", TableA.clearSelect)
   }, [])
   return (
     <LayoutA className="bg-primary-subtle">
