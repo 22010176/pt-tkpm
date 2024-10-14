@@ -1,0 +1,9 @@
+.btn {
+  padding: 80px 50px;
+  opacity: .85;
+  transition: all .5s;
+}
+
+.btn:hover {
+  opacity: 1;
+}

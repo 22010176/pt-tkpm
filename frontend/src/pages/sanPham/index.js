@@ -10,6 +10,23 @@ import styles from './style.module.css'
 import ErrorModal from '../../components/modals/errorModal'
 import HeaderModalA from '../../components/modals/headerA'
 
+const spHeader = [
+  { key: "Mã SP", value: "ma" },
+  { key: "Tên sản phẩm", value: "tenSP" },
+  { key: "Số lượng tồn kho", value: "soLuong" },
+  { key: "Thương hiệu", value: "thuongHieu" },
+  { key: "Hệ điều hành", value: "heDieuHanh" },
+  { key: "Phiên bản HĐH", value: "phienBanHDH" },
+  { key: "Xuất xứ", value: "xuatXu" },
+]
+
+const chHeader = [
+  { key: "RAM", value: "ram" },
+  { key: "ROM", value: "rom" },
+  { key: "Màu sắc", value: "mauSac" },
+  { key: "Giá nhập", value: "giaNhap" },
+  { key: "Giá xuất", value: "giaXuat" }
+]
 
 function SanPhamForm({ data = {}, setData }) {
   const [file, setFile] = useState();
@@ -123,23 +140,7 @@ function SanPhamForm({ data = {}, setData }) {
   )
 }
 
-const spHeader = [
-  { key: "Mã SP", value: "ma" },
-  { key: "Tên sản phẩm", value: "tenSP" },
-  { key: "Số lượng tồn kho", value: "soLuong" },
-  { key: "Thương hiệu", value: "thuongHieu" },
-  { key: "Hệ điều hành", value: "heDieuHanh" },
-  { key: "Phiên bản HĐH", value: "phienBanHDH" },
-  { key: "Xuất xứ", value: "xuatXu" },
-]
 
-const chHeader = [
-  { key: "RAM", value: "ram" },
-  { key: "ROM", value: "rom" },
-  { key: "Màu sắc", value: "mauSac" },
-  { key: "Giá nhập", value: "giaNhap" },
-  { key: "Giá xuất", value: "giaXuat" }
-]
 
 function SanPham() {
   const spData = new Array(1000).fill().map(i => ({
