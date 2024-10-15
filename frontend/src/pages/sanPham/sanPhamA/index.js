@@ -1,14 +1,14 @@
 import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
-import { Modal, Button, Form, InputGroup } from 'react-bootstrap'
+import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap'
 import { useState } from 'react'
 
-import PageTemplateA from '../../components/layouts/pageA'
-import TableA from '../../components/tables/tableA'
-import ToolBtn from '../../components/buttons/toolBtn'
-import IconBtn from '../../components/buttons/iconBtn'
+import PageTemplateA from '../../../components/layouts/pageA'
+import TableA from '../../../components/tables/tableA'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import IconBtn from '../../../components/buttons/iconBtn'
 import styles from './style.module.css'
-import ErrorModal from '../../components/modals/errorModal'
-import HeaderModalA from '../../components/modals/headerA'
+import ErrorModal from '../../../components/modals/errorModal'
+import HeaderModalA from '../../../components/modals/headerA'
 
 const defaultSanPham = { ma: undefined, tenSP: "", soLuong: "", thuongHieu: "", heDieuHanh: "", phienBanHDH: "", xuatXu: "" }
 const spHeader = [
@@ -142,7 +142,7 @@ function SanPhamForm({ data = {}, setData }) {
   )
 }
 
-function SanPham() {
+function SanPhamA() {
   const spData = new Array(1000).fill().map(i => ({ ma: "3", tenSP: "44", soLuong: 3, thuongHieu: "d", heDieuHanh: "d", phienBanHDH: "d", xuatXu: "d" }))
   const chData = new Array(1000).fill().map((i, j) => ({ stt: j + 1, ram: 44, rom: 3, mauSac: "d", giaNhap: "d", giaXuat: "d" }))
 
@@ -177,9 +177,9 @@ function SanPham() {
             <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDelete} />
           </div>
 
-          <div className={["d-flex align-items-center h-100 gap-3 px-1"].join(" ")}>
-            < div >
-              <input className="form-control" type="text" placeholder="Tìm kiếm" aria-label="default input example" />
+          <Form className={["d-flex align-items-center h-100 gap-3 px-1"].join(" ")}>
+            <div>
+              <FormControl type='text' placeholder='Tìm kiếm' />
             </div>
             <div>
               <IconBtn icon={faMagnifyingGlass} title={"Tìm kiếm"} className="btn-primary" />
@@ -187,7 +187,7 @@ function SanPham() {
             <div>
               <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-success " />
             </div>
-          </div>
+          </Form>
         </PageTemplateA.Toolbar >
 
         <PageTemplateA.Table>
@@ -308,4 +308,4 @@ function SanPham() {
   )
 }
 
-export default SanPham
+export default SanPhamA

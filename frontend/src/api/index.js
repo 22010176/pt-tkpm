@@ -1,23 +1,24 @@
 import { v4 } from "uuid"
 
-function genThuocTinh() {
-
+export async function wait(s) {
+  return new Promise(a => setTimeout(a, s * 1000))
 }
 
 export const thuocTinhAPI = {
-  async GET(table) {
-    switch (table) {
+  async GET(api) {
+    await wait(.5)
+    switch (api) {
       case "ram":
       case "rom":
         return {
           body: [
-            { ma: v4(), ten: "4GB" },
-            { ma: v4(), ten: "6GB" },
-            { ma: v4(), ten: "8GB" },
-            { ma: v4(), ten: "12GB" },
-            { ma: v4(), ten: "16GB" },
-            { ma: v4(), ten: "24GB" },
-            { ma: v4(), ten: "32GB" }
+            { ma: v4(), ten: 4 },
+            { ma: v4(), ten: 6 },
+            { ma: v4(), ten: 8 },
+            { ma: v4(), ten: 12 },
+            { ma: v4(), ten: 16 },
+            { ma: v4(), ten: 24 },
+            { ma: v4(), ten: 32 }
           ],
           message: "Success"
         }
@@ -37,11 +38,21 @@ export const thuocTinhAPI = {
       default:
         return {
           body: [],
-          message: `Fail, cant not find route ${table}`
+          message: `Fail, cant not find route ${api}`
         }
     }
   },
-  async PUT() {
+  async PUT(api, data) {
+    await wait(.5)
+    return {
+      body: [
+        { ma: v4(), ten: data.ten }
+      ],
+      message: "Success"
+    }
+  },
+  async POST(api, data) {
+    await wait(.5)
     return {
       body: [
 
@@ -49,15 +60,8 @@ export const thuocTinhAPI = {
       message: "Success"
     }
   },
-  async POST() {
-    return {
-      body: [
-
-      ],
-      message: "Success"
-    }
-  },
-  async DELETE() {
+  async DELETE(api, data) {
+    await wait(.5)
     return {
       body: [
 

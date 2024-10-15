@@ -5,7 +5,7 @@ import styles from './style.module.css'
 const TableA = function ({ index, onClick, data = [], headers = [] }) {
   function rowOnClick(e) {
     e.stopPropagation()
-    TableA.clearSelect(e, onClick)
+    TableA.clearSelect(e)
 
     const elem = e.target.parentElement
     setTimeout(() => elem.classList.add("table-active"), 0)
@@ -15,7 +15,6 @@ const TableA = function ({ index, onClick, data = [], headers = [] }) {
   }
 
   return (
-    // <div className="container-fluid p-0 border border-dark" onClick={clearSelect} >
     <Table striped bordered hover>
       <thead className='table-primary'>
         <tr className='text-center'>
@@ -32,13 +31,12 @@ const TableA = function ({ index, onClick, data = [], headers = [] }) {
         ))}
       </tbody>
     </Table>
-    // </div>
   )
 }
 
-TableA.clearSelect = function (e, onClick) {
+TableA.clearSelect = function (e) {
   document.querySelectorAll(".table-active").forEach(element => element.classList.remove("table-active"));
-  if (typeof onClick == 'function') onClick(null)
+
 }
 
 export default TableA;
