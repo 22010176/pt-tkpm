@@ -115,7 +115,7 @@ export default function SideNavbar({ navItem = navLinks, account }) {
   }
 
   return (
-    <div className={["bg-light h-100"].join(" ")}>
+    <div className={["bg-light h-100 user-select-none"].join(" ")}>
       {/* Tài khoản */}
       <div className={[styles.account_sec, "d-flex gap-3 align-items-center border-bottom p-3 m-0"].join(" ")}>
         <div className={[styles.avatar, "align-self-center d-grid"].join(" ")}>

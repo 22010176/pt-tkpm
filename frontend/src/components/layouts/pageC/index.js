@@ -8,7 +8,7 @@ function PageTemplateC({ sidebarWidth = 20, toolbarHeight = 15, sidebar, tools, 
           {sidebar}
         </section>
 
-        <section className='bg-info-subtle h-100 d-flex flex-column p-3 gap-4' style={{ width: (100 - sidebarWidth) + "%" }}>
+        <section className='bg-info-subtle h-100 d-flex flex-column p-3 gap-3' style={{ width: (100 - sidebarWidth) + "%" }}>
           <div style={{ height: toolbarHeight + "%" }}>
             <div className='px-3 d-flex h-100 justify-content-between align-items-center bg-light border border-info-subtle border-5 rounded'>
               <div className='d-flex gap-2'>

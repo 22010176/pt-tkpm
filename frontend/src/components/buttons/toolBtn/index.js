@@ -9,8 +9,8 @@ const btnTitleStyle = "m-0 fw-bold"
 const ToolBtn = forwardRef(function ({ icon, color, title, ...prop }, ref) {
   return (
     <div ref={ref} className={[btnStyle].join(" ")} {...prop} >
-      <FontAwesomeIcon icon={icon} color={color} size='3x' />
-      <p className={[btnTitleStyle].join(" ")}> {title} </p>
+      <FontAwesomeIcon icon={icon} className='mx-auto' color={color} size='3x' />
+      <p className={[btnTitleStyle].join(" ")}> {title?.toUpperCase()} </p>
     </div>
   )
 })

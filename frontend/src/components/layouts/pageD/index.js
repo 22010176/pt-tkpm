@@ -8,7 +8,7 @@ function PageTemplateD({ sidebarWidth = 20, sidebar, children }) {
           {sidebar}
         </section>
 
-        <section className='bg-info-subtle h-100 d-flex flex-column gap-4' style={{ width: (100 - sidebarWidth) + "%" }}>
+        <section className='bg-info-subtle h-100' style={{ width: (100 - sidebarWidth) + "%" }}>
           {children}
         </section>
       </div>
