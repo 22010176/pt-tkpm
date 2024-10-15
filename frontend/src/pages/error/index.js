@@ -1,11 +1,13 @@
 import styles from './style.module.css'
-import PageTemplateC from '../../components/layouts/pageC'
+import PageTemplateD from '../../components/layouts/pageD'
 import SideNavbar from '../../components/layouts/sideBar'
 
 
 function ErrorPage() {
   return (
-    <PageTemplateC sidebar={<SideNavbar />} />
+    <PageTemplateD sidebar={<SideNavbar />}>
+      <h1 className='m-3'>Lỗi</h1>
+    </PageTemplateD>
   )
 }
 

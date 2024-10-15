@@ -1,22 +1,4 @@
-import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
-import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap'
-import { useState } from 'react'
-import { v4 } from 'uuid'
-
-import SideNavbar from '../sideBar'
-import ToolBtn from '../../buttons/toolBtn'
-import IconBtn from '../../buttons/iconBtn'
-import TableA from '../../tables/tableA'
-import styles from './style.module.css'
-
-const khachHangHeader = [
-  { key: "Mã NCC", value: "ma" },
-  { key: "Tên nhà cung cấp", value: "tenNCC" },
-  { key: "Địa chỉ", value: "diaChi" },
-  { key: "Email", value: "mail" },
-  { key: "Số điện thoại", value: "sdt" },
-]
-const khachHangData = new Array(100).fill().map(i => ({ ma: v4(), tenNCC: "t", diaChi: "tt", sdt: "" }))
+import style from './style.module.css'
 
 function PageTemplateC({ sidebarWidth = 20, toolbarHeight = 15, sidebar, tools, rightSec, dataTable }) {
   return (
