@@ -6,6 +6,8 @@ import PageTemplateB from '../../components/layouts/pageB'
 import ThuocTinhBtn from '../../components/buttons/thuocTinhBtn'
 import ThuocTinhModalA from '../../components/modals/thuocTinhModaA'
 import { useState } from 'react'
+import PageTemplateD from '../../components/layouts/pageD'
+import SideNavbar from '../../components/layouts/sideBar'
 
 function ThuocTinh() {
   const [modals, setModals] = useState("");
@@ -58,6 +60,14 @@ function ThuocTinh() {
       <ThuocTinhModalA show={modals === "rom"} apiRoute="rom" unit="GB" title="Rom" icon={faMemory} onClose={closeOverlay} />
       <ThuocTinhModalA show={modals === "mauSac"} apiRoute="mauSac" title="Màu sắc" icon={faBrush} onClose={closeOverlay} />
     </>
+  )
+}
+
+function ThuocTinhB() {
+  return (
+    <PageTemplateD sidebar={<SideNavbar />}>
+      <h1>Hello World</h1>
+    </PageTemplateD>
   )
 }
 

@@ -1,26 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import TrangChu from './trangChu';
-import ThuocTinh from './thuocTinh';
-import KhachHang from './khachHang';
-import NhaCungCap from './nhaCungCap';
+
+import { navLinks } from '../utilities/navLinks';
 import ErrorPage from './error';
-import SanPhamB from './sanPham';
-import NhapKho from './nhapKho';
-import XuatKho from './xuatKho';
-import ThemNhapKho from './themNhapKho';
+
 
 function App() {
+  const links = navLinks.map(({ link, Component, links }) => {
+    if (links.length === 0) return Component && { path: link, element: <Component /> }
+    return links.map(({ href, Component }) => Component && ({ path: href, element: <Component /> }))
+  }).flat().filter(i => !!i)
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<TrangChu />} />
-        <Route path='/san-pham' element={<SanPhamB />} />
-        <Route path='/thuoc-tinh' element={<ThuocTinh />} />
-        <Route path='/nhap-kho' element={<NhapKho />} />
-        <Route path='/nhap-kho/them' element={<ThemNhapKho />} />
-        <Route path='/xuat-kho' element={<XuatKho />} />
-        <Route path='/khach-hang' element={<KhachHang />} />
-        <Route path='/nha-cung-cap' element={<NhaCungCap />} />
+        {links.map((i, j) => <Route key={j} {...i} />)}
         <Route path='/*' element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

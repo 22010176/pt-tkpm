@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef, act } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import Accordion from 'react-bootstrap/Accordion'
 import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
 import { AccordionContext, Image } from 'react-bootstrap';
@@ -7,47 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faWarehouse, faAngleRight, faRightFromBracket, faHandshakeSimple, faShieldHalved, faClipboardUser, faLaptop, faUnlockKeyhole, faCircleCheck, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './style.module.css'
-
-const navLinks = [
-  { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, links: [] },
-  {
-    title: "Sản phẩm", eventKey: "sanPham", icon: faLaptop, links: [
-      { content: "Sản phẩm", href: "/san-pham", visible: true },
-      { content: "Thuộc tính", href: "/thuoc-tinh", visible: true }
-    ]
-  },
-  {
-    title: "Xuất nhập", eventKey: "xuatNhap", icon: faWarehouse, links: [
-      { content: "Nhập kho", href: "/nhap-kho", visible: true },
-      { content: "Nhập kho", href: "/nhap-kho/them", visible: false },
-      { content: "Xuất kho", href: "/xuat-kho", visible: true }
-    ]
-  },
-  {
-    title: "Đối tác", eventKey: "doiTac", icon: faHandshakeSimple, links: [
-      { content: "Khách hàng", href: "/khach-hang", visible: true },
-      { content: "Nhà cung cấp", href: "/nha-cung-cap", visible: true }
-    ]
-  },
-  {
-    title: "Dịch vụ", eventKey: "dichVu", icon: faShieldHalved, links: [
-      { content: "Đổi hàng", href: "/doi-hang", visible: true },
-      { content: "Trả hàng", href: "/tra-hang", visible: true },
-      { content: "Bảo hành", href: "/bao-hanh", visible: true }
-    ]
-  },
-  { title: "Nhân viên", eventKey: "nhanVien", link: "/nhan-vien", icon: faClipboardUser, links: [] },
-  { title: "Tài khoản", eventKey: "taiKhoan", link: "/tai-khoan", icon: faCircleUser, links: [] },
-  { title: "Thống kê", eventKey: "thongKe", link: "/thong-ke", icon: faCircleCheck, links: [] },
-  { title: "Phân quyền", eventKey: "phanQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, links: [] },
-]
+import { navLinks } from '../../../utilities/navLinks';
 
 function NavLinks({ className, icon, link, eventKey, title, links = [], onClick }) {
   const { activeEventKey } = useContext(AccordionContext);
   const [active, setActive] = useState(false)
 
   useEffect(function () {
-    setActive(links.some(i => i.href === window.location.pathname))
+    setActive(links.some(i => window.location.pathname.includes(i.href)))
   }, [])
 
 
@@ -73,7 +40,7 @@ function NavLinks({ className, icon, link, eventKey, title, links = [], onClick 
       {!!links.length && <Accordion.Collapse eventKey={eventKey} >
         <ul className='mx-4'>
           {links?.map(({ href, content, visible }, j) => visible && (
-            <li className={["py-1"].join(" ")} key={j} >
+            <li key={j} className={["py-1"].join(" ")}>
               <a className={[window.location.pathname.includes(href) && 'text-danger', 'text-decoration-none'].join(" ")} href={href}>{content}</a>
             </li>
           ))}
@@ -87,28 +54,8 @@ export default function SideNavbar({ navItem = navLinks, account }) {
   const [activeTab, setActiveTab] = useState("");
 
   useEffect(function () {
-    switch (window.location.pathname) {
-      case "/san-pham":
-      case "/thuoc-tinh":
-        setActiveTab("sanPham")
-        break;
-      case "/nhap-kho":
-      case "/xuat-kho":
-      case "/nhap-kho/them":
-        setActiveTab("xuatNhap")
-        break;
-      case "/khach-hang":
-      case "/nha-cung-cap":
-        setActiveTab("doiTac")
-        break;
-      case "/doi-hang":
-      case "/tra-hang":
-      case "/bao-hanh":
-        setActiveTab("dichVu")
-        break;
-      default:
-        setActiveTab("trangChu")
-    }
+    const activeItem = navLinks.find(i => i.links.some(j => window.location.pathname.includes(j.href)))
+    setActiveTab(activeItem?.eventKey)
   }, [])
 
   function onNavlinkClick(key) {

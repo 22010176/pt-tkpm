@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faPencil, faTrashCan, faRectangleList, faFileExcel, faFileExport } from '@fortawesome/free-solid-svg-icons'
 import { Modal, Button, Form } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
@@ -33,13 +33,14 @@ function SanPhamB() {
   return (
     <>
       <PageTemplateC
-        sidebarWidth={20}
-        toolbarHeight={15}
         sidebar={<SideNavbar />}
         tools={<>
           <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" />
           <ToolBtn color="#e69138" icon={faPencil} title="Sửa" />
           <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" />
+          <ToolBtn color="#2b78e4" icon={faRectangleList} title="DS IMEI" />
+          <ToolBtn color="#009e0f" icon={faFileExcel} title="Nhập Excel" />
+          <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
         </>}
         rightSec={<SearchForm />}
         dataTable={<TableA headers={spHeader} />}

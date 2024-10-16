@@ -1,5 +1,3 @@
-import { forwardRef, ElementType, HTMLAttributes, FC } from 'react';
-
 import styles from './style.module.css'
 
 function Div({ children, ...prop }) {

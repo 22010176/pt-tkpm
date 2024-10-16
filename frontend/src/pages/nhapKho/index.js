@@ -1,9 +1,10 @@
-import { Form, FormControl, InputGroup } from 'react-bootstrap'
+import { Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
 import PageTemplateD from '../../components/layouts/pageD'
 import ToolBtn from '../../components/buttons/toolBtn'
 import IconBtn from '../../components/buttons/iconBtn'
+import HeaderModalA from '../../components/modals/headerA'
 import PageTemplateC from '../../components/layouts/pageC'
 import SideNavbar from '../../components/layouts/sideBar'
 import SearchForm from '../../components/Forms/searchForm'
@@ -11,6 +12,8 @@ import SearchForm from '../../components/Forms/searchForm'
 import style from './style.module.css'
 import TableA from '../../components/tables/tableA'
 import ToolLink from '../../components/buttons/toolLink'
+import ContentA from '../../components/layouts/blockContent'
+import { useState } from 'react'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -20,9 +23,25 @@ const phieuNhapHd = [
   { key: "Tổng tiền", value: "tongTien" },
 ]
 
+const chiTietPhieuHd = [
+  { key: "Mã SP", value: "ma" },
+  { key: "Tên sản phẩm", value: "tenSP" },
+  { key: "RAM", value: "ram" },
+  { key: "rom", value: "rom" },
+  { key: "Màu sắc", value: "mauSac" },
+  { key: "Đơn giá", value: "gia" },
+]
+
+
 function NhapKho() {
   const height = 15;
   const width = 25;
+
+  const [modal, setModal] = useState("")
+
+  function openModal(key, e) {
+    setModal(key);
+  }
   return (
     <>
       <PageTemplateD sidebarWidth={20} sidebar={<SideNavbar />}>
@@ -30,7 +49,7 @@ function NhapKho() {
           <div className='rounded-3 d-flex justify-content-between px-3 align-items-center bg-light border border-info-subtle border-5' style={{ height: height + "%" }}>
             <div className='d-flex'>
               <ToolLink href="/nhap-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
-              <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" />
+              <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
               <ToolBtn color="#cf2a27" icon={faCircleXmark} title="Hủy" />
               <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
             </div>
@@ -100,8 +119,6 @@ function NhapKho() {
                   <InputGroup.Text>VNĐ</InputGroup.Text>
                 </InputGroup>
               </Form.Group>
-
-
             </Form>
 
             <div className='rounded-3 bg-light border border-info-subtle border-5 mh-100 overflow-auto' style={{ width: 100 - width + "%" }}>
@@ -110,6 +127,46 @@ function NhapKho() {
           </div>
         </div>
       </PageTemplateD>
+
+      {/* Chi tiết */}
+      <Modal show={modal === "info"} size='xl' scrollable backdrop="static" centered>
+        <HeaderModalA title={"THÔNG TIN PHIẾU NHẬP"} />
+
+        <ModalBody className='d-flex flex-column gap-3 p-4 overflow-hidden'>
+          <Form className='d-flex justify-content-between gap-3'>
+            <FormGroup>
+              <FormLabel className='fw-bold'>Mã phiếu</FormLabel>
+              <FormControl type='text' disabled />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel className='fw-bold'> Nhân viên nhập</FormLabel>
+              <FormControl type='text' disabled />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel className='fw-bold'>Nhà cung cấp</FormLabel>
+              <FormControl type='text' disabled />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel className='fw-bold'>Thời gian tạo</FormLabel>
+              <FormControl type='text' disabled />
+            </FormGroup>
+          </Form>
+
+          <ContentA style={{ maxHeight: "100%" }}>
+            <TableA headers={chiTietPhieuHd} />
+            <div style={{ height: "1000px" }}></div>
+          </ContentA>
+          <p className='text-end m-0 fw-bold mx-4'>Tổng số: <span>2</span> chiếc</p>
+        </ModalBody>
+
+        <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+          <Button variant='primary' style={{ width: "20%" }}>Xuất PDF</Button>
+          <Button variant='danger' style={{ width: "20%" }} onClick={openModal.bind({}, "")}>Hủy</Button>
+        </ModalFooter>
+      </Modal>
     </>
   )
 }

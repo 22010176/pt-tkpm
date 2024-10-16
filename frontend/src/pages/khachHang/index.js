@@ -37,23 +37,23 @@ function KhachHangForm() {
 
   return (
     <Form className='mx-5 px-5 my-4'>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Tên khách hàng</Form.Label>
         <Form.Control type="text" value={data.hoTen} onChange={onDataChange.bind({}, "hoTen")} />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Ngày sinh</Form.Label>
         <Form.Control type="date" value={data.ngaySinh} onChange={onDataChange.bind({}, "ngaySinh")} />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Địa chỉ</Form.Label>
         <Form.Control type="text" value={data.diaChi} onChange={onDataChange.bind({}, "diaChi")} />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Số điện thoại</Form.Label>
         <Form.Control type="email" value={data.sdt} onChange={onDataChange.bind({}, "sdt")} />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+      <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Email</Form.Label>
         <Form.Control type="email" value={data.mail} onChange={onDataChange.bind({}, "mail")} />
       </Form.Group>

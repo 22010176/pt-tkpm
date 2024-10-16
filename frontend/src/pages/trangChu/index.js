@@ -1,13 +1,12 @@
-import PageTemplateB from '../../components/layouts/pageB'
+import PageTemplateD from '../../components/layouts/pageD'
+import SideNavbar from '../../components/layouts/sideBar'
 
 function TrangChu() {
 
   return (
-    <PageTemplateB>
-      <div className='w-100 h-100 bg-dark'>
-        <h1 className='text-light'>Trang chu</h1>
-      </div>
-    </PageTemplateB>
+    <PageTemplateD sidebar={<SideNavbar />}>
+      <h1 className='m-3'>Trang chu</h1>
+    </PageTemplateD>
   )
 }
 

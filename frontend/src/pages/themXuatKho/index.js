@@ -1,11 +1,11 @@
-import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter } from 'react-bootstrap'
+import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
 
 import ContentA from '../../components/layouts/blockContent'
 import PageTemplateD from '../../components/layouts/pageD'
 import SideNavbar from '../../components/layouts/sideBar'
-import style from './style.module.css'
 import TableA from '../../components/tables/tableA'
-import HeaderModalA from '../../components/modals/headerA'
+
+import style from './style.module.css'
 
 
 
@@ -22,11 +22,11 @@ const khoHeader = [
   { key: "Tên sp", value: "tenSP" },
   { key: "Số lượng tồn kho", value: "tonKho" },
 ]
-function ThemNhapKho() {
+function ThemXuatKho() {
   const width = 75;
   const height = 55;
-
   const width2 = 60;
+
   return (
     <PageTemplateD sidebar={<SideNavbar />}>
       <div className='w-100 h-100 d-flex p-3 gap-2'>
@@ -69,12 +69,19 @@ function ThemNhapKho() {
                 </FormSelect>
               </FormGroup>
 
-              <FormGroup>
-                <FormLabel className='fw-bold'>Giá nhập</FormLabel>
-                <InputGroup>
-                  <FormControl type='number' />
-                  <InputGroup.Text>VNĐ</InputGroup.Text>
-                </InputGroup>
+              <FormGroup className='d-flex gap-3'>
+                <FormGroup>
+                  <FormLabel className='fw-bold'>Giá xuất</FormLabel>
+                  <InputGroup>
+                    <FormControl type='number' />
+                    <InputGroup.Text>VNĐ</InputGroup.Text>
+                  </InputGroup>
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel className='fw-bold'>Số lượng tồn</FormLabel>
+                  <FormControl type='number' disabled />
+                </FormGroup>
               </FormGroup>
 
               <FormGroup>
@@ -105,17 +112,17 @@ function ThemNhapKho() {
         <ContentA className="d-flex justify-content-between flex-column p-3" style={{ width: 100 - width + "%" }}>
           <Form className='d-flex flex-column gap-5'>
             <FormGroup>
-              <FormLabel className='fw-bold'>Mã phiếu nhập</FormLabel>
+              <FormLabel className='fw-bold'>Mã phiếu xuất</FormLabel>
               <FormControl disabled />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel className='fw-bold'>Nhân viên nhập</FormLabel>
+              <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
               <FormControl disabled />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel className='fw-bold'>Nhà cung cấp</FormLabel>
+              <FormLabel className='fw-bold'>Khách hàng</FormLabel>
               <FormSelect>
                 <option>test1</option>
                 <option>test2</option>
@@ -135,4 +142,4 @@ function ThemNhapKho() {
   )
 }
 
-export default ThemNhapKho
+export default ThemXuatKho
