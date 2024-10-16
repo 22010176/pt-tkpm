@@ -1,7 +1,6 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef, act } from 'react';
 import Accordion from 'react-bootstrap/Accordion'
 import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
-import { Card, ContextAwareToggle } from 'react-bootstrap';
 import { AccordionContext, Image } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,27 +12,28 @@ const navLinks = [
   { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, links: [] },
   {
     title: "Sản phẩm", eventKey: "sanPham", icon: faLaptop, links: [
-      { content: "Sản phẩm", href: "/san-pham" },
-      { content: "Thuộc tính", href: "/thuoc-tinh" }
+      { content: "Sản phẩm", href: "/san-pham", visible: true },
+      { content: "Thuộc tính", href: "/thuoc-tinh", visible: true }
     ]
   },
   {
     title: "Xuất nhập", eventKey: "xuatNhap", icon: faWarehouse, links: [
-      { content: "Nhập kho", href: "/nhap-kho" },
-      { content: "Xuất kho", href: "/xuat-kho" }
+      { content: "Nhập kho", href: "/nhap-kho", visible: true },
+      { content: "Nhập kho", href: "/nhap-kho/them", visible: false },
+      { content: "Xuất kho", href: "/xuat-kho", visible: true }
     ]
   },
   {
     title: "Đối tác", eventKey: "doiTac", icon: faHandshakeSimple, links: [
-      { content: "Khách hàng", href: "/khach-hang" },
-      { content: "Nhà cung cấp", href: "/nha-cung-cap" }
+      { content: "Khách hàng", href: "/khach-hang", visible: true },
+      { content: "Nhà cung cấp", href: "/nha-cung-cap", visible: true }
     ]
   },
   {
     title: "Dịch vụ", eventKey: "dichVu", icon: faShieldHalved, links: [
-      { content: "Đổi hàng", href: "/doi-hang" },
-      { content: "Trả hàng", href: "/tra-hang" },
-      { content: "Bảo hành", href: "/bao-hanh" }
+      { content: "Đổi hàng", href: "/doi-hang", visible: true },
+      { content: "Trả hàng", href: "/tra-hang", visible: true },
+      { content: "Bảo hành", href: "/bao-hanh", visible: true }
     ]
   },
   { title: "Nhân viên", eventKey: "nhanVien", link: "/nhan-vien", icon: faClipboardUser, links: [] },
@@ -59,12 +59,12 @@ function NavLinks({ className, icon, link, eventKey, title, links = [], onClick 
     <Accordion.Item className={[className, 'bg-light'].join(" ")} eventKey={eventKey}>
       {/* header */}
       <div className={[styles.nav_header, "px-4 py-2"].join(" ")} onClick={useAccordionButton(eventKey, onUserClick)} >
-        <FontAwesomeIcon size='2xl' width={35} icon={icon} />
+        <FontAwesomeIcon className={active ? "text-danger" : ""} size='2xl' width={35} icon={icon} />
 
         {links.length
           ? <>
             <p className={[active && "text-danger", "fs-5 fw-semibold my-0"].join(" ")}>{title}</p>
-            <FontAwesomeIcon className={styles.arrow_icon} icon={faAngleRight} rotation={activeEventKey !== eventKey ? 0 : 90} />
+            <FontAwesomeIcon className={[styles.arrow_icon].join()} icon={faAngleRight} rotation={activeEventKey !== eventKey ? 0 : 90} />
           </>
           : <a href={link} className="fs-5 text-decoration-none fw-semibold">{title}</a>}
       </div>
@@ -72,9 +72,9 @@ function NavLinks({ className, icon, link, eventKey, title, links = [], onClick 
       {/* hidden nav-links */}
       {!!links.length && <Accordion.Collapse eventKey={eventKey} >
         <ul className='mx-4'>
-          {links?.map(({ href, content }, j) => (
+          {links?.map(({ href, content, visible }, j) => visible && (
             <li className={["py-1"].join(" ")} key={j} >
-              <a className={[href === window.location.pathname && 'text-danger', 'text-decoration-none'].join(" ")} href={href}>{content}</a>
+              <a className={[window.location.pathname.includes(href) && 'text-danger', 'text-decoration-none'].join(" ")} href={href}>{content}</a>
             </li>
           ))}
         </ul>
@@ -94,6 +94,7 @@ export default function SideNavbar({ navItem = navLinks, account }) {
         break;
       case "/nhap-kho":
       case "/xuat-kho":
+      case "/nhap-kho/them":
         setActiveTab("xuatNhap")
         break;
       case "/khach-hang":

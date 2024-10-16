@@ -3,11 +3,11 @@ import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-
 import { Modal, Button, Form } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import PageTemplateC from '../../../components/layouts/pageC'
-import SearchForm from '../../../components/Forms/searchForm'
-import TableA from '../../../components/tables/tableA'
+import SideNavbar from '../../components/layouts/sideBar'
+import ToolBtn from '../../components/buttons/toolBtn'
+import PageTemplateC from '../../components/layouts/pageC'
+import SearchForm from '../../components/Forms/searchForm'
+import TableA from '../../components/tables/tableA'
 
 const defaultSanPham = { ma: undefined, tenSP: "", soLuong: "", thuongHieu: "", heDieuHanh: "", phienBanHDH: "", xuatXu: "" }
 const spHeader = [

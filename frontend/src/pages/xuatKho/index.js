@@ -24,7 +24,7 @@ function XuatKho() {
   const width = 25;
   return (
     <>
-      <PageTemplateD sidebarWidth={13} sidebar={<SideNavbar />}>
+      <PageTemplateD sidebarWidth={20} sidebar={<SideNavbar />}>
         <div className='d-flex gap-3 flex-column w-100 h-100 p-3'>
           <div className='rounded-3 d-flex justify-content-between px-3 align-items-center bg-light border border-info-subtle border-5' style={{ height: height + "%" }}>
             <div className='d-flex'>
@@ -55,7 +55,7 @@ function XuatKho() {
           </div>
 
           <div className='d-flex gap-3' style={{ height: 100 - height + "%" }}>
-            <Form className='d-flex flex-column justify-content-center gap-5 p-4 rounded-3 bg-light border border-info-subtle border-5' style={{ width: width + "%" }}>
+            <Form className='d-flex flex-column justify-content-around gap-5 p-4 rounded-3 bg-light border border-info-subtle border-5' style={{ width: width + "%" }}>
               <Form.Group>
                 <Form.Label className='fw-bold'>Khách hàng</Form.Label>
                 <Form.Select>

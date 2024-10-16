@@ -2,7 +2,8 @@ import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRig
 import { Modal, Button, Form, InputGroup, FormControl } from 'react-bootstrap'
 import { useState } from 'react'
 
-import PageTemplateA from '../../../components/layouts/pageA'
+// import PageTemplateA from '../../../components/layouts/pageA'
+import PageTemplateA from '../../../components/layouts/deprecated'
 import TableA from '../../../components/tables/tableA'
 import ToolBtn from '../../../components/buttons/toolBtn'
 import IconBtn from '../../../components/buttons/iconBtn'

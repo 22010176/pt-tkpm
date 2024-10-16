@@ -10,6 +10,7 @@ import SearchForm from '../../components/Forms/searchForm'
 
 import style from './style.module.css'
 import TableA from '../../components/tables/tableA'
+import ToolLink from '../../components/buttons/toolLink'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -24,11 +25,11 @@ function NhapKho() {
   const width = 25;
   return (
     <>
-      <PageTemplateD sidebarWidth={13} sidebar={<SideNavbar />}>
+      <PageTemplateD sidebarWidth={20} sidebar={<SideNavbar />}>
         <div className='d-flex gap-3 flex-column w-100 h-100 p-3'>
           <div className='rounded-3 d-flex justify-content-between px-3 align-items-center bg-light border border-info-subtle border-5' style={{ height: height + "%" }}>
             <div className='d-flex'>
-              <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" />
+              <ToolLink href="/nhap-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
               <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" />
               <ToolBtn color="#cf2a27" icon={faCircleXmark} title="Hủy" />
               <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
@@ -55,7 +56,7 @@ function NhapKho() {
           </div>
 
           <div className='d-flex gap-3' style={{ height: 100 - height + "%" }}>
-            <Form className='d-flex flex-column justify-content-center gap-5 p-4 rounded-3 bg-light border border-info-subtle border-5' style={{ width: width + "%" }}>
+            <Form className='d-flex flex-column justify-content-around gap-5 p-4 rounded-3 bg-light border border-info-subtle border-5' style={{ width: width + "%" }}>
               <Form.Group>
                 <Form.Label className='fw-bold'>Nhà cung cấp</Form.Label>
                 <Form.Select>

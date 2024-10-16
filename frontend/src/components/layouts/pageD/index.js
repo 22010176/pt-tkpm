@@ -1,6 +1,7 @@
 import style from './style.module.css'
 
-function PageTemplateD({ sidebarWidth = 20, sidebar, children }) {
+function PageTemplateD({ sidebar, children }) {
+  const sidebarWidth = 20
   return (
     <main className='overflow-hidden vh-100'>
       <div className='d-flex h-100'>
