@@ -1,16 +1,18 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { Modal, Button, Form, FormControl } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
 import SideNavbar from '../../components/layouts/sideBar'
 import ToolBtn from '../../components/buttons/toolBtn'
 import TableA from '../../components/tables/tableA'
 import PageTemplateC from '../../components/layouts/pageC'
+import IconBtn from '../../components/buttons/iconBtn'
 import SearchForm from '../../components/Forms/searchForm'
 import HeaderModalA from '../../components/modals/headerA'
 import ErrorModal from '../../components/modals/errorModal'
 import { wait } from '../../api'
+import FlexForm from '../../components/Forms/FlexForm'
 
 const NCCContext = createContext()
 const defaultNCC = { ma: undefined, tenNCC: "", diaChi: "", mail: "", sdt: "" }
@@ -61,18 +63,11 @@ function NhaCungCap() {
 
   useEffect(function () {
     updateTableData()
-    document.body.addEventListener("click", resetRowSelect)
-    return () => document.body.removeEventListener("click", resetRowSelect)
   }, [])
 
   function updateTableData() {
     setTableData([])
-    wait(.5).then(a => setTableData(new Array(100).fill().map(i => ({ ma: v4(), tenNCC: "t", diaChi: "tt", sdt: "" }))))
-  }
-
-  function resetRowSelect() {
-    TableA.clearSelect();
-    setRowClick(undefined)
+    wait(.5).then(() => setTableData(new Array(100).fill().map(i => ({ ma: v4(), tenNCC: "t", diaChi: "tt", sdt: "" }))))
   }
 
   function openModal(modal) {
@@ -120,7 +115,11 @@ function NhaCungCap() {
           <ToolBtn color="#e69138" icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
           <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDelete} />
         </>}
-        rightSec={<SearchForm />}
+        rightSec={<FlexForm>
+          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />
+          <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"} />
+          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} />
+        </FlexForm>}
         dataTable={<TableA headers={nhaCungCapHeader} data={tableData} onClick={onRowClick} />}
       />
 

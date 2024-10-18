@@ -3,10 +3,11 @@ import { Accordion, Button, Form, Modal, Table, InputGroup } from 'react-bootstr
 import { v4 } from 'uuid'
 
 import styles from './style.module.css'
-import HeaderModalA from '../headerA';
-import TableA from '../../tables/tableA';
-import { thuocTinhAPI } from '../../../api';
+import HeaderModalA from '../../components/modals/headerA';
+import TableA from '../../components/tables/tableA';
+import { thuocTinhAPI } from '../../api';
 import { useEffect, useRef, useState } from 'react';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 const headers = [
   { key: "Mã", value: "ma" },
@@ -14,6 +15,7 @@ const headers = [
 ]
 
 const defaultItem = { ma: "", ten: "" }
+
 const ThuocTinhModalA = function ({ title, icon, apiRoute, onClose, unit, ...prop }) {
   // store unchanged table's header
   const tableHeader = useRef(headers.map(({ key, value }) => ({ key: key + " " + title?.toLowerCase(), value })))
@@ -24,13 +26,13 @@ const ThuocTinhModalA = function ({ title, icon, apiRoute, onClose, unit, ...pro
   // store form data
   const [formData, setFormData] = useState({ ...defaultItem })
 
-  const [rowClick, setRowClick] = useState({ ...defaultItem })
   useEffect(function () {
     fetchData()
-    // document.body.addEventListener("click", function (e) {
-    //   TableA.clearSelect2(onRowClick)
-    // })
   }, [])
+
+  useEffect(function () {
+    console.log(formData)
+  }, [formData])
 
 
   function fetchData() {
@@ -46,10 +48,14 @@ const ThuocTinhModalA = function ({ title, icon, apiRoute, onClose, unit, ...pro
     setFormData(src => ({ ...src, [key]: e.target.value }))
   }
 
-  async function onRowClick(data) {
-    console.log(data)
-    // setRowClick(data)
-    // if (insertBtn.current) insertBtn.current.setAttribute("disabled", true)
+  function onRowClick(data) {
+    // if (!data) return setFormData({ ...defaultItem })
+    if (data) setFormData(data)
+  }
+
+  function onDeselectRow() {
+    onRowClick(undefined)
+    TableA.clearSelect()
   }
 
   async function onInsertItem() {
@@ -71,18 +77,22 @@ const ThuocTinhModalA = function ({ title, icon, apiRoute, onClose, unit, ...pro
       <HeaderModalA title={title?.toUpperCase()} />
 
       <Modal.Body className='overflow-y-hidden' style={{ height: "60vh" }}>
-        <div className='container-fluid h-100'>
-          <div className='align-items-center d-flex justify-content-center gap-4 mb-4'>
-            <FontAwesomeIcon icon={icon} size='7x' className='col-auto' />
+        <div className='h-100'>
+          <div className='align-items-center w-100 d-flex justify-content-center gap-4 mb-4'>
+            <FontAwesomeIcon icon={icon} size='6x' className='col-auto' />
             <Form className='w-50'>
-              <Form.Group>
-                <h5>{title}</h5>
-                {unit ? (
-                  <InputGroup className="mb-3">
+              <Form.Group className='d-flex gap-2 align-items-center'>
+                <h5 className='text-nowrap'>{title}</h5>
+                {unit
+                  ? <InputGroup>
                     <Form.Control type='number' value={formData.ten} onChange={onFormDataChange.bind({}, "ten")} />
                     <InputGroup.Text >{unit}</InputGroup.Text>
                   </InputGroup>
-                ) : <Form.Control type='text' className='w-100' value={formData.ten} onChange={onFormDataChange.bind({}, "ten")} />}
+                  : <Form.Control type='text' className='w-100' value={formData.ten} onChange={onFormDataChange.bind({}, "ten")} />}
+
+                <Button variant='danger' onClick={onDeselectRow}>
+                  <FontAwesomeIcon icon={faX} className='p-0 m-0' />
+                </Button>
               </Form.Group>
             </Form>
           </div>
@@ -97,11 +107,11 @@ const ThuocTinhModalA = function ({ title, icon, apiRoute, onClose, unit, ...pro
 
       <Modal.Footer className='d-flex justify-content-center gap-5 py-4'>
         <Button ref={insertBtn} style={{ width: "15%" }} variant='info' onClick={onInsertItem}>Thêm</Button>
-        <Button ref={updateBtn} style={{ width: "15%" }} variant='success'>Sửa</Button>
-        <Button ref={deleteBtn} style={{ width: "15%" }} variant='danger'>Xóa</Button>
+        <Button ref={updateBtn} style={{ width: "15%" }} variant='success' onClick={onUpdateItem}>Sửa</Button>
+        <Button ref={deleteBtn} style={{ width: "15%" }} variant='danger' onClick={onDeleteItem}>Xóa</Button>
         <Button style={{ width: "15%" }} variant='dark' onClick={onClose}>Đóng</Button>
       </Modal.Footer>
-    </Modal >
+    </Modal>
   )
 }
 

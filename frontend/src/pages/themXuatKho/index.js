@@ -7,8 +7,6 @@ import TableA from '../../components/tables/tableA'
 
 import style from './style.module.css'
 
-
-
 const spHeader = [
   { key: "Mã SP", value: "ma" },
   { key: "Tên sp", value: "tenSP" },
@@ -22,6 +20,7 @@ const khoHeader = [
   { key: "Tên sp", value: "tenSP" },
   { key: "Số lượng tồn kho", value: "tonKho" },
 ]
+
 function ThemXuatKho() {
   const width = 75;
   const height = 55;
@@ -42,7 +41,6 @@ function ThemXuatKho() {
 
               <ContentA className='h-100 overflow-auto bg-light'>
                 <TableA headers={khoHeader} index />
-                {/* <div style={{ height: "100000px" }}></div> */}
               </ContentA>
             </div>
 

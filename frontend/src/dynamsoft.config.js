@@ -9,8 +9,8 @@ CoreModule.engineResourcePaths.rootDirectory = "https://cdn.jsdelivr.net/npm/";
 /** LICENSE ALERT - README
  * To use the library, you need to first specify a license key using the API "initLicense()" as shown below.
  */
-
-LicenseManager.initLicense("DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSJ9", { executeNow: true });
+const license = "DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAzMzE3NDg5LVRYbFhaV0pRY205cSIsIm1haW5TZXJ2ZXJVUkwiOiJodHRwczovL21kbHMuZHluYW1zb2Z0b25saW5lLmNvbSIsIm9yZ2FuaXphdGlvbklEIjoiMTAzMzE3NDg5Iiwic3RhbmRieVNlcnZlclVSTCI6Imh0dHBzOi8vc2Rscy5keW5hbXNvZnRvbmxpbmUuY29tIiwiY2hlY2tDb2RlIjoxMzI1NzMwMTg4fQ=="
+LicenseManager.initLicense(license, { executeNow: true });
 
 /**
  * You can visit https://www.dynamsoft.com/customer/license/trialLicense?utm_source=samples&product=dbr&package=js to get your own trial license good for 30 days.

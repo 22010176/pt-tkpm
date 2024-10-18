@@ -13,7 +13,7 @@ function PageTemplateC({ tools, rightSec, dataTable }) {
           <SideNavbar />
         </section>
 
-        <section className='bg-info-subtle h-100 d-flex flex-column p-3 gap-3' style={{ width: (100 - sidebarWidth) + "%" }}>
+        <section className='bg-primary-subtle h-100 d-flex flex-column p-3 gap-3' style={{ width: (100 - sidebarWidth) + "%" }}>
           <ContentA className="d-flex justify-content-between px-2" style={{ height: toolbarHeight + "%" }}>
             <div className='d-flex gap-2'>
               {tools}

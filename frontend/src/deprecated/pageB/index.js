@@ -1,5 +1,5 @@
 import LayoutA from '../layoutA';
-import SideNavbar from '../sideBar';
+import SideNavbar from '../../components/layouts/sideBar';
 
 import styles from './style.module.css'
 

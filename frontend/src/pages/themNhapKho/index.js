@@ -1,18 +1,15 @@
+import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 
 import ContentA from '../../components/layouts/blockContent'
 import PageTemplateD from '../../components/layouts/pageD'
 import SideNavbar from '../../components/layouts/sideBar'
-import style from './style.module.css'
 import TableA from '../../components/tables/tableA'
-import HeaderModalA from '../../components/modals/headerA'
-import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import BarCodeScanner from '../../components/barcode'
-import HeaderModalB from '../../components/modals/headerB'
 
-
+import style from './style.module.css'
 
 const spHeader = [
   { key: "Mã SP", value: "ma" },
@@ -85,13 +82,13 @@ function ThemNhapKho() {
 
                   <FormGroup>
                     <FormLabel className='fw-bold'>Tên sp</FormLabel>
-                    <FormControl type='text' disabled size='sm' />
+                    <FormControl size='sm' type='text' disabled />
                   </FormGroup>
                 </FormGroup>
 
                 <FormGroup>
                   <FormLabel className='fw-bold'>Cấu hình</FormLabel>
-                  <FormSelect>
+                  <FormSelect size='sm'>
                     <option>test</option>
                     <option>tes2</option>
                     <option>tes4</option>
@@ -102,12 +99,12 @@ function ThemNhapKho() {
                 <FormGroup>
                   <FormLabel className='fw-bold'>Giá nhập</FormLabel>
                   <InputGroup>
-                    <FormControl type='number' />
+                    <FormControl size='sm' type='number' />
                     <InputGroup.Text>VNĐ</InputGroup.Text>
                   </InputGroup>
                 </FormGroup>
 
-                <FormGroup className='h-100 d-flex gap-2 flex-column overflow-hidden'>
+                <FormGroup className='d-flex gap-2 flex-column'>
                   <div className='d-flex gap-3 justify-content-between'>
                     <FormLabel className='fw-bold'>Mã IMEI</FormLabel>
                     <ButtonGroup>
@@ -115,26 +112,31 @@ function ThemNhapKho() {
                       <Button variant='success' size="sm">Excel</Button>
                     </ButtonGroup>
                   </div>
+                </FormGroup>
 
-                  <InputGroup>
+                <FormGroup className='h-100'>
+                  <InputGroup size='sm'>
+                    <FormControl type='text' id='imei-input' size='sm' />
                     <Button variant='primary' onClick={onInsertIMEICode}>
                       <FontAwesomeIcon icon={faPlus} />
                     </Button>
-                    <FormControl type='text' id='imei-input' />
                   </InputGroup>
-                  <ListGroup className='bg-light border border-dark border-3 h-100 overflow-y-auto' style={{ maxHeight: "100%" }}>
-                    {Object.keys(imei).map((i, j) => <ListGroupItem key={j}>{i}</ListGroupItem>)}
-                  </ListGroup>
+
+                  <div className='h-100 overflow-auto'>
+                    <ListGroup variant='flush' className='bg-light'>
+                      {Object.keys(imei).map((i, j) => <ListGroupItem key={j}>{i}</ListGroupItem>)}
+                    </ListGroup>
+                  </div>
                 </FormGroup>
               </ContentA>
             </div>
 
             <div className='d-flex flex-column gap-1' style={{ height: 100 - height + "%" }}>
               <div className='h-25 d-flex justify-content-between gap-5 w-100 px-1'>
-                <Button className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
-                <Button className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
-                <Button className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
-                <Button className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
+                <Button size='sm' className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
+                <Button size='sm' className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
+                <Button size='sm' className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
+                <Button size='sm' className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
               </div>
 
               <ContentA className='w-100 h-100' >
@@ -189,7 +191,6 @@ function ThemNhapKho() {
         <ModalBody className='vh-100 p-3' >
           <BarCodeScanner onChange={scanImei} />
         </ModalBody>
-
       </Modal>
     </>
   )

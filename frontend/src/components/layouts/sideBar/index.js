@@ -15,7 +15,7 @@ function NavLinks({ className, icon, link, eventKey, title, links = [], onClick 
 
   useEffect(function () {
     setActive(links.some(i => window.location.pathname.includes(i.href)))
-  }, [])
+  }, [links])
 
 
   function onUserClick() {

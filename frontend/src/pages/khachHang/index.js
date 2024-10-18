@@ -1,5 +1,6 @@
-import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
-import { Modal, ModalFooter, Form, Button } from 'react-bootstrap'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalFooter, Form, Button, FormControl } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
 import SideNavbar from '../../components/layouts/sideBar'
@@ -7,11 +8,12 @@ import ToolBtn from '../../components/buttons/toolBtn'
 import PageTemplateC from '../../components/layouts/pageC'
 import TableA from '../../components/tables/tableA'
 
-import styles from './style.module.css'
-import SearchForm from '../../components/Forms/searchForm'
+import IconBtn from '../../components/buttons/iconBtn'
 import HeaderModalA from '../../components/modals/headerA'
-import { createContext, useContext, useEffect, useState } from 'react'
 import ErrorModal from '../../components/modals/errorModal'
+import FlexForm from '../../components/Forms/FlexForm'
+
+import styles from './style.module.css'
 
 const KhachHangContext = createContext()
 
@@ -70,14 +72,10 @@ function KhachHang() {
 
   useEffect(function () {
     updateTableData()
-    document.body.addEventListener("click", resetRowSelect)
-    return () => document.body.removeEventListener("click", resetRowSelect)
+    // document.body.addEventListener("click", resetRowSelect)
+    // return () => document.body.removeEventListener("click", resetRowSelect)
   }, [])
 
-  function resetRowSelect() {
-    TableA.clearSelect();
-    setRowClick(undefined)
-  }
 
   function openModal(modal) {
     setModal(modal)
@@ -121,7 +119,11 @@ function KhachHang() {
           <ToolBtn color="#e69138" icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
           <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang} />
         </>}
-        rightSec={<SearchForm />}
+        rightSec={<FlexForm>
+          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />
+          <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"} />
+          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} />
+        </FlexForm>}
         dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={onRowClick} />}
       />
 

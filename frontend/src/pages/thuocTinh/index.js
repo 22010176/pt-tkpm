@@ -1,73 +1,86 @@
+import { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEmpire, faAndroid, } from '@fortawesome/free-brands-svg-icons'
-import { faMountainCity, faComputer, faMemory, faBrush } from '@fortawesome/free-solid-svg-icons'
+import { faMountainCity, faComputer, faMemory, faBrush, faX } from '@fortawesome/free-solid-svg-icons'
+import { Form, InputGroup, Button, Modal, FormControl } from 'react-bootstrap'
+
+// import PageTemplateB from '../../components/layouts/pageB'
+import PageTemplateD from '../../components/layouts/pageD'
+import ThuocTinhBtn from '../../components/buttons/thuocTinhBtn'
+import TableA from '../../components/tables/tableA'
+import HeaderModalA from '../../components/modals/headerA'
 
 import styles from './style.module.css'
-import PageTemplateB from '../../components/layouts/pageB'
-import ThuocTinhBtn from '../../components/buttons/thuocTinhBtn'
-import ThuocTinhModalA from '../../components/modals/thuocTinhModaA'
-import { useState } from 'react'
-import PageTemplateD from '../../components/layouts/pageD'
-import SideNavbar from '../../components/layouts/sideBar'
 
+const thuocTinh = {
+  thuongHieu: { title: "Thương hiệu", icon: faEmpire, id: "thuongHieu" },
+  xuatXu: { title: "Xuất xứ", icon: faMountainCity, id: "xuatXu" },
+  hdh: { title: "Hệ điều hành", icon: faAndroid, id: "hdh" },
+  ram: { title: "RAM", unit: "GB", icon: faComputer, id: "ram" },
+  rom: { title: "ROM", unit: "GB", icon: faMemory, id: "rom" },
+  mauSac: { title: "Màu sắc", icon: faBrush, id: "mauSac" },
+}
+const headers = [
+  { key: "Mã", value: "ma" },
+  { key: "Tên", value: "ten" }
+]
 function ThuocTinh() {
-  const [modals, setModals] = useState("");
-  const categoryClass = 'd-flex justify-content-center align-items-center'
+  const [modal, setModal] = useState()
 
   function openOverlay(modal, e) {
-    setModals(modal)
-  }
-
-  function closeOverlay() {
-    setModals("")
+    setModal(thuocTinh[modal])
   }
 
   return (
     <>
-      <PageTemplateB>
-        <div className='container-fluid w-100 h-100'>
-          <div className='row row-cols-2 h-100 mx-3'>
-            <div className={categoryClass} >
-              <ThuocTinhBtn className={[styles.thuongHieu, "col"].join(" ")} icon={faEmpire} title="Thương hiệu" onClick={openOverlay.bind({}, "thuongHieu")} />
+      <PageTemplateD>
+        <div className='d-flex flex-wrap flex-grow-1 h-100'>
+          {/* Thương hiệu */}
+          {Object.values(thuocTinh).map((i, j) => (
+            <div className='d-flex justify-content-center align-items-center w-50 p-5' key={j}>
+              <ThuocTinhBtn className={[styles[i.id], "w-100 h-100"].join(" ")} icon={i.icon} title={i.title} onClick={openOverlay.bind({}, i.id)} />
+            </div>
+          ))}
+        </div>
+      </PageTemplateD>
+
+      <Modal backdrop="static" show={modal} scrollable centered size='lg'>
+        <HeaderModalA title={modal?.title} />
+
+        <Modal.Body className='overflow-y-hidden' style={{ height: "60vh" }}>
+          <div className='h-100'>
+            <div className='align-items-center w-100 d-flex justify-content-center gap-4 mb-4'>
+              <FontAwesomeIcon size='6x' icon={modal?.icon} className='col-auto' />
+              <Form className='w-50'>
+                <Form.Group className='d-flex gap-2 align-items-center'>
+                  <h5 className='text-nowrap'>{modal?.title}</h5>
+                  <InputGroup>
+                    <FormControl type={modal?.unit ? "number" : "text"} />
+                    {!!modal?.unit && <InputGroup.Text>{modal.unit}</InputGroup.Text>}
+                  </InputGroup>
+                  <Button variant='danger' >
+                    <FontAwesomeIcon icon={faX} className='p-0 m-0' />
+                  </Button>
+                </Form.Group>
+              </Form>
             </div>
 
-            <div className={categoryClass}>
-              <ThuocTinhBtn className={[styles.xuatXu, "col"].join(" ")} icon={faMountainCity} title="Xuất xứ" onClick={openOverlay.bind({}, "thuongHieu")} />
-            </div>
-
-            <div className={categoryClass}>
-              <ThuocTinhBtn className={[styles.heDieuHanh, "col"].join(" ")} icon={faAndroid} title="Hệ điều hành" onClick={openOverlay.bind({}, "hdh")} />
-            </div>
-
-            <div className={categoryClass}>
-              <ThuocTinhBtn className={[styles.ram, "col"].join(" ")} icon={faComputer} title="Ram" onClick={openOverlay.bind({}, "ram")} />
-            </div>
-
-            <div className={categoryClass}>
-              <ThuocTinhBtn className={[styles.rom, "col"].join(" ")} icon={faMemory} title="Rom" onClick={openOverlay.bind({}, "rom")} />
-            </div>
-
-            <div className={categoryClass}>
-              <ThuocTinhBtn className={[styles.mauSac, "col"].join(" ")} icon={faBrush} title="Màu sắc" onClick={openOverlay.bind({}, "mauSac")} />
+            <div className='justify-content-center mx-3' style={{ height: "70%" }}>
+              <div className='overflow-y-auto h-100 border border-black' style={{}}>
+                <TableA headers={headers} />
+              </div>
             </div>
           </div>
-        </div>
-      </PageTemplateB>
+        </Modal.Body>
 
-      <ThuocTinhModalA show={modals === "thuongHieu"} apiRoute="thuongHieu" title="Thương hiệu" icon={faEmpire} onClose={closeOverlay} />
-      <ThuocTinhModalA show={modals === "xuatXu"} apiRoute="xuatXu" title="Xuất xứ" icon={faMountainCity} onClose={closeOverlay} />
-      <ThuocTinhModalA show={modals === "hdh"} apiRoute="heDieuHanh" title="Hệ điều hành" icon={faAndroid} onClose={closeOverlay} />
-      <ThuocTinhModalA show={modals === "ram"} apiRoute="ram" unit="GB" title="Ram" icon={faComputer} onClose={closeOverlay} />
-      <ThuocTinhModalA show={modals === "rom"} apiRoute="rom" unit="GB" title="Rom" icon={faMemory} onClose={closeOverlay} />
-      <ThuocTinhModalA show={modals === "mauSac"} apiRoute="mauSac" title="Màu sắc" icon={faBrush} onClose={closeOverlay} />
+        <Modal.Footer className='d-flex justify-content-center gap-5 py-4'>
+          <Button style={{ width: "15%" }} variant='info' >Thêm</Button>
+          <Button style={{ width: "15%" }} variant='success' >Sửa</Button>
+          <Button style={{ width: "15%" }} variant='danger' >Xóa</Button>
+          <Button style={{ width: "15%" }} variant='dark' onClick={openOverlay} >Đóng</Button>
+        </Modal.Footer>
+      </Modal>
     </>
-  )
-}
-
-function ThuocTinhB() {
-  return (
-    <PageTemplateD sidebar={<SideNavbar />}>
-      <h1>Hello World</h1>
-    </PageTemplateD>
   )
 }
 

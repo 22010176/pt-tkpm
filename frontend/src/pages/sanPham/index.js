@@ -70,16 +70,6 @@ function SanPhamB() {
 
   useEffect(function () {
     getSPData();
-
-    const clr = () => {
-      TableA.clearSelect();
-      setRowClick(undefined)
-    }
-    document.body.addEventListener("click", clr)
-
-    return () => {
-      document.body.removeEventListener("click", clr)
-    }
   }, [])
 
   async function getSPData() {
