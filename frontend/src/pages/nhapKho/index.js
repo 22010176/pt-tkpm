@@ -1,11 +1,11 @@
 import { Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
-import PageTemplateD from '../../components/layouts/pageD'
+import Page1 from '../../components/layouts/Page1'
 import ToolBtn from '../../components/buttons/toolBtn'
 import IconBtn from '../../components/buttons/iconBtn'
 import HeaderModalA from '../../components/modals/headerA'
-import PageTemplateC from '../../components/layouts/pageC'
+import Page2 from '../../components/layouts/Page2'
 import SideNavbar from '../../components/layouts/sideBar'
 import SearchForm from '../../components/Forms/searchForm'
 
@@ -14,7 +14,7 @@ import TableA from '../../components/tables/tableA'
 import ToolLink from '../../components/buttons/toolLink'
 import ContentA from '../../components/layouts/blockContent'
 import { useState } from 'react'
-import PageTemplateE from '../../components/layouts/PageE'
+import Page3 from '../../components/layouts/Page3'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -45,7 +45,7 @@ function NhapKho() {
   }
   return (
     <>
-      <PageTemplateE
+      <Page3
         tools={<>
           <ToolLink href="/nhap-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
           <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />

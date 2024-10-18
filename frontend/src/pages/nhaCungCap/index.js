@@ -6,7 +6,7 @@ import { v4 } from 'uuid'
 import SideNavbar from '../../components/layouts/sideBar'
 import ToolBtn from '../../components/buttons/toolBtn'
 import TableA from '../../components/tables/tableA'
-import PageTemplateC from '../../components/layouts/pageC'
+import Page2 from '../../components/layouts/Page2'
 import IconBtn from '../../components/buttons/iconBtn'
 import SearchForm from '../../components/Forms/searchForm'
 import HeaderModalA from '../../components/modals/headerA'
@@ -106,7 +106,7 @@ function NhaCungCap() {
 
   return (
     <>
-      <PageTemplateC
+      <Page2
         sidebarWidth={20}
         toolbarHeight={15}
         sidebar={<SideNavbar />}

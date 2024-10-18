@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap'
 
-import PageTemplateD from '../../components/layouts/pageD'
+import Page1 from '../../components/layouts/Page1'
 import SideNavbar from '../../components/layouts/sideBar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartLine, faLaptop, faWarehouse } from '@fortawesome/free-solid-svg-icons'
@@ -8,7 +8,7 @@ import { faChartLine, faLaptop, faWarehouse } from '@fortawesome/free-solid-svg-
 function TrangChu() {
 
   return (
-    <PageTemplateD sidebar={<SideNavbar />}>
+    <Page1 sidebar={<SideNavbar />}>
       <div className='w-100 bg-primary-subtle h-100 pt-2 d-flex flex-wrap justify-content-center gap-2 align-items-center gap-5'>
         <div className='d-flex flex-wrap gap-4'>
           <h1 className='fs-1 fw-bold w-100  text-primary-emphasis text-center'>
@@ -61,7 +61,7 @@ function TrangChu() {
           </div>
         </div>
       </div>
-    </PageTemplateD>
+    </Page1>
   )
 }
 

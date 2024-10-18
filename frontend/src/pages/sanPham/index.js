@@ -7,7 +7,7 @@ import { wait } from '../../api'
 
 import SideNavbar from '../../components/layouts/sideBar'
 import ToolBtn from '../../components/buttons/toolBtn'
-import PageTemplateC from '../../components/layouts/pageC'
+import Page2 from '../../components/layouts/Page2'
 import SearchForm from '../../components/Forms/searchForm'
 import TableA from '../../components/tables/tableA'
 import HeaderModalA from '../../components/modals/headerA'
@@ -123,7 +123,7 @@ function SanPhamB() {
 
   return (
     <>
-      <PageTemplateC
+      <Page2
         sidebar={<SideNavbar />}
         tools={<>
           <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />

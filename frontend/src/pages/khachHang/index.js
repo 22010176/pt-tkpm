@@ -5,7 +5,7 @@ import { v4 } from 'uuid'
 
 import SideNavbar from '../../components/layouts/sideBar'
 import ToolBtn from '../../components/buttons/toolBtn'
-import PageTemplateC from '../../components/layouts/pageC'
+import Page2 from '../../components/layouts/Page2'
 import TableA from '../../components/tables/tableA'
 
 import IconBtn from '../../components/buttons/iconBtn'
@@ -110,7 +110,7 @@ function KhachHang() {
 
   return (
     <>
-      <PageTemplateC
+      <Page2
         sidebarWidth={20}
         toolbarHeight={15}
         sidebar={<SideNavbar />}

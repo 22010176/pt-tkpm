@@ -3,7 +3,7 @@ import SideNavbar from '../sideBar'
 
 import style from './style.module.css'
 
-function PageTemplateC({ tools, rightSec, dataTable }) {
+function Page2({ tools, rightSec, dataTable }) {
   const sidebarWidth = 20, toolbarHeight = 15
 
   return (
@@ -31,4 +31,4 @@ function PageTemplateC({ tools, rightSec, dataTable }) {
   )
 }
 
-export default PageTemplateC
+export default Page2

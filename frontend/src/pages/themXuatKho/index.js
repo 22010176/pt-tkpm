@@ -1,7 +1,7 @@
 import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
 
 import ContentA from '../../components/layouts/blockContent'
-import PageTemplateD from '../../components/layouts/pageD'
+import Page1 from '../../components/layouts/Page1'
 import SideNavbar from '../../components/layouts/sideBar'
 import TableA from '../../components/tables/tableA'
 
@@ -27,7 +27,7 @@ function ThemXuatKho() {
   const width2 = 60;
 
   return (
-    <PageTemplateD sidebar={<SideNavbar />}>
+    <Page1 sidebar={<SideNavbar />}>
       <div className='w-100 h-100 d-flex p-3 gap-2'>
         <div className='h-100 d-flex flex-column' style={{ width: width + "%" }}>
           <div className='d-flex gap-2' style={{ height: height + "%" }}>
@@ -136,7 +136,7 @@ function ThemXuatKho() {
           </div>
         </ContentA>
       </div>
-    </PageTemplateD>
+    </Page1>
   )
 }
 

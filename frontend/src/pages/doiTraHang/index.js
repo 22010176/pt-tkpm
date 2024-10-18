@@ -1,7 +1,7 @@
 import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../components/buttons/toolBtn'
-import PageTemplateC from '../../components/layouts/pageC'
+import Page2 from '../../components/layouts/Page2'
 import SideNavbar from '../../components/layouts/sideBar'
 import SearchForm2 from '../../components/Forms/searchForm2'
 import TableA from '../../components/tables/tableA'
@@ -21,7 +21,7 @@ const doiTraHeader = [
 
 function DoiTraHang() {
   return (
-    <PageTemplateC
+    <Page2
       sidebar={<SideNavbar />}
       tools={<>
         <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" />

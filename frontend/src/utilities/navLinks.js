@@ -13,6 +13,7 @@ import KhachHang from "../pages/khachHang"
 import NhaCungCap from "../pages/nhaCungCap"
 import DoiTraHang from "../pages/doiTraHang"
 import NhanVien from "../pages/nhanVien"
+import PhanQuyen from "../pages/phanQuyen"
 
 export const navLinks = [
   { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, Component: TrangChu, links: [] },
@@ -45,6 +46,6 @@ export const navLinks = [
   { title: "Nhân viên", eventKey: "nhanVien", link: "/nhan-vien", icon: faClipboardUser, Component: NhanVien, links: [] },
   { title: "Tài khoản", eventKey: "taiKhoan", link: "/tai-khoan", icon: faCircleUser, links: [] },
   { title: "Thống kê", eventKey: "thongKe", link: "/thong-ke", icon: faCircleCheck, links: [] },
-  { title: "Phân quyền", eventKey: "phanQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, links: [] },
+  { title: "Phân quyền", eventKey: "phanQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, Component: PhanQuyen, links: [] },
 ];
 

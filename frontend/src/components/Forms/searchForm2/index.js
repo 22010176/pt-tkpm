@@ -9,19 +9,16 @@ const SearchForm2 = forwardRef(function (prop = {}, ref) {
   return (
     <Form ref={ref} className={["d-flex align-items-center gap-3"].join(" ")} {...prop}>
       {/* <div> */}
-      <FormSelect className='d-block'>
+      <FormSelect className='w-auto'>
         <option>test1</option>
         <option>test2</option>
         <option>test3</option>
         <option>test4</option>
       </FormSelect>
-      {/* </div> */}
-      {/* <div> */}
-      <FormControl className='d-block' type='text' placeholder='Tìm kiếm' />
-      {/* </div> */}
-      {/* <div> */}
-      <IconBtn className="d-block btn-success" icon={faArrowRotateRight} title={"Làm mới"} />
-      {/* </div> */}
+      <FormControl className='w-auto d-block' type='text' placeholder='Tìm kiếm' />
+
+      <IconBtn className="w-auto btn-success" icon={faArrowRotateRight} title={"Làm mới"} />
+
     </Form>
 
   )

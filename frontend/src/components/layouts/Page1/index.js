@@ -2,7 +2,7 @@ import SideNavbar from '../sideBar'
 
 import style from './style.module.css'
 
-function PageTemplateD({ children }) {
+function Page1({ children }) {
   const sidebarWidth = 20
   return (
     <main className='overflow-hidden vh-100'>
@@ -19,4 +19,4 @@ function PageTemplateD({ children }) {
   )
 }
 
-export default PageTemplateD
+export default Page1

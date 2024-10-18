@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 
-import ContentA from '../../components/layouts/blockContent'
-import Page1 from '../../components/layouts/Page1'
-import SideNavbar from '../../components/layouts/sideBar'
-import TableA from '../../components/tables/tableA'
-import BarCodeScanner from '../../components/barcode'
+import ContentA from '../blockContent'
+import Page1 from '../Page1'
+import SideNavbar from '../sideBar'
+import TableA from '../../tables/tableA'
+import BarCodeScanner from '../../barcode'
+
 
 import style from './style.module.css'
 

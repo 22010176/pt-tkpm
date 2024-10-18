@@ -6,12 +6,12 @@ import styles from './style.module.css'
 const btnStyle = "btn d-grid gap-2 text-center align-self-center"
 const btnTitleStyle = "m-0 fw-bold"
 
-const ToolBtn = forwardRef(function ({ icon, color, title, ...prop }, ref) {
+const ToolBtn = forwardRef(function ({ className, icon, color, title, ...prop }, ref) {
   return (
-    <div ref={ref} className={[btnStyle].join(" ")} {...prop} >
+    <button {...prop} ref={ref} className={[btnStyle, "btn ", className].join(" ")}  >
       <FontAwesomeIcon icon={icon} className='mx-auto' color={color} size='3x' />
       <p className={[btnTitleStyle].join(" ")}> {title?.toUpperCase()} </p>
-    </div>
+    </button>
   )
 })
 

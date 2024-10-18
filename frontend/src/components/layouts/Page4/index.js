@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Form } from 'react-bootstrap'
 
 
-import PageTemplateD from '../pageD'
+import Page1 from '../Page1'
 import SideNavbar from '../sideBar'
 
 import ContentA from '../blockContent'
@@ -11,11 +11,11 @@ import FlexForm from '../../Forms/FlexForm'
 
 import style from './style.module.css'
 
-function PageTemplateE({ tools, rightForm, leftForm, table }) {
+function Page3({ tools, rightForm, leftForm, table }) {
   const height = 15;
   const width = 25;
   return (
-    <PageTemplateD sidebar={<SideNavbar />}>
+    <Page1 sidebar={<SideNavbar />}>
       <div className='d-flex gap-3 flex-column w-100 h-100 p-3'>
         <ContentA className="d-flex justify-content-between px-3" style={{ height: height + "%" }}>
           <div className='d-flex' >
@@ -37,8 +37,8 @@ function PageTemplateE({ tools, rightForm, leftForm, table }) {
           </ContentA>
         </div>
       </div>
-    </PageTemplateD>
+    </Page1>
   )
 }
 
-export default PageTemplateE
+export default Page3

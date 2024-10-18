@@ -5,7 +5,7 @@ import { faMountainCity, faComputer, faMemory, faBrush, faX } from '@fortawesome
 import { Form, InputGroup, Button, Modal, FormControl } from 'react-bootstrap'
 
 // import PageTemplateB from '../../components/layouts/pageB'
-import PageTemplateD from '../../components/layouts/pageD'
+import Page1 from '../../components/layouts/Page1'
 import ThuocTinhBtn from '../../components/buttons/thuocTinhBtn'
 import TableA from '../../components/tables/tableA'
 import HeaderModalA from '../../components/modals/headerA'
@@ -33,7 +33,7 @@ function ThuocTinh() {
 
   return (
     <>
-      <PageTemplateD>
+      <Page1>
         <div className='d-flex flex-wrap flex-grow-1 h-100'>
           {/* Thương hiệu */}
           {Object.values(thuocTinh).map((i, j) => (
@@ -42,7 +42,7 @@ function ThuocTinh() {
             </div>
           ))}
         </div>
-      </PageTemplateD>
+      </Page1>
 
       <Modal backdrop="static" show={modal} scrollable centered size='lg'>
         <HeaderModalA title={modal?.title} />

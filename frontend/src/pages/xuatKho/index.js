@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Form, FormControl, InputGroup, FormGroup, Modal, ModalBody, ModalFooter, FormLabel, Button } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
-import PageTemplateD from '../../components/layouts/pageD'
+import Page1 from '../../components/layouts/Page1'
 import ToolBtn from '../../components/buttons/toolBtn'
 import HeaderModalA from '../../components/modals/headerA'
 import IconBtn from '../../components/buttons/iconBtn'
@@ -11,7 +11,7 @@ import ContentA from '../../components/layouts/blockContent'
 import SideNavbar from '../../components/layouts/sideBar'
 import TableA from '../../components/tables/tableA'
 import ToolLink from '../../components/buttons/toolLink'
-import PageTemplateE from '../../components/layouts/PageE'
+import Page3 from '../../components/layouts/Page3'
 
 import style from './style.module.css'
 
@@ -41,7 +41,7 @@ function XuatKho() {
 
   return (
     <>
-      <PageTemplateE
+      <Page3
         tools={<>
           <ToolLink href="/xuat-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
           <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
