@@ -1,20 +1,18 @@
+import { useState } from 'react'
 import { Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
-import Page1 from '../../components/layouts/Page1'
-import ToolBtn from '../../components/buttons/toolBtn'
-import IconBtn from '../../components/buttons/iconBtn'
-import HeaderModalA from '../../components/modals/headerA'
-import Page2 from '../../components/layouts/Page2'
-import SideNavbar from '../../components/layouts/sideBar'
-import SearchForm from '../../components/Forms/searchForm'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import IconBtn from '../../../components/buttons/iconBtn'
+import HeaderModalA from '../../../components/modals/headerA'
+import SideNavbar from '../../../components/layouts/sideBar'
+import SearchForm from '../../../components/Forms/searchForm'
+import TableA from '../../../components/tables/tableA'
+import ToolLink from '../../../components/buttons/toolLink'
+import ContentA from '../../../components/layouts/blockContent'
+import Page3 from '../../../components/layouts/Page3'
 
-import style from './style.module.css'
-import TableA from '../../components/tables/tableA'
-import ToolLink from '../../components/buttons/toolLink'
-import ContentA from '../../components/layouts/blockContent'
-import { useState } from 'react'
-import Page3 from '../../components/layouts/Page3'
+import styles from './style.module.css'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -35,9 +33,6 @@ const chiTietPhieuHd = [
 
 
 function NhapKho() {
-  const height = 15;
-  const width = 25;
-
   const [modal, setModal] = useState("")
 
   function openModal(key, e) {
@@ -46,6 +41,7 @@ function NhapKho() {
   return (
     <>
       <Page3
+        sidebar={<SideNavbar />}
         tools={<>
           <ToolLink href="/nhap-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
           <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />

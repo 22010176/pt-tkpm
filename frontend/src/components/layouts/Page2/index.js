@@ -3,14 +3,14 @@ import SideNavbar from '../sideBar'
 
 import style from './style.module.css'
 
-function Page2({ tools, rightSec, dataTable }) {
+function Page2({ sidebar, tools, rightSec, dataTable }) {
   const sidebarWidth = 20, toolbarHeight = 15
 
   return (
     <main className='overflow-hidden vh-100'>
       <div className='d-flex h-100'>
         <section className='h-100' style={{ width: sidebarWidth + "%" }}>
-          <SideNavbar />
+          {sidebar}
         </section>
 
         <section className='bg-primary-subtle h-100 d-flex flex-column p-3 gap-3' style={{ width: (100 - sidebarWidth) + "%" }}>

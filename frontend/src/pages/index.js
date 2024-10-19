@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { navLinks } from '../utilities/navLinks';
-import ErrorPage from './error';
+import ErrorPage from './UtilitesPage/error';
 
 import './style.css'
 

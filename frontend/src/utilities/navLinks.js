@@ -2,24 +2,28 @@ import {
   faHouse, faLaptop, faWarehouse, faHandshakeSimple, faShieldHalved, faClipboardUser, faCircleUser, faCircleCheck, faUnlockKeyhole
 } from "@fortawesome/free-solid-svg-icons"
 
-import SanPhamB from "../pages/sanPham"
-import ThuocTinh from "../pages/thuocTinh"
-import TrangChu from "../pages/trangChu"
-import NhapKho from "../pages/nhapKho"
-import ThemNhapKho from "../pages/themNhapKho"
-import XuatKho from '../pages/xuatKho'
-import ThemXuatKho from "../pages/themXuatKho"
-import KhachHang from "../pages/khachHang"
-import NhaCungCap from "../pages/nhaCungCap"
-import DoiTraHang from "../pages/doiTraHang"
-import NhanVien from "../pages/nhanVien"
-import PhanQuyen from "../pages/phanQuyen"
+import TrangChu from "../pages/OtherPage/trangChu"
+import NhanVien from "../pages/OtherPage/nhanVien"
+import PhanQuyen from "../pages/OtherPage/phanQuyen"
+
+import SanPham from "../pages/SanPhamPage/sanPham"
+import ThuocTinh from "../pages/SanPhamPage/thuocTinh"
+
+import NhapKho from "../pages/XuatNhapPage/nhapKho"
+import ThemNhapKho from "../pages/XuatNhapPage/themNhapKho"
+import XuatKho from "../pages/XuatNhapPage/xuatKho"
+import ThemXuatKho from "../pages/XuatNhapPage/themXuatKho"
+
+import KhachHang from "../pages/DoiTacPage/khachHang"
+import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
+
+import DoiTraHang from "../pages/DichVuPage/doiTraHang"
 
 export const navLinks = [
   { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, Component: TrangChu, links: [] },
   {
     title: "Sản phẩm", eventKey: "sanPham", icon: faLaptop, links: [
-      { content: "Sản phẩm", href: "/san-pham", visible: true, Component: SanPhamB },
+      { content: "Sản phẩm", href: "/san-pham", visible: true, Component: SanPham },
       { content: "Thuộc tính", href: "/thuoc-tinh", visible: true, Component: ThuocTinh }
     ]
   },

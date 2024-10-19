@@ -1,14 +1,13 @@
 import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { Form, FormControl, FormSelect } from 'react-bootstrap'
 
-import TableA from '../../components/tables/tableA'
-import Page2 from '../../components/layouts/Page2'
-import SideNavbar from '../../components/layouts/sideBar'
-import ToolBtn from '../../components/buttons/toolBtn'
-import IconBtn from '../../components/buttons/iconBtn'
+import TableA from '../../../components/tables/tableA'
+import Page2 from '../../../components/layouts/Page2'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import SearchForm2 from '../../../components/Forms/searchForm2'
 
 import styles from './style.module.css'
-import SearchForm2 from '../../components/Forms/searchForm2'
 
 const tableHd = [
   { key: "Mã NV", value: "" },

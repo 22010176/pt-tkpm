@@ -3,16 +3,16 @@ import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faMagnifyingGla
 import { Modal, Button, Form, FormControl } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
-import SideNavbar from '../../components/layouts/sideBar'
-import ToolBtn from '../../components/buttons/toolBtn'
-import TableA from '../../components/tables/tableA'
-import Page2 from '../../components/layouts/Page2'
-import IconBtn from '../../components/buttons/iconBtn'
-import SearchForm from '../../components/Forms/searchForm'
-import HeaderModalA from '../../components/modals/headerA'
-import ErrorModal from '../../components/modals/errorModal'
-import { wait } from '../../api'
-import FlexForm from '../../components/Forms/FlexForm'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import TableA from '../../../components/tables/tableA'
+import Page2 from '../../../components/layouts/Page2'
+import IconBtn from '../../../components/buttons/iconBtn'
+import SearchForm from '../../../components/Forms/searchForm'
+import HeaderModalA from '../../../components/modals/headerA'
+import ErrorModal from '../../../components/modals/errorModal'
+import { wait } from '../../../api'
+import FlexForm from '../../../components/Forms/FlexForm'
 
 const NCCContext = createContext()
 const defaultNCC = { ma: undefined, tenNCC: "", diaChi: "", mail: "", sdt: "" }

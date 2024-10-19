@@ -1,9 +1,9 @@
-import { Button } from 'react-bootstrap'
-
-import Page1 from '../../components/layouts/Page1'
-import SideNavbar from '../../components/layouts/sideBar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartLine, faLaptop, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { Button } from 'react-bootstrap'
+
+import Page1 from '../../../components/layouts/Page1'
+import SideNavbar from '../../../components/layouts/sideBar'
 
 function TrangChu() {
 

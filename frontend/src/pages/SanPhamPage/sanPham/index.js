@@ -3,16 +3,17 @@ import { faCirclePlus, faPencil, faTrashCan, faRectangleList, faFileExcel, faFil
 import { Modal, Button, Form, ModalBody, ModalFooter, FormGroup, FormControl, Image, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
-import { wait } from '../../api'
+import { wait } from '../../../api'
 
-import SideNavbar from '../../components/layouts/sideBar'
-import ToolBtn from '../../components/buttons/toolBtn'
-import Page2 from '../../components/layouts/Page2'
-import SearchForm from '../../components/Forms/searchForm'
-import TableA from '../../components/tables/tableA'
-import HeaderModalA from '../../components/modals/headerA'
-import ContentA from '../../components/layouts/blockContent'
-import ErrorModal from '../../components/modals/errorModal'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import Page2 from '../../../components/layouts/Page2'
+import SearchForm from '../../../components/Forms/searchForm'
+import TableA from '../../../components/tables/tableA'
+import HeaderModalA from '../../../components/modals/headerA'
+import ContentA from '../../../components/layouts/blockContent'
+import ErrorModal from '../../../components/modals/errorModal'
+import CauHinhModal from '../cauHinh'
 
 const SanPhamContext = createContext();
 const ImageContext = createContext();
@@ -42,15 +43,6 @@ const spHeader = [
   { key: "Xuất xứ", value: "xuatXu" },
 ]
 
-const defaultCauHinh = { ma: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: "" }
-const chHeader = [
-  { key: "RAM", value: "ram" },
-  { key: "ROM", value: "rom" },
-  { key: "Màu sắc", value: "mauSac" },
-  { key: "Giá nhập", value: "giaNhap" },
-  { key: "Giá xuất", value: "giaXuat" }
-]
-
 const imeiHeader = [
   { key: "IMEI", value: "imei" },
   { key: "Mã phiếu nhập", value: "phieuNhap" },
@@ -58,7 +50,7 @@ const imeiHeader = [
   { key: "Tình trạng", value: "tinhTrang" },
 ]
 
-function SanPhamB() {
+function SanPham() {
   const [modal, setModal] = useState("");
   const [preModal, setPreModal] = useState("");
 
@@ -107,6 +99,8 @@ function SanPhamB() {
 
   function onInsertSP(e) {
     // Send data to api
+
+    onOpenCauHinhModal()
 
   }
 
@@ -170,7 +164,7 @@ function SanPhamB() {
           </Modal>
 
           {/* Cấu hình */}
-          <CauHinhModal show={modal === "ch"} onModalHide={openModal.bind({}, preModal)} />
+          <CauHinhModal sanPham={formData} show={modal === "ch"} onModalHide={openModal.bind({}, preModal)} />
 
           {/* IMEI */}
           <Modal scrollable show={modal === "imei"} size="xl" centered>
@@ -325,123 +319,4 @@ function SanPhamForm() {
   )
 }
 
-function CauHinhModal({ onModalHide, ...prop }) {
-  const [formData,] = useContext(SanPhamContext)
-  const [data, setData] = useState({ ...defaultCauHinh })
-
-  const [tableData, setTableData] = useState([]);
-
-  useEffect(function () {
-    getCHData()
-  }, [])
-
-  function getCHData() {
-    setTableData([])
-    wait(.5).then(() => setTableData(new Array(100).fill().map(i => ({
-      ma: v4(), ram: 4, rom: 2, mauSac: "Dd", giaNhap: 55, giaXuat: 55
-    }))))
-    setData({ ...defaultCauHinh })
-  }
-
-  function onHide() {
-    if (typeof onModalHide === 'function') onModalHide();
-  }
-
-  function onDataChange(key, e) {
-    setData(src => ({ ...src, [key]: e.target.value }))
-  }
-
-  function onInsertCauHinh() {
-    // send data
-    console.log(formData.ma)
-
-    getCHData();
-  }
-
-  function onUpdateCauHinh() {
-    // send data
-    console.log(formData.ma)
-
-    getCHData();
-  }
-
-  function onDeleteCauHinh() {
-    // send data
-    console.log(formData.ma)
-
-    getCHData();
-  }
-
-  return (
-    <Modal {...prop} scrollable size='xl' centered backdrop="static">
-      <HeaderModalA title="TẠO CẤU HÌNH" />
-
-      <ModalBody className='d-flex p-5 flex-column gap-4'>
-        <Form className='d-flex justify-content-between gap-4'>
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>ROM</FormLabel>
-            <FormSelect value={data.rom} onChange={onDataChange.bind({}, "rom")}>
-              <option>test1</option>
-              <option>test2</option>
-              <option>test3</option>
-            </FormSelect>
-          </FormGroup>
-
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>RAM</FormLabel>
-            <FormSelect value={data.ram} onChange={onDataChange.bind({}, "ram")}>
-              <option>test1</option>
-              <option>test2</option>
-              <option>test3</option>
-            </FormSelect>
-          </FormGroup>
-
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>Màu sắc</FormLabel>
-            <FormSelect value={data.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
-              <option>test1</option>
-              <option>test2</option>
-              <option>test3</option>
-            </FormSelect>
-          </FormGroup>
-
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>Giá nhập</FormLabel>
-            <InputGroup>
-              <FormControl type='number' value={data.giaNhap} onChange={onDataChange.bind({}, "giaNhap")} />
-              <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
-          </FormGroup>
-
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>Giá xuất</FormLabel>
-            <InputGroup>
-              <FormControl type='number' value={data.giaXuat} onChange={onDataChange.bind({}, "giaXuat")} />
-              <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
-          </FormGroup>
-        </Form>
-
-        <div className='d-flex gap-4' style={{ height: "40vh" }}>
-          <ContentA style={{ width: "80%" }}>
-            <TableA index headers={chHeader} data={tableData} onClick={setData} />
-            {/* <div style={{ height: "1000px" }}></div> */}
-          </ContentA>
-          <div className='d-flex flex-column justify-content-around flex-grow-1'>
-            <Button className='py-2 fw-semibold' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='success' onClick={getCHData}>Làm mới</Button>
-          </div>
-        </div>
-      </ModalBody>
-
-      <ModalFooter className='justify-content-center gap-5'>
-        <Button variant='primary' style={{ width: "15%" }}>Tạo cấu hình</Button>
-        <Button variant='danger' style={{ width: "15%" }} onClick={onHide}>Hủy bỏ</Button>
-      </ModalFooter>
-    </Modal>
-  )
-}
-
-export default SanPhamB;
+export default SanPham;

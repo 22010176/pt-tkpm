@@ -1,10 +1,10 @@
 import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
-import ToolBtn from '../../components/buttons/toolBtn'
-import Page2 from '../../components/layouts/Page2'
-import SideNavbar from '../../components/layouts/sideBar'
-import SearchForm2 from '../../components/Forms/searchForm2'
-import TableA from '../../components/tables/tableA'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import Page2 from '../../../components/layouts/Page2'
+import SideNavbar from '../../../components/layouts/sideBar'
+import SearchForm2 from '../../../components/Forms/searchForm2'
+import TableA from '../../../components/tables/tableA'
 
 import styles from './style.module.css'
 

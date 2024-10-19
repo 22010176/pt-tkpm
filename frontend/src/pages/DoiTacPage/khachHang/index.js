@@ -3,15 +3,15 @@ import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRig
 import { Modal, ModalFooter, Form, Button, FormControl } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
-import SideNavbar from '../../components/layouts/sideBar'
-import ToolBtn from '../../components/buttons/toolBtn'
-import Page2 from '../../components/layouts/Page2'
-import TableA from '../../components/tables/tableA'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import Page2 from '../../../components/layouts/Page2'
+import TableA from '../../../components/tables/tableA'
 
-import IconBtn from '../../components/buttons/iconBtn'
-import HeaderModalA from '../../components/modals/headerA'
-import ErrorModal from '../../components/modals/errorModal'
-import FlexForm from '../../components/Forms/FlexForm'
+import IconBtn from '../../../components/buttons/iconBtn'
+import HeaderModalA from '../../../components/modals/headerA'
+import ErrorModal from '../../../components/modals/errorModal'
+import FlexForm from '../../../components/Forms/FlexForm'
 
 import styles from './style.module.css'
 

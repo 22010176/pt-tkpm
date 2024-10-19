@@ -1,6 +1,7 @@
+import Page1 from '../../../components/layouts/Page1'
+import SideNavbar from '../../../components/layouts/sideBar'
+
 import styles from './style.module.css'
-import Page1 from '../../components/layouts/Page1'
-import SideNavbar from '../../components/layouts/sideBar'
 
 
 function ErrorPage() {
