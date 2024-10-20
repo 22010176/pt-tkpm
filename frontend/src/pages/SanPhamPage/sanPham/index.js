@@ -155,8 +155,6 @@ function SanPham() {
             <FontAwesomeIcon icon={faArrowRotateRight} />
             <span>Làm mới</span>
           </Button>
-          {/* <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"} />
-          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} /> */}
         </FlexForm>}
         dataTable={<TableA headers={spHeader} data={sanPhamData} index onClick={setRowClick} />}
       />
