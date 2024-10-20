@@ -6,7 +6,7 @@ function Div({ children, ...prop }) {
 
 const ContentA = function ({ As = Div, children, className, ...prop }) {
   return (
-    <As {...prop} className={[className, 'rounded-3 bg-light border border-info-subtle border-5 mh-100 overflow-auto'].join(" ")} >
+    <As {...prop} className={[styles.element, className, 'rounded-3 bg-light border border-1 shadow-sm mh-100 overflow-auto'].join(" ")} >
       {children}
     </As>
   )

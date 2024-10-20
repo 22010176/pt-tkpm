@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './style.module.css'
 
-const IconBtn = forwardRef(function ({ icon, title, className = "btn-outline-dark", ...prop }, ref) {
+const IconBtn = forwardRef(function ({ as: As = "button", icon, title, className = "btn-outline-dark", ...prop }, ref) {
   return (
-    <button {...prop} ref={ref} type="button" className={[className, "btn d-flex gap-2 align-items-center"].join(" ")} >
+    <As {...prop} ref={ref} type="button" className={[className, "btn d-flex gap-2 align-items-center"].join(" ")} >
       {!!icon && <FontAwesomeIcon icon={icon} />}
       <span> {title} </span>
-    </button>
+    </As>
   )
 })
 

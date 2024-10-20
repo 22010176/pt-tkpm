@@ -13,6 +13,7 @@ const spHeader = [
   { key: "ROM", value: "rom" },
   { key: "Màu sắc", value: "mauSac" },
   { key: "Đơn giá", value: "gia" },
+  { key: "Số lượng", value: "soLuong" },
 ]
 
 const khoHeader = [
@@ -59,20 +60,26 @@ function ThemXuatKho() {
             <FormGroup>
               <FormLabel className='fw-bold'>Giá xuất</FormLabel>
               <InputGroup>
-                <FormControl type='number' />
+                <FormControl type='number' disabled />
                 <InputGroup.Text>VNĐ</InputGroup.Text>
               </InputGroup>
             </FormGroup>
 
             <FormGroup>
               <FormLabel className='fw-bold'>Số lượng tồn</FormLabel>
-              <FormControl type='number' disabled />
+              <InputGroup>
+                <FormControl type='number' disabled />
+                <InputGroup.Text>chiếc</InputGroup.Text>
+              </InputGroup>
             </FormGroup>
           </FormGroup>
 
           <FormGroup>
-            <FormLabel className='fw-bold'>Mã IMEI (gồm 15 chữ số)</FormLabel>
-            <FormControl type='number' />
+            <FormLabel className='fw-bold'>Số lượng xuất</FormLabel>
+            <InputGroup>
+              <FormControl type='number' />
+              <InputGroup.Text>chiếc</InputGroup.Text>
+            </InputGroup>
           </FormGroup>
         </Form>
       }

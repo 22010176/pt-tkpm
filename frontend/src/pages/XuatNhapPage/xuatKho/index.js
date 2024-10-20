@@ -8,11 +8,10 @@ import HeaderModalA from '../../../components/modals/headerA'
 import IconBtn from '../../../components/buttons/iconBtn'
 import ContentA from '../../../components/layouts/blockContent'
 import TableA from '../../../components/tables/tableA'
-import ToolLink from '../../../components/buttons/toolLink'
 import Page3 from '../../../components/layouts/Page3'
+import SideNavbar from '../../../components/layouts/sideBar'
 
 import style from './style.module.css'
-import SideNavbar from '../../../components/layouts/sideBar'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -43,7 +42,7 @@ function XuatKho() {
       <Page3
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolLink href="/xuat-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
+          <ToolBtn href="/xuat-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
           <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
           <ToolBtn color="#cf2a27" icon={faCircleXmark} title="Hủy" />
           <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />

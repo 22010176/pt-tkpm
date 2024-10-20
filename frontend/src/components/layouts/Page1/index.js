@@ -11,7 +11,7 @@ function Page1({ sidebar, children }) {
           {sidebar}
         </section>
 
-        <section className='bg-primary-subtle h-100' style={{ width: (100 - sidebarWidth) + "%" }}>
+        <section className={['h-100 _bg-blue-0'].join(" ")} style={{ width: (100 - sidebarWidth) + "%" }}>
           {children}
         </section>
       </div>

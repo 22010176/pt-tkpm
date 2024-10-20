@@ -2,24 +2,8 @@ import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup
 
 import ContentA from '../blockContent'
 import Page1 from '../Page1'
-import SideNavbar from '../sideBar'
-import TableA from '../../tables/tableA'
 
 import style from './style.module.css'
-
-const spHeader = [
-  { key: "Mã SP", value: "ma" },
-  { key: "Tên sp", value: "tenSP" },
-  { key: "RAM", value: "ram" },
-  { key: "ROM", value: "rom" },
-  { key: "Màu sắc", value: "mauSac" },
-  { key: "Đơn giá", value: "gia" },
-]
-
-const khoHeader = [
-  { key: "Tên sp", value: "tenSP" },
-  { key: "Số lượng tồn kho", value: "tonKho" },
-]
 
 function Page4({ sidebar, tableTop, table, tableForm, toolBtn, table2, count, rightTopForm, rightBottomForm }) {
   const width = 75;

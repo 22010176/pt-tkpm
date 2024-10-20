@@ -8,11 +8,12 @@ import HeaderModalA from '../../../components/modals/headerA'
 import SideNavbar from '../../../components/layouts/sideBar'
 import SearchForm from '../../../components/Forms/searchForm'
 import TableA from '../../../components/tables/tableA'
-import ToolLink from '../../../components/buttons/toolLink'
 import ContentA from '../../../components/layouts/blockContent'
 import Page3 from '../../../components/layouts/Page3'
 
 import styles from './style.module.css'
+import ExcelExport from '../../../components/excel'
+import colors from '../../../utilities/colors'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -43,10 +44,10 @@ function NhapKho() {
       <Page3
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolLink href="/nhap-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
-          <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
-          <ToolBtn color="#cf2a27" icon={faCircleXmark} title="Hủy" />
-          <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
+          <ToolBtn href="/nhap-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm" />
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
+          <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy" />
+          <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel" />
         </>}
         rightForm={<>
           <div>
@@ -63,7 +64,7 @@ function NhapKho() {
             <IconBtn icon={faMagnifyingGlass} title={"Tìm kiếm"} className="btn-primary" />
           </div>
           <div>
-            <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-success " />
+            <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-primary" />
           </div>
         </>}
         leftForm={<>

@@ -4,7 +4,7 @@ import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
 import { AccordionContext, Image } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faWarehouse, faAngleRight, faRightFromBracket, faHandshakeSimple, faShieldHalved, faClipboardUser, faLaptop, faUnlockKeyhole, faCircleCheck, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faWarehouse, faAngleRight, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './style.module.css'
 import { navLinks } from '../../../utilities/navLinks';
@@ -66,21 +66,21 @@ export default function SideNavbar({ navItem = navLinks, account }) {
     <div className={["bg-light h-100 user-select-none"].join(" ")}>
       {/* Tài khoản */}
       <div className={[styles.account_sec, "d-flex gap-3 align-items-center border-bottom p-3 m-0"].join(" ")}>
-        <div className={[styles.avatar, "align-self-center d-grid"].join(" ")}>
+        <a href='/tai-khoan' className={[styles.avatar, "align-self-center d-grid"].join(" ")}>
           <Image className='bg-primary' src={account?.img || ""} roundedCircle />
           {/* <img className={[styles.avatar, "rounded-circle bg-primary"].join(" ")} src={account?.img || ""} alt='avartar' /> */}
-        </div>
-        <div className={[].join(" ")}>
+        </a>
+        <a href='/tai-khoan' className={["text-decoration-none text-dark"].join(" ")}>
           <p className={["fs-5 fw-bold m-0"].join(" ")}>{account?.name || "User"}</p>
           <p className={["fs-6 m-0"].join(" ")}>{account?.role || "Quản lý kho"}</p>
-        </div>
+        </a>
       </div>
 
       {/* Trang chủ */}
       <div className={[styles.nav_container, "d-flex flex-column justify-content-between"].join(" ")}>
         {/* nav link */}
         <Accordion flush activeKey={activeTab}>
-          {navItem.map((i, j) => <NavLinks {...i} key={j} onClick={onNavlinkClick} />)}
+          {navItem.filter(i => !i.hidden).map((i, j) => <NavLinks {...i} key={j} onClick={onNavlinkClick} />)}
         </Accordion>
 
         {/* Đăng xuất */}

@@ -13,7 +13,7 @@ function Page2({ sidebar, tools, rightSec, dataTable }) {
           {sidebar}
         </section>
 
-        <section className='bg-primary-subtle h-100 d-flex flex-column p-3 gap-3' style={{ width: (100 - sidebarWidth) + "%" }}>
+        <section className={['_bg-blue-0 h-100 d-flex flex-column p-3 gap-3'].join(" ")} style={{ width: (100 - sidebarWidth) + "%" }}>
           <ContentA className="d-flex justify-content-between px-2" style={{ height: toolbarHeight + "%" }}>
             <div className='d-flex gap-2'>
               {tools}

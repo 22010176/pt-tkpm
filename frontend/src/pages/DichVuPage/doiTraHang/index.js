@@ -1,4 +1,4 @@
-import { faCirclePlus, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faPencil, faTrashCan, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
 import Page2 from '../../../components/layouts/Page2'
@@ -7,6 +7,7 @@ import SearchForm2 from '../../../components/Forms/searchForm2'
 import TableA from '../../../components/tables/tableA'
 
 import styles from './style.module.css'
+import colors from '../../../utilities/colors'
 
 const doiTraHeader = [
   { key: "Mã phiếu đổi trả", value: "" },
@@ -24,9 +25,10 @@ function DoiTraHang() {
     <Page2
       sidebar={<SideNavbar />}
       tools={<>
-        <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" />
-        <ToolBtn color="#e69138" icon={faPencil} title="Sửa" />
-        <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" />
+        <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" />
+        <ToolBtn color={colors.orange} icon={faPencil} title="Sửa" />
+        <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" />
+        <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" />
       </>}
       rightSec={<SearchForm2 />}
       dataTable={<TableA headers={doiTraHeader} />}

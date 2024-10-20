@@ -6,6 +6,8 @@ import { wait } from "../../../api";
 import HeaderModalA from "../../../components/modals/headerA";
 import ContentA from "../../../components/layouts/blockContent";
 import TableA from "../../../components/tables/tableA";
+import InputShadow from "../../../components/Forms/InputShadow";
+import GroupShadow from "../../../components/Forms/GroupShadow";
 
 const defaultCauHinh = { ma: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: "" }
 const chHeader = [
@@ -68,34 +70,35 @@ function CauHinhModal({ sanPham, onModalHide, ...prop }) {
         <Form className='d-flex justify-content-between gap-4'>
           <FormGroup className='flex-grow-1'>
             <FormLabel className='fw-bold'>ROM</FormLabel>
-            <FormSelect value={data?.rom} onChange={onDataChange.bind({}, "rom")}>
+            <InputShadow as={FormSelect} value={data?.rom} onChange={onDataChange.bind({}, "rom")}>
               <option>test1</option>
               <option>test2</option>
               <option>test3</option>
-            </FormSelect>
+            </InputShadow>
           </FormGroup>
 
           <FormGroup className='flex-grow-1'>
             <FormLabel className='fw-bold'>RAM</FormLabel>
-            <FormSelect value={data?.ram} onChange={onDataChange.bind({}, "ram")}>
+            <InputShadow as={FormSelect} value={data?.ram} onChange={onDataChange.bind({}, "ram")}>
               <option>test1</option>
               <option>test2</option>
               <option>test3</option>
-            </FormSelect>
+            </InputShadow>
           </FormGroup>
 
           <FormGroup className='flex-grow-1'>
             <FormLabel className='fw-bold'>Màu sắc</FormLabel>
-            <FormSelect value={data?.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
+
+            <InputShadow as={FormSelect} value={data?.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
               <option>test1</option>
               <option>test2</option>
               <option>test3</option>
-            </FormSelect>
+            </InputShadow>
           </FormGroup>
 
-          <FormGroup className='flex-grow-1'>
+          <FormGroup className='shadow-1 flex-grow-1'>
             <FormLabel className='fw-bold'>Giá nhập</FormLabel>
-            <InputGroup>
+            <InputGroup className='shadow-sm'>
               <FormControl type='number' value={data?.giaNhap} onChange={onDataChange.bind({}, "giaNhap")} />
               <InputGroup.Text>VNĐ</InputGroup.Text>
             </InputGroup>
@@ -103,30 +106,29 @@ function CauHinhModal({ sanPham, onModalHide, ...prop }) {
 
           <FormGroup className='flex-grow-1'>
             <FormLabel className='fw-bold'>Giá xuất</FormLabel>
-            <InputGroup>
+            <GroupShadow className='shadow-sm'>
               <FormControl type='number' value={data?.giaXuat} onChange={onDataChange.bind({}, "giaXuat")} />
               <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
+            </GroupShadow>
           </FormGroup>
         </Form>
 
         <div className='d-flex gap-4' style={{ height: "40vh" }}>
           <ContentA style={{ width: "80%" }}>
             <TableA index headers={chHeader} data={tableData} onClick={setData} />
-            {/* <div style={{ height: "1000px" }}></div> */}
           </ContentA>
           <div className='d-flex flex-column justify-content-around flex-grow-1'>
-            <Button className='py-2 fw-semibold' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
-            <Button className='py-2 fw-semibold' variant='success' onClick={getCHData}>Làm mới</Button>
+            <Button className='py-2 fw-semibold shadow-sm' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
+            <Button className='py-2 fw-semibold shadow-sm' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
+            <Button className='py-2 fw-semibold shadow-sm' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
+            <Button className='py-2 fw-semibold shadow-sm' variant='success' onClick={getCHData}>Làm mới</Button>
           </div>
         </div>
       </ModalBody>
 
       <ModalFooter className='justify-content-center gap-5'>
-        <Button variant='primary' style={{ width: "15%" }}>Tạo cấu hình</Button>
-        <Button variant='danger' style={{ width: "15%" }} onClick={onHide}>Hủy bỏ</Button>
+        <Button className="shadow-sm" variant='primary' style={{ width: "15%" }}>Tạo cấu hình</Button>
+        <Button className="shadow-sm" variant='danger' style={{ width: "15%" }} onClick={onHide}>Hủy bỏ</Button>
       </ModalFooter>
     </Modal>
   )

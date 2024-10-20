@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 
 import ContentA from '../../../components/layouts/blockContent'
@@ -19,6 +19,7 @@ const spHeader = [
   { key: "ROM", value: "rom" },
   { key: "Màu sắc", value: "mauSac" },
   { key: "Đơn giá", value: "gia" },
+  { key: "Số lượng", value: "soLuong" },
 ]
 
 const khoHeader = [
@@ -64,6 +65,9 @@ function ThemNhapKho() {
           <InputGroup>
             <InputGroup.Text>Tìm kiếm</InputGroup.Text>
             <Form.Control />
+            <Button variant="success">
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </Button>
           </InputGroup>
         }
         table={<TableA headers={khoHeader} index />}

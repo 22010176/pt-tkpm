@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { faCirclePlus, faPencil, faTrashCan, faRectangleList, faFileExcel, faFileExport } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faArrowRotateRight, faMagnifyingGlass, faPencil, faTrashCan, faRectangleList, faFileExcel, faFileExport } from '@fortawesome/free-solid-svg-icons'
 import { Modal, Button, Form, ModalBody, ModalFooter, FormGroup, FormControl, Image, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
@@ -8,12 +8,17 @@ import { wait } from '../../../api'
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
 import Page2 from '../../../components/layouts/Page2'
-import SearchForm from '../../../components/Forms/searchForm'
 import TableA from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
 import ContentA from '../../../components/layouts/blockContent'
 import ErrorModal from '../../../components/modals/errorModal'
 import CauHinhModal from '../cauHinh'
+import exportExcel from '../../../components/excel'
+import FlexForm from '../../../components/Forms/FlexForm'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import colors from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const SanPhamContext = createContext();
 const ImageContext = createContext();
@@ -43,6 +48,8 @@ const spHeader = [
   { key: "Xuất xứ", value: "xuatXu" },
 ]
 
+const colToName = Object.fromEntries(spHeader.map(({ key, value }) => [value, key]))
+
 const imeiHeader = [
   { key: "IMEI", value: "imei" },
   { key: "Mã phiếu nhập", value: "phieuNhap" },
@@ -68,7 +75,7 @@ function SanPham() {
     setSanPhamData([])
     await wait(.5)
     setSanPhamData(new Array(100).fill().map(i => ({
-      ma: v4(), tenSP: "test3", soLuong: 44, thuongHieu: "aaa", heDieuHanh: "aaa", pbHDH: "aaa", xuatXu: "aa"
+      ma: v4(), tenSP: "test3", soLuong: Math.floor(Math.random() * 1000), thuongHieu: "aaa", heDieuHanh: "aaa", pbHDH: "aaa", xuatXu: "aa"
     })));
   }
 
@@ -115,19 +122,42 @@ function SanPham() {
     // send request to api
   }
 
+  function onImportExcel() {
+    const elem = document.getElementById("input-xlms")
+    elem.click()
+    const file = elem.value
+    console.log(file)
+  }
+
+  function onExportExcel() {
+    const result = sanPhamData.map(i => Object.fromEntries(Object.entries(i).map(([key, value]) => [colToName[key], value])))
+    exportExcel(result, "sản phẩm")
+  }
   return (
     <>
       <Page2
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
-          <ToolBtn color="#e69138" icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
-          <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDeleteSP} />
-          <ToolBtn color="#2b78e4" icon={faRectangleList} title="DS IMEI" onClick={openModal.bind({}, "imei")} />
-          <ToolBtn color="#009e0f" icon={faFileExcel} title="Nhập Excel" />
-          <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
+          <FormControl id='input-xlms' type='file' className='d-none' />
+          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
+          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
+          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteSP} />
+          <ToolBtn color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={openModal.bind({}, "imei")} />
+          <ToolBtn color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel} />
+          <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel} />
         </>}
-        rightSec={<SearchForm />}
+        rightSec={<FlexForm>
+          <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm" />
+          <Button className='d-flex gap-2 align-items-center px-4 opacity-2' size='lg' variant='success' >
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </Button>
+          <Button className='d-flex gap-2 align-items-center' variant='primary'>
+            <FontAwesomeIcon icon={faArrowRotateRight} />
+            <span>Làm mới</span>
+          </Button>
+          {/* <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"} />
+          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} /> */}
+        </FlexForm>}
         dataTable={<TableA headers={spHeader} data={sanPhamData} index onClick={setRowClick} />}
       />
 
@@ -192,7 +222,7 @@ function SanPham() {
 
                 <FormGroup className='flex-grow-1'>
                   <FormLabel className='fw-bold'>Tìm kiếm</FormLabel>
-                  <FormControl type='text' />
+                  <FormControl className='shadow-sm' type='text' />
                 </FormGroup>
               </Form>
 
@@ -228,91 +258,91 @@ function SanPhamForm() {
   return (
     <Form className='d-flex gap-5 m-5 justify-content-center'>
       <FormGroup className='d-flex flex-column gap-3 ' style={{ width: "40%" }}>
-        <FormControl type='file' onChange={onDataChange.bind({}, "img")} />
-        <Image className='w-100 h-100' src={img} />
+        <InputShadow type='file' onChange={onDataChange.bind({}, "img")} />
+        <Image className='w-100 h-100 shadow' src={img} />
       </FormGroup>
 
       <FormGroup className='d-flex gap-4 flex-wrap w-100'>
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Tên sản phẩm</FormLabel>
-          <FormControl type='text' value={data.tenSP} onChange={onDataChange.bind({}, "tenSP")} />
+          <InputShadow type='text' value={data.tenSP} onChange={onDataChange.bind({}, "tenSP")} />
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Xuất xứ</FormLabel>
-          <FormSelect value={data.xuatXu} onChange={onDataChange.bind({}, "xuatXu")} >
+          <InputShadow as={FormSelect} value={data.xuatXu} onChange={onDataChange.bind({}, "xuatXu")} >
             <option>1</option>
             <option>2</option>
             <option>3</option>
-          </FormSelect>
+          </InputShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Chip xử lý</FormLabel>
-          <FormControl type='text' value={data.cpu} onChange={onDataChange.bind({}, "cpu")} />
+          <InputShadow type='text' value={data.cpu} onChange={onDataChange.bind({}, "cpu")} />
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Dung lượng pin</FormLabel>
-          <InputGroup>
+          <GroupShadow>
             <FormControl type='number' min={0} value={data.pin} onChange={onDataChange.bind({}, "pin")} />
             <InputGroup.Text>mAh</InputGroup.Text>
-          </InputGroup>
+          </GroupShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Kích thước màn</FormLabel>
-          <InputGroup>
+          <GroupShadow>
             <FormControl type='number' min={0} value={data.kichThuocMan} onChange={onDataChange.bind({}, "kichThuocMan")} />
             <InputGroup.Text>inch</InputGroup.Text>
-          </InputGroup>
+          </GroupShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Camera trước</FormLabel>
-          <InputGroup>
+          <GroupShadow>
             <FormControl type='number' min={0} value={data.camTruoc} onChange={onDataChange.bind({}, "camTruoc")} />
             <InputGroup.Text>MP</InputGroup.Text>
-          </InputGroup>
+          </GroupShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Camera sau</FormLabel>
-          <InputGroup>
+          <GroupShadow>
             <FormControl type='number' min={0} value={data.camSau} onChange={onDataChange.bind({}, "camSau")} />
             <InputGroup.Text>MP</InputGroup.Text>
-          </InputGroup>
+          </GroupShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Hệ điều hành</FormLabel>
-          <FormSelect value={data.heDieuHanh} onChange={onDataChange.bind({}, "heDieuHanh")} >
+          <InputShadow as={FormSelect} value={data.heDieuHanh} onChange={onDataChange.bind({}, "heDieuHanh")} >
             <option>1</option>
             <option>2</option>
             <option>3</option>
-          </FormSelect>
+          </InputShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Phiên bản hệ điều hành</FormLabel>
-          <FormControl type='text' value={data.pbHDH} onChange={onDataChange.bind({}, "pbHDH")} />
+          <InputShadow type='text' value={data.pbHDH} onChange={onDataChange.bind({}, "pbHDH")} />
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Thời gian bảo hành</FormLabel>
-          <InputGroup>
+          <GroupShadow>
             <FormControl type='number' min={0} value={data.baoHanh} onChange={onDataChange.bind({}, "baoHanh")} />
             <InputGroup.Text>Tháng</InputGroup.Text>
-          </InputGroup>
+          </GroupShadow>
         </FormGroup>
 
         <FormGroup className=' my-3' style={{ width: "30%" }}>
           <FormLabel className='fs-6 fw-bold'>Thương hiệu</FormLabel>
-          <FormSelect value={data.thuongHieu} onChange={onDataChange.bind({}, "thuongHieu")} >
+          <InputShadow as={FormSelect} value={data.thuongHieu} onChange={onDataChange.bind({}, "thuongHieu")} >
             <option>1</option>
             <option>2</option>
             <option>3</option>
-          </FormSelect>
+          </InputShadow>
         </FormGroup>
       </FormGroup>
     </Form >
