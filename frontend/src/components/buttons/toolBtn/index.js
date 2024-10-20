@@ -5,7 +5,7 @@ import styles from './style.module.css'
 
 const ToolBtn = forwardRef(function ({ as: As = "button", className, icon, color, title, ...prop }, ref) {
   return (
-    <As {...prop} ref={ref} className={["btn d-grid gap-2 text-center align-self-center", className].join(" ")}  >
+    <As {...prop} type="button" ref={ref} className={[styles.button, "btn d-grid gap-2 text-center align-self-center", className].join(" ")}  >
       <FontAwesomeIcon icon={icon} className='mx-auto' color={color} size='3x' />
       <p className={["m-0 fw-bold"].join(" ")}> {title?.toUpperCase()} </p>
     </As>

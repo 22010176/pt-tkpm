@@ -4,7 +4,7 @@ import { useAccordionButton } from 'react-bootstrap/esm/AccordionButton';
 import { AccordionContext, Image } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faWarehouse, faAngleRight, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faWarehouse, faAngleRight, faRightFromBracket, faCircle } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './style.module.css'
 import { navLinks } from '../../../utilities/navLinks';
@@ -14,39 +14,40 @@ function NavLinks({ className, icon, link, eventKey, title, links = [], onClick 
   const [active, setActive] = useState(false)
 
   useEffect(function () {
-    setActive(links.some(i => window.location.pathname.includes(i.href)))
-  }, [links])
+    setActive(links.some(i => window.location.pathname.includes(i.href)) || window.location.pathname === link)
+  }, [links, link])
 
 
   function onUserClick() {
     if (typeof onClick == 'function') onClick(eventKey);
   }
-
+  const clsName = active && "_bg-yellow-0"
   return (
     <Accordion.Item className={[className, 'bg-light'].join(" ")} eventKey={eventKey}>
       {/* header */}
-      <div className={[styles.nav_header, "px-4 py-2"].join(" ")} onClick={useAccordionButton(eventKey, onUserClick)} >
-        <FontAwesomeIcon className={active ? "text-danger" : ""} size='2xl' width={35} icon={icon} />
+      <div className={[clsName, styles.nav_header, "px-4 py-2"].join(" ")} onClick={useAccordionButton(eventKey, onUserClick)} >
+        <FontAwesomeIcon size='2xl' width={35} icon={icon} />
 
         {links.length
           ? <>
-            <p className={[active && "text-danger", "fs-5 fw-semibold my-0"].join(" ")}>{title}</p>
+            <p className={["fs-5 fw-semibold my-0"].join(" ")}>{title}</p>
             <FontAwesomeIcon className={[styles.arrow_icon].join()} icon={faAngleRight} rotation={activeEventKey !== eventKey ? 0 : 90} />
           </>
-          : <a href={link} className="fs-5 text-decoration-none fw-semibold">{title}</a>}
+          : <a href={link} className={["fs-5 text-decoration-none fw-semibold text-dark"].join(" ")}>{title}</a>}
       </div>
 
-      {/* hidden nav-links */}
-      {!!links.length && <Accordion.Collapse eventKey={eventKey} >
-        <ul className='mx-4'>
+      {!!links.length && <Accordion.Collapse eventKey={eventKey}>
+        <div className='position-relative my-1'>
+          <div className={[styles.leftBar, "position-absolute rounded-5"].join(" ")}></div>
           {links?.map(({ href, content, visible }, j) => visible && (
-            <li key={j} className={["py-1"].join(" ")}>
-              <a className={[window.location.pathname.includes(href) && 'text-danger', 'text-decoration-none'].join(" ")} href={href}>{content}</a>
-            </li>
+            <div key={j} className={["py-1 position-relative"].join(" ")}>
+              <div className={[styles.heading, "position-absolute rounded-5", window.location.pathname.includes(href) ? '_bg-yellow-2' : "bg-dark"].join(" ")}></div>
+              <a className={[styles.links, window.location.pathname.includes(href) ? '_text-yellow-2' : "text-dark", 'text-decoration-none fs-5'].join(" ")} href={href}>{content}</a>
+            </div>
           ))}
-        </ul>
+        </div>
       </Accordion.Collapse>}
-    </Accordion.Item>
+    </Accordion.Item >
   );
 }
 

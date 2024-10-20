@@ -1,5 +1,4 @@
 import { useState } from 'react'
-
 import { Form, FormControl, InputGroup, FormGroup, Modal, ModalBody, ModalFooter, FormLabel, Button } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -10,6 +9,8 @@ import ContentA from '../../../components/layouts/blockContent'
 import TableA from '../../../components/tables/tableA'
 import Page3 from '../../../components/layouts/Page3'
 import SideNavbar from '../../../components/layouts/sideBar'
+import colors from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
 
 import style from './style.module.css'
 
@@ -42,19 +43,14 @@ function XuatKho() {
       <Page3
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn href="/xuat-kho/them" color="#63e6be" icon={faCirclePlus} title="Thêm" />
-          <ToolBtn color="#2b78e4" icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
-          <ToolBtn color="#cf2a27" icon={faCircleXmark} title="Hủy" />
-          <ToolBtn color="#009e0f" icon={faFileExport} title="Xuất Excel" />
+          <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm" />
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
+          <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy" />
+          <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel" />
         </>}
         rightForm={<>
-          <Form.Select className='w-auto'>
-            <option value="1">Tất cả</option>
-            <option value="2">Tên</option>
-            <option value="3">A</option>
-          </Form.Select>
-          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />
-          <IconBtn icon={faMagnifyingGlass} title={"Tìm kiếm"} className="btn-primary w-auto'" />
+          <InputShadow as={FormControl} className='w-auto' type='text' placeholder='Tìm kiếm' />
+          <IconBtn icon={faMagnifyingGlass} className="btn-primary w-auto btn-lg" />
           <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-success w-auto'" />
         </>}
         leftForm={<>

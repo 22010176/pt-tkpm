@@ -26,3 +26,20 @@
 .nav_header .arrow_icon {
   transition: all .5s;
 }
+
+.links {
+  margin-left: 110px;
+}
+
+.leftBar {
+  background-color: black;
+  height: 100%;
+  width: 2px;
+  transform: translateX(calc(90px - 50%));
+}
+
+.heading {
+  width: 10px;
+  height: 10px;
+  transform: translateX(calc(90px - 50%)) translateY(100%);
+}

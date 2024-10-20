@@ -11,6 +11,7 @@ import HeaderModalA from '../../../components/modals/headerA'
 import SideNavbar from '../../../components/layouts/sideBar'
 
 import styles from './style.module.css'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const thuocTinh = {
   thuongHieu: { title: "Thương hiệu", icon: faEmpire, id: "thuongHieu", className: "_bg-green-1 _bg-green-hover-0" },
@@ -28,6 +29,7 @@ function ThuocTinh() {
   const [modal, setModal] = useState()
 
   function openOverlay(modal, e) {
+
     setModal(thuocTinh[modal])
   }
 
@@ -43,21 +45,21 @@ function ThuocTinh() {
         </div>
       </Page1>
 
-      <Modal backdrop="static" show={modal} scrollable centered size='lg'>
+      <Modal backdrop="static" show={!!modal} scrollable centered size='lg'>
         <HeaderModalA title={modal?.title} />
 
         <Modal.Body className='overflow-y-hidden' style={{ height: "60vh" }}>
           <div className='h-100'>
             <div className='align-items-center w-100 d-flex justify-content-center gap-4 mb-4'>
-              <FontAwesomeIcon size='6x' icon={modal?.icon} className='col-auto' />
+              {!!modal?.icon && <FontAwesomeIcon size='6x' icon={modal.icon} className='col-auto' />}
               <Form className='w-50'>
+                <h5 className='text-nowrap'>{modal?.title}</h5>
                 <Form.Group className='d-flex gap-2 align-items-center'>
-                  <h5 className='text-nowrap'>{modal?.title}</h5>
-                  <InputGroup>
+                  <GroupShadow>
                     <FormControl type={modal?.unit ? "number" : "text"} />
                     {!!modal?.unit && <InputGroup.Text>{modal.unit}</InputGroup.Text>}
-                  </InputGroup>
-                  <Button variant='danger' >
+                  </GroupShadow>
+                  <Button className='shadow-sm' variant='danger' >
                     <FontAwesomeIcon icon={faX} className='p-0 m-0' />
                   </Button>
                 </Form.Group>

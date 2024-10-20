@@ -20,7 +20,6 @@ function Page4({ sidebar, tableTop, table, tableForm, toolBtn, table2, count, ri
                 {tableTop}
               </Form>
 
-
               <ContentA className='h-100 overflow-auto bg-light'>
                 {table}
               </ContentA>

@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCirclePlus, faArrowRotateRight, faMagnifyingGlass, faPencil, faTrashCan, faRectangleList, faFileExcel, faFileExport } from '@fortawesome/free-solid-svg-icons'
 import { Modal, Button, Form, ModalBody, ModalFooter, FormGroup, FormControl, Image, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
 import { wait } from '../../../api'
-
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
 import Page2 from '../../../components/layouts/Page2'
@@ -15,7 +15,7 @@ import ErrorModal from '../../../components/modals/errorModal'
 import CauHinhModal from '../cauHinh'
 import exportExcel from '../../../components/excel'
 import FlexForm from '../../../components/Forms/FlexForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import colors from '../../../utilities/colors'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
@@ -139,12 +139,12 @@ function SanPham() {
         sidebar={<SideNavbar />}
         tools={<>
           <FormControl id='input-xlms' type='file' className='d-none' />
-          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
-          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
-          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteSP} />
-          <ToolBtn color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={openModal.bind({}, "imei")} />
-          <ToolBtn color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel} />
-          <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel} />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
+          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteSP} />
+          <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={openModal.bind({}, "imei")} />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel} />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel} />
         </>}
         rightSec={<FlexForm>
           <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm" />
@@ -204,31 +204,30 @@ function SanPham() {
               <Form className='d-flex justify-content-between gap-4 mb-3'>
                 <FormGroup className='flex-grow-1'>
                   <FormLabel className='fw-bold'>Phiên bản</FormLabel>
-                  <FormSelect>
+                  <InputShadow as={FormSelect}>
                     <option>test1</option>
                     <option>test2</option>
                     <option>test3</option>
-                  </FormSelect>
+                  </InputShadow>
                 </FormGroup>
 
                 <FormGroup className='flex-grow-1'>
                   <FormLabel className='fw-bold'>Tình trạng</FormLabel>
-                  <FormSelect>
+                  <InputShadow as={FormSelect}>
                     <option>test1</option>
                     <option>test2</option>
                     <option>test3</option>
-                  </FormSelect>
+                  </InputShadow>
                 </FormGroup>
 
                 <FormGroup className='flex-grow-1'>
                   <FormLabel className='fw-bold'>Tìm kiếm</FormLabel>
-                  <FormControl className='shadow-sm' type='text' />
+                  <InputShadow type='text' />
                 </FormGroup>
               </Form>
 
               <ContentA style={{ height: "40vh" }}>
                 <TableA index headers={imeiHeader} />
-                {/* <div style={{ height: "1000px" }}></div> */}
               </ContentA>
             </ModalBody>
 

@@ -15,7 +15,7 @@ function Page3({ sidebar, tools, rightForm, leftForm, table }) {
     <Page1 sidebar={sidebar}>
       <div className='d-flex gap-3 flex-column w-100 h-100 p-3'>
         <ContentA className="d-flex justify-content-between px-3" style={{ height: height + "%" }}>
-          <div className='d-flex' >
+          <div className='d-flex gap-2' >
             {tools}
           </div>
 

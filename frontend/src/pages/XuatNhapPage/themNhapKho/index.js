@@ -3,14 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 
-import ContentA from '../../../components/layouts/blockContent'
-import Page1 from '../../../components/layouts/Page1'
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
 import BarCodeScanner from '../../../components/barcode'
+import Page4 from '../../../components/layouts/Page4'
 
 import style from './style.module.css'
-import Page4 from '../../../components/layouts/Page4'
+import InputShadow from '../../../components/Forms/InputShadow'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const spHeader = [
   { key: "Mã SP", value: "ma" },
@@ -28,11 +28,6 @@ const khoHeader = [
 ]
 
 function ThemNhapKho() {
-  const width = 75;
-  const height = 60;
-
-  const width2 = 60;
-
   const [modal, setModal] = useState("")
   const [imei, setImei] = useState({})
 
@@ -54,7 +49,6 @@ function ThemNhapKho() {
     setImei(src => ({ ...src, [data]: data }))
 
     elem.value = ""
-
   }
   return (
     <>
@@ -62,64 +56,62 @@ function ThemNhapKho() {
         count={0}
         sidebar={<SideNavbar />}
         tableTop={
-          <InputGroup>
+          <GroupShadow>
             <InputGroup.Text>Tìm kiếm</InputGroup.Text>
             <Form.Control />
             <Button variant="success">
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </Button>
-          </InputGroup>
+          </GroupShadow>
         }
         table={<TableA headers={khoHeader} index />}
         tableForm={
-          <Form className='p-3 d-flex gap-3 flex-column justify-content-around'>
+          <Form className='p-3 d-flex gap-3 w-100 flex-column'>
             <FormGroup className='d-flex justify-content-between gap-4'>
               <FormGroup>
                 <FormLabel className='fw-bold'>Mã sp</FormLabel>
-                <FormControl type='text' disabled size='sm' />
+                <InputShadow as={FormControl} type='text' disabled size='sm' />
               </FormGroup>
 
               <FormGroup>
                 <FormLabel className='fw-bold'>Tên sp</FormLabel>
-                <FormControl size='sm' type='text' disabled />
+                <InputShadow as={FormControl} size='sm' type='text' disabled />
               </FormGroup>
             </FormGroup>
 
             <FormGroup>
               <FormLabel className='fw-bold'>Cấu hình</FormLabel>
-              <FormSelect size='sm'>
+              <InputShadow as={FormSelect} size='sm'>
                 <option>test</option>
                 <option>tes2</option>
                 <option>tes4</option>
                 <option>tes5</option>
-              </FormSelect>
+              </InputShadow>
             </FormGroup>
 
             <FormGroup>
               <FormLabel className='fw-bold'>Giá nhập</FormLabel>
-              <InputGroup>
+              <GroupShadow size="sm">
                 <FormControl size='sm' type='number' />
                 <InputGroup.Text>VNĐ</InputGroup.Text>
-              </InputGroup>
+              </GroupShadow>
             </FormGroup>
 
-            <FormGroup className='d-flex gap-2 flex-column'>
-              <div className='d-flex gap-3 justify-content-between'>
-                <FormLabel className='fw-bold'>Mã IMEI</FormLabel>
-                <ButtonGroup>
-                  <Button variant='primary' size="sm" onClick={openModal.bind({}, "scanIMEI")}>Scan</Button>
-                  <Button variant='success' size="sm">Excel</Button>
-                </ButtonGroup>
-              </div>
+            <FormGroup className='d-flex gap-2 justify-content-between align-items-center'>
+              <FormLabel className='fw-bold'>Mã IMEI</FormLabel>
+              <ButtonGroup>
+                <Button variant='primary' size="sm" onClick={openModal.bind({}, "scanIMEI")}>Scan</Button>
+                <Button variant='success' size="sm">Excel</Button>
+              </ButtonGroup>
             </FormGroup>
 
-            <FormGroup className='h-100'>
-              <InputGroup size='sm'>
+            <FormGroup>
+              <GroupShadow size='sm'>
                 <FormControl type='text' id='imei-input' size='sm' />
                 <Button variant='primary' onClick={onInsertIMEICode}>
                   <FontAwesomeIcon icon={faPlus} />
                 </Button>
-              </InputGroup>
+              </GroupShadow>
 
               <div className='h-100 overflow-auto'>
                 <ListGroup variant='flush' className='bg-light'>
@@ -130,8 +122,8 @@ function ThemNhapKho() {
           </Form>
         }
         toolBtn={<>
-          <Button size='sm' className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
           <Button size='sm' className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
+          <Button size='sm' className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
           <Button size='sm' className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
           <Button size='sm' className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
         </>}
@@ -139,22 +131,22 @@ function ThemNhapKho() {
         rightTopForm={<>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã phiếu nhập</FormLabel>
-            <FormControl disabled />
+            <InputShadow as={FormControl} disabled />
           </FormGroup>
 
           <FormGroup>
             <FormLabel className='fw-bold'>Nhân viên nhập</FormLabel>
-            <FormControl disabled />
+            <InputShadow as={FormControl} disabled />
           </FormGroup>
 
           <FormGroup>
             <FormLabel className='fw-bold'>Nhà cung cấp</FormLabel>
-            <FormSelect>
+            <InputShadow as={FormSelect}>
               <option>test1</option>
               <option>test2</option>
               <option>test3</option>
               <option>test4</option>
-            </FormSelect>
+            </InputShadow>
           </FormGroup>
         </>}
         rightBottomForm={<>

@@ -1,13 +1,14 @@
-import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faFileExcel, faFileExport } from '@fortawesome/free-solid-svg-icons'
-import { Form, FormControl, FormSelect } from 'react-bootstrap'
+import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faFileExcel, faFileExport, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { Form, FormControl, FormSelect, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import InputShadow from '../../../components/Forms/InputShadow'
 import TableA from '../../../components/tables/tableA'
 import Page2 from '../../../components/layouts/Page2'
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
-import IconBtn from '../../../components/buttons/iconBtn'
-import SearchForm2 from '../../../components/Forms/searchForm2'
 import FlexForm from '../../../components/Forms/FlexForm'
+import colors from '../../../utilities/colors'
 
 import styles from './style.module.css'
 
@@ -26,21 +27,21 @@ function NhanVien() {
     <Page2
       sidebar={<SideNavbar />}
       tools={<>
-        <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" />
-        <ToolBtn color="#e69138" icon={faPencil} title="Sửa" />
-        <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" />
-        <ToolBtn color="#009e0f" icon={faFileExport} title="Nhập Excel" />
-        <ToolBtn color="#009e0f" icon={faFileExcel} title="Xuất Excel" />
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" />
+        <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" />
+        <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" />
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel" />
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" />
       </>}
       rightSec={<FlexForm>
-        <FormSelect className='w-auto'>
-          <option>test1</option>
-          <option>test2</option>
-          <option>test3</option>
-          <option>test4</option>
-        </FormSelect>
-        <FormControl className='w-auto d-block' type='text' placeholder='Tìm kiếm' />
-        <IconBtn className="w-auto btn-success" icon={faArrowRotateRight} title={"Làm mới"} />
+        <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm" />
+        <Button className='d-flex gap-2 align-items-center px-4 opacity-2' size='lg' variant='success' >
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Button>
+        <Button className='d-flex gap-2 align-items-center' variant='primary'>
+          <FontAwesomeIcon icon={faArrowRotateRight} />
+          <span>Làm mới</span>
+        </Button>
       </FlexForm>
       }
       dataTable={<TableA headers={nhanVienHeader} />}

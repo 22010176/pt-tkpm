@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
+import { FormControl } from 'react-bootstrap'
 
 import styles from './style.module.css'
-import { FormControl } from 'react-bootstrap'
 
 const InputShadow = forwardRef(function ({ as: As = "input", className, children, ...prop }, ref) {
   return (

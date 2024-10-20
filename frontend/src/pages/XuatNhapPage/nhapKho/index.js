@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
+import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import { faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
@@ -14,6 +14,8 @@ import Page3 from '../../../components/layouts/Page3'
 import styles from './style.module.css'
 import ExcelExport from '../../../components/excel'
 import colors from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const phieuNhapHd = [
   { key: "Mã phiếu nhập", value: "ma" },
@@ -44,72 +46,59 @@ function NhapKho() {
       <Page3
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn href="/nhap-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm" />
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
-          <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy" />
-          <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel" />
+          <ToolBtn as="a" className="_border-green-focus" href="/nhap-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm" />
+          <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")} />
+          <ToolBtn className="_border-red-focus" color={colors.red} icon={faCircleXmark} title="Hủy" />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" />
         </>}
         rightForm={<>
-          <div>
-            <Form.Select>
-              <option value="1">Tất cả</option>
-              <option value="2">Tên</option>
-              <option value="3">A</option>
-            </Form.Select>
-          </div>
-          <div>
-            <FormControl type='text' placeholder='Tìm kiếm' />
-          </div>
-          <div>
-            <IconBtn icon={faMagnifyingGlass} title={"Tìm kiếm"} className="btn-primary" />
-          </div>
-          <div>
-            <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-primary" />
-          </div>
+          <InputShadow type='text' className="w-auto" placeholder='Tìm kiếm' />
+          <IconBtn icon={faMagnifyingGlass} className="btn-success btn-lg" />
+          <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-primary" />
         </>}
         leftForm={<>
           <Form.Group>
             <Form.Label className='fw-bold'>Nhà cung cấp</Form.Label>
-            <Form.Select>
+            <InputShadow as={FormSelect}>
               <option>a</option>
               <option>b</option>
               <option>c</option>
-            </Form.Select>
+            </InputShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Nhân viên nhập</Form.Label>
-            <Form.Select>
+            <InputShadow as={FormSelect}>
               <option>a</option>
               <option>b</option>
               <option>c</option>
-            </Form.Select>
+            </InputShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Từ ngày</Form.Label>
-            <Form.Control type='date' />
+            <InputShadow type="date" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Đến ngày</Form.Label>
-            <Form.Control type='date' />
+            <InputShadow type="date" />
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Từ số tiền</Form.Label>
-            <InputGroup>
+            <GroupShadow>
               <Form.Control type='number' />
               <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
+            </GroupShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Đến số tiền</Form.Label>
-            <InputGroup>
+            <GroupShadow>
               <Form.Control type='number' />
               <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
+            </GroupShadow>
           </Form.Group>
         </>}
         table={<TableA index headers={phieuNhapHd} />}
