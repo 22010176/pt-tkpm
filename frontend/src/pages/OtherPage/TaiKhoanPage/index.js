@@ -1,8 +1,8 @@
 import { Image, Form, FormGroup, FormLabel, FormControl, FormSelect, Button } from 'react-bootstrap'
-import ContentA from '../../components/layouts/blockContent'
-import Page1 from '../../components/layouts/Page1'
-import SideNavbar from '../../components/layouts/sideBar'
-import InputShadow from '../../components/Forms/InputShadow'
+import ContentA from '../../../components/layouts/blockContent'
+import Page1 from '../../../components/layouts/Page1'
+import SideNavbar from '../../../components/layouts/sideBar'
+import InputShadow from '../../../components/Forms/InputShadow'
 
 import styles from './style.module.css'
 

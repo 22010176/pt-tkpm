@@ -5,7 +5,7 @@ import {
 import TrangChu from "../pages/OtherPage/trangChu"
 import NhanVien from "../pages/OtherPage/nhanVien"
 import PhanQuyen from "../pages/OtherPage/phanQuyen"
-import TaiKhoan from "../pages/TaiKhoanPage"
+import TaiKhoan from "../pages/OtherPage/TaiKhoanPage"
 
 import SanPham from "../pages/SanPhamPage/sanPham"
 import ThuocTinh from "../pages/SanPhamPage/thuocTinh"
@@ -19,10 +19,12 @@ import KhachHang from "../pages/DoiTacPage/khachHang"
 import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
 
 import DoiTraHang from "../pages/DichVuPage/doiTraHang"
+import DangSuat from "../pages/OtherPage/dangSuat"
 
 
 export const navLinks = [
-  { title: "", hidden: true, eventKey: "trangChu", link: "/tai-khoan", Component: TaiKhoan, links: [] },
+  { title: "", hidden: true, eventKey: "caNhan", link: "/tai-khoan-ca-nhan", Component: TaiKhoan, links: [] },
+  { title: "", hidden: true, eventKey: "dangSuat", link: "/dang-suat", Component: DangSuat, links: [] },
   { title: "Trang chủ", eventKey: "trangChu", link: "/", icon: faHouse, Component: TrangChu, links: [] },
   {
     title: "Sản phẩm", eventKey: "sanPham", icon: faLaptop, links: [

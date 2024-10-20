@@ -1,4 +1,0 @@
-1. Thêm box-shadow cho tất cả các input
-2. Dùng mã màu ở trong balid
-3. Ở trang xuất kho, nút khách hàng hiện thị modal chọn khách hàng.
-4. Sửa border tool btn

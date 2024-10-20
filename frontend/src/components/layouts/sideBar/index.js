@@ -67,11 +67,10 @@ export default function SideNavbar({ navItem = navLinks, account }) {
     <div className={["bg-light h-100 user-select-none"].join(" ")}>
       {/* Tài khoản */}
       <div className={[styles.account_sec, "d-flex gap-3 align-items-center border-bottom p-3 m-0"].join(" ")}>
-        <a href='/tai-khoan' className={[styles.avatar, "align-self-center d-grid"].join(" ")}>
+        <a href='/tai-khoan-ca-nhan' className={[styles.avatar, "align-self-center d-grid"].join(" ")}>
           <Image className='bg-primary' src={account?.img || ""} roundedCircle />
-          {/* <img className={[styles.avatar, "rounded-circle bg-primary"].join(" ")} src={account?.img || ""} alt='avartar' /> */}
         </a>
-        <a href='/tai-khoan' className={["text-decoration-none text-dark"].join(" ")}>
+        <a href='/tai-khoan-ca-nhan' className={["text-decoration-none text-dark"].join(" ")}>
           <p className={["fs-5 fw-bold m-0"].join(" ")}>{account?.name || "User"}</p>
           <p className={["fs-6 m-0"].join(" ")}>{account?.role || "Quản lý kho"}</p>
         </a>
@@ -85,10 +84,9 @@ export default function SideNavbar({ navItem = navLinks, account }) {
         </Accordion>
 
         {/* Đăng xuất */}
-        <div className="border-top my-3">
-          <NavLinks icon={faRightFromBracket} title={"Đăng xuất"} />
+        <div className="border-top ">
+          <NavLinks icon={faRightFromBracket} title={"Đăng xuất"} link="/dang-suat" />
         </div>
-
       </div>
     </div>
   )
