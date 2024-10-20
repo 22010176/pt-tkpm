@@ -1,4 +1,6 @@
 import { Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMagnifyingGlass, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
@@ -29,6 +31,9 @@ function ThemXuatKho() {
         <InputGroup>
           <InputGroup.Text>Tìm kiếm</InputGroup.Text>
           <Form.Control />
+          <Button variant="success">
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </Button>
         </InputGroup>
       }
       table={<TableA headers={khoHeader} index />}
@@ -84,8 +89,8 @@ function ThemXuatKho() {
         </Form>
       }
       toolBtn={<>
-        <Button className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
         <Button className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
+        <Button className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
         <Button className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
         <Button className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
       </>}
