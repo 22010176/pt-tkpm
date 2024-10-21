@@ -1,17 +1,19 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
-import { Modal, ModalFooter, Form, Button, FormControl } from 'react-bootstrap'
+import { faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalFooter, Form, Button, FormControl, ModalBody, ModalHeader, FormGroup, FormLabel } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
+import ContentA from '../../../components/layouts/blockContent'
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
 import Page2 from '../../../components/layouts/Page2'
 import TableA from '../../../components/tables/tableA'
-
 import IconBtn from '../../../components/buttons/iconBtn'
 import HeaderModalA from '../../../components/modals/headerA'
 import ErrorModal from '../../../components/modals/errorModal'
 import FlexForm from '../../../components/Forms/FlexForm'
+import InputShadow from '../../../components/Forms/InputShadow'
+import colors from '../../../utilities/colors'
 
 import styles from './style.module.css'
 
@@ -20,6 +22,8 @@ const KhachHangContext = createContext()
 const defaultKhachHang = {
   ma: undefined, hoTen: "", ngaySinh: new Date().toISOString().split('T')[0], diaChi: "", mail: "", sdt: ""
 }
+
+
 const khachHangHeader = [
   { key: "Mã KH", value: "ma" },
   { key: "Tên khách hàng", value: "hoTen" },
@@ -28,6 +32,14 @@ const khachHangHeader = [
   { key: "Email", value: "mail" },
   { key: "Số điện thoại", value: "sdt" },
   { key: "Ngày tham gia", value: "ngayThamGia" },
+]
+
+const lichSuMuaHangHeader = [
+  { key: "Ngày mua hàng", value: "ma" },
+  { key: "Mã phiếu xuất hàng", value: "tenNCC" },
+  { key: "Số lượng", value: "diaChi" },
+  { key: "Thành tiền", value: "mail" },
+  { key: "Ghi chú", value: "sdt" },
 ]
 
 function KhachHangForm() {
@@ -115,14 +127,15 @@ function KhachHang() {
         toolbarHeight={15}
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
-          <ToolBtn color="#e69138" icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
-          <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang} />
+          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
+          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
+          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang} />
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Sửa" onClick={openModal.bind({}, "lichSu")} />
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />
-          <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"} />
-          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} />
+          <IconBtn className='w-auto btn-primary btn-lg btn-success' icon={faMagnifyingGlass} />
+          <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"} />
         </FlexForm>}
         dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={onRowClick} />}
       />
@@ -160,6 +173,59 @@ function KhachHang() {
           Hãy chọn một khách hàng!!!
         </ErrorModal>
       </KhachHangContext.Provider>
+
+
+      <Modal centered size="xl" show={modal === "lichSu"} backdrop="static" className='vh-100' scrollable>
+        <HeaderModalA title="LỊCH SỬ MUA HÀNG" />
+
+        <ModalBody className='d-flex flex-column h-100 gap-4 px-5 py-4'>
+          <Form className='d-flex flex-column gap-4'>
+            <FormGroup className='d-flex gap-5'>
+              <FormGroup className='_w-40'>
+                <FormLabel className='fw-bold'>Mã khách hàng</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+              <FormGroup className='_w-100'>
+                <FormLabel className='fw-bold'>Tên khách hàng</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+              <FormGroup className='_w-50'>
+                <FormLabel className='fw-bold'>Ngày sinh</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+              <FormGroup className='_w-50'>
+                <FormLabel className='fw-bold'>Ngày tham gia</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+            </FormGroup>
+
+            <FormGroup className='d-flex gap-5'>
+              <FormGroup className='_w-100'>
+                <FormLabel className='fw-bold'>Địa chỉ</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+              <FormGroup className='_w-25'>
+                <FormLabel className='fw-bold'>Số điện thoại</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+              <FormGroup className='_w-25'>
+                <FormLabel className='fw-bold'>Email</FormLabel>
+                <InputShadow as={FormControl} size="sm" disabled />
+              </FormGroup>
+            </FormGroup>
+          </Form>
+
+          <ContentA>
+            <TableA headers={lichSuMuaHangHeader} />
+            <div style={{ height: "10000px" }}></div>
+          </ContentA>
+        </ModalBody>
+
+        <ModalFooter className='d-flex justify-content-center gap-5'>
+          <Button className='_w-15' variant='primary'>Xuất PDF</Button>
+          <Button className='_w-15' variant='danger' onClick={openModal.bind({}, "")}>Đóng</Button>
+        </ModalFooter>
+      </Modal>
     </>
   )
 }

@@ -31,6 +31,15 @@ const chiTietPhieuHd = [
   { key: "Đơn giá", value: "gia" },
 ]
 
+const phieuXuatHeader = [
+  { key: "Mã sp", value: "tenSP" },
+  { key: "Tên sản phẩm", value: "tonKho" },
+  { key: "RAM", value: "tonKho" },
+  { key: "ROM", value: "tonKho" },
+  { key: "Màu sắc", value: "tonKho" },
+  { key: "Mã IMEI", value: "tonKho" },
+  { key: "Đơn giá", value: "tonKho" },
+]
 function XuatKho() {
   const [modal, setModal] = useState("")
 
@@ -132,6 +141,41 @@ function XuatKho() {
             <div style={{ height: "1000px" }}></div>
           </ContentA>
           <p className='text-end m-0 fw-bold mx-4'>Tổng số: <span>2</span> chiếc</p>
+        </ModalBody>
+
+        <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+          <Button variant='primary' style={{ width: "20%" }}>Xuất PDF</Button>
+          <Button variant='danger' style={{ width: "20%" }} onClick={openModal.bind({}, "")}>Hủy</Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal centered scrollable size='xl' show={modal === "phieuSuat"} className='vh-100'>
+        <HeaderModalA title="THÔNG TIN PHIẾU XUẤT" />
+
+        <ModalBody className='d-flex flex-column gap-5 p-5'>
+          <Form className='d-flex gap-5 justify-content-between'>
+            <FormGroup>
+              <FormLabel className='fw-bold'>Mã phiếu</FormLabel>
+              <InputShadow disabled />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
+              <InputShadow disabled />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel className='fw-bold'>Khách hàng</FormLabel>
+              <InputShadow disabled />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel className='fw-bold'>Thời gian</FormLabel>
+              <InputShadow disabled type="date" />
+            </FormGroup>
+          </Form>
+
+          <ContentA>
+            <TableA headers={phieuXuatHeader} />
+            <div style={{ height: "1000px" }}></div>
+          </ContentA>
         </ModalBody>
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>

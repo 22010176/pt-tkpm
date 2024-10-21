@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
-import { Modal, Button, Form, FormControl } from 'react-bootstrap'
+import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faMagnifyingGlass, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { Modal, Button, Form, FormControl, ModalBody, ModalFooter, FormGroup, FormLabel } from 'react-bootstrap'
 import { v4 } from 'uuid'
 
 import SideNavbar from '../../../components/layouts/sideBar'
@@ -13,6 +13,9 @@ import HeaderModalA from '../../../components/modals/headerA'
 import ErrorModal from '../../../components/modals/errorModal'
 import { wait } from '../../../api'
 import FlexForm from '../../../components/Forms/FlexForm'
+import InputShadow from '../../../components/Forms/InputShadow'
+import ContentA from '../../../components/layouts/blockContent'
+import colors from '../../../utilities/colors'
 
 const NCCContext = createContext()
 const defaultNCC = { ma: undefined, tenNCC: "", diaChi: "", mail: "", sdt: "" }
@@ -23,6 +26,14 @@ const nhaCungCapHeader = [
   { key: "Địa chỉ", value: "diaChi" },
   { key: "Email", value: "mail" },
   { key: "Số điện thoại", value: "sdt" },
+]
+
+const lichSuMuaHangHeader = [
+  { key: "Ngày nhập hàng", value: "ma" },
+  { key: "Mã phiếu nhập hàng", value: "tenNCC" },
+  { key: "Số lượng", value: "diaChi" },
+  { key: "Thành tiền", value: "mail" },
+  { key: "Ghi chú", value: "sdt" },
 ]
 
 function NhaCungCapForm() {
@@ -111,9 +122,10 @@ function NhaCungCap() {
         toolbarHeight={15}
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn color="#63e6be" icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
-          <ToolBtn color="#e69138" icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
-          <ToolBtn color="#ffd43b" icon={faTrashCan} title="Xóa" onClick={onDelete} />
+          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
+          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
+          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete} />
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Sửa" onClick={openModal.bind({}, "lichSu")} />
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />
@@ -137,7 +149,7 @@ function NhaCungCap() {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={modal === "edit"} size='lg' centered backdrop="static">
+        <Modal show={modal === "edit"} size='lg' centered backdrop="static" >
           <HeaderModalA title={"CHỈNH SỬA NHÀ CUNG CẤP"} />
 
           <Modal.Body>
@@ -153,6 +165,51 @@ function NhaCungCap() {
         <ErrorModal show={modal === "error"} onHide={openModal.bind({})}>
           Phải chọn 1 nhà cung cấp!!!
         </ErrorModal>
+
+        <Modal centered size="xl" show={modal === "lichSu"} backdrop="static" className='vh-100' scrollable>
+          <HeaderModalA title="LỊCH SỬ MUA HÀNG" />
+
+          <ModalBody className='d-flex flex-column h-100 gap-4 px-5 py-4'>
+            <Form className='d-flex flex-column gap-4'>
+              <FormGroup className='d-flex gap-5'>
+                <FormGroup className='_w-40'>
+                  <FormLabel className='fw-bold'>Mã nhà cung cấp</FormLabel>
+                  <InputShadow as={FormControl} size="sm" disabled />
+                </FormGroup>
+                <FormGroup className='_w-100'>
+                  <FormLabel className='fw-bold'>Tên nhà cung cấp</FormLabel>
+                  <InputShadow as={FormControl} size="sm" disabled />
+                </FormGroup>
+                <FormGroup className='_w-50'>
+                  <FormLabel className='fw-bold'>Email</FormLabel>
+                  <InputShadow as={FormControl} size="sm" disabled />
+                </FormGroup>
+                <FormGroup className='_w-50'>
+                  <FormLabel className='fw-bold'>Số điện thoại</FormLabel>
+                  <InputShadow as={FormControl} size="sm" disabled />
+                </FormGroup>
+              </FormGroup>
+
+              <FormGroup className='d-flex gap-5'>
+                <FormGroup className='_w-55'>
+                  <FormLabel className='fw-bold'>Địa chỉ</FormLabel>
+                  <InputShadow as={FormControl} size="sm" disabled />
+                </FormGroup>
+
+              </FormGroup>
+            </Form>
+
+            <ContentA>
+              <TableA headers={lichSuMuaHangHeader} />
+              <div style={{ height: "10000px" }}></div>
+            </ContentA>
+          </ModalBody>
+
+          <ModalFooter className='d-flex justify-content-center gap-5'>
+            <Button className='_w-15' variant='primary'>Xuất PDF</Button>
+            <Button className='_w-15' variant='danger' onClick={openModal.bind({}, "")}>Đóng</Button>
+          </ModalFooter>
+        </Modal>
       </NCCContext.Provider>
     </>
   )
