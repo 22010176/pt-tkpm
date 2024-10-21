@@ -10,12 +10,12 @@ import ToolBtn from '../../../components/buttons/toolBtn'
 import SearchForm2 from '../../../components/Forms/searchForm2'
 import InputShadow from '../../../components/Forms/InputShadow'
 import FlexForm from '../../../components/Forms/FlexForm'
-
 import colors from '../../../utilities/colors'
-import styles from './style.module.css'
 import HeaderModalA from '../../../components/modals/headerA'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 import ContentA from '../../../components/layouts/blockContent'
+
+import styles from './style.module.css'
 
 const tableHd = [
   { key: "Mã tài khoản", value: "" },

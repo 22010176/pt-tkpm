@@ -130,7 +130,7 @@ function KhachHang() {
           <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal} />
           <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal} />
           <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang} />
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Sửa" onClick={openModal.bind({}, "lichSu")} />
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "lichSu")} />
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' />

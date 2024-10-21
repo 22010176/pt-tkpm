@@ -1,17 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight, faCircleCheck, faEnvelope, faKey, faMailBulk, faRightToBracket, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
 
+import InputShadow from '../../../components/Forms/InputShadow';
 import colors from '../../../utilities/colors';
 import styles from './style.module.css'
-import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
-import InputShadow from '../../../components/Forms/InputShadow';
 
 function DangNhap() {
-  return (
+  return (<>
+
     <div className='d-flex flex-column vw-100 vh-100 bg-light'>
       <div className='_bg-blue-3 px-5 py-3 text-light d-flex justify-content-between'>
         <h1>HỆ THỐNG QUẢN LÝ KHO HÀNG ĐIỆN THOẠI</h1>
-        <div className='d-flex gap-2 align-items-center'>
+        <div className='d-flex gap-3 align-items-center'>
           <span>Trang chủ</span>
           <FontAwesomeIcon icon={faCaretRight} />
           <span>Đăng nhập</span>
@@ -38,11 +39,14 @@ function DangNhap() {
 
           <FormGroup className='d-flex flex-column gap-3 text-center' >
             <Button >Đăng nhập</Button>
-            <a href='/'>Quên mật khẩu?</a>
+            <Button variant='outline'>Quên mật khẩu?</Button>
           </FormGroup>
         </Form>
       </div>
     </div>
+
+
+  </>
   )
 }
 

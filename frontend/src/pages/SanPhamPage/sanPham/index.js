@@ -253,7 +253,7 @@ function SanPhamForm() {
   }
 
   return (
-    <Form className='d-flex gap-5 m-5 justify-content-center'>
+    <Form className='d-flex gap-5 mx-5 justify-content-center'>
       <FormGroup className='d-flex flex-column gap-3 ' style={{ width: "40%" }}>
         <InputShadow type='file' onChange={onDataChange.bind({}, "img")} />
         <Image className='w-100 h-100 shadow' src={img} />
