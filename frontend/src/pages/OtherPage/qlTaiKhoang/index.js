@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faCircleInfo, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Form, FormControl, FormSelect, Button, Modal, ModalBody, ModalFooter, FormGroup, FormLabel } from 'react-bootstrap'
@@ -30,15 +31,19 @@ const chonNhanVienHD = [
   { key: "Tên nhân viên", value: "" },
 ]
 function QuanLyTaiKhoang() {
+  const [modal, setModal] = useState("")
+
+  function openModal(key, e) {
+    setModal(key);
+  }
   return (
     <>
       <Page2
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" />
-          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={openModal.bind({}, "add")} />
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={openModal.bind({}, "edit")} />
           <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" />
-          <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faCircleInfo} title="Chi tiết" />
         </>}
         rightSec={<FlexForm>
           <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm" />
@@ -53,10 +58,10 @@ function QuanLyTaiKhoang() {
         dataTable={<TableA headers={tableHd} />}
       />
 
-      <Modal centered size='xl' backdrop="static" scrollable className='_vh-65'>
+      <Modal centered size='xl' show={modal === "add"} backdrop="static" scrollable className='_vh-100'>
         <HeaderModalA title="THÊM TÀI KHOẢN " />
 
-        <ModalBody className='d-flex gap-4 px-5 py-4 _vh-40'>
+        <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
           <div className='h-100 d-flex flex-column gap-2 _w-35'>
             <FormGroup className=''>
               <FormLabel className='fw-bold'>Chọn nhân viên</FormLabel>
@@ -77,20 +82,20 @@ function QuanLyTaiKhoang() {
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button className='_w-20' variant='primary' >Thêm tài khoản</Button>
-          <Button className='_w-20' variant='danger' >Hủy</Button>
+          <Button className='_w-20' variant='danger' onClick={openModal.bind({}, "")} >Hủy</Button>
         </ModalFooter>
       </Modal>
 
-      <Modal centered size='lg' backdrop="static" scrollable className='_vh-65'>
+      <Modal centered size='lg' show={modal === "edit"} backdrop="static" scrollable className='_vh-100'>
         <HeaderModalA title="SỬA TÀI KHOẢN " />
 
-        <ModalBody className='d-flex gap-4 px-5 py-4 _vh-50'>
+        <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
           <TaiKhoanForm className="_w-100" passwordDisabled />
         </ModalBody>
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button className='_w-20' variant='primary' >lưu</Button>
-          <Button className='_w-20' variant='danger' >Hủy</Button>
+          <Button className='_w-20' variant='danger' onClick={openModal.bind({}, "")}>Hủy</Button>
         </ModalFooter>
       </Modal>
     </>

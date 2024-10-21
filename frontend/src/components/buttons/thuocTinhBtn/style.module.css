@@ -1,10 +1,5 @@
 .btn {
   padding: 2% 4%;
   margin: 0px 4%;
-  /* opacity: .75; */
   transition: all .25s;
-}
-
-.btn:hover {
-  opacity: 1;
 }
