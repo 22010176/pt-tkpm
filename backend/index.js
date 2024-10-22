@@ -9,9 +9,12 @@ app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
 
 // Authentication
-app.use('/auth', require("./src/routes/auth"))
-app.use('/nhan-vien', require('./src/routes/nhanVien'))
-app.use('/thuoc-tinh', require('./src/routes/thuocTinh'))
+
+
+app.use('/api/tai-khoan', require("./src/routes/taiKhoan"))
+
+
+app.all('/*', (req, res) => res.json({ message: "not found entry" }))
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)

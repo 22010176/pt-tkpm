@@ -2,18 +2,20 @@
 
 export async function authToken() {
   const token = sessionStorage.getItem("accountToken")
-  const res = await fetch("/auth/authToken", {
+  if (!token && document.location.pathname !== "/dang-nhap") document.location.replace("/dang-nhap")
+
+  // Check token if valid
+  const res = await fetch("/api/auth/authToken", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `token=${token}`
   }).then(a => a.json())
   console.log(res, token)
   // if (res && document.location.pathname === "/dang-nhap") document.location.replace("/")
-  // if (!token && document.location.pathname !== "/dang-nhap") document.location.replace("/dang-nhap")
 }
 
 export async function authAccount(email, password) {
-  return fetch("/auth/authToken", {
+  return fetch("/api/auth/authToken", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: `email=${email}&password=${password}`

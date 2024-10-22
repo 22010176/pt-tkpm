@@ -4,16 +4,16 @@ const router = express.Router()
 const pool = require("../models")
 
 router.route("/")
-  .get((req, res) => {
+  .get((req, res) => { // Get data
 
   })
-  .put((req, res) => {
+  .put((req, res) => { // Insert data
 
   })
-  .post((req, res) => {
+  .post((req, res) => { // Update data
 
   })
-  .delete((req, res) => {
+  .delete((req, res) => { // Remove data
 
   })
 
