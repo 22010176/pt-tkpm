@@ -11,9 +11,9 @@ import colors from '../../../utilities/colors'
 import HeaderModalA from '../../../components/modals/headerA'
 import InputShadow from '../../../components/Forms/InputShadow'
 import FlexForm from '../../../components/Forms/FlexForm'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 import styles from './style.module.css'
-import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const doiTraHeader = [
   { key: "Mã phiếu đổi trả", value: "" },
@@ -181,8 +181,8 @@ function DoiTraHang() {
 
                 <FormGroup className='d-flex justify-content-end w-100'>
                   <Button variant='outline' className='w-auto _border-yellow-focus-2' >
-                    <FontAwesomeIcon icon={faTrashCan} color={colors.yellow_2} size='1x' />
-                    <p className='m-0 _text-yellow-2'>Xóa</p>
+                    <FontAwesomeIcon icon={faTrashCan} color={colors.yellow_2} size='2x' />
+                    {/* <p className='m-0 _text-yellow-2'>Xóa</p> */}
                   </Button>
                 </FormGroup>
               </FormGroup>
@@ -191,8 +191,8 @@ function DoiTraHang() {
           </Form>
           <FormGroup>
             <Button variant='outline' className='w-auto _border-green-focus' >
-              <FontAwesomeIcon icon={faCirclePlus} color={colors.green} size='1x' />
-              <p className='m-0 _text-green'>Xóa</p>
+              <FontAwesomeIcon icon={faCirclePlus} color={colors.green} size='2x' />
+              {/* <p className='m-0 _text-green'>Thêm<br /> sản phẩm</p> */}
             </Button>
           </FormGroup>
 
