@@ -92,7 +92,7 @@ function ThemNhapKho() {
             <FormGroup>
               <FormLabel className='fw-bold'>Giá nhập</FormLabel>
               <GroupShadow size="sm">
-                <FormControl size='sm' type='number' />
+                <FormControl disabled size='sm' type='number' />
                 <InputGroup.Text>VNĐ</InputGroup.Text>
               </GroupShadow>
             </FormGroup>

@@ -20,7 +20,7 @@ function TaiKhoan() {
           </h2>
         </div>
 
-        <div class="d-flex gap-0 gap-3 vh-100">
+        <div className="d-flex gap-0 gap-3 vh-100">
           <ContentA as={Form} className="w-25 h-100 d-flex flex-column p-3 gap-4">
             <FormGroup className='h-50 d-flex flex-column gap-2'>
               <Image src='test' className='h-100 w-100 bg-dark border border-dark border-3' />
