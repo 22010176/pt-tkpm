@@ -6,9 +6,18 @@ import InputShadow from '../../../components/Forms/InputShadow';
 import colors from '../../../utilities/colors';
 import styles from './style.module.css'
 import { useState } from 'react';
+import { authAccount } from '../../../utilities/authentication';
 
 function DangNhap() {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({ mail: "", password: "" });
+
+  async function onSubmit(e) {
+    e.preventDefault()
+    if (!authAccount(formData.mail, formData.password)) return;
+
+    document.location.replace("/")
+
+  }
 
   return (<>
 
@@ -23,25 +32,25 @@ function DangNhap() {
       </div>
       <div className='d-flex h-100'>
         <div className='w-100 bg-light'></div>
-        <Form className='w-100 d-flex flex-column align-items-center justify-content-center gap-5'>
+        <Form className='w-100 d-flex flex-column align-items-center justify-content-center gap-5' onSubmit={onSubmit}>
           <FormLabel className='fw-bold fs-3 _text-blue-3'>Đăng nhập</FormLabel>
 
           <FormGroup className='d-flex gap-3 align-items-center w-50'>
             <FormLabel>
               <FontAwesomeIcon icon={faEnvelope} width={"40px"} />
             </FormLabel>
-            <InputShadow placeholder="Email" type="mail" />
+            <InputShadow placeholder="Email" type="mail" value={formData.mail} onChange={e => setFormData(src => ({ ...src, mail: e.target.value }))} />
           </FormGroup>
 
           <FormGroup className='d-flex gap-3 w-50'>
             <FormLabel>
               <FontAwesomeIcon icon={faKey} width={"40px"} />
             </FormLabel>
-            <InputShadow placeholder="Mật khẩu" type="password" />
+            <InputShadow placeholder="Mật khẩu" type="password" value={formData.password} onChange={e => setFormData(src => ({ ...src, password: e.target.value }))} />
           </FormGroup>
 
           <FormGroup className='d-flex flex-column gap-3 text-center' >
-            <Button >Đăng nhập</Button>
+            <Button type='submit'>Đăng nhập</Button>
             <Button variant='outline'>Quên mật khẩu?</Button>
           </FormGroup>
         </Form>

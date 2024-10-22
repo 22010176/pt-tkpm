@@ -23,7 +23,6 @@ import DangSuat from "../pages/OtherPage/dangSuat"
 import QuanLyTaiKhoang from "../pages/OtherPage/qlTaiKhoang"
 import DangNhap from "../pages/OtherPage/dangNhap"
 
-
 export const navLinks = [
   { title: "", hidden: true, eventKey: "caNhan", link: "/tai-khoan-ca-nhan", Component: TaiKhoan, links: [] },
   { title: "", hidden: true, eventKey: "dangSuat", link: "/dang-suat", Component: DangSuat, links: [] },

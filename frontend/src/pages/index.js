@@ -1,8 +1,8 @@
+import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import { navLinks } from '../utilities/navLinks';
 import ErrorPage from './UtilitesPage/error';
-import { createContext, useEffect, useState } from 'react';
+import { navLinks } from '../utilities/navLinks';
 import { authToken } from '../utilities/authentication';
 
 const UserContext = createContext()
