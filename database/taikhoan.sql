@@ -113,6 +113,7 @@ CREATE TABLE taiKhoan (
 INSERT INTO taiKhoan (email, matKhau, vaiTro) VALUES 
 ('b@b', "admin", 1);
 
+--  Lay danh sach quyen cua tai khoan
 SELECT tk.ma AS maTaiKhoan, tk.vaiTro AS maVaiTro, nq.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong
 FROM taiKhoan AS tk 
 INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
@@ -120,10 +121,9 @@ INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
 INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
 INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
 INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
-WHERE tk.ma = 2;
+WHERE tk.ma = 4;
 
 SELECT * FROM taiKhoan ;
--- WHERE email = '@g' AND matKhau = 'admin2';
 
 SELECT * FROM taiKhoan
 WHERE password = '' AND email = '' AND userID = '';
@@ -141,15 +141,18 @@ CREATE TABLE nhanVien (
     taiKhoan INT UNSIGNED UNIQUE,
     
     FOREIGN KEY (taiKhoan) REFERENCES taiKhoan(ma)
-    ON UPDATE CASCADE ON DELETE CASCADE
+    ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan) VALUES 
-('TEST1', '2001-01-13', '0000000', 'Nam', 2);
+('TEST1', '2001-01-13', '0000000', 'Nam', 4);
 
 
 SELECT * FROM nhanVien AS nv
 INNER JOIN taiKhoan AS tk ON tk.ma = nv.taiKhoan;
+
+DELETE FROM taiKhoan 
+WHERE ma = 2 AND email = 'b@b' AND matKhau = 'admin';
 
 
 
