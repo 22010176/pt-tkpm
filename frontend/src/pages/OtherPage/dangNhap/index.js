@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight, faCircleCheck, faEnvelope, faKey, faMailBulk, faRightToBracket, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
@@ -5,18 +6,19 @@ import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
 import InputShadow from '../../../components/Forms/InputShadow';
 import colors from '../../../utilities/colors';
 import styles from './style.module.css'
-import { useState } from 'react';
+
 import { authAccount } from '../../../utilities/authentication';
 
 function DangNhap() {
-  const [formData, setFormData] = useState({ mail: "", password: "" });
+  const [formData, setFormData] = useState({ mail: "admin2@g", password: "admin" });
 
   async function onSubmit(e) {
     e.preventDefault()
-    if (!authAccount(formData.mail, formData.password)) return;
+    const result = await authAccount(formData.mail, formData.password)
+    if (!result.body.length) alert("Fail")
 
+    sessionStorage.setItem("accountToken", result.body[0].token)
     document.location.replace("/")
-
   }
 
   return (<>

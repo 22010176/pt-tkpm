@@ -9,8 +9,6 @@ app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
 
 // Authentication
-
-
 app.use('/api/tai-khoan', require("./src/routes/taiKhoan"))
 
 
