@@ -1,5 +1,4 @@
 DROP DATABASE IF EXISTS ptpm_taiKhoan;
-
 CREATE DATABASE IF NOT EXISTS ptpm_taiKhoan;
 USE ptpm_taiKhoan;
 
@@ -138,7 +137,7 @@ CREATE TABLE nhanVien (
     ngaySinh DATE,
     soDienThoai VARCHAR(20) UNIQUE,
     gioiTinh ENUM ('Nam', 'Nữ'),
-    taiKhoan INT UNSIGNED UNIQUE,
+    taiKhoan INT UNSIGNED UNIQUE DEFAULT NULL,
     
     FOREIGN KEY (taiKhoan) REFERENCES taiKhoan(ma)
     ON UPDATE CASCADE ON DELETE SET NULL

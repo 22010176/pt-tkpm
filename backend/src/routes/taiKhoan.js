@@ -33,8 +33,8 @@ async function verifyToken(token, email) {
   const connection = await pool.getConnection();
   const [result] = await connection.query(`
 SELECT * FROM taiKhoan
-WHERE matKhau = ? AND email = ? AND ma = ?;`
-    , [data.password, data.email, data.id])
+WHERE matKhau = ? AND email = ? AND ma = ?;`,
+    [data.password, data.email, data.id])
 
   if (!result.length) {
     connection.destroy()

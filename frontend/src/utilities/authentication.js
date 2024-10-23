@@ -1,4 +1,6 @@
+import { createContext } from "react"
 
+export const UserContext = createContext()
 
 export async function authToken() {
   const token = sessionStorage.getItem("accountToken")
@@ -21,7 +23,6 @@ export async function authAccount(email, password) {
     body: `email=${email}&password=${password}`
   }).then(a => a.json())
     .then(data => {
-      console.log(data)
       if (!data.body.length) return data
 
       return data;

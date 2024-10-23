@@ -5,7 +5,7 @@ import ErrorPage from './UtilitesPage/error';
 import { navLinks } from '../utilities/navLinks';
 import { authToken } from '../utilities/authentication';
 
-const UserContext = createContext()
+import { UserContext } from '../utilities/authentication';
 
 function App() {
   const [token, setToken] = useState()

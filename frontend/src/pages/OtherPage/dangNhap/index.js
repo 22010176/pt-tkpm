@@ -15,7 +15,7 @@ function DangNhap() {
   async function onSubmit(e) {
     e.preventDefault()
     const result = await authAccount(formData.mail, formData.password)
-    if (!result.body.length) alert("Fail")
+    if (!result.body.length) return alert("Fail")
 
     sessionStorage.setItem("accountToken", result.body[0].token)
     document.location.replace("/")
