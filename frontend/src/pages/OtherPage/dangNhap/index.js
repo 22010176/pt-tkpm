@@ -10,7 +10,7 @@ import styles from './style.module.css'
 import { authAccount } from '../../../utilities/authentication';
 
 function DangNhap() {
-  const [formData, setFormData] = useState({ mail: "admin2@g", password: "admin" });
+  const [formData, setFormData] = useState({ mail: "b@b", password: "admin" });
 
   async function onSubmit(e) {
     e.preventDefault()

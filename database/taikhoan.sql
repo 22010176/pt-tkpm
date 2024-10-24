@@ -8,35 +8,11 @@ CREATE TABLE chucNang (
     ten VARCHAR(255) UNIQUE
 );
 
-INSERT INTO chucNang (ten) VALUES
-('QuanLySanPham'),
-('QuanLyThuocTinh'),
-('QuanLyNhanVien'),
-('QuanLyNhapKho'),
-('QuanLyXuatKho'),
-('QuanLyKhachHang'),
-('QuanLyNhaCungCap'),
-('QuanLyDoiTraHang'),
-('QuanLyTaiKhoanCaNhan'),
-('QuanLyTaiKhoanNhanVien'),
-('ThongKe'),
-('PhanQuyen');
-SELECT * FROM chucNang ORDER BY ma;
-
 DROP TABLE IF EXISTS hanhDong;
 CREATE TABLE hanhDong (
 	ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     ten VARCHAR(255) UNIQUE
 );
-INSERT INTO hanhDong (ten) VALUES
-('Xem'),
-('XemChiTiet'),
-('Them'),
-('Sua'),
-('XuatExcel'),
-('Xoa');
-
-SELECT * FROM hanhDong ORDER BY ma;
 
 DROP TABLE IF EXISTS quyenHan;
 CREATE TABLE quyenHan (
@@ -50,32 +26,19 @@ CREATE TABLE quyenHan (
     FOREIGN KEY (hanhDong) REFERENCES hanhDong(ma) 
     ON UPDATE CASCADE ON DELETE CASCADE
 );
-INSERT INTO quyenHan (chucNang, hanhDong) VALUES
-(12, 1), -- Xem Phan quyen
-(10, 1), -- Xem Tai khoan Nhan Vien
-(3, 1), -- Xem Nhan vien
-(9, 1); -- Xem tai khoan ca nha
-
-SELECT q.ma, cn.*, qh.* FROM quyenHan AS q
-INNER JOIN chucNang AS cn ON cn.ma = q.chucNang
-INNER JOIN hanhDong AS qh ON qh.ma = q.hanhDong;
 
 DROP TABLE IF EXISTS nhomQuyen;
 CREATE TABLE nhomQuyen (
 	ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    ten VARCHAR(255) UNIQUE
+    maQuyen VARCHAR(255) UNIQUE,
+    ten VARCHAR(255)
 );
-
-INSERT INTO nhomQuyen (ten) VALUES
-('Root');
-
-SELECT * FROM nhomQuyen ORDER BY ma;
 
 DROP TABLE IF EXISTS CTQuyen;
 CREATE TABLE CTQuyen (
 	ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    nhomQuyen INT UNSIGNED,
-    quyenHan INT UNSIGNED,
+    nhomQuyen INT UNSIGNED UNIQUE,
+    quyenHan INT UNSIGNED UNIQUE,
     
     FOREIGN KEY (nhomQuyen) REFERENCES nhomQuyen(ma)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -84,51 +47,16 @@ CREATE TABLE CTQuyen (
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO CTQuyen (nhomQuyen, quyenHan) VALUES 
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4);
-
--- Lay danh sach quyen
-SELECT vt.ma AS maVaiTro, vt.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong 
-FROM CTQuyen AS ct
-INNER JOIN nhomQuyen AS vt ON vt.ma = ct.nhomQuyen
-INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
-INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong;
-
 DROP TABLE IF EXISTS taiKhoan;
 CREATE TABLE taiKhoan (
 	ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     matKhau VARCHAR(255) NOT NULL,
     vaiTro INT UNSIGNED,
     
     FOREIGN KEY (vaiTro) REFERENCES nhomQuyen(ma)
-    ON UPDATE CASCADE ON DELETE CASCADE
+    ON UPDATE CASCADE ON DELETE SET NULL
 );
-
-INSERT INTO taiKhoan (email, matKhau, vaiTro) VALUES 
-('b@b', "admin", 1);
-
---  Lay danh sach quyen cua tai khoan
-SELECT tk.ma AS maTaiKhoan, tk.vaiTro AS maVaiTro, nq.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong
-FROM taiKhoan AS tk 
-INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
-INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
-INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
-INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
-WHERE tk.ma = 4;
-
-SELECT * FROM taiKhoan ;
-
-SELECT * FROM taiKhoan
-WHERE password = '' AND email = '' AND userID = '';
-
-DELETE FROM taiKhoan 
-WHERE ma = '' AND email = '' AND matKhau = '';
 
 DROP TABLE IF EXISTS nhanVien;
 CREATE TABLE nhanVien (
@@ -143,15 +71,131 @@ CREATE TABLE nhanVien (
     ON UPDATE CASCADE ON DELETE SET NULL
 );
 
-INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan) VALUES 
-('TEST1', '2001-01-13', '0000000', 'Nam', 4);
+INSERT INTO chucNang (ten) VALUES
+('QuanLySanPham'),
+('QuanLyThuocTinh'),
+('QuanLyNhapKho'),
+('QuanLyXuatKho'),
+('QuanLyDoiTraHang'),
+('QuanLyKhachHang'),
+('QuanLyNhaCungCap'),
+('QuanLyNhanVien'),
+('QuanLyTaiKhoan'),
+('ThongKe'),
+('QuanLyNhomQuyen'),
+('QuanLyQuyenHan');
+
+INSERT INTO hanhDong (ten) VALUES
+('Xem'),
+('XemCaNhan');
+
+SELECT * FROM hanhDong ORDER BY ma;
+SELECT * FROM chucNang ORDER BY ma;
+SELECT * FROM quyenHan ORDER BY ma;
+
+INSERT INTO quyenHan (chucNang, hanhDong)  (	-- Them quyen xem cho tat ca chuc nang
+	SELECT ma AS chucNang, 1 AS hanhDong 
+    FROM chucNang
+);
+
+INSERT INTO quyenHan (chucNang, hanhDong) (	-- Them quyen xem cac nhan cho quyen han, nhom quyen, tai khoan va nhan vien
+	SELECT cn.ma AS chucNang, hd.ma AS hanhDong
+    FROM chucNang AS cn
+    INNER JOIN hanhDong AS hd 
+    WHERE hd.ma = 2 AND cn.ma IN (25, 24, 22, 21)
+);
+
+-- Lay danh sach cac quyen han
+SELECT qh.ma AS maQuyenHan, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong 
+FROM quyenHan AS qh
+INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
+INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
+ORDER BY maHanhDong;
+
+-- Them vai tro vao trong csdl
+INSERT INTO nhomQuyen (maQuyen, ten) VALUES
+('root', 'Quản lý kho'),
+('nhanVien', 'Nhân viên');
+
+SELECT * FROM nhomQuyen ORDER BY ma;
+SELECT * FROM quyenHan ORDER BY ma;
+SELECT * FROM ctquyen;
+
+-- Gan quyen xem tat ca cac trang cho quan ly kho
+INSERT INTO ctquyen (nhomQuyen, quyenHan) (
+	SELECT nq.ma AS nhomQuyen, qh.ma AS quyenHan 
+    FROM quyenHan AS qh
+    INNER JOIN nhomQuyen AS nq 
+    WHERE nq.ma = 1 
+);
+
+SELECT * FROM nhomQuyen;
+SELECT * FROM quyenHan;
+
+SELECT qh.ma AS maQuyenHan, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong 
+FROM quyenHan AS qh
+INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
+INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong;
+
+--  Them cac quyen xem thong tin ca nhan cho nhan vien
+INSERT INTO ctquyen (nhomQuyen, quyenHan) (
+	SELECT nq.ma AS nhomQuyen, qh.ma AS quyenHan
+    FROM quyenHan AS qh
+    INNER JOIN nhomQuyen AS nq
+    WHERE qh.hanhDong = 2 AND nq.ma = 2
+);
+
+SELECT * FROM chucNang ORDER BY ma;
+
+-- Them quyen xem san pham, thuoc tinh va khach hang cho nhan vien
+INSERT INTO ctquyen (nhomQuyen, quyenHan) (
+	SELECT  nq.ma AS nhomQuyen, qh.ma AS quyenHan
+    FROM quyenHan AS qh
+    INNER JOIN nhomQuyen AS nq
+    WHERE qh.hanhDong = 1 AND nq.ma = 2 AND qh.chucNang IN (14, 15, 22)
+);
+
+-- Lay danh sach nhom quyen cua mot nhom quyen (vi du nhan vien)
+SELECT ct.ma AS ma, vt.ma AS maVaiTro, vt.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong 
+FROM ctQuyen AS ct
+INNER JOIN nhomQuyen AS vt ON vt.ma = ct.nhomQuyen
+INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
+INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
+INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
+WHERE vt.ma = 2
+ORDER BY ct.ma;
+
+SELECT * FROM taiKhoan;
+SELECT * FROM nhomQuyen;
+
+-- Them tai khoan demo cho 2 nhom quyen
+INSERT INTO taiKhoan (email, matKhau, vaiTro) VALUES
+('root', 'admin', 1),
+('nhanVien','admin', 2);
+
+SELECT * FROM taiKhoan;
+
+UPDATE taiKhoan SET email = "nv@mail" WHERE ma = 2;
+
+--  Lay danh sach quyen han cua tai khoan (vi du nhanVien)
+SELECT tk.ma AS maTaiKhoan, tk.email AS email, tk.vaiTro AS maVaiTro, nq.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong
+FROM taiKhoan AS tk 
+INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
+INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
+INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
+INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
+INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
+WHERE tk.ma = 2;
 
 
-SELECT * FROM nhanVien AS nv
-INNER JOIN taiKhoan AS tk ON tk.ma = nv.taiKhoan;
 
-DELETE FROM taiKhoan 
-WHERE ma = 2 AND email = 'b@b' AND matKhau = 'admin';
+
+
+
+
+
+
+
 
 
 

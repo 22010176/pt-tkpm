@@ -13,7 +13,8 @@ export async function authToken() {
   //   body: `token=${token}`
   // }).then(a => a.json())
   // console.log(res, token)
-  // if (res && document.location.pathname === "/dang-nhap") document.location.replace("/")
+  console.log(token)
+  if (token && document.location.pathname === "/dang-nhap") document.location.replace("/")
 }
 
 export async function authAccount(email, password) {
