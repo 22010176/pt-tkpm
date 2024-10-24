@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight, faCircleCheck, faEnvelope, faKey, faMailBulk, faRightToBracket, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
-import { Button, Form, FormGroup, FormLabel } from 'react-bootstrap';
+import { Button, Form, FormGroup, FormLabel, Modal } from 'react-bootstrap';
 
 import InputShadow from '../../../components/Forms/InputShadow';
 import colors from '../../../utilities/colors';
 import styles from './style.module.css'
 
-import { authAccount } from '../../../utilities/authentication';
+import { loginAccount } from '../../../api/authentication';
+import ErrorModal from '../../../components/modals/errorModal';
 
 function DangNhap() {
-  const [formData, setFormData] = useState({ mail: "b@b", password: "admin" });
+  const [formData, setFormData] = useState({ mail: "", password: "" });
+  const [modal, setModal] = useState('')
 
   async function onSubmit(e) {
     e.preventDefault()
-    const result = await authAccount(formData.mail, formData.password)
-    if (!result.body.length) return alert("Fail")
+    const result = await loginAccount(formData.mail, formData.password)
+    if (!result.body.length) return setModal("error")
 
     sessionStorage.setItem("accountToken", result.body[0].token)
     document.location.replace("/")
@@ -59,6 +61,9 @@ function DangNhap() {
       </div>
     </div>
 
+    <ErrorModal show={modal === 'error'} onHide={setModal.bind({}, "")}>
+      <p>Đăng nhập thất bại.</p>
+    </ErrorModal>
 
   </>
   )

@@ -43,6 +43,7 @@ async function parseAccountData(req, res, next) {
 app.use(cors())
 app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
+
 app.use(parseAccountData)
 app.use(getPermission)
 

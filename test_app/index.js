@@ -73,10 +73,25 @@ const xemDanhSachChucNang = async (mail, pass) => {
   return await a.json()
 }
 
+const xemThongTinTaiKhoan = async function (mail, pass) {
+  const res = await dangNhapTest(mail, pass)
+  const body = res.body
+  const a = await fetch("http://localhost:3001/api/tai-khoan/thong-tin-ca-nhan", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": body?.[0]?.token
+    }
+  })
+  return await a.json()
+
+}
 
 
-// xemChucNangTaiKhoan("nv@mail", "admin")
+// xemChucNangTaiKhoan("nv@mil", "admin")
 //   .then(console.log)
-
-xemDanhSachChucNang("root", "admin")
+xemThongTinTaiKhoan("nv@mail", "admin")
   .then(console.log)
+
+// xemDanhSachChucNang("root", "admin")
+//   .then(console.log)

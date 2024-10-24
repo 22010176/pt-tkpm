@@ -189,11 +189,27 @@ WHERE tk.ma = 2;
 
 
 
+SELECT * FROM nhanVien;
+SELECT * FROM taiKhoan;
 
+	-- ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+--     hoTen VARCHAR(255),
+--     ngaySinh DATE,
+--     soDienThoai VARCHAR(20) UNIQUE,
+--     gioiTinh ENUM ('Nam', 'Nữ'),
+--     taiKhoan INT UNSIGNED UNIQUE DEFAULT NULL,
 
+INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan) VALUES
+("test1", "1000-1-20", "1234567890", "Nam", 1),
+("test1", "1000-1-20", "1234567891", "Nam", 2);
 
+SELECT * FROM nhomQuyen;
 
-
+SELECT nv.ma, nv.hoTen, nv.gioiTinh, nv.ngaySinh, nv.soDienThoai, tk.email AS email, nq.ten AS tenNhomQuyen
+FROM nhanvien AS nv
+INNER JOIN taiKhoan AS tk ON tk.ma = nv.taiKhoan
+INNER JOIN nhomQuyen as nq ON nq.ma = tk.vaiTro
+WHERE nv.ma = 2;
 
 
 

@@ -21,8 +21,8 @@ async function authAccount(req, res, next) {
   const account = res.locals.account
   const connection = await pool.getConnection();
   try {
-    const [result] = await connection.query(`
-SELECT * FROM taiKhoan WHERE email = ? AND matKhau = ? LIMIT 1`,
+    const [result] = await connection.query(
+      `SELECT * FROM taiKhoan WHERE email = ? AND matKhau = ? LIMIT 1`,
       [account.email, account.password])
     connection.destroy()
     if (!result.length) return res.json({ body: [], success: false, message: "not registered" })
