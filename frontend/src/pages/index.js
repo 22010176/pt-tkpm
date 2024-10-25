@@ -26,7 +26,7 @@ import DangSuat from "../pages/OtherPage/dangSuat"
 import QuanLyTaiKhoan from "../pages/OtherPage/qlTaiKhoang"
 import DangNhap from "../pages/OtherPage/dangNhap"
 import ErrorPage from './UtilitesPage/error';
-import Page1 from '../components/layouts/Page1';
+import ThongKe from "./thongKePage";
 
 
 const pagePerm = {
@@ -81,7 +81,7 @@ const pagePerm = {
   },
   ThongKe: {
     Xem: [
-      {path: "/thong-ke", element: Page1}
+      {path: "/thong-ke", element: ThongKe}
     ]
   },
   QuanLyQuyenHan: {
@@ -114,6 +114,7 @@ function App() {
           <Route index element={<TrangChu/>}/>
           <Route path='/dang-suat' element={<DangSuat/>}/>
           <Route path='/dang-nhap' element={<DangNhap/>}/>
+
           {perm.map(({tenChucNang, tenHanhDong}) => pagePerm[tenChucNang]?.[tenHanhDong])
           .filter(i => !!i)
           .flat()

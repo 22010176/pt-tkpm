@@ -1,23 +1,6 @@
 import {useState} from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  InputGroup,
-  Modal,
-  ModalBody,
-  ModalFooter
-} from 'react-bootstrap'
-import {
-  faArrowRotateRight,
-  faCircleInfo,
-  faCirclePlus,
-  faCircleXmark,
-  faFileExport,
-  faMagnifyingGlass
-} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
 import HeaderModalA from '../../../components/modals/headerA'

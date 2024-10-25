@@ -7,7 +7,7 @@ const dangNhapTest = (email, password) =>
     },
     body: `email=${email}&password=${password}`
   })
-    .then(a => a.json())
+  .then(a => a.json())
 
 
 // Dang suat
@@ -20,7 +20,7 @@ const dangSuatTest = (token, email) =>
     },
     body: `email=${email}`
   })
-    .then(a => a.json())
+  .then(a => a.json())
 
 // Xoa tai khoan
 const xoaTest = (token, email, password) =>
@@ -32,7 +32,7 @@ const xoaTest = (token, email, password) =>
     },
     body: `email=${email}&password=${password}`
   })
-    .then(a => a.json())
+  .then(a => a.json())
 
 const xemDanhSachNhomQuyen = (mail, pass) =>
   dangNhapTest(mail, pass).then(async (res) => {
@@ -43,7 +43,8 @@ const xemDanhSachNhomQuyen = (mail, pass) =>
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": body?.[0]?.token
-      }
+      },
+      body: ""
     })
   }).then(a => a.json())
 
@@ -88,10 +89,10 @@ const xemThongTinTaiKhoan = async function (mail, pass) {
 }
 
 
-// xemChucNangTaiKhoan("nv@mil", "admin")
-//   .then(console.log)
-xemThongTinTaiKhoan("nv@mail", "admin")
-  .then(console.log)
+xemDanhSachNhomQuyen("nv@mil", "admin")
+.then(console.log)
+// xemThongTinTaiKhoan("nv@mail", "admin")
+// .then(console.log)
 
 // xemDanhSachChucNang("root", "admin")
 //   .then(console.log)
