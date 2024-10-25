@@ -1,11 +1,9 @@
-import { createContext, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 
 // import { navLinks } from '../utilities/navLinks';
-import { getPermissions, getUserData } from '../api/authentication';
-
-import { UserContext } from '../api/authentication';
+import {getPermissions, getUserData, UserContext} from '../api/authentication';
 
 import TrangChu from "../pages/OtherPage/trangChu"
 import NhanVien from "../pages/OtherPage/nhanVien"
@@ -31,14 +29,73 @@ import ErrorPage from './UtilitesPage/error';
 import Page1 from '../components/layouts/Page1';
 
 
+const pagePerm = {
+  QuanLySanPham: {
+    Xem: [
+      {path: "/san-pham", element: SanPham}
+    ],
+  }
+  ,
+  QuanLyThuocTinh: {
+    Xem: [{path: "/thuoc-tinh", element: ThuocTinh}]
+  }
+  ,
+  QuanLyNhapKho: {
+    Xem: [
+      {path: "/nhap-kho", element: NhapKho},
+      {path: "/nhap-kho/them", element: ThemNhapKho},
+    ]
+  },
+  QuanLyXuatKho: {
+    Xem: [
+      {path: "/xuat-kho", element: XuatKho},
+      {path: "/xuat-kho/them", element: ThemXuatKho}
+    ]
+  },
+  QuanLyDoiTraHang: {
+    Xem: [
+      {path: "/doi-tra-hang", element: DoiTraHang},
+    ]
+  },
+  QuanLyKhachHang: {
+    Xem: [
+      {path: "/khach-hang", element: KhachHang}
+    ]
+  },
+  QuanLyNhaCungCap: {
+    Xem: [{path: "/nha-cung-cap", element: NhaCungCap},]
+  },
+  QuanLyNhanVien: {
+    Xem: [
+      {path: "/nhan-vien", element: NhanVien}
+    ]
+  },
+  QuanLyTaiKhoan: {
+    XemCaNhan: [
+      {path: "/tai-khoan-ca-nhan", element: TaiKhoan},
+    ],
+    Xem: [
+      {path: "/tai-khoan-ca-nhan", element: TaiKhoan},
+      {path: "/tai-khoan", element: QuanLyTaiKhoan},
+    ]
+  },
+  ThongKe: {
+    Xem: [
+      {path: "/thong-ke", element: Page1}
+    ]
+  },
+  QuanLyQuyenHan: {
+    Xem: [
+      {path: "/phan-quyen", element: PhanQuyen}
+    ]
+  }
+}
+
 function App() {
-  const [token, setToken] = useState()
+  const [token, setToken] = useState('')
   const [perm, setPerm] = useState([])
-  const [user, setUser] = useState()
-  const links = navLinks.map(({ link, Component, links }) => {
-    if (links.length === 0) return Component && { path: link, element: <Component /> }
-    return links.map(({ href, Component }) => Component && ({ path: href, element: <Component /> }))
-  }).flat().filter(i => !!i)
+  const [user, setUser] = useState({})
+
 
   useEffect(function () {
     const token = sessionStorage.getItem("accountToken");
@@ -51,86 +108,52 @@ function App() {
     getPermissions(token).then(data => setPerm(data))
     getUserData(token).then(data => setUser(data))
   }, [token])
-  // console.log(token, perm, user)
 
+  useEffect(() => {
+    console.log(pagePerm, perm)
+    console.log()
+  }, [perm]);
 
   return (
     <BrowserRouter>
-      <UserContext.Provider value={{ token, perm, user }}>
+      <UserContext.Provider value={{token, perm, user}}>
         <Routes>
-          <Route index element={<TrangChu />} />
-          <Route path='/dang-suat' element={<DangSuat />} />
-          <Route path='/dang-nhap' element={<DangNhap />} />
+          <Route index element={<TrangChu/>}/>
+          <Route path='/dang-suat' element={<DangSuat/>}/>
+          <Route path='/dang-nhap' element={<DangNhap/>}/>
+          {perm.map(({tenChucNang, tenHanhDong}) => pagePerm[tenChucNang]?.[tenHanhDong])
+          .filter(i => !!i)
+          .flat()
+          .map(({path, element: Elem}, j) => (
+            <Route key={j} path={path} element={<Elem/>}/>
+          ))}
 
-          <Route path='/tai-khoan-ca-nhan' element={<TaiKhoan />} />
+          {/*<Route path='/tai-khoan-ca-nhan' element={<TaiKhoan/>}/>*/}
 
-          <Route path='/san-pham' element={<SanPham />} />
-          <Route path='/thuoc-tinh' element={<ThuocTinh />} />
+          {/*<Route path='/san-pham' element={<SanPham/>}/>*/}
+          {/*<Route path='/thuoc-tinh' element={<ThuocTinh/>}/>*/}
 
-          <Route path='/nhap-kho' element={<NhapKho />} />
-          <Route path='/nhap-kho/them' element={<ThemNhapKho />} />
-          <Route path='/xuat-kho' element={<XuatKho />} />
-          <Route path='/xuat-kho/them' element={<ThemXuatKho />} />
+          {/*<Route path='/nhap-kho' element={<NhapKho/>}/>*/}
+          {/*<Route path='/nhap-kho/them' element={<ThemNhapKho/>}/>*/}
+          {/*<Route path='/xuat-kho' element={<XuatKho/>}/>*/}
+          {/*<Route path='/xuat-kho/them' element={<ThemXuatKho/>}/>*/}
 
-          <Route path='/khach-hang' element={<KhachHang />} />
-          <Route path='/nha-cung-cap' element={<NhaCungCap />} />
+          {/*<Route path='/khach-hang' element={<KhachHang/>}/>*/}
+          {/*<Route path='/nha-cung-cap' element={<NhaCungCap/>}/>*/}
 
-          <Route path='/doi-tra-hang' element={<DoiTraHang />} />
+          {/*<Route path='/doi-tra-hang' element={<DoiTraHang/>}/>*/}
 
-          <Route path='/nhan-vien' element={<NhanVien />} />
-          <Route path='/tai-khoan' element={<QuanLyTaiKhoan />} />
-          <Route path='/thong-ke' element={<Page1 />} />
-          <Route path='/tai-khoan' element={<QuanLyTaiKhoan />} />
-          <Route path='/phan-quyen' element={<Page1 />} />
+          {/*<Route path='/nhan-vien' element={<NhanVien/>}/>*/}
 
+          {/*<Route path='/thong-ke' element={<Page1/>}/>*/}
+          {/*<Route path='/tai-khoan' element={<QuanLyTaiKhoan/>}/>*/}
+          {/*<Route path='/phan-quyen' element={<PhanQuyen/>}/>*/}
 
-
-          {/* {links.map((i, j) => <Route key={j} {...i} />)} */}
-          <Route path='/*' element={<ErrorPage />} />
+          <Route path='/*' element={<ErrorPage/>}/>
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>
   );
 }
-
-const navLinks = [
-  { title: "", hidden: true, eventKey: "QuanLyTaiKhoan", link: "/tai-khoan-ca-nhan", Component: TaiKhoan, links: [] },
-  { title: "", hidden: true, eventKey: "dangSuat", link: "/dang-suat", Component: DangSuat, links: [] },
-  { title: "", hidden: true, eventKey: "dangNhap", link: "/dang-nhap", Component: DangNhap, links: [] },
-  { title: "Trang chủ", eventKey: "trangChu", link: "/", Component: TrangChu, links: [] },
-  {
-    title: "Sản phẩm", eventKey: "sanPham", links: [
-      { content: "Sản phẩm", eventKey: "QuanLySanPham", href: "/san-pham", visible: true, Component: SanPham },
-      { content: "Thuộc tính", eventKey: "QuanLyThuocTinh", href: "/thuoc-tinh", visible: true, Component: ThuocTinh }
-    ]
-  },
-  {
-    title: "Xuất nhập", eventKey: "xuatNhap", links: [
-      { content: "Nhập kho", eventKey: "", href: "/nhap-kho", visible: true, Component: NhapKho },
-      { content: "Nhập kho", eventKey: "", href: "/nhap-kho/them", visible: false, Component: ThemNhapKho },
-      { content: "Xuất kho", eventKey: "", href: "/xuat-kho", visible: true, Component: XuatKho },
-      { content: "Xuất kho", eventKey: "", href: "/xuat-kho/them", visible: false, Component: ThemXuatKho },
-    ]
-  },
-  {
-    title: "Đối tác", eventKey: "doiTac", links: [
-      { content: "Khách hàng", eventKey: "", href: "/khach-hang", visible: true, Component: KhachHang },
-      { content: "Nhà cung cấp", eventKey: "", href: "/nha-cung-cap", visible: true, Component: NhaCungCap }
-    ]
-  },
-  {
-    title: "Dịch vụ", eventKey: "dichVu", links: [
-      { content: "Đổi trả hàng", eventKey: "", href: "/doi-tra-hang", visible: true, Component: DoiTraHang },
-      // { content: "Bảo hành", eventKey: "", href: "/bao-hanh", visible: true }
-    ]
-  },
-  { title: "Nhân viên", eventKey: "QuanLyNhanVien", link: "/nhan-vien", Component: NhanVien, links: [] },
-  { title: "Tài khoản", eventKey: "QuanLyTaiKhoan", link: "/tai-khoan", Component: QuanLyTaiKhoan, links: [] },
-  { title: "Thống kê", eventKey: "thongKe", link: "/thong-ke", links: [] },
-  { title: "Phân quyền", eventKey: "QuanLyNhomQuyen", link: "/phan-quyen", Component: PhanQuyen, links: [] },
-];
-
-
-
 
 export default App;
