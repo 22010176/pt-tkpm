@@ -13,10 +13,10 @@ import TaiKhoan from "../pages/OtherPage/TaiKhoanPage"
 import SanPham from "../pages/SanPhamPage/sanPham"
 import ThuocTinh from "../pages/SanPhamPage/thuocTinh"
 
-import NhapKho from "../pages/XuatNhapPage/nhapKho"
-import ThemNhapKho from "../pages/XuatNhapPage/themNhapKho"
-import XuatKho from "../pages/XuatNhapPage/xuatKho"
-import ThemXuatKho from "../pages/XuatNhapPage/themXuatKho"
+import NhapKho from "./DichVuPage/nhapKho"
+import ThemNhapKho from "./DichVuPage/themNhapKho"
+import XuatKho from "./DichVuPage/xuatKho"
+import ThemXuatKho from "./DichVuPage/themXuatKho"
 
 import KhachHang from "../pages/DoiTacPage/khachHang"
 import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
@@ -96,10 +96,8 @@ function App() {
   const [perm, setPerm] = useState([])
   const [user, setUser] = useState({})
 
-
   useEffect(function () {
     const token = sessionStorage.getItem("accountToken");
-
 
     if (!token && document.location.pathname !== "/dang-nhap")
       document.location.replace("/dang-nhap")
@@ -108,11 +106,6 @@ function App() {
     getPermissions(token).then(data => setPerm(data))
     getUserData(token).then(data => setUser(data))
   }, [token])
-
-  useEffect(() => {
-    console.log(pagePerm, perm)
-    console.log()
-  }, [perm]);
 
   return (
     <BrowserRouter>

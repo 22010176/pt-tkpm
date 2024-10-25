@@ -1,30 +1,43 @@
-import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
+import {useState} from 'react'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  ButtonGroup,
+  CloseButton,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  ModalBody,
+  ModalHeader
+} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
 import BarCodeScanner from '../../../components/barcode'
 import Page4 from '../../../components/layouts/Page4'
-
-import style from './style.module.css'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const spHeader = [
-  { key: "Mã SP", value: "ma" },
-  { key: "Tên sp", value: "tenSP" },
-  { key: "RAM", value: "ram" },
-  { key: "ROM", value: "rom" },
-  { key: "Màu sắc", value: "mauSac" },
-  { key: "Đơn giá", value: "gia" },
-  { key: "Số lượng", value: "soLuong" },
+  {key: "Mã SP", value: "ma"},
+  {key: "Tên sp", value: "tenSP"},
+  {key: "RAM", value: "ram"},
+  {key: "ROM", value: "rom"},
+  {key: "Màu sắc", value: "mauSac"},
+  {key: "Đơn giá", value: "gia"},
+  {key: "Số lượng", value: "soLuong"},
 ]
 
 const khoHeader = [
-  { key: "Tên sp", value: "tenSP" },
-  { key: "Số lượng tồn kho", value: "tonKho" },
+  {key: "Tên sp", value: "tenSP"},
+  {key: "Số lượng tồn kho", value: "tonKho"},
 ]
 
 function ThemNhapKho() {
@@ -33,7 +46,7 @@ function ThemNhapKho() {
 
   function scanImei(data) {
     openModal("")
-    setImei(src => ({ ...src, [data]: data }))
+    setImei(src => ({...src, [data]: data}))
   }
 
   function openModal(key, e) {
@@ -46,36 +59,37 @@ function ThemNhapKho() {
     if (!elem.value) return;
 
     const data = elem.value;
-    setImei(src => ({ ...src, [data]: data }))
+    setImei(src => ({...src, [data]: data}))
 
     elem.value = ""
   }
+
   return (
     <>
       <Page4
         count={0}
-        sidebar={<SideNavbar />}
+        sidebar={<SideNavbar/>}
         tableTop={
           <GroupShadow>
             <InputGroup.Text>Tìm kiếm</InputGroup.Text>
-            <Form.Control />
+            <Form.Control/>
             <Button variant="success">
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
+              <FontAwesomeIcon icon={faMagnifyingGlass}/>
             </Button>
           </GroupShadow>
         }
-        table={<TableA headers={khoHeader} index />}
+        table={<TableA headers={khoHeader} index/>}
         tableForm={
           <Form className='p-3 d-flex gap-3 w-100 flex-column'>
             <FormGroup className='d-flex justify-content-between gap-4'>
               <FormGroup>
                 <FormLabel className='fw-bold'>Mã sp</FormLabel>
-                <InputShadow as={FormControl} type='text' disabled size='sm' />
+                <InputShadow as={FormControl} type='text' disabled size='sm'/>
               </FormGroup>
 
               <FormGroup>
                 <FormLabel className='fw-bold'>Tên sp</FormLabel>
-                <InputShadow as={FormControl} size='sm' type='text' disabled />
+                <InputShadow as={FormControl} size='sm' type='text' disabled/>
               </FormGroup>
             </FormGroup>
 
@@ -92,7 +106,7 @@ function ThemNhapKho() {
             <FormGroup>
               <FormLabel className='fw-bold'>Giá nhập</FormLabel>
               <GroupShadow size="sm">
-                <FormControl disabled size='sm' type='number' />
+                <FormControl disabled size='sm' type='number'/>
                 <InputGroup.Text>VNĐ</InputGroup.Text>
               </GroupShadow>
             </FormGroup>
@@ -107,9 +121,9 @@ function ThemNhapKho() {
 
             <FormGroup>
               <GroupShadow size='sm'>
-                <FormControl type='text' id='imei-input' size='sm' />
+                <FormControl type='text' id='imei-input' size='sm'/>
                 <Button variant='primary' onClick={onInsertIMEICode}>
-                  <FontAwesomeIcon icon={faPlus} />
+                  <FontAwesomeIcon icon={faPlus}/>
                 </Button>
               </GroupShadow>
 
@@ -127,16 +141,16 @@ function ThemNhapKho() {
           <Button size='sm' className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
           <Button size='sm' className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
         </>}
-        table2={<TableA headers={spHeader} />}
+        table2={<TableA headers={spHeader}/>}
         rightTopForm={<>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã phiếu nhập</FormLabel>
-            <InputShadow as={FormControl} disabled />
+            <InputShadow as={FormControl} disabled/>
           </FormGroup>
 
           <FormGroup>
             <FormLabel className='fw-bold'>Nhân viên nhập</FormLabel>
-            <InputShadow as={FormControl} disabled />
+            <InputShadow as={FormControl} disabled/>
           </FormGroup>
 
           <FormGroup>
@@ -147,6 +161,11 @@ function ThemNhapKho() {
               <option>test3</option>
               <option>test4</option>
             </InputShadow>
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel className="fw-bold">Nhân viên chỉnh sửa cuối </FormLabel>
+            <InputShadow as={FormControl} disabled/>
           </FormGroup>
         </>}
         rightBottomForm={<>
@@ -160,11 +179,11 @@ function ThemNhapKho() {
           <Modal.Title className='text-center w-100 fw-bold fs-2 text-light'>
             QUÉT MÃ IMEI
           </Modal.Title>
-          <CloseButton onClick={openModal.bind({}, "")} />
+          <CloseButton onClick={openModal.bind({}, "")}/>
         </ModalHeader>
 
-        <ModalBody className='vh-100 p-3' >
-          <BarCodeScanner onChange={scanImei} />
+        <ModalBody className='vh-100 p-3'>
+          <BarCodeScanner onChange={scanImei}/>
         </ModalBody>
       </Modal>
     </>

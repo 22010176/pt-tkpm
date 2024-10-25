@@ -1,10 +1,8 @@
-import { Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
-import styles from './style.module.css'
-
-const HeaderModalB = function ({ children, ...prop }) {
+const HeaderModalB = function ({children, className, ...prop}) {
   return (
-    <Modal.Header {...prop} className='bg-primary text-light'>
+    <Modal.Header className={[className, 'bg-primary text-light'].join(' ')} {...prop}>
       {children}
     </Modal.Header>
   )
