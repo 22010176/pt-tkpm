@@ -30,7 +30,7 @@ const chonNhanVienHD = [
   { key: "Mã nv", value: "" },
   { key: "Tên nhân viên", value: "" },
 ]
-function QuanLyTaiKhoang() {
+function QuanLyTaiKhoan() {
   const [modal, setModal] = useState("")
 
   function openModal(key, e) {
@@ -148,4 +148,4 @@ function TaiKhoanForm({ className, passwordDisabled }) {
   )
 }
 
-export default QuanLyTaiKhoang
+export default QuanLyTaiKhoan

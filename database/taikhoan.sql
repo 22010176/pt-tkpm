@@ -152,8 +152,10 @@ INSERT INTO ctquyen (nhomQuyen, quyenHan) (
 	SELECT  nq.ma AS nhomQuyen, qh.ma AS quyenHan
     FROM quyenHan AS qh
     INNER JOIN nhomQuyen AS nq
-    WHERE qh.hanhDong = 1 AND nq.ma = 2 AND qh.chucNang IN (14, 15, 22)
+    WHERE qh.hanhDong = 1 AND nq.ma = 2 AND qh.chucNang IN (41)
 );
+
+DELETE FROM ctQuyen WHERE ma IN (30);
 
 -- Lay danh sach nhom quyen cua mot nhom quyen (vi du nhan vien)
 SELECT ct.ma AS ma, vt.ma AS maVaiTro, vt.ten AS tenVaiTro, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong 
@@ -165,8 +167,15 @@ INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
 WHERE vt.ma = 2
 ORDER BY ct.ma;
 
+SELECT * FROM ctQuyen;
+
+INSERT INTO ctQuyen (nhomQuyen, quyenHan) VALUES 
+(2, 41);
+
 SELECT * FROM taiKhoan;
 SELECT * FROM nhomQuyen;
+
+
 
 -- Them tai khoan demo cho 2 nhom quyen
 INSERT INTO taiKhoan (email, matKhau, vaiTro) VALUES
@@ -186,6 +195,9 @@ INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
 INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
 INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
 WHERE tk.ma = 2;
+
+
+
 
 
 
