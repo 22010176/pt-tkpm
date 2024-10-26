@@ -3,18 +3,7 @@ import Accordion from 'react-bootstrap/Accordion'
 import {useAccordionButton} from 'react-bootstrap/esm/AccordionButton';
 import {AccordionContext, Image} from 'react-bootstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-  faAngleRight,
-  faCircleCheck,
-  faCircleUser,
-  faClipboardUser,
-  faHandshakeSimple,
-  faHouse,
-  faLaptop,
-  faRightFromBracket,
-  faShieldHalved,
-  faUnlockKeyhole
-} from "@fortawesome/free-solid-svg-icons"
+import {faAngleRight, faCircleCheck, faCircleUser, faClipboardUser, faHandshakeSimple, faHouse, faLaptop, faRightFromBracket, faShieldHalved, faUnlockKeyhole, faWarehouse} from "@fortawesome/free-solid-svg-icons"
 
 import {UserContext} from '../../../api/authentication';
 import styles from './style.module.css'
@@ -35,14 +24,14 @@ const navLinks = [
     ]
   },
   {
-    title: "Dịch vụ", eventKey: "dichVu", icon: faShieldHalved, links: [
-      {title: "Đổi trả hàng", eventKey: "QuanLyDoiTraHang", link: "/doi-tra-hang", visible: true,},
+    title: "Nhập xuất", eventKey: "nhapXuat", icon: faWarehouse, links: [
       {title: "Nhập kho", eventKey: "QuanLyNhapKho", link: "/nhap-kho", visible: true,},
       {title: "Nhập kho", eventKey: "QuanLyNhapKho", link: "/nhap-kho/them", visible: false,},
       {title: "Xuất kho", eventKey: "QuanLyXuatKho", link: "/xuat-kho", visible: true,},
       {title: "Xuất kho", eventKey: "QuanLyXuatKho", link: "/xuat-kho/them", visible: false,},
     ]
   },
+  {title: "Dịch vụ", eventKey: "QuanLyDoiTraHang", link: "/doi-tra-hang", icon: faShieldHalved, links: []},
   {title: "Nhân viên", eventKey: "QuanLyNhanVien", link: "/nhan-vien", icon: faClipboardUser, links: []},
   {title: "Tài khoản", eventKey: "QuanLyTaiKhoan", link: "/tai-khoan", icon: faCircleUser, links: []},
   {title: "Thống kê", eventKey: "ThongKe", link: "/thong-ke", icon: faCircleCheck, links: []},

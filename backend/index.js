@@ -13,19 +13,19 @@ async function getPermission(req, res, next) {
   const connection = await pool.getConnection()
 
   const [result] = await connection.query(`
-              SELECT tk.ma     AS maTaiKhoan,
-                     tk.vaiTro AS maVaiTro,
-                     nq.ten    AS tenVaiTro,
-                     cn.ma     AS maChucNang,
-                     cn.ten    AS tenChucNang,
-                     hd.ma     AS maHanhDong,
-                     hd.ten    AS tenHanhDong
-              FROM taiKhoan AS tk
-                       INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
-                       INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
-                       INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
-                       INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-                       INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
+              SELECT tk.ma     maTaiKhoan,
+                     tk.vaiTro maVaiTro,
+                     nq.ten    tenVaiTro,
+                     cn.ma     maChucNang,
+                     cn.ten    tenChucNang,
+                     hd.ma     maHanhDong,
+                     hd.ten    tenHanhDong
+              FROM taiKhoan tk
+                       INNER JOIN nhomQuyen nq ON nq.ma = tk.vaiTro
+                       INNER JOIN CTQuyen ct ON ct.nhomQuyen = nq.ma
+                       INNER JOIN quyenHan qh ON qh.ma = ct.quyenHan
+                       INNER JOIN chucNang cn ON cn.ma = qh.chucNang
+                       INNER JOIN hanhDong hd ON hd.ma = qh.hanhDong
               WHERE tk.ma = ?`,
     [res.locals.account.id])
 
@@ -63,8 +63,7 @@ app.use("/api/quyen-han",
 app.use("/api/nhan-vien",
   authAccount,
   authPermission({chucNangID: 21, hanhDongID: 1, last: true}),
-  require('./src/routes/nhanVien')
-)
+  require('./src/routes/nhanVien'))
 
 app.all('/*', (req, res) => res.json({success: false, message: "not found entry"}));
 
