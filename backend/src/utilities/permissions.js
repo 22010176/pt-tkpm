@@ -2,19 +2,15 @@ const pool = require('../models')
 
 
 async function getAllPerm() {
-  let perms = {}
-  const [result] = await pool.query(`
-      SELECT qh.ma, cn.ma AS maChucNang, cn.ten AS tenChucNang, hd.ma AS maHanhDong, hd.ten AS tenHanhDong
-      FROM quyenHan AS qh
-               INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-               INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong;`)
-
-  for (const perm of result) {
-    perms[`${perm.tenChucNang}_${perm.tenHanhDong}`] = {chucNangID: perm.maChucNang, hanhDongID: perm.maHanhDong}
-  }
-
-  console.log('permissions', perms)
-  return Object.freeze(perms)
+  const [chucNang] = await pool.query(`SELECT *
+                                       FROM chucNang
+                                       ORDER BY maChucNang;`)
+  const [hanhDong] = await pool.query(`SELECT *
+                                       FROM hanhDong
+                                       ORDER BY maHanhDong;`)
+  
+  console.log('permissions', {hanhDong, chucNang})
+  return Object.freeze({hanhDong, chucNang})
 }
 
 const permissions = getAllPerm()

@@ -8,66 +8,26 @@ const {createToken, decodeToken, verifyToken} = require('../utilities/validateTo
 
 // return token
 async function ValidateAccount(email, password) {
-  const connection = await pool.getConnection();
-  const [result,] = await connection.query(
-    `SELECT *
-     FROM taiKhoan
-     WHERE email = ?
-       AND matKhau = ?;`,
-    [email, password])
-  connection.destroy()
-
-  if (result.length === 0) return ``
-
-  return await createToken(result[0].ma, email, password)
+  return {}
 }
 
 async function loginAccount(email, password) {
-  const result = await ValidateAccount(email, password)
-  if (!result.length) return {body: [], message: "Input is wrong", success: false}
-
-  return {body: [{token: result}], message: "success login", success: true}
+  return {}
 }
 
 async function deleteAccount(token, email, password) {
-  const data = decodeToken(token)
-  if (!(data.email === email && data.password === password)) return {body: [], message: "Cant delete your account", success: false}
-  const connection = await pool.getConnection();
-
-  const [res] = await connection.query(
-    `DELETE
-     FROM taiKhoan
-     WHERE ma = ?
-       AND email = ?
-       AND matKhau = ?;`,
-    [data.id, data.email, data.password])
-
-  connection.destroy()
-
-
-  if (res.affectedRows == 0) return {body: [], message: "Your account doesnt exists", success: true}
-
-  return {body: [], message: "Deleted your account", success: true}
+  return {}
 }
 
 async function logoutAccount(token, email) {
-  console.log(token, email)
-  return await verifyToken(token, email)
+  return {}
 }
 
 
 async function getAccountInfo(id) {
-  const connection = await pool.getConnection()
-  const [result] = await connection.query(`
-              SELECT nv.ma, nv.hoTen, nv.gioiTinh, nv.ngaySinh, nv.soDienThoai, tk.email AS email, nq.ten AS tenNhomQuyen
-              FROM nhanvien AS nv
-                       INNER JOIN taiKhoan AS tk ON tk.ma = nv.taiKhoan
-                       INNER JOIN nhomQuyen as nq ON nq.ma = tk.vaiTro
-              WHERE nv.ma = ?;`,
-    [id])
-  connection.destroy()
 
-  return {body: result, message: "success", success: true}
+
+  return {body: [], message: "success", success: true}
 }
 
 // _____________________________________________________________________________________________________________________
@@ -109,7 +69,14 @@ router.post("/xoa-tai-khoan",
 router.post("/sua-tai-khoan",
   authAccount,
   function (req, res) {
-    res.json({body: req.body, message: "", success: true})
+    res.json()
   })
-
+/*
+ * {
+ body: req.body,
+ message: "",
+ success: true
+ }
+ *
+ * */
 module.exports = router

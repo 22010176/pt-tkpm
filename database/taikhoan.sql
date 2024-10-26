@@ -33,6 +33,8 @@ CREATE TABLE CTQuyen
     chucNang  INT UNSIGNED,
     hanhDong  INT UNSIGNED,
 
+    UNIQUE INDEX quyen (nhomQuyen, chucNang, hanhDong),
+
     FOREIGN KEY (nhomQuyen) REFERENCES nhomQuyen (maNhomQuyen)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
@@ -69,6 +71,7 @@ CREATE TABLE nhanVien
         ON UPDATE CASCADE ON DELETE SET NULL
 );
 
+# Them gia tri chuc nang
 INSERT INTO chucNang (tenChucNang)
 VALUES ('QuanLySanPham'),
        ('QuanLyThuocTinh'),
@@ -83,6 +86,7 @@ VALUES ('QuanLySanPham'),
        ('QuanLyNhomQuyen'),
        ('QuanLyQuyenHan');
 
+# Them gia tri hanh dong
 INSERT INTO hanhDong (tenHanhDong)
 VALUES ('Xem'),
        ('XemCaNhan'),
@@ -98,8 +102,7 @@ INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', '');
 
-
-
+# Them quyen xem tat ca cac trang cho tai khoan root
 INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
                                                             cN.maChucNang  chucNang,
                                                             hD.maHanhDong  hanhDong
@@ -109,12 +112,74 @@ INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQ
                                                      WHERE nQ.maNhomQuyen IN (1)
                                                        AND hD.maHanhDong IN (1));
 
-SELECT ctq.maCTQuyen ma, nQ.tenNhomQuyen, cN.tenChucNang, hD.tenHanhDong
+# Them quyen them, sua, xoa cho san pham, thuoc tinh va nhan vien cho tai khoan root
+INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
+                                                            cN.maChucNang  chucNang,
+                                                            hD.maHanhDong  hanhDong
+                                                     FROM nhomQuyen nQ
+                                                              INNER JOIN chucNang cN
+                                                              INNER JOIN hanhDong hD
+                                                     WHERE nQ.maNhomQuyen IN (1)
+                                                       AND cN.maChucNang IN (8, 2, 1)
+                                                       AND hD.maHanhDong IN (5, 4, 6));
+
+# Them quyen xem trang san pham, thuoc tinh, khach hang cho nhan vien
+INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
+                                                            cN.maChucNang  chucNang,
+                                                            hD.maHanhDong  hanhDong
+                                                     FROM nhomQuyen nQ
+                                                              INNER JOIN chucNang cN
+                                                              INNER JOIN hanhDong hD
+                                                     WHERE nQ.maNhomQuyen IN (2)
+                                                       AND cN.maChucNang IN (1, 2, 6)
+                                                       AND hD.maHanhDong IN (1));
+
+
+SELECT nV.maNhanVien,
+       nv.hoTen,
+       nv.ngaySinh,
+       nv.soDienThoai,
+       nv.gioiTinh,
+       tK.mail,
+       nQ.tenNhomQuyen,
+       nQ.tenHienThi
+FROM nhanVien nV
+         INNER JOIN taiKhoan tK on nV.taiKhoan = tK.maTaiKhoan
+         INNER JOIN nhomQuyen nQ ON nQ.maNhomQuyen = tK.vaiTro;
+
+# Hien thi danh sach cac quyen cua tai khoan root
+SELECT ctq.maCTQuyen ma,
+#        nq.maNhomQuyen,
+#        nQ.tenNhomQuyen,
+       cN.maChucNang,
+       cN.tenChucNang,
+       hD.maHanhDong,
+       hD.tenHanhDong
 FROM CTQuyen ctq
          INNER JOIN chucNang cN on ctq.chucNang = cN.maChucNang
          INNER JOIN hanhDong hD on ctq.hanhDong = hD.maHanhDong
          INNER JOIN nhomQuyen nQ on ctq.nhomQuyen = nQ.maNhomQuyen
+WHERE tenNhomQuyen = 'root'
 ORDER BY maCTQuyen;
 
+# Tao tai khoan root
+INSERT INTO taiKhoan (mail, matKhau, vaiTro)
+VALUES ('root@mail', 'admin', 1);
 
+# Tao tai khoan nhan vien
+INSERT INTO taiKhoan (mail, matKhau, vaiTro)
+VALUES ('nv@mail', 'admin', 2);
 
+# Gan tai khoan voi nhan vien
+INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan)
+VALUES ('test1', '2004-1-20', '1234567890', 'Nam', 1),
+       ('test1', '2004-1-20', '1234567891', 'Nu', 2);
+
+SELECT *
+FROM chucNang;
+
+SELECT *
+FROM hanhDong;
+
+SELECT *
+FROM taiKhoan;
