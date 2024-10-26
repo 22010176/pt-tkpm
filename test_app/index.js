@@ -85,12 +85,26 @@ const xemThongTinTaiKhoan = async function (mail, pass) {
     }
   })
   return await a.json()
-
 }
 
-
-xemDanhSachNhomQuyen("nv@mil", "admin")
+const xemDanhSachNhanVien = async function (mail, pass) {
+  const res = await dangNhapTest(mail, pass)
+  // console.log(res)
+  const body = res.body
+  const a = await fetch("http://localhost:3001/api/nhan-vien/danh-sach-nhan-vien", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Authorization": body?.[0]?.token
+    }
+  })
+  return await a.json()
+}
+xemDanhSachNhanVien("root", "admin")
 .then(console.log)
+
+// xemDanhSachNhomQuyen("nv@mil", "admin")
+// .then(console.log)
 // xemThongTinTaiKhoan("nv@mail", "admin")
 // .then(console.log)
 
