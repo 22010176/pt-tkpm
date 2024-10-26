@@ -314,15 +314,9 @@ FROM taiKhoan AS tk
 
 SELECT *
 FROM nhanVien;
+
 SELECT *
 FROM taiKhoan;
-
--- ma INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
---     hoTen VARCHAR(255),
---     ngaySinh DATE,
---     soDienThoai VARCHAR(20) UNIQUE,
---     gioiTinh ENUM ('Nam', 'Nữ'),
---     taiKhoan INT UNSIGNED UNIQUE DEFAULT NULL,
 
 INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan)
 VALUES ("test1", "1000-1-20", "1234567890", "Nam", 1),
@@ -341,7 +335,9 @@ ALTER TABLE taiKhoan
 
 UPDATE taiKhoan
 set ptpm_taikhoan.taiKhoan.truyCap = TRUE
-WHERE taiKhoan.ma > 0;;
+WHERE taiKhoan.ma > 0;
+
+
 
 
 
