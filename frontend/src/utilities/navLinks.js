@@ -1,18 +1,8 @@
-import {
-  faCircleCheck,
-  faCircleUser,
-  faClipboardUser,
-  faHandshakeSimple,
-  faHouse,
-  faLaptop,
-  faShieldHalved,
-  faUnlockKeyhole,
-  faWarehouse
-} from "@fortawesome/free-solid-svg-icons"
+import {faCircleCheck, faCircleUser, faClipboardUser, faHandshakeSimple, faHouse, faLaptop, faShieldHalved, faUnlockKeyhole, faWarehouse} from "@fortawesome/free-solid-svg-icons"
 
 import TrangChu from "../pages/OtherPage/trangChu"
-import NhanVien from "../pages/OtherPage/nhanVien"
-import PhanQuyen from "../pages/OtherPage/phanQuyen"
+import NhanVien from "../pages/phanQuyenPage/nhanVien"
+import PhanQuyen from "../pages/phanQuyenPage/phanQuyen"
 import TaiKhoan from "../pages/OtherPage/TaiKhoanPage"
 
 import SanPham from "../pages/SanPhamPage/sanPham"
@@ -28,7 +18,7 @@ import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
 
 import DoiTraHang from "../pages/DichVuPage/doiTraHang"
 import DangSuat from "../pages/OtherPage/dangSuat"
-import QuanLyTaiKhoang from "../pages/OtherPage/qlTaiKhoang"
+import QuanLyTaiKhoang from "../pages/phanQuyenPage/qlTaiKhoang"
 import DangNhap from "../pages/OtherPage/dangNhap"
 
 export const navLinks = [
