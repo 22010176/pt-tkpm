@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 
@@ -5,6 +6,13 @@ import colors from '../../../utilities/colors';
 import styles from './style.module.css'
 
 function DangSuat() {
+  useEffect(function () {
+    sessionStorage.removeItem("accountToken")
+    setTimeout(function () {
+      document.location.replace("/dang-nhap")
+    }, 5000)
+  }, [])
+
   return (
     <div className='d-flex flex-column vw-100 vh-100 bg-light'>
       <div className='_bg-blue-1 px-5 py-3 text-light'>

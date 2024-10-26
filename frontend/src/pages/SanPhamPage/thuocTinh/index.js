@@ -9,14 +9,14 @@ import ThuocTinhBtn from '../../../components/buttons/thuocTinhBtn'
 import TableA from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
 import SideNavbar from '../../../components/layouts/sideBar'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 
 import styles from './style.module.css'
-import GroupShadow from '../../../components/Forms/GroupShadow'
 
 const thuocTinh = {
   thuongHieu: { title: "Thương hiệu", icon: faEmpire, id: "thuongHieu", className: "_bg-green-1 _bg-green-hover-0" },
   xuatXu: { title: "Xuất xứ", icon: faMountainCity, id: "xuatXu", className: "_bg-red-1 _bg-red-hover-0" },
-  hdh: { title: "Hệ điều hành", icon: faAndroid, id: "hdh", className: "_bg-orange-1 _bg-orange-hover-0" },
+  heDieuHanh: { title: "Hệ điều hành", icon: faAndroid, id: "heDieuHanh", className: "_bg-orange-1 _bg-orange-hover-0" },
   ram: { title: "RAM", unit: "GB", icon: faComputer, id: "ram", className: "_bg-purple-1 _bg-purple-hover-0" },
   rom: { title: "ROM", unit: "GB", icon: faMemory, id: "rom", className: "_bg-pink-1 _bg-pink-hover-0" },
   mauSac: { title: "Màu sắc", icon: faBrush, id: "mauSac", className: "_bg-yellow-1 _bg-yellow-hover-0" },
@@ -25,12 +25,23 @@ const headers = [
   { key: "Mã", value: "ma" },
   { key: "Tên", value: "ten" }
 ]
+
+
 function ThuocTinh() {
   const [modal, setModal] = useState()
+  const [formData, setFormData] = useState()
+  const [tableData, setTableData] = useState([])
 
   function openOverlay(modal, e) {
-
     setModal(thuocTinh[modal])
+
+    if (modal?.length) fetch(`/thuoc-tinh?table=${modal}`)
+      .then(a => a.json())
+      .then(a => setTableData(a.body))
+  }
+
+  function onRowclick(row) {
+
   }
 
   return (
@@ -68,7 +79,7 @@ function ThuocTinh() {
 
             <div className='justify-content-center mx-3' style={{ height: "70%" }}>
               <div className='overflow-y-auto h-100 border border-black' style={{}}>
-                <TableA headers={headers} />
+                <TableA headers={headers} data={tableData} onClick={onRowclick} />
               </div>
             </div>
           </div>
@@ -78,7 +89,7 @@ function ThuocTinh() {
           <Button className='shadow-sm' style={{ width: "15%" }} variant='info' >Thêm</Button>
           <Button className='shadow-sm' style={{ width: "15%" }} variant='success' >Sửa</Button>
           <Button className='shadow-sm' style={{ width: "15%" }} variant='danger' >Xóa</Button>
-          <Button className='shadow-sm' style={{ width: "15%" }} variant='dark' onClick={openOverlay} >Đóng</Button>
+          <Button className='shadow-sm' style={{ width: "15%" }} variant='dark' onClick={openOverlay.bind({}, "")} >Đóng</Button>
         </Modal.Footer>
       </Modal>
     </>
