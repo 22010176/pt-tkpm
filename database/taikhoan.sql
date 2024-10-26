@@ -277,40 +277,40 @@ SELECT *
 FROM taiKhoan;
 
 UPDATE taiKhoan
-SET email = "nv@mail"
+SET email = 'nv@mail'
 WHERE ma = 2;
 
 --  Lay danh sach quyen han cua tai khoan (vi du nhanVien)
-SELECT tk.ma     AS maTaiKhoan,
-       tk.email  AS email,
-       tk.vaiTro AS maVaiTro,
-       nq.ten    AS tenVaiTro,
-       cn.ma     AS maChucNang,
-       cn.ten    AS tenChucNang,
-       hd.ma     AS maHanhDong,
-       hd.ten    AS tenHanhDong
-FROM taiKhoan AS tk
-         INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
-         INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
-         INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
-         INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-         INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong
+SELECT tk.ma     maTaiKhoan,
+       tk.email,
+       tk.vaiTro maVaiTro,
+       nq.ten    tenVaiTro,
+       cn.ma     maChucNang,
+       cn.ten    tenChucNang,
+       hd.ma     maHanhDong,
+       hd.ten    tenHanhDong
+FROM taiKhoan tk
+         INNER JOIN nhomQuyen nq ON nq.ma = tk.vaiTro
+         INNER JOIN CTQuyen ct ON ct.nhomQuyen = nq.ma
+         INNER JOIN quyenHan qh ON qh.ma = ct.quyenHan
+         INNER JOIN chucNang cn ON cn.ma = qh.chucNang
+         INNER JOIN hanhDong hd ON hd.ma = qh.hanhDong
 WHERE tk.ma = 2;
 
-SELECT tk.ma     AS maTaiKhoan,
-       tk.email  AS email,
-       tk.vaiTro AS maVaiTro,
-       nq.ten    AS tenVaiTro,
-       cn.ma     AS maChucNang,
-       cn.ten    AS tenChucNang,
-       hd.ma     AS maHanhDong,
-       hd.ten    AS tenHanhDong
-FROM taiKhoan AS tk
-         INNER JOIN nhomQuyen AS nq ON nq.ma = tk.vaiTro
-         INNER JOIN CTQuyen AS ct ON ct.nhomQuyen = nq.ma
-         INNER JOIN quyenHan AS qh ON qh.ma = ct.quyenHan
-         INNER JOIN chucNang AS cn ON cn.ma = qh.chucNang
-         INNER JOIN hanhDong AS hd ON hd.ma = qh.hanhDong;
+SELECT tk.ma     maTaiKhoan,
+       tk.email,
+       tk.vaiTro maVaiTro,
+       nq.ten    tenVaiTro,
+       cn.ma     maChucNang,
+       cn.ten    tenChucNang,
+       hd.ma     maHanhDong,
+       hd.ten    tenHanhDong
+FROM taiKhoan tk
+         INNER JOIN nhomQuyen nq ON nq.ma = tk.vaiTro
+         INNER JOIN CTQuyen ct ON ct.nhomQuyen = nq.ma
+         INNER JOIN quyenHan qh ON qh.ma = ct.quyenHan
+         INNER JOIN chucNang cn ON cn.ma = qh.chucNang
+         INNER JOIN hanhDong hd ON hd.ma = qh.hanhDong;
 
 SELECT *
 FROM nhanVien;
@@ -319,8 +319,8 @@ SELECT *
 FROM taiKhoan;
 
 INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan)
-VALUES ("test1", "1000-1-20", "1234567890", "Nam", 1),
-       ("test1", "1000-1-20", "1234567891", "Nam", 2);
+VALUES ('test1', '1000-1-20', '1234567890', 'Nam', 1),
+       ('test1', '1000-1-20', '1234567891', 'Nam', 2);
 
 SELECT *
 FROM nhomQuyen;
