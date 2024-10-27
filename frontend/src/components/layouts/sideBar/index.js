@@ -12,30 +12,30 @@ import styles from './style.module.css'
 const navLinks = [
   {title: "Trang chủ", force: true, eventKey: "trangChu", link: "/", icon: faHouse, links: []},
   {
-    title: "Sản phẩm", eventKey: "sanPham", icon: faLaptop, links: [
-      {title: "Sản phẩm", eventKey: "QuanLySanPham", link: "/san-pham", visible: true,},
-      {title: "Thuộc tính", eventKey: "QuanLyThuocTinh", link: "/thuoc-tinh", visible: true,}
+    title: "Sản phẩm", force: true, eventKey: "sanPham", icon: faLaptop, links: [
+      {title: "Sản phẩm", force: true, eventKey: "QuanLySanPham", link: "/san-pham", visible: true,},
+      {title: "Thuộc tính", force: true, eventKey: "QuanLyThuocTinh", link: "/thuoc-tinh", visible: true,}
     ]
   },
   {
-    title: "Đối tác", eventKey: "doiTac", icon: faHandshakeSimple, links: [
-      {title: "Khách hàng", eventKey: "QuanLyKhachHang", link: "/khach-hang", visible: true,},
-      {title: "Nhà cung cấp", eventKey: "QuanLyNhaCungCap", link: "/nha-cung-cap", visible: true,}
+    title: "Đối tác", force: true, eventKey: "doiTac", icon: faHandshakeSimple, links: [
+      {title: "Khách hàng", force: true, eventKey: "QuanLyKhachHang", link: "/khach-hang", visible: true,},
+      {title: "Nhà cung cấp", force: true, eventKey: "QuanLyNhaCungCap", link: "/nha-cung-cap", visible: true,}
     ]
   },
   {
-    title: "Nhập xuất", eventKey: "nhapXuat", icon: faWarehouse, links: [
-      {title: "Nhập kho", eventKey: "QuanLyNhapKho", link: "/nhap-kho", visible: true,},
-      {title: "Nhập kho", eventKey: "QuanLyNhapKho", link: "/nhap-kho/them", visible: false,},
-      {title: "Xuất kho", eventKey: "QuanLyXuatKho", link: "/xuat-kho", visible: true,},
-      {title: "Xuất kho", eventKey: "QuanLyXuatKho", link: "/xuat-kho/them", visible: false,},
+    title: "Nhập xuất", force: true, eventKey: "nhapXuat", icon: faWarehouse, links: [
+      {title: "Nhập kho", force: true, eventKey: "QuanLyNhapKho", link: "/nhap-kho", visible: true,},
+      {title: "Nhập kho", force: true, eventKey: "QuanLyNhapKho", link: "/nhap-kho/them", visible: false,},
+      {title: "Xuất kho", force: true, eventKey: "QuanLyXuatKho", link: "/xuat-kho", visible: true,},
+      {title: "Xuất kho", force: true, eventKey: "QuanLyXuatKho", link: "/xuat-kho/them", visible: false,},
     ]
   },
-  {title: "Dịch vụ", eventKey: "QuanLyDoiTraHang", link: "/doi-tra-hang", icon: faShieldHalved, links: []},
-  {title: "Nhân viên", eventKey: "QuanLyNhanVien", link: "/nhan-vien", icon: faClipboardUser, links: []},
-  {title: "Tài khoản", eventKey: "QuanLyTaiKhoan", link: "/tai-khoan", icon: faCircleUser, links: []},
-  {title: "Thống kê", eventKey: "ThongKe", link: "/thong-ke", icon: faCircleCheck, links: []},
-  {title: "Phân quyền", eventKey: "QuanLyNhomQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, links: []},
+  {title: "Dịch vụ", force: true, eventKey: "QuanLyDoiTraHang", link: "/doi-tra-hang", icon: faShieldHalved, links: []},
+  {title: "Nhân viên", force: true, eventKey: "QuanLyNhanVien", link: "/nhan-vien", icon: faClipboardUser, links: []},
+  {title: "Tài khoản", force: true, eventKey: "QuanLyTaiKhoan", link: "/tai-khoan", icon: faCircleUser, links: []},
+  {title: "Thống kê", force: true, eventKey: "ThongKe", link: "/thong-ke", icon: faCircleCheck, links: []},
+  {title: "Phân quyền", force: true, eventKey: "QuanLyNhomQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, links: []},
 ];
 
 function NavLinks({className, icon, link, eventKey, title, links = [], onClick, perm, force, icon_angle = 0}) {
@@ -71,12 +71,12 @@ function NavLinks({className, icon, link, eventKey, title, links = [], onClick, 
       {!!links.length && <Accordion.Collapse eventKey={eventKey}>
         <div className='position-relative my-1'>
           <div className={[styles.leftBar, "position-absolute rounded-5"].join(" ")}></div>
-          {links?.map(({link, title, visible, eventKey}, j) => visible && (
+          {links?.map(({link, title, visible, eventKey, force}, j) => visible && (
             <div key={j} className={["py-1 position-relative"].join(" ")}>
               <div
                 className={[styles.heading, "position-absolute rounded-5", window.location.pathname.includes(link) ? '_bg-yellow-2' : "bg-dark"].join(" ")}></div>
               <a
-                className={[styles.links, perm?.includes(eventKey) || "text-dark pe-none", window.location.pathname.includes(link) && '_text-yellow-2', 'text-decoration-none fs-5 disabled'].join(" ")}
+                className={[styles.links, force || perm?.includes(eventKey) || "text-dark pe-none", window.location.pathname.includes(link) && '_text-yellow-2', 'text-decoration-none fs-5 disabled'].join(" ")}
                 href={link}>{title}</a>
             </div>
           ))}

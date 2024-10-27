@@ -2,49 +2,40 @@ const pool = require('../models')
 const jwt = require('jsonwebtoken')
 
 const {permissions} = require('./permissions')
+const {v4} = require("uuid");
 
 function parseToken(token = "") {
   if (!token.length) return ""
-  return token.split(" ")[1]
-}
-
-function getSecretKey() {
-  return "mySecretKey"
-}
-
-// Generate login token
-function createToken(rootID, email, password) {
-  const token = jwt.sign({id: rootID, email, password}, getSecretKey())
-  return `Bearer ${token}`;
-}
-
-function decodeToken(token) {
   try {
-    return jwt.verify(parseToken(token), getSecretKey())
+    return jwt.verify(parseToken(token.split(" ")[1]), getSecretKey())
   } catch (error) {
     return {}
   }
 }
 
-// return user if true
-async function verifyToken(token, email) {
-  const data = decodeToken(token)
-  const connection = await pool.getConnection();
-  const [result] = await connection.query(`
-              SELECT *
-              FROM taiKhoan
-              WHERE matKhau = ?
-                AND email = ?
-                AND ma = ?;`,
-    [data.password, data.email, data.id])
-
-  if (!result.length) {
-    connection.destroy()
-    return {body: [], success: false, message: "can't find user"};
-  }
-
-  connection.destroy()
-  return {body: [], success: true, message: "success"};
+function getSecretKey() {
+  return "mySecretKey1234%^&*"
 }
 
-module.exports = {createToken, decodeToken, verifyToken}
+// Generate login token
+function createToken(userID, mail, password) {
+  const token = jwt.sign({userID, mail, password}, getSecretKey())
+  return `Bearer ${token}`;
+}
+
+// return user if true
+async function verifyToken(conn, token) {
+  const data = parseToken(token)
+  const [result] = await conn.query(
+    `SELECT 1
+     FROM taiKhoan
+     WHERE matKhau = ?
+       AND mail = ?
+       AND maTaiKhoan = ?
+     LIMIT 1;`,
+    [data.password, data.email, data.userID])
+
+  return result.length > 0;
+}
+
+module.exports = {createToken, verifyToken, parseToken}

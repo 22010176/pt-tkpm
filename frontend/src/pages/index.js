@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 
 // import { navLinks } from '../utilities/navLinks';
-import {getPermissions, getUserData, UserContext} from '../api/authentication';
+import {UserContext} from '../api/authentication';
 
 import TrangChu from "../pages/OtherPage/trangChu"
 import NhanVien from "./phanQuyenPage/nhanVien"
@@ -93,20 +93,9 @@ const pagePerm = {
 
 function App() {
   const [auth, setAuth] = useState({token: "", perm: [], user: {}})
-  // const [token, setToken] = useState('')
-  // const [perm, setPerm] = useState([])
-  // const [user, setUser] = useState({})
-
 
   useEffect(function () {
-    const token = sessionStorage.getItem("accountToken");
 
-    if (!token && document.location.pathname !== "/dang-nhap")
-      document.location.replace("/dang-nhap")
-    setAuth(src => ({...src, token}))
-    // setToken(token)
-    getPermissions(token).then(data => setAuth(src => ({...src, perm: data})))
-    getUserData(token).then(data => setAuth(src => ({...src, user: data})))
   }, [])
 
   return (
@@ -123,27 +112,26 @@ function App() {
           .map(({path, element: Elem}, j) => (
             <Route key={j} path={path} element={<Elem/>}/>
           ))}
+          <Route path='/tai-khoan-ca-nhan' element={<TaiKhoan/>}/>
 
-          {/*<Route path='/tai-khoan-ca-nhan' element={<TaiKhoan/>}/>*/}
+          <Route path='/san-pham' element={<SanPham/>}/>
+          <Route path='/thuoc-tinh' element={<ThuocTinh/>}/>
 
-          {/*<Route path='/san-pham' element={<SanPham/>}/>*/}
-          {/*<Route path='/thuoc-tinh' element={<ThuocTinh/>}/>*/}
+          <Route path='/nhap-kho' element={<NhapKho/>}/>
+          <Route path='/nhap-kho/them' element={<ThemNhapKho/>}/>
+          <Route path='/xuat-kho' element={<XuatKho/>}/>
+          <Route path='/xuat-kho/them' element={<ThemXuatKho/>}/>
 
-          {/*<Route path='/nhap-kho' element={<NhapKho/>}/>*/}
-          {/*<Route path='/nhap-kho/them' element={<ThemNhapKho/>}/>*/}
-          {/*<Route path='/xuat-kho' element={<XuatKho/>}/>*/}
-          {/*<Route path='/xuat-kho/them' element={<ThemXuatKho/>}/>*/}
+          <Route path='/khach-hang' element={<KhachHang/>}/>
+          <Route path='/nha-cung-cap' element={<NhaCungCap/>}/>
 
-          {/*<Route path='/khach-hang' element={<KhachHang/>}/>*/}
-          {/*<Route path='/nha-cung-cap' element={<NhaCungCap/>}/>*/}
+          <Route path='/doi-tra-hang' element={<DoiTraHang/>}/>
 
-          {/*<Route path='/doi-tra-hang' element={<DoiTraHang/>}/>*/}
+          <Route path='/nhan-vien' element={<NhanVien/>}/>
 
-          {/*<Route path='/nhan-vien' element={<NhanVien/>}/>*/}
-
-          {/*<Route path='/thong-ke' element={<Page1/>}/>*/}
-          {/*<Route path='/tai-khoan' element={<QuanLyTaiKhoan/>}/>*/}
-          {/*<Route path='/phan-quyen' element={<PhanQuyen/>}/>*/}
+          <Route path='/thong-ke' element={<ThongKe/>}/>
+          <Route path='/tai-khoan' element={<QuanLyTaiKhoan/>}/>
+          <Route path='/phan-quyen' element={<PhanQuyen/>}/>
 
           <Route path='/*' element={<ErrorPage/>}/>
         </Routes>

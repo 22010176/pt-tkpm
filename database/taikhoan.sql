@@ -183,3 +183,11 @@ FROM hanhDong;
 
 SELECT *
 FROM taiKhoan;
+
+SELECT 1
+FROM taiKhoan
+WHERE matKhau = 'admin'
+  AND mail = 'root@mail'
+  AND maTaiKhoan = 1
+LIMIT 1;
+
