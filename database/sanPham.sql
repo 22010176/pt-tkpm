@@ -1,6 +1,5 @@
 DROP DATABASE IF EXISTS ptpm_sanPham;
 CREATE DATABASE ptpm_sanPham;
-
 USE ptpm_sanPham;
 
 DROP TABLE IF EXISTS xuatXu;
@@ -127,24 +126,3 @@ VALUES ('đỏ'),
        ('xanh lá cây'),
        ('vàng');
 
-SELECT *
-FROM ram
-ORDER BY maRam;
-
-UPDATE Ram
-SET dungLuongRam = 32
-WHERE maRam = 5;
-
-SELECT *
-FROM mausac;
-
-DELETE
-FROM ram
-WHERE maRam = 1;
-
-SELECT *
-FROM danhMucSanPham
-ORDER BY maDanhMucSanPham;
-
-SELECT *
-FROM xuatXu;
