@@ -49,7 +49,6 @@ DROP TABLE IF EXISTS taiKhoan;
 CREATE TABLE taiKhoan
 (
     maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    mail       VARCHAR(255) NOT NULL UNIQUE,
     matKhau    VARCHAR(255) NOT NULL,
     vaiTro     INT UNSIGNED,
 
@@ -63,6 +62,7 @@ CREATE TABLE nhanVien
     maNhanVien  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     hoTen       VARCHAR(255),
     ngaySinh    DATE,
+    mail        VARCHAR(255) NOT NULL UNIQUE,
     soDienThoai VARCHAR(20) UNIQUE,
     gioiTinh    ENUM ('Nam', 'Nữ'),
     taiKhoan    INT UNSIGNED UNIQUE DEFAULT NULL,

@@ -21,14 +21,12 @@ async function initialDBConnection(req, res, next) {
 }
 
 async function getPermission(req, res, next) {
-  // const conn = res.locals.conn;
+  
   next()
 }
 
 async function parseAccountData(req, res, next) {
   try {
-    // const userData = parseToken(req.headers.authorization)
-    // res.locals.account = userData
   } catch (error) {
   }
   next()
