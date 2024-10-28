@@ -1,18 +1,36 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
+const {updateSupplier, insertSupplier, getSuppliers, deleteSupplier} = require('../models/suppliers')
+
 router.route("/")
-.get((req, res) => {
-  res.json({message: req.path})
+.get(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await getSuppliers(conn)
+  
+  await conn.destroy()
+  res.json(result)
 })
-.post((req, res) => {
-  res.json({message: req.path})
+.post(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await insertSupplier(conn, req.body)
+
+  await conn.destroy()
+  res.json(result)
 })
-.put((req, res) => {
-  res.json({message: req.path})
+.put(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await updateSupplier(conn, req.body)
+
+  await conn.destroy()
+  res.json(result)
 })
-.delete((req, res) => {
-  res.json({message: req.path})
+.delete(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await deleteSupplier(conn, req.body)
+
+  await conn.destroy()
+  res.json(result)
 })
 
 module.exports = router

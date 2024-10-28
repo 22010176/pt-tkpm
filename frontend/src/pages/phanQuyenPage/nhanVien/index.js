@@ -34,7 +34,7 @@ function NhanVien() {
   const [modal, setModal] = useState("")
   const [formData, setFormData] = useState({})
   const [tableData, setTableData] = useState()
-  
+
   return (
     <>
       <Page2
@@ -43,7 +43,7 @@ function NhanVien() {
           {/*Them btn*/}
           <ToolBtn
             className={[
-              !perm.find(i => i.tenHanhDong === 'Them' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
+              // !perm.find(i => i.tenHanhDong === 'Them' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-green-focus"
             ].join(' ')}
             color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
@@ -51,7 +51,7 @@ function NhanVien() {
           {/*Sua btn*/}
           <ToolBtn
             className={[
-              !perm.find(i => i.tenHanhDong === 'Sua' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
+              // !perm.find(i => i.tenHanhDong === 'Sua' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-orange-focus-2"
             ].join(' ')}
             color={colors.orange_2} icon={faPencil} title="Sửa" onClick={setModal.bind({}, "edit")}/>
@@ -59,7 +59,7 @@ function NhanVien() {
           {/*Xoa btn*/}
           <ToolBtn
             className={[
-              !perm.find(i => i.tenHanhDong === 'Xoa' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
+              // !perm.find(i => i.tenHanhDong === 'Xoa' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-yellow-focus-2"
             ].join(' ')}
             color={colors.yellow_2} icon={faTrashCan} title="Xóa"/>
@@ -67,7 +67,7 @@ function NhanVien() {
           {/*NhapFile btn*/}
           <ToolBtn
             className={[
-              !perm.find(i => i.tenHanhDong === 'NhapFile' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
+              // !perm.find(i => i.tenHanhDong === 'NhapFile' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-green-focus"
             ].join(' ')}
             color={colors.green} icon={faFileExcel} title="Nhập Excel"/>
@@ -75,7 +75,7 @@ function NhanVien() {
           {/*XuatFile btn*/}
           <ToolBtn
             className={[
-              !perm.find(i => i.tenHanhDong === 'XuatFile' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
+              // !perm.find(i => i.tenHanhDong === 'XuatFile' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-green-focus"
             ].join(' ')}
             color={colors.green} icon={faFileExport} title="Xuất Excel"/>
@@ -145,8 +145,8 @@ function KhachHangForm() {
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Giới tính</Form.Label>
         <InputShadow as={FormSelect} value={data.hoTen} onChange={onDataChange.bind({}, "gioiTinh")}>
-          <option>Nam</option>
-          <option>Nu</option>
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
         </InputShadow>
       </Form.Group>
       <Form.Group className="mb-3">

@@ -10,7 +10,7 @@ router.route("/:attribute")
   const conn = res.locals.conn
 
   const result = await getAttributes(conn, attribute)
-  conn.destroy()
+  await conn.destroy()
   res.json(result)
 })
 // Them du lieu thuoc tinh
@@ -19,7 +19,7 @@ router.route("/:attribute")
   const conn = res.locals.conn
 
   const result = await insertAttribute(conn, attribute, req.body)
-  conn.destroy()
+  await conn.destroy()
   res.json(result)
 })
 // Sua du lieu thuoc tinh
@@ -28,7 +28,7 @@ router.route("/:attribute")
   const conn = res.locals.conn
 
   const result = await updateAttribute(conn, attribute, req.body)
-  conn.destroy()
+  await conn.destroy()
   res.json(result)
 })
 // Xoa du lieu thuoc tinh
@@ -37,7 +37,7 @@ router.route("/:attribute")
   const conn = res.locals.conn
 
   const result = await deleteAttribute(conn, attribute, req.body)
-  conn.destroy()
+  await conn.destroy()
   res.json(result)
 })
 

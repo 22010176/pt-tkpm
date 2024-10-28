@@ -21,7 +21,7 @@ async function initialDBConnection(req, res, next) {
 }
 
 async function getPermission(req, res, next) {
-  
+
   next()
 }
 
@@ -75,9 +75,11 @@ app.use("/api/statistics",
 app.use("/api/employees",
   require("./src/routes/employees"))
 
-app.all('/*', (req, res) => {
+app.all('/*', async (req, res) => {
+  await res.locals.conn.destroy()
   res.json({success: false, message: "not found entry"})
 });
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)

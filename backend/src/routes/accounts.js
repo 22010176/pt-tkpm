@@ -2,16 +2,21 @@ const express = require("express")
 const router = express.Router({mergeParams: true})
 
 router.route("/")
-.get((req, res) => {
+.get(async function (req, res) {
+
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.post((req, res) => {
+.post(async function (req, res) {
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.put((req, res) => {
+.put(async function (req, res) {
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.delete((req, res) => {
+.delete(async function (req, res) {
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
 
