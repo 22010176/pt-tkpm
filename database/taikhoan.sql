@@ -16,6 +16,21 @@ CREATE TABLE hanhDong
     tenHanhDong VARCHAR(255) UNIQUE
 );
 
+DROP TABLE IF EXISTS quyenHan;
+CREATE TABLE quyenHan
+(
+    maQuyenHan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    chucNang   INT UNSIGNED NOT NULL,
+    hanhDong   INT UNSIGNED NOT NULL,
+
+    UNIQUE (chucNang, hanhDong),
+
+    FOREIGN KEY (chucNang) REFERENCES chucNang (maChucNang)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (hanhDong) REFERENCES hanhDong (maHanhDong)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 DROP TABLE IF EXISTS nhomQuyen;
 CREATE TABLE nhomQuyen
 (
@@ -29,19 +44,15 @@ DROP TABLE IF EXISTS CTQuyen;
 CREATE TABLE CTQuyen
 (
     maCTQuyen INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    nhomQuyen INT UNSIGNED,
-    chucNang  INT UNSIGNED,
-    hanhDong  INT UNSIGNED,
+    nhomQuyen INT UNSIGNED NOT NULL,
+    quyenHan  INT UNSIGNED NOT NULL,
 
-    UNIQUE INDEX quyen (nhomQuyen, chucNang, hanhDong),
+    UNIQUE (nhomQuyen, quyenHan),
 
     FOREIGN KEY (nhomQuyen) REFERENCES nhomQuyen (maNhomQuyen)
         ON DELETE CASCADE ON UPDATE CASCADE,
 
-    FOREIGN KEY (chucNang) REFERENCES chucNang (maChucNang)
-        ON DELETE CASCADE ON UPDATE CASCADE,
-
-    FOREIGN KEY (hanhDong) REFERENCES hanhDong (maHanhDong)
+    FOREIGN KEY (quyenHan) REFERENCES quyenHan (maQuyenHan)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -52,7 +63,7 @@ CREATE TABLE taiKhoan
     matKhau    VARCHAR(255) NOT NULL,
 
     vaiTro     INT UNSIGNED,
-    nhanVien   INT UNSIGNED,
+    nhanVien   INT UNSIGNED NOT NULL,
 
     FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
         ON UPDATE CASCADE ON DELETE SET NULL,
@@ -60,6 +71,8 @@ CREATE TABLE taiKhoan
     FOREIGN KEY (nhanVien) REFERENCES nhanVien (maNhanVien)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+
 
 DROP TABLE IF EXISTS nhanVien;
 CREATE TABLE nhanVien
@@ -69,11 +82,9 @@ CREATE TABLE nhanVien
     ngaySinh    DATE,
     mail        VARCHAR(255) NOT NULL UNIQUE,
     soDienThoai VARCHAR(20) UNIQUE,
-    gioiTinh    ENUM ('Nam', 'Nữ')
+    gioiTinh    BOOLEAN DEFAULT 1
 );
 
-ALTER TABLE nhanVien
-    MODIFY COLUMN mail VARCHAR(255) UNIQUE NOT NULL ;
 
 # UPDATE nhanVien SET mail = 'a' WHERE mail IS null;
 
@@ -108,74 +119,5 @@ INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', '');
 
-# Them quyen xem tat ca cac trang cho tai khoan root
-INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
-                                                            cN.maChucNang  chucNang,
-                                                            hD.maHanhDong  hanhDong
-                                                     FROM nhomQuyen nQ
-                                                              INNER JOIN chucNang cN
-                                                              INNER JOIN hanhDong hD
-                                                     WHERE nQ.maNhomQuyen IN (1)
-                                                       AND hD.maHanhDong IN (1));
 
-# Them quyen them, sua, xoa cho san pham, thuoc tinh va nhan vien cho tai khoan root
-INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
-                                                            cN.maChucNang  chucNang,
-                                                            hD.maHanhDong  hanhDong
-                                                     FROM nhomQuyen nQ
-                                                              INNER JOIN chucNang cN
-                                                              INNER JOIN hanhDong hD
-                                                     WHERE nQ.maNhomQuyen IN (1)
-                                                       AND cN.maChucNang IN (8, 2, 1)
-                                                       AND hD.maHanhDong IN (5, 4, 6));
 
-# Them quyen xem trang san pham, thuoc tinh, khach hang cho nhan vien
-INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQuyen,
-                                                            cN.maChucNang  chucNang,
-                                                            hD.maHanhDong  hanhDong
-                                                     FROM nhomQuyen nQ
-                                                              INNER JOIN chucNang cN
-                                                              INNER JOIN hanhDong hD
-                                                     WHERE nQ.maNhomQuyen IN (2)
-                                                       AND cN.maChucNang IN (1, 2, 6)
-                                                       AND hD.maHanhDong IN (1));
-
-SELECT nV.maNhanVien,
-       nv.hoTen,
-       nv.ngaySinh,
-       nv.soDienThoai,
-       nv.gioiTinh,
-       tK.mail,
-       nQ.tenNhomQuyen,
-       nQ.tenHienThi
-FROM nhanVien nV
-         INNER JOIN taiKhoan tK on nV.taiKhoan = tK.maTaiKhoan
-         INNER JOIN nhomQuyen nQ ON nQ.maNhomQuyen = tK.vaiTro;
-
-# Hien thi danh sach cac quyen cua tai khoan root
-SELECT ctq.maCTQuyen ma,
-       cN.maChucNang,
-       cN.tenChucNang,
-       hD.maHanhDong,
-       hD.tenHanhDong
-FROM CTQuyen ctq
-         INNER JOIN chucNang cN on ctq.chucNang = cN.maChucNang
-         INNER JOIN hanhDong hD on ctq.hanhDong = hD.maHanhDong
-         INNER JOIN nhomQuyen nQ on ctq.nhomQuyen = nQ.maNhomQuyen
-WHERE tenNhomQuyen = 'root'
-ORDER BY maCTQuyen;
-
-# Tao tai khoan root
-INSERT INTO taiKhoan (mail, matKhau, vaiTro)
-VALUES ('root@mail', 'admin', 1);
-
-# Tao tai khoan nhan vien
-INSERT INTO taiKhoan (mail, matKhau, vaiTro)
-VALUES ('nv@mail', 'admin', 2);
-
-# Gan tai khoan voi nhan vien
-INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, mail,taiKhoan)
-VALUES ('test1', '2004-1-20', '1234567890', 'Nam', 'a',1),
-       ('test1', '2004-1-20', '1234567891', 'Nu', 'b',2);
-
-DELETE FROM nhanVien WHERE nhanVien.maNhanVien > 0;

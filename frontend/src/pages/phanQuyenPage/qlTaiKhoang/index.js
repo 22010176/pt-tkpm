@@ -18,12 +18,12 @@ import ContentA from '../../../components/layouts/blockContent'
 import styles from './style.module.css'
 
 const tableHd = [
-  { key: "Mã tài khoản", value: "" },
-  { key: "Mã nhân viên", value: "" },
-  { key: "Tên nhân viên", value: "" },
-  { key: "Gmail", value: "" },
-  { key: "Nhóm quyền", value: "" },
-  { key: "Trạng thái", value: "" },
+  { key: "Mã tài khoản", value: "maTaiKhoan" },
+  { key: "Mã nhân viên", value: "maNhanVien" },
+  { key: "Tên nhân viên", value: "hoTen" },
+  { key: "Mail", value: "mail" },
+  { key: "Nhóm quyền", value: "tenHienThi" },
+  // { key: "Trạng thái", value: "" },
 ]
 
 const chonNhanVienHD = [

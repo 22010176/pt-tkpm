@@ -22,23 +22,6 @@ const tableHd = [
   { key: "Ghi chú", value: "" },
 ]
 
-const nhomQuyenHd = [
-  {
-    key: "Danh mục chức năng",
-    value: "feature",
-    As: ({ children, ...prop }) => < FormLabel {...prop}>{children}</FormLabel>,
-  },
-  {
-    key: "Xem",
-    As: ({ ...prop }) => <FormCheck {...prop} />,
-    value: "view"
-  },
-  { key: "Tạo", value: "insert" },
-  { key: "Sửa", value: "update" },
-  { key: "Xóa", value: "delete" },
-  { key: "Xuất", value: "export" },
-]
-
 const defaultPermissions = [
   { feature: "test", view: true, insert: false, update: false, delete: false, export: false },
   { feature: "test", view: false, insert: true, update: false, delete: false, export: false },
@@ -116,8 +99,11 @@ function PhanQuyenModal({ data = [], setData }) {
           </FormGroup>
         </FormGroup>
 
-        <Form className='d-flex h-100 w-100 overflow-auto'>
-          <Table borderless responsive className='h-100 bg-light ' >
+        <ContentA className='d-flex flex-column h-100 w-100 overflow-auto'>
+          <div>
+
+
+          <Table borderless className='h-100 w-100 bg-light ' >
             <thead className='fw-bold text-nowrap ' >
               <tr className=''>
                 <th>Danh mục chức năng</th>
@@ -125,34 +111,23 @@ function PhanQuyenModal({ data = [], setData }) {
                 <th className='text-center px-4'>Sửa</th>
                 <th className='text-center px-4'>Xóa</th>
                 <th className='text-center px-4'>Xuất dữ liệu</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
-                <th className='text-center px-4'>Xem chi tiết</th>
               </tr>
             </thead>
 
             <tbody className=''>
-              {new Array(100).fill().map(i => (
-                <tr>
+              {new Array(5).fill().map((i,j) => (
+                <tr key={j}>
                   <td>Quản lý tài khoản</td>
-                  {new Array(15).fill().map(i => <td>{<FormCheck size="xl" className='text-center' disabled={Math.random() > .5} />}</td>)}
+                  {new Array(10).fill().map((i,j) => <td key={j}>{<FormCheck size="xl" className='text-center' disabled={Math.random() > .5} />}</td>)}
                 </tr>
               ))}
 
             </tbody>
           </Table>
+           </div>
           {/* <div style={{ width: "10000px", height: "1000px" }} style={{wiminWidthh:"200px", }><
-        
         /div> */}
-        </Form>
+        </ContentA>
         {/* <ContentA as={FormGroup} className="h-100 px-3 py-2 overflow-x-hidden overflow-y-auto"> */}
 
         {/* {new Array(10).fill().map(i => (
