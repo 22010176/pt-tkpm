@@ -111,7 +111,7 @@ function NhanVien() {
 
         {/* Sua thong tin khach hang */}
         {perm.find(i => i.tenHanhDong === 'Sua' && i.tenChucNang === 'QuanLyNhanVien')
-          && <Modal show={modal === "edit"} centered backdrop="static" size='lg'>
+          || <Modal show={modal === "edit"} centered backdrop="static" size='lg'>
             <HeaderModalA title={"CHỈNH SỬA NHÂN VIÊN"}/>
 
             <Modal.Body>

@@ -50,10 +50,15 @@ CREATE TABLE taiKhoan
 (
     maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     matKhau    VARCHAR(255) NOT NULL,
+
     vaiTro     INT UNSIGNED,
+    nhanVien   INT UNSIGNED,
 
     FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
-        ON UPDATE CASCADE ON DELETE SET NULL
+        ON UPDATE CASCADE ON DELETE SET NULL,
+
+    FOREIGN KEY (nhanVien) REFERENCES nhanVien (maNhanVien)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS nhanVien;
@@ -64,12 +69,13 @@ CREATE TABLE nhanVien
     ngaySinh    DATE,
     mail        VARCHAR(255) NOT NULL UNIQUE,
     soDienThoai VARCHAR(20) UNIQUE,
-    gioiTinh    ENUM ('Nam', 'Nữ'),
-    taiKhoan    INT UNSIGNED UNIQUE DEFAULT NULL,
-
-    FOREIGN KEY (taiKhoan) REFERENCES taiKhoan (maTaiKhoan)
-        ON UPDATE CASCADE ON DELETE SET NULL
+    gioiTinh    ENUM ('Nam', 'Nữ')
 );
+
+ALTER TABLE nhanVien
+    MODIFY COLUMN mail VARCHAR(255) UNIQUE NOT NULL ;
+
+# UPDATE nhanVien SET mail = 'a' WHERE mail IS null;
 
 # Them gia tri chuc nang
 INSERT INTO chucNang (tenChucNang)
@@ -134,7 +140,6 @@ INSERT INTO CTQuyen (nhomQuyen, chucNang, hanhDong) (SELECT nQ.maNhomQuyen nhomQ
                                                        AND cN.maChucNang IN (1, 2, 6)
                                                        AND hD.maHanhDong IN (1));
 
-
 SELECT nV.maNhanVien,
        nv.hoTen,
        nv.ngaySinh,
@@ -149,8 +154,6 @@ FROM nhanVien nV
 
 # Hien thi danh sach cac quyen cua tai khoan root
 SELECT ctq.maCTQuyen ma,
-#        nq.maNhomQuyen,
-#        nQ.tenNhomQuyen,
        cN.maChucNang,
        cN.tenChucNang,
        hD.maHanhDong,
@@ -171,23 +174,8 @@ INSERT INTO taiKhoan (mail, matKhau, vaiTro)
 VALUES ('nv@mail', 'admin', 2);
 
 # Gan tai khoan voi nhan vien
-INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, taiKhoan)
-VALUES ('test1', '2004-1-20', '1234567890', 'Nam', 1),
-       ('test1', '2004-1-20', '1234567891', 'Nu', 2);
+INSERT INTO nhanVien (hoTen, ngaySinh, soDienThoai, gioiTinh, mail,taiKhoan)
+VALUES ('test1', '2004-1-20', '1234567890', 'Nam', 'a',1),
+       ('test1', '2004-1-20', '1234567891', 'Nu', 'b',2);
 
-SELECT *
-FROM chucNang;
-
-SELECT *
-FROM hanhDong;
-
-SELECT *
-FROM taiKhoan;
-
-SELECT 1
-FROM taiKhoan
-WHERE matKhau = 'admin'
-  AND mail = 'root@mail'
-  AND maTaiKhoan = 1
-LIMIT 1;
-
+DELETE FROM nhanVien WHERE nhanVien.maNhanVien > 0;
