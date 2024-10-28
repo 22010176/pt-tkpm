@@ -74,19 +74,20 @@ function PhanQuyen() {
   const [rowClick, setRowClick] = useState()
   const [formData, setFormData] = useState({...defaultRole})
 
+  let permissionData;
+
   useEffect(() => {
     updateTableData()
     getPermissionData().then(data => {
       delete data.success
       setPermission(data)
     })
+
   }, [])
 
   useEffect(() => {
-    setFormData({
-      tenNhomQuyen: "", ghiChu: "",
-      permissions: parsePermissions(permission.permissions)
-    })
+    permissionData = parsePermissions(permission.permissions)
+    setFormData({...defaultRole, permissions: permissionData})
   }, [permission]);
 
   function updateTableData() {
@@ -100,7 +101,8 @@ function PhanQuyen() {
 
   function onOpenEditModal() {
     if (!rowClick) return setModal("error")
-    setFormData(rowClick)
+
+    setFormData({...rowClick, permissions: permissionData})
 
     setModal("edit")
   }
@@ -111,7 +113,7 @@ function PhanQuyen() {
 
     if (!result.success) return
 
-    setFormData({...defaultRole})
+    setFormData({...defaultRole, permissions: permissionData})
     updateTableData()
   }
 
@@ -120,7 +122,7 @@ function PhanQuyen() {
 
     if (!result.success) return
 
-    setFormData({...defaultRole})
+    setFormData({...defaultRole, permissions: permissionData})
     updateTableData()
     setModal('')
   }
@@ -163,7 +165,7 @@ function PhanQuyen() {
 
           <ModalBody className='d-flex flex-column _vh-60 overflow-auto px-5 py-3'>
 
-            <PhanQuyenModal actions={permission.actions} features={permission.features}/>
+            <PhanQuyenModal actions={permission.actions} features={permission.features} permissions={permission.permissions}/>
           </ModalBody>
 
           <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
@@ -176,7 +178,7 @@ function PhanQuyen() {
           <HeaderModalA title="CHỈNH SỬA NHÓM QUYỀN"/>
           <ModalBody className='d-flex flex-column _vh-60 overflow-auto px-5 py-3'>
 
-            <PhanQuyenModal actions={permission.actions} features={permission.features}/>
+            <PhanQuyenModal actions={permission.actions} features={permission.features} permissions={permission.permissions}/>
           </ModalBody>
 
           <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
@@ -191,8 +193,14 @@ function PhanQuyen() {
   )
 }
 
-function PhanQuyenModal({actions = [], features = []}) {
+function PhanQuyenModal({actions = [], features = [], permissions = []}) {
   const [data, setData] = useContext(FormContext)
+  const [permissionData, setPermissionData] = useState({});
+
+  useEffect(() => {
+    setPermissionData(parsePermissions(permissions))
+  }, [permissions])
+  
 
   function onChangeCheck(key, e) {
     setData(src => ({
@@ -240,8 +248,8 @@ function PhanQuyenModal({actions = [], features = []}) {
                   const key = `${cn.maChucNang}_${cn.tenChucNang}_${hd.maHanhDong}_${hd.tenHanhDong}`
                   return (
                     <td key={k}>
-                      {data.permissions?.[key] != null
-                        && <FormCheck className='text-center' value={data.permissions[key]} onChange={onChangeCheck.bind({}, key)}/>}
+                      {permissionData?.[key] != null
+                        && <FormCheck className='text-center' value={data?.permissions?.[key]} onChange={onChangeCheck.bind({}, key)}/>}
                     </td>
                   )
 
