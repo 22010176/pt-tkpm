@@ -69,7 +69,7 @@ function NhanVien() {
 
   async function onInsert() {
     const result = await insertEmployee(formData)
-
+    console.log(result)
     if (!result.success) return
 
     setFormData({...defaultNhanVien})

@@ -2,17 +2,15 @@ const pool = require('../models')
 
 
 async function getAllPerm() {
-  const [chucNang] = await pool.query(`
-      SELECT *
-      FROM chucNang
-      ORDER BY maChucNang;`)
-  const [hanhDong] = await pool.query(`
-      SELECT *
-      FROM hanhDong
-      ORDER BY maHanhDong;`)
+  const [res] = await pool.query(
+    `SELECT q.maQuyenHan, cN.tenChucNang chucNang, hD.tenHanhDong hanhDong
+     FROM ptpm_taikhoan.quyenHan q
+              INNER JOIN ptpm_taikhoan.chucNang cN on q.chucNang = cN.maChucNang
+              INNER join ptpm_taikhoan.hanhDong hD on q.hanhDong = hD.maHanhDong
+     ORDER BY cN.maChucNang, hD.maHanhDong;`)
+  console.log('permissions', res)
 
-  console.log('permissions', {hanhDong, chucNang})
-  return Object.freeze({hanhDong, chucNang})
+  return Object.freeze(res)
 }
 
 const permissions = getAllPerm()
@@ -21,14 +19,14 @@ async function authAccount(req, res, next) {
 
 }
 
-function authPermission({chucNangID = 0, hanhDongID = 0, optional = true, last = false}) {
+function authPermission({maQuyenHan = 0, optional = true, last = false}) {
   return async function (req, res, next) {
     if (res.locals.permissionCheck && optional) return next()
     res.locals.permissionCheck = false;
 
     const perms = res.locals.permissions
     for (let perm of perms)
-      if (perm.maChucNang === chucNangID && perm.maHanhDong === hanhDongID) {
+      if (perm.maQuyenHan === maQuyenHan) {
         res.locals.permissionCheck = true;
         return next()
       }

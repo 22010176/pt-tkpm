@@ -21,7 +21,7 @@ async function insertEmployee(conn, employee) {
     return {message: "Employee added", success: true}
   } catch (e) {
     console.log(e)
-    return {message: "Added failed", success: true}
+    return {message: "Added failed", success: false}
   }
 }
 

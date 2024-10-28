@@ -33,16 +33,14 @@ const chonNhanVienHD = [
 function QuanLyTaiKhoan() {
   const [modal, setModal] = useState("")
 
-  function openModal(key, e) {
-    setModal(key);
-  }
+
   return (
     <>
       <Page2
         sidebar={<SideNavbar />}
         tools={<>
-          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={openModal.bind({}, "add")} />
-          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={openModal.bind({}, "edit")} />
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")} />
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={setModal.bind({}, "edit")} />
           <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" />
         </>}
         rightSec={<FlexForm>
@@ -82,7 +80,7 @@ function QuanLyTaiKhoan() {
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button className='_w-20' variant='primary' >Thêm tài khoản</Button>
-          <Button className='_w-20' variant='danger' onClick={openModal.bind({}, "")} >Hủy</Button>
+          <Button className='_w-20' variant='danger' onClick={setModal.bind({}, "")} >Hủy</Button>
         </ModalFooter>
       </Modal>
 
@@ -95,7 +93,7 @@ function QuanLyTaiKhoan() {
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button className='_w-20' variant='primary' >lưu</Button>
-          <Button className='_w-20' variant='danger' onClick={openModal.bind({}, "")}>Hủy</Button>
+          <Button className='_w-20' variant='danger' onClick={setModal.bind({}, "")}>Hủy</Button>
         </ModalFooter>
       </Modal>
     </>

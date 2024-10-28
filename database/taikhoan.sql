@@ -6,14 +6,16 @@ DROP TABLE IF EXISTS chucNang;
 CREATE TABLE chucNang
 (
     maChucNang  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenChucNang VARCHAR(255) UNIQUE
+    tenChucNang VARCHAR(255) UNIQUE,
+    tenHienThi  VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS hanhDong;
 CREATE TABLE hanhDong
 (
     maHanhDong  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenHanhDong VARCHAR(255) UNIQUE
+    tenHanhDong VARCHAR(255) UNIQUE,
+    tenHienThi  VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS quyenHan;
@@ -82,42 +84,92 @@ CREATE TABLE nhanVien
     ngaySinh    DATE,
     mail        VARCHAR(255) NOT NULL UNIQUE,
     soDienThoai VARCHAR(20) UNIQUE,
-    gioiTinh    BOOLEAN DEFAULT 1
+    gioiTinh    ENUM ('Nam', 'Nữ') DEFAULT 'Nam'
 );
 
-
-# UPDATE nhanVien SET mail = 'a' WHERE mail IS null;
-
 # Them gia tri chuc nang
-INSERT INTO chucNang (tenChucNang)
-VALUES ('QuanLySanPham'),
-       ('QuanLyThuocTinh'),
-       ('QuanLyNhapKho'),
-       ('QuanLyXuatKho'),
-       ('QuanLyDoiTraHang'),
-       ('QuanLyKhachHang'),
-       ('QuanLyNhaCungCap'),
-       ('QuanLyNhanVien'),
-       ('QuanLyTaiKhoan'),
-       ('ThongKe'),
-       ('QuanLyNhomQuyen'),
-       ('QuanLyQuyenHan');
+INSERT INTO chucNang (tenChucNang, tenHienThi)
+VALUES ('QuanLySanPham', 'Quản lý sản phẩm'),
+       ('QuanLyThuocTinh', 'Quản lý thuộc tính'),
+       ('QuanLyNhapKho', 'Quản lý nhập kho'),
+       ('QuanLyXuatKho', 'Quản lý xuất kho'),
+       ('QuanLyDichVu', 'Quản lý dịch vụ'),
+       ('QuanLyKhachHang', 'Quản lý khách hàng'),
+       ('QuanLyNhaCungCap', 'Quản lý Nhà cung cấp'),
+       ('QuanLyNhanVien', 'Quản lý nhân viên'),
+       ('QuanLyTaiKhoan', 'Quản lý tài khoản'),
+       ('ThongKe', 'Thống kê'),
+       ('QuanLyNhomQuyen', 'Quản lý nhóm quyền'),
+       ('QuanLyQuyenHan', 'Quản lý quyền hạn');
 
 # Them gia tri hanh dong
-INSERT INTO hanhDong (tenHanhDong)
-VALUES ('Xem'),
-       ('XemCaNhan'),
-       ('XemChiTiet'),
-       ('Them'),
-       ('Sua'),
-       ('Xoa'),
-       ('NhapFile'),
-       ('XuatFile');
+INSERT INTO hanhDong (tenHanhDong, tenHienThi)
+VALUES ('Xem', 'Xem'),
+       ('XemCaNhan', 'Xem cá nhân'),
+       ('XemChiTiet', 'Xem chi tiết'),
+       ('Them', 'Thêm'),
+       ('Sua', 'Sửa'),
+       ('Xoa', 'Xóa'),
+       ('NhapFile', 'Nhập tệp'),
+       ('XuatFile', 'Xuất tệp');
+
+SELECT *
+FROM chucNang
+ORDER BY maChucNang;
+
+SELECT *
+FROM hanhDong
+ORDER BY maHanhDong;
+
+# them quyen xem cho tat cac cac chuc nang
+INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang chucNang, h.maHanhDong AS hanhDong
+                                           FROM chucNang c
+                                                    INNER JOIN hanhdong h
+                                           WHERE h.maHanhDong = 1);
+
+INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang, h.maHanhDong
+                                           FROM chucNang c
+                                                    INNER JOIN hanhdong h
+                                           WHERE c.maChucNang IN (1, 2, 6, 7, 8, 9)
+                                             AND h.maHanhDong IN (4, 5, 6));
+
+INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuyenHan quyenHan FROM quyenHan);
+
+
+SELECT *
+FROM ctquyen;
+
+SELECT q.maQuyenHan, Cn.maChucNang, cN.tenChucNang, Hd.maHanhDong, hd.tenHanhDong
+FROM quyenHan q
+         RIGHT JOIN hanhDong hD on q.hanhDong = hD.maHanhDong
+         RIGHT JOIN chucNang cN on q.chucNang = cN.maChucNang
+ORDER BY cN.maChucNang, hD.maHanhDong;
 
 -- Them vai tro vao trong csdl
 INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', '');
 
+# Lay danh sach Quyen han
+SELECT q.maQuyenHan, cN.tenChucNang, hD.tenHanhDong
+FROM quyenHan q
+         INNER JOIN chucNang cN on q.chucNang = cN.maChucNang
+         INNER join hanhDong hD on q.hanhDong = hD.maHanhDong
+ORDER BY cN.maChucNang, hD.maHanhDong;
+
+SELECT *
+FROM nhomQuyen
+ORDER BY maNhomQuyen;
+
+SELECT *
+FROM nhanVien;
 
 
+
+SELECT qh.maQuyenHan, cN.maChucNang, cN.tenChucNang, hD.maHanhDong, hD.tenHanhDong
+FROM nhomQuyen nQ
+         INNER JOIN ctquyen c ON nQ.maNhomQuyen = c.nhomQuyen
+         INNER JOIN quyenHan qH on c.quyenHan = qH.maQuyenHan
+         INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
+         INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
+WHERE nQ.maNhomQuyen = 1;
