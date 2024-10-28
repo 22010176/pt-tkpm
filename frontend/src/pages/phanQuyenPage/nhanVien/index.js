@@ -77,7 +77,6 @@ function NhanVien() {
   }
 
   async function onUpdate() {
-
     const result = await updateEmployee(formData)
 
     if (!result.success) return

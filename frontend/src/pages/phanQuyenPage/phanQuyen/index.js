@@ -15,7 +15,9 @@ import HeaderModalA from '../../../components/modals/headerA'
 import ContentA from '../../../components/layouts/blockContent'
 
 import styles from './style.module.css'
-import {getPermissionData, getRolePermissions, getRoles} from "../../../api/roles";
+import {deleteRole, getPermissionData, getRolePermissions, getRoles, insertRole, updateRole} from "../../../api/roles";
+import ErrorModal from "../../../components/modals/errorModal";
+import {deleteEmployee, updateEmployee} from "../../../api/employees";
 
 const tableHd = [
   {key: "Mã nhóm quyền", value: "maNhomQuyen"},
@@ -25,16 +27,52 @@ const tableHd = [
 
 const FormContext = createContext({})
 
-function parsePermissions(permissions, value = false) {
+function removeVietnameseTones(str) {
+  str = str.replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, "a");
+  str = str.replace(/[èéẹẻẽêềếệểễ]/g, "e");
+  str = str.replace(/[ìíịỉĩ]/g, "i");
+  str = str.replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, "o");
+  str = str.replace(/[ùúụủũưừứựửữ]/g, "u");
+  str = str.replace(/[ỳýỵỷỹ]/g, "y");
+  str = str.replace(/đ/g, "d");
+  str = str.replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, "A");
+  str = str.replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, "E");
+  str = str.replace(/[ÌÍỊỈĨ]/g, "I");
+  str = str.replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, "O");
+  str = str.replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, "U");
+  str = str.replace(/[ỲÝỴỶỸ]/g, "Y");
+  str = str.replace(/Đ/g, "D");
+  // Some system encode vietnamese combining accent as individual utf-8 characters
+  // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
+  str = str.replace(/[\u0300\u0301\u0303\u0309\u0323]/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
+  str = str.replace(/[\u02C6\u0306\u031B]/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
+  // Remove extra spaces
+  // Bỏ các khoảng trắng liền nhau
+  str = str.replace(/ + /g, " ");
+  str = str.trim();
+  // Remove punctuations
+  // Bỏ dấu câu, kí tự đặc biệt
+  str = str.replace(/[!@%^*()+=<>?\/,.:;'"&#\[\]~$_`\-{}|\\]/g, " ");
+  return str;
+}
+
+function parsePermissions(permissions = [], value = false) {
   return Object.fromEntries(permissions.map(i => [`${i.maChucNang}_${i.tenChucNang}_${i.maHanhDong}_${i.tenHanhDong}`, value]))
 }
+
+function parsePermissionString(str) {
+  const [maChucNang, tenChucNang, maHanhDong, tenHanhDong] = str.split('_')
+  return {maChucNang: +maChucNang, tenChucNang, maHanhDong: +maHanhDong, tenHanhDong}
+}
+
+const defaultRole = {tenNhomQuyen: "", tenHienThi: "", ghiChu: "", permissions: {}}
 
 function PhanQuyen() {
   const [modal, setModal] = useState("")
   const [tableData, setTableData] = useState([])
   const [permission, setPermission] = useState({actions: [], features: [], permissions: []})
   const [rowClick, setRowClick] = useState()
-  const [formData, setFormData] = useState({tenNhomQuyen: "", ghiChu: ""})
+  const [formData, setFormData] = useState({...defaultRole})
 
   useEffect(() => {
     updateTableData()
@@ -47,25 +85,54 @@ function PhanQuyen() {
   useEffect(() => {
     setFormData({
       tenNhomQuyen: "", ghiChu: "",
-      ...parsePermissions(permission.permissions)
+      permissions: parsePermissions(permission.permissions)
     })
   }, [permission]);
-  console.log(permission)
-
-  // console.log(permission)
 
   function updateTableData() {
     setTableData([])
     getRoles().then(data => setTableData(data.roles))
   }
 
-  async function onInsertRole() {
-    console.log(formData)
+  function onRowClick(row) {
+    if (row) setRowClick(row)
   }
 
-  function onRowClick(row) {
-    if (!row) return
-    getRolePermissions(1).then(data => setRowClick(parsePermissions(data.permissions, true)))
+  function onOpenEditModal() {
+    if (!rowClick) return setModal("error")
+    setFormData(rowClick)
+
+    setModal("edit")
+  }
+
+  async function onInsertRole() {
+    formData.tenNhomQuyen = removeVietnameseTones(formData.tenHienThi)
+    const result = await insertRole(formData)
+
+    if (!result.success) return
+
+    setFormData({...defaultRole})
+    updateTableData()
+  }
+
+  async function onUpdateRole() {
+    const result = await updateRole(formData)
+
+    if (!result.success) return
+
+    setFormData({...defaultRole})
+    updateTableData()
+    setModal('')
+  }
+
+  async function onDeleteRole() {
+    if (!rowClick) return setModal("error")
+    const result = await deleteRole(rowClick)
+
+    if (!result.success) return
+
+    setFormData({...defaultRole})
+    updateTableData()
   }
 
   return (
@@ -74,8 +141,8 @@ function PhanQuyen() {
         sidebar={<SideNavbar/>}
         tools={<>
           <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
-          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={setModal.bind({}, "edit")}/>
-          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa"/>
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenEditModal}/>
+          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteRole}/>
         </>}
         rightSec={<FlexForm>
           <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm"/>
@@ -96,7 +163,7 @@ function PhanQuyen() {
 
           <ModalBody className='d-flex flex-column _vh-60 overflow-auto px-5 py-3'>
 
-            <PhanQuyenModal {...permission}/>
+            <PhanQuyenModal actions={permission.actions} features={permission.features}/>
           </ModalBody>
 
           <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
@@ -113,11 +180,13 @@ function PhanQuyen() {
           </ModalBody>
 
           <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-            <Button className='_w-15 py-2' variant='primary'>Lưu</Button>
+            <Button className='_w-15 py-2' variant='primary' onClick={onUpdateRole}>Lưu</Button>
             <Button className='_w-15 py-2' variant='danger' onClick={setModal.bind({}, "")}>Hủy</Button>
           </ModalFooter>
         </Modal>
       </FormContext.Provider>
+
+      <ErrorModal show={modal === 'error'} onHide={setModal.bind({}, "")}/>
     </>
   )
 }
@@ -126,7 +195,12 @@ function PhanQuyenModal({actions = [], features = []}) {
   const [data, setData] = useContext(FormContext)
 
   function onChangeCheck(key, e) {
-    setData(src => ({...src, [key]: e.target.checked}))
+    setData(src => ({
+      ...src, permissions: {
+        ...src.permissions,
+        [key]: e.target.checked
+      }
+    }))
   }
 
   function onChange(key, e) {
@@ -138,7 +212,7 @@ function PhanQuyenModal({actions = [], features = []}) {
       <FormGroup className='d-flex gap-5'>
         <FormGroup className='w-50'>
           <FormLabel className='fw-bold'>Tên nhóm quyền</FormLabel>
-          <InputShadow value={data.tenNhomQuyen} onChange={onChange.bind({}, 'tenNhomQuyen')}/>
+          <InputShadow value={data.tenHienThi} onChange={onChange.bind({}, 'tenHienThi')}/>
         </FormGroup>
 
         <FormGroup className='w-50'>
@@ -153,25 +227,25 @@ function PhanQuyenModal({actions = [], features = []}) {
           <tr className=''>
             <th>STT</th>
             <th>Danh mục chức năng</th>
-            {actions.map((i, j) => (
-              <th key={j} className='text-center px-3'>{i.tenHienThi}</th>
-            ))}
+            {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenHienThi}</th>)}
           </tr>
           </thead>
 
           <tbody>
-          {features.map((feature, j) =>
+          {features.map((cn, j) =>
             <tr key={j}>
               <td>{j + 1}</td>
-              <td>{feature.tenHienThi}</td>
-              {actions.map((action, k) =>
-                <td key={k}>
-                  {data[`${feature.tenChucNang}_${action.tenHanhDong}`] != null
-                    && <FormCheck className='text-center'
-                                  value={data[`${feature.tenChucNang}_${action.tenHanhDong}`]}
-                                  onChange={onChangeCheck.bind({}, `${feature.tenChucNang}_${action.tenHanhDong}`)}
-                    />}
-                </td>
+              <td>{cn.tenHienThi}</td>
+              {actions.map((hd, k) => {
+                  const key = `${cn.maChucNang}_${cn.tenChucNang}_${hd.maHanhDong}_${hd.tenHanhDong}`
+                  return (
+                    <td key={k}>
+                      {data.permissions?.[key] != null
+                        && <FormCheck className='text-center' value={data.permissions[key]} onChange={onChangeCheck.bind({}, key)}/>}
+                    </td>
+                  )
+
+                }
               )}
             </tr>
           )}

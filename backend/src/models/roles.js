@@ -3,11 +3,11 @@ async function getRoles(conn) {
     const [result] = await conn.query(
       `SELECT *
        FROM ptpm_taikhoan.nhomquyen
+       WHERE maNhomQuyen != 1 # root id
        ORDER BY maNhomQuyen;`)
 
     return {roles: result, success: true};
   } catch (err) {
-    console.log(err);
     return {roles: [], success: false};
   }
 }
@@ -71,12 +71,56 @@ async function getRolePermissions(conn, roleID) {
 }
 
 async function insertRole(conn, role) {
+  try {
+    const [result] = await conn.query(
+      `INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
+       VALUES (?, ?, ?);`,
+      [role.tenNhomQuyen, role.tenHienThi, role.ghiChu])
+
+    return {message: "Role added", success: true};
+  } catch (e) {
+    return {message: "Added fail", success: false};
+  }
 }
 
 async function updateRole(conn, role) {
+  try {
+    const [result] = await conn.query(
+      `UPDATE ptpm_taikhoan.nhomQuyen
+       SET tenNhomQuyen = ?,
+           tenHienThi   = ?,
+           ghiChu       = ?
+       WHERE maNhomQuyen = ?;`,
+      [role.tenNhomQuyen, role.tenHienThi, role.ghiChu, role.maNhomQuyen]);
+
+    return {message: "Role updated", success: true};
+
+  } catch (e) {
+    return {message: "Updated fail", success: false};
+  }
 }
 
-async function deleteRole(conn) {
+async function deleteRole(conn, role) {
+  try {
+    const [result] = await conn.query(
+      `DELETE
+       FROM ptpm_taikhoan.nhomQuyen
+       WHERE maNhomQuyen = ?;`,
+      [role.maNhomQuyen]);
+
+    return {message: "Role deleted", success: true};
+
+  } catch (e) {
+    return {message: "Deleted fail", success: false};
+  }
+}
+
+async function insertPermission(conn, role, permissions) {
+
+}
+
+async function deletePermission(conn, role, permissions) {
+
 }
 
 module.exports = {

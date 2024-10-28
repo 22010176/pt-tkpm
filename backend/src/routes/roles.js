@@ -1,25 +1,28 @@
 const express = require('express')
-const {getRoles, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions} = require("../models/roles");
+const {getRoles, getActionsQuery, deleteRole, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertRole, updateRole} = require("../models/roles");
+
 const router = express.Router({mergeParams: true})
 
 router.route("/")
 .get(async function (req, res) {
   const result = await getRoles(res.locals.conn)
-
   await res.locals.conn.destroy()
   res.json(result)
 })
 .post(async function (req, res) {
+  const result = await insertRole(res.locals.conn, req.body);
   await res.locals.conn.destroy()
-  res.json({message: req.path})
+  res.json(result)
 })
 .put(async function (req, res) {
+  const result = await updateRole(res.locals.conn, req.body);
   await res.locals.conn.destroy()
-  res.json({message: req.path})
+  res.json(result)
 })
 .delete(async function (req, res) {
+  const result = await deleteRole(res.locals.conn, req.body);
   await res.locals.conn.destroy()
-  res.json({message: req.path})
+  res.json(result)
 })
 
 router.get("/permissions", async function (req, res) {

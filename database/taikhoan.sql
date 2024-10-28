@@ -173,3 +173,17 @@ FROM nhomQuyen nQ
          INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
          INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
 WHERE nQ.maNhomQuyen = 1;
+
+INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
+VALUES ('', '', '');
+
+UPDATE nhomQuyen
+SET tenNhomQuyen = '',
+    tenHienThi   = '',
+    ghiChu       = ''
+WHERE maNhomQuyen = 1;
+
+
+DELETE
+FROM nhomQuyen
+WHERE maNhomQuyen = 1;
