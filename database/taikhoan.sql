@@ -58,24 +58,6 @@ CREATE TABLE CTQuyen
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS taiKhoan;
-CREATE TABLE taiKhoan
-(
-    maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    matKhau    VARCHAR(255) NOT NULL,
-
-    vaiTro     INT UNSIGNED,
-    nhanVien   INT UNSIGNED NOT NULL,
-
-    FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
-        ON UPDATE CASCADE ON DELETE SET NULL,
-
-    FOREIGN KEY (nhanVien) REFERENCES nhanVien (maNhanVien)
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-
-
 DROP TABLE IF EXISTS nhanVien;
 CREATE TABLE nhanVien
 (
@@ -86,6 +68,22 @@ CREATE TABLE nhanVien
     soDienThoai VARCHAR(20) UNIQUE,
     gioiTinh    ENUM ('Nam', 'Nữ') DEFAULT 'Nam'
 );
+
+DROP TABLE IF EXISTS taiKhoan;
+CREATE TABLE taiKhoan
+(
+    maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    matKhau    VARCHAR(255) NOT NULL,
+    vaiTro     INT UNSIGNED,
+    nhanVien   INT UNSIGNED NOT NULL,
+
+    FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
+        ON UPDATE CASCADE ON DELETE SET NULL,
+
+    FOREIGN KEY (nhanVien) REFERENCES nhanVien (maNhanVien)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 
 # Them gia tri chuc nang
 INSERT INTO chucNang (tenChucNang, tenHienThi)
@@ -127,7 +125,6 @@ INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang, h.maHanhDong
                                              AND h.maHanhDong IN (4, 5, 6));
 
 INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuyenHan quyenHan FROM quyenHan);
-
 
 
 -- Them vai tro vao trong csdl

@@ -48,6 +48,7 @@ DROP TABLE IF EXISTS danhMucSanPham;
 CREATE TABLE danhMucSanPham
 (
     maDanhMucSanPham   INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    tenDanhMucSanPham  VARCHAR(255),
     chipXuLy           VARCHAR(255),
     dungLuongPin       INT UNSIGNED,
     kichThuongManHinh  INT UNSIGNED,

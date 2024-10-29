@@ -2,10 +2,6 @@ async function getProducts(conn) {
   return {}
 }
 
-async function getProductById(conn, id) {
-  return {}
-}
-
 async function insertProduct(conn, product) {
   return {}
 }

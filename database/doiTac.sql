@@ -11,7 +11,7 @@ CREATE TABLE khachHang
     diaChi       VARCHAR(255),
     soDienThoai  VARCHAR(255) UNIQUE,
     mail         VARCHAR(255) UNIQUE DEFAULT NULL,
-    ngayThamGia  DATE                DEFAULT CURRENT_TIMESTAMP
+    ngayThamGia  DATETIME            DEFAULT CURRENT_TIMESTAMP
 );
 
 DROP TABLE IF EXISTS nhaCungCap;
@@ -24,42 +24,4 @@ CREATE TABLE nhaCungCap
     soDienThoai   VARCHAR(255) UNIQUE
 );
 
-ALTER TABLE nhaCungCap
-    ADD tenNhaCungCap VARCHAR(255);
-
-SELECT *
-FROM khachHang
-ORDER BY maKhachHang;
-
-SELECT *
-FROM nhaCungCap
-ORDER BY maNhaCungCap;
-
-INSERT INTO khachHang (tenKhachHang, ngaySinh, diaChi, soDienThoai, mail)
-VALUES ('test1', '2004-01-30', 'test', '099333', 'a@a');
-
-INSERT INTO nhaCungCap (tenNhaCungCap, diaChi, mail, soDienThoai)
-VALUES ('d', 'dd', 'aaa', '0987');
-
-UPDATE khachHang
-SET tenKhachHang = '',
-    ngaySinh     = '',
-    diaChi       = '',
-    soDienThoai  = '',
-    mail         = ''
-WHERE maKhachHang = 2;
-
-UPDATE nhaCungCap
-SET tenNhaCungCap = '',
-    diaChi        = '',
-    mail          = '',
-    soDienThoai   = ''
-WHERE maNhaCungCap = 2;
-
-DELETE
-FROM khachHang
-WHERE maKhachHang = '';
-
-DELETE
-FROM nhaCungCap
-WHERE maNhaCungCap = 3;
+SHOW DATABASES ;
