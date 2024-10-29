@@ -18,7 +18,7 @@ import ContentA from '../../../components/layouts/blockContent'
 import styles from './style.module.css'
 import {getEmployeeNoAccount, getEmployees} from "../../../api/employees";
 import {getRoles} from "../../../api/roles";
-import {getAccounts, insertAccount, updateAccount} from "../../../api/accounts";
+import {deleteAccount, getAccounts, insertAccount, updateAccount} from "../../../api/accounts";
 import ErrorModal from "../../../components/modals/errorModal";
 
 const tableHd = [
@@ -41,51 +41,43 @@ const chonNhanVienHD = [
 const FormContext = createContext({})
 const InfoContext = createContext({})
 
-const defaulUser = {matKhau: "", vaiTro: ""},
-  nhanVienSelect = {maNhanVien: "", hoTen: "", mail: ""}
-
-
 function QuanLyTaiKhoan() {
   const [modal, setModal] = useState("")
-
+  const [table, setTable] = useState()
+  const [row, setRow] = useState()
 
   useEffect(() => {
     updateInfo()
-    updateTableData()
   }, []);
 
 
   function updateTableData() {
-
+    setTable([])
+    getAccounts().then(data => setTable(data.accounts))
   }
 
+  function onRowClick(row) {
+    setRow(row)
+  }
 
   async function updateInfo() {
-
+    updateTableData()
+    setRow()
   }
 
-  async function onOpenInsertAccountModal() {
-
+  function onOpenEditModal() {
+    if (!row) return setModal('error')
+    setModal("edit")
   }
 
-  async function onOpenUpdateAccountModal() {
+  async function onDelete() {
+    if (!row) return setModal('error')
+    console.log(row)
+    const result = await deleteAccount(row)
 
-  }
+    if (!result.success) return;
 
-  function onNhanVienRowClick(row) {
-
-  }
-
-  function onAccountRowClick(row) {
-
-  }
-
-  async function onInsertAccount() {
-
-  }
-
-  async function onUpdateAccount() {
-
+    updateInfo()
   }
 
   return (
@@ -93,9 +85,9 @@ function QuanLyTaiKhoan() {
       <Page2
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertAccountModal}/>
-          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateAccountModal}/>
-          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa"/>
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenEditModal}/>
+          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete}/>
         </>}
         rightSec={<FlexForm>
           <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm"/>
@@ -107,50 +99,16 @@ function QuanLyTaiKhoan() {
             <span>Làm mới</span>
           </Button>
         </FlexForm>}
-        dataTable={<TableA headers={tableHd} data={[]} onClick={onAccountRowClick}/>}
+        dataTable={<TableA headers={tableHd} data={table} onClick={onRowClick}/>}
       />
 
       <InfoContext.Provider value={{}}>
         <FormContext.Provider value={[]}>
           {/*Them tai khoan*/}
-          <Modal centered size='xl' show={modal === "add"} backdrop="static" scrollable className='_vh-100'>
-            <HeaderModalA title="THÊM TÀI KHOẢN "/>
-
-            <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
-              <div className='h-100 d-flex flex-column gap-2 _w-35'>
-                <FormGroup className=''>
-                  <FormLabel className='fw-bold'>Chọn nhân viên</FormLabel>
-                  <InputShadow/>
-                </FormGroup>
-
-                <ContentA className="h-100">
-                  <TableA subtable index={false} headers={chonNhanVienHD} data={[]} onClick={onNhanVienRowClick}/>
-                  <div style={{height: "10000px"}}></div>
-                </ContentA>
-              </div>
-
-              <TaiKhoanForm className="_w-65"/>
-            </ModalBody>
-
-            <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-              <Button className='_w-20' variant='primary' onClick={onInsertAccount}>Thêm tài khoản</Button>
-              <Button className='_w-20' variant='danger' onClick={setModal.bind({}, "")}>Hủy</Button>
-            </ModalFooter>
-          </Modal>
+          <AddTaiKhoanModal show={modal === "add"} onSubmit={updateTableData} onHide={setModal.bind({}, "")}/>
 
           {/*Sua tai khoan*/}
-          <Modal centered size='lg' show={modal === "edit"} backdrop="static" scrollable className='_vh-100'>
-            <HeaderModalA title="SỬA TÀI KHOẢN "/>
-
-            <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
-              <TaiKhoanForm className="_w-100" passwordDisabled/>
-            </ModalBody>
-
-            <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-              <Button className='_w-20' variant='primary' onClick={onUpdateAccount}>lưu</Button>
-              <Button className='_w-20' variant='danger' onClick={setModal.bind({}, "")}>Hủy</Button>
-            </ModalFooter>
-          </Modal>
+          <EditTaiKhoanModal account={row} show={modal === "edit"} onSubmit={updateInfo} onHide={setModal.bind({}, "")}/>
         </FormContext.Provider>
       </InfoContext.Provider>
 
@@ -161,47 +119,188 @@ function QuanLyTaiKhoan() {
   )
 }
 
-function TaiKhoanForm({className, passwordDisabled}) {
+function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
+  const [nhomQuyen, setNhomQuyen] = useState([])
+  const [vaiTro, setVaiTro] = useState()
 
+  useEffect(() => {
+    getRoles().then(data => setNhomQuyen(data.roles))
+  }, []);
+
+  useEffect(() => {
+    setVaiTro(account?.maNhomQuyen)
+  }, [account])
+
+  function onCloseModal() {
+    if (typeof onHide === 'function') onHide()
+  }
+
+  async function onUpdate() {
+    const data = {vaiTro: +vaiTro, maTaiKhoan: +account?.maTaiKhoan}
+    console.log(data)
+    const result = await updateAccount(data)
+    console.log(result)
+    if (!result.success) return;
+
+    if (typeof onSubmit === 'function') onSubmit()
+    if (typeof onHide === 'function') onHide()
+  }
 
   return (
-    <Form className={[className, 'd-flex flex-column gap-5'].join(" ")}>
-      <FormGroup className='d-flex gap-5'>
-        <FormGroup className='_w-50'>
-          <FormLabel className='fw-bold'>Mã nhân viên</FormLabel>
-          <InputShadow disabled/>
-        </FormGroup>
+    <Modal {...props} centered size='lg' backdrop="static" scrollable className='_vh-100'>
+      <HeaderModalA title="SỬA TÀI KHOẢN "/>
 
-        <FormGroup className='_w-100'>
-          <FormLabel className='fw-bold'>Tên nhân viên</FormLabel>
-          <InputShadow disabled/>
-        </FormGroup>
-      </FormGroup>
+      <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
+        <Form className={['w-100 d-flex flex-column gap-5'].join(" ")}>
+          <FormGroup className='d-flex gap-5'>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Mã nhân viên</FormLabel>
+              <InputShadow disabled value={account?.maNhanVien}/>
+            </FormGroup>
 
-      <FormGroup className='d-flex gap-5'>
-        <FormGroup className='_w-50'>
-          <FormLabel className='fw-bold'>Email</FormLabel>
-          <InputShadow disabled/>
-        </FormGroup>
+            <FormGroup className='_w-100'>
+              <FormLabel className='fw-bold'>Tên nhân viên</FormLabel>
+              <InputShadow disabled value={account?.hoTen}/>
+            </FormGroup>
+          </FormGroup>
 
-        <FormGroup className='_w-50'>
-          <FormLabel className='fw-bold'>Mật khẩu</FormLabel>
-          <InputShadow type="password" disabled={passwordDisabled}/>
-        </FormGroup>
-      </FormGroup>
+          <FormGroup className='d-flex gap-5'>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Email</FormLabel>
+              <InputShadow disabled value={account?.mail}/>
+            </FormGroup>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
+              <InputShadow as={FormSelect} value={vaiTro} onChange={e => setVaiTro(e.target.value)}>
+                {nhomQuyen?.map(({maNhomQuyen, tenHienThi}, j) => <option key={j} value={maNhomQuyen}>{tenHienThi}</option>)}
+              </InputShadow>
+            </FormGroup>
+          </FormGroup>
 
-      <FormGroup className='d-flex gap-5'>
-        <FormGroup className='_w-50'>
-          <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
-          <InputShadow as={FormSelect}>
-            {/*{info.roles.map((role, j) => (*/}
-            {/*  <option key={j} value={role.maNhomQuyen} data-ma={role.tenNhomQuyen}>{role.tenHienThi}</option>)*/}
-            {/*)}*/}
-          </InputShadow>
-        </FormGroup>
-      </FormGroup>
-    </Form>
+        </Form>
+      </ModalBody>
+
+      <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+        <Button className='_w-20' variant='primary' onClick={onUpdate}>lưu</Button>
+        <Button className='_w-20' variant='danger' onClick={onCloseModal}>Hủy</Button>
+      </ModalFooter>
+    </Modal>
   )
 }
+
+function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
+  const [nhanVien, setNhanVien] = useState([]);
+  const [nhomQuyen, setNhomQuyen] = useState([])
+
+  const [filterForm, setFilterForm] = useState("")
+
+  // disabledForm
+  const [maNhanVien, setMaNhanVien] = useState()
+  const [hoTen, setHoTen] = useState("")
+  const [mail, setMail] = useState("")
+
+  // active Form
+  const [matKhau, setMatKhau] = useState("")
+  const [vaiTro, setVaiTro] = useState("")
+
+
+  useEffect(() => {
+    setUp()
+  }, []);
+
+  function setUp() {
+    getEmployeeNoAccount().then(data => setNhanVien(data.employees))
+    getRoles().then(data => setNhomQuyen(data.roles))
+    setMaNhanVien(undefined)
+    setHoTen("")
+    setMail("")
+    setMatKhau("")
+    setVaiTro("")
+    setNhomQuyen([])
+  }
+
+  function onChange(setState, e) {
+    setState(e.target.value)
+  }
+
+  function onRowClick(data) {
+    setMaNhanVien(data?.maNhanVien)
+    setHoTen(data?.hoTen)
+    setMail(data?.mail)
+  }
+
+  async function onInsert() {
+    const result = await insertAccount({matKhau, vaiTro: vaiTro || nhomQuyen?.[0]?.maNhomQuyen, nhanVien: maNhanVien})
+    if (!result.success) return;
+
+    if (typeof onSubmit === "function") onSubmit()
+    setUp()
+  }
+
+  function onCloseModal() {
+    if (typeof onHide === "function") onHide()
+  }
+
+  return (
+    <Modal {...props} centered size='xl' backdrop="static" scrollable className='_vh-100'>
+      <HeaderModalA title="THÊM TÀI KHOẢN "/>
+
+      <ModalBody className='d-flex gap-4 px-5 py-4 _vh-60'>
+        <div className='h-100 d-flex flex-column gap-2 _w-35'>
+          <FormGroup className=''>
+            <FormLabel className='fw-bold'>Chọn nhân viên</FormLabel>
+            <InputShadow value={filterForm} onChange={e => setFilterForm(e.target.value)}/>
+          </FormGroup>
+
+          <ContentA className="h-100">
+            <TableA subtable index={false} headers={chonNhanVienHD} data={nhanVien.filter(i => (i.hoTen + i.mail).includes(filterForm))} onClick={onRowClick}/>
+            <div style={{height: "10000px"}}></div>
+          </ContentA>
+        </div>
+
+        <Form className={['_w-65 d-flex flex-column gap-5'].join(" ")}>
+          <FormGroup className='d-flex gap-5'>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Mã nhân viên</FormLabel>
+              <InputShadow disabled value={maNhanVien} onChange={onChange.bind({}, setMaNhanVien)}/>
+            </FormGroup>
+
+            <FormGroup className='_w-100'>
+              <FormLabel className='fw-bold'>Tên nhân viên</FormLabel>
+              <InputShadow disabled value={hoTen} onChange={onChange.bind({}, setHoTen)}/>
+            </FormGroup>
+          </FormGroup>
+
+          <FormGroup className='d-flex gap-5'>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Email</FormLabel>
+              <InputShadow disabled value={mail} onChange={onChange.bind({}, setMail)}/>
+            </FormGroup>
+
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Mật khẩu</FormLabel>
+              <InputShadow type="password" value={matKhau} onChange={onChange.bind({}, setMatKhau)}/>
+            </FormGroup>
+          </FormGroup>
+
+          <FormGroup className='d-flex gap-5'>
+            <FormGroup className='_w-50'>
+              <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
+              <InputShadow as={FormSelect} value={vaiTro} onChange={onChange.bind({}, setVaiTro)}>
+                {nhomQuyen?.map(({maNhomQuyen, tenHienThi}, j) => <option key={j} value={maNhomQuyen}>{tenHienThi}</option>)}
+              </InputShadow>
+            </FormGroup>
+          </FormGroup>
+        </Form>
+      </ModalBody>
+
+      <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+        <Button className='_w-20' variant='primary' onClick={onInsert}>Thêm tài khoản</Button>
+        <Button className='_w-20' variant='danger' onClick={onCloseModal}>Hủy</Button>
+      </ModalFooter>
+    </Modal>
+  )
+}
+
 
 export default QuanLyTaiKhoan

@@ -133,6 +133,10 @@ VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', ''),
        ('kho', 'test1', '');
 
+DELETE
+FROM ctquyen
+WHERE nhomQuyen IN (3, 3);
+
 
 SELECT *
 FROM nhanvien;

@@ -1,5 +1,5 @@
 const express = require('express')
-const {getRoles, getActionsQuery, deleteRole, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertRole, updateRole} = require("../models/roles");
+const {getRoles, getActionsQuery, deleteRole, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertRole, updateRole, insertPermission} = require("../models/roles");
 
 const router = express.Router({mergeParams: true})
 
@@ -43,4 +43,12 @@ router.get("/:roleID", async function (req, res) {
   res.json(result)
 })
 
+
+router.post("/update-permission", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await insertPermission(conn, req.body);
+
+  await res.locals.conn.destroy()
+  return res.json(result);
+})
 module.exports = router

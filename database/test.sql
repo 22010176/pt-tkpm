@@ -52,7 +52,9 @@ FROM ptpm_taikhoan.quyenhan;
 SELECT COUNT(*)
 FROM ptpm_taikhoan.nhanvien;
 
-
+# Thêm quyền
+INSERT INTO ptpm_taikhoan.ctquyen (nhomQuyen, quyenHan)
+VALUES ();
 
 
 

@@ -70,12 +70,12 @@ async function getRolePermissions(conn, roleID) {
   }
 }
 
-async function insertRole(conn, role) {
+async function insertRole(conn, {tenNhomQuyen, tenHienThi, ghiChu}) {
   try {
     const [result] = await conn.query(
       `INSERT INTO ptpm_taikhoan.nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
        VALUES (?, ?, ?);`,
-      [role.tenNhomQuyen, role.tenHienThi, role.ghiChu])
+      [tenNhomQuyen, tenHienThi, ghiChu])
 
     return {message: "Role added", success: true};
   } catch (e) {
@@ -83,7 +83,7 @@ async function insertRole(conn, role) {
   }
 }
 
-async function updateRole(conn, role) {
+async function updateRole(conn, {tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen}) {
   try {
     const [result] = await conn.query(
       `UPDATE ptpm_taikhoan.nhomQuyen
@@ -91,11 +91,12 @@ async function updateRole(conn, role) {
            tenHienThi   = ?,
            ghiChu       = ?
        WHERE maNhomQuyen = ?;`,
-      [role.tenNhomQuyen, role.tenHienThi, role.ghiChu, role.maNhomQuyen]);
+      [tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen]);
 
     return {message: "Role updated", success: true};
 
   } catch (e) {
+    console.log(e)
     return {message: "Updated fail", success: false};
   }
 }
@@ -115,14 +116,22 @@ async function deleteRole(conn, role) {
   }
 }
 
-async function insertPermission(conn, role, permissions) {
+async function insertPermission(conn, perms = []) {
+  try {
+    await conn.query(`DELETE
+                      FROM ptpm_taikhoan.ctquyen
+                      WHERE nhomQuyen IN ?`, [perms.map(i => i.maNhomQuyen)]);
 
-}
-
-async function deletePermission(conn, role, permissions) {
-
+    const [result] = await conn.query(
+      `INSERT INTO ptpm_taikhoan.ctquyen (nhomQuyen, quyenHan)
+       VALUES ?`,
+      [perms.map(({maNhomQuyen, maQuyenHan}) => [maNhomQuyen, maQuyenHan])]);
+    return {message: "Role updated", success: true};
+  } catch (e) {
+    return {message: "Updated fail", success: false};
+  }
 }
 
 module.exports = {
-  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions
+  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermission
 }

@@ -17,7 +17,7 @@ import ContentA from '../../../components/layouts/blockContent'
 import styles from './style.module.css'
 import {deleteRole, getPermissionData, getRolePermissions, getRoles, insertRole, updateRole} from "../../../api/roles";
 import ErrorModal from "../../../components/modals/errorModal";
-import {deleteEmployee, updateEmployee} from "../../../api/employees";
+import {removeVietnameseTones} from "../../../utilities/others";
 
 const tableHd = [
   {key: "Mã nhóm quyền", value: "maNhomQuyen"},
@@ -27,34 +27,6 @@ const tableHd = [
 
 const FormContext = createContext({})
 
-function removeVietnameseTones(str) {
-  str = str.replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, "a");
-  str = str.replace(/[èéẹẻẽêềếệểễ]/g, "e");
-  str = str.replace(/[ìíịỉĩ]/g, "i");
-  str = str.replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, "o");
-  str = str.replace(/[ùúụủũưừứựửữ]/g, "u");
-  str = str.replace(/[ỳýỵỷỹ]/g, "y");
-  str = str.replace(/đ/g, "d");
-  str = str.replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, "A");
-  str = str.replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, "E");
-  str = str.replace(/[ÌÍỊỈĨ]/g, "I");
-  str = str.replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, "O");
-  str = str.replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, "U");
-  str = str.replace(/[ỲÝỴỶỸ]/g, "Y");
-  str = str.replace(/Đ/g, "D");
-  // Some system encode vietnamese combining accent as individual utf-8 characters
-  // Một vài bộ encode coi các dấu mũ, dấu chữ như một kí tự riêng biệt nên thêm hai dòng này
-  str = str.replace(/[\u0300\u0301\u0303\u0309\u0323]/g, ""); // ̀ ́ ̃ ̉ ̣  huyền, sắc, ngã, hỏi, nặng
-  str = str.replace(/[\u02C6\u0306\u031B]/g, ""); // ˆ ̆ ̛  Â, Ê, Ă, Ơ, Ư
-  // Remove extra spaces
-  // Bỏ các khoảng trắng liền nhau
-  str = str.replace(/ + /g, " ");
-  str = str.trim();
-  // Remove punctuations
-  // Bỏ dấu câu, kí tự đặc biệt
-  str = str.replace(/[!@%^*()+=<>?\/,.:;'"&#\[\]~$_`\-{}|\\]/g, " ");
-  return str;
-}
 
 function parsePermissions(permissions = [], value = false) {
   return Object.fromEntries(permissions.map(i => [`${i.maChucNang}_${i.tenChucNang}_${i.maHanhDong}_${i.tenHanhDong}`, value]))
@@ -97,6 +69,11 @@ function PhanQuyen() {
 
   function onRowClick(row) {
     if (row) setRowClick(row)
+  }
+
+  function onOpenAddModal() {
+    setModal("add")
+
   }
 
   function onOpenEditModal() {
@@ -142,7 +119,7 @@ function PhanQuyen() {
       <Page2
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenAddModal}/>
           <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenEditModal}/>
           <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteRole}/>
         </>}
@@ -164,7 +141,6 @@ function PhanQuyen() {
           <HeaderModalA title="THÊM NHÓM QUYỀN"/>
 
           <ModalBody className='d-flex flex-column _vh-60 overflow-auto px-5 py-3'>
-
             <PhanQuyenModal actions={permission.actions} features={permission.features} permissions={permission.permissions}/>
           </ModalBody>
 
@@ -188,7 +164,9 @@ function PhanQuyen() {
         </Modal>
       </FormContext.Provider>
 
-      <ErrorModal show={modal === 'error'} onHide={setModal.bind({}, "")}/>
+      <ErrorModal show={modal === 'error'} onHide={setModal.bind({}, "")}>
+        <p>Hãy chọn 1 nhóm quyền</p>
+      </ErrorModal>
     </>
   )
 }
@@ -200,7 +178,7 @@ function PhanQuyenModal({actions = [], features = [], permissions = []}) {
   useEffect(() => {
     setPermissionData(parsePermissions(permissions))
   }, [permissions])
-  
+
 
   function onChangeCheck(key, e) {
     setData(src => ({
@@ -246,13 +224,10 @@ function PhanQuyenModal({actions = [], features = [], permissions = []}) {
               <td>{cn.tenHienThi}</td>
               {actions.map((hd, k) => {
                   const key = `${cn.maChucNang}_${cn.tenChucNang}_${hd.maHanhDong}_${hd.tenHanhDong}`
-                  return (
-                    <td key={k}>
-                      {permissionData?.[key] != null
-                        && <FormCheck className='text-center' value={data?.permissions?.[key]} onChange={onChangeCheck.bind({}, key)}/>}
-                    </td>
-                  )
-
+                  return <td key={k}>
+                    {permissionData?.[key] != null
+                      && <FormCheck className='text-center' value={data?.permissions?.[key]} onChange={onChangeCheck.bind({}, key)}/>}
+                  </td>
                 }
               )}
             </tr>

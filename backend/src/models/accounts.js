@@ -33,13 +33,13 @@ async function insertAccount(conn, {matKhau, vaiTro, nhanVien}) {
   }
 }
 
-async function updateAccount(conn, account) {
+async function updateAccount(conn, {vaiTro, maTaiKhoan}) {
   try {
     await conn.query(
       `UPDATE ptpm_taikhoan.taikhoan
        SET vaiTro = ?
        WHERE maTaiKhoan = ?;`,
-      [account.vaiTro, account.maTaiKhoan])
+      [vaiTro, maTaiKhoan])
     return {message: "Account updated", success: true}
   } catch (e) {
     console.log((e))

@@ -1,12 +1,15 @@
 import Table from 'react-bootstrap/Table'
 
 import styles from './style.module.css'
-import {useEffect} from 'react'
+import {useEffect, useRef} from 'react'
+import {v4} from "uuid";
 
 
 // const clr = "table-active" //styles.tableActive
 const clr = styles.tableActive //
 function TableA({index = true, onClick, data = [], headers = [], subtable = false}) {
+  const elem = useRef()
+
   function rowOnClick(e) {
     e.stopPropagation()
     clearRow()
@@ -22,21 +25,16 @@ function TableA({index = true, onClick, data = [], headers = [], subtable = fals
   }
 
   function clearRow() {
-    document.querySelectorAll("." + clr).forEach(element => element.classList.remove(clr));
+    elem.current.querySelectorAll("." + clr).forEach(element => element.classList.remove(clr));
     if (typeof onClick === 'function') onClick(undefined)
   }
 
   useEffect(function () {
-    if (subtable) return
 
-    document.body.addEventListener("click", clearRow)
-    return () => {
-      document.body.removeEventListener("click", clearRow)
-    }
   }, [])
 
   return (
-    <Table className='shadow-sm' bordered>
+    <Table ref={elem} className={['shadow-sm'].join(' ')} bordered>
       <thead>
       <tr className='text-center'>
         {!!index && <th scope='col'>Stt</th>}
