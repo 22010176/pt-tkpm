@@ -73,9 +73,9 @@ DROP TABLE IF EXISTS taiKhoan;
 CREATE TABLE taiKhoan
 (
     maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    matKhau    VARCHAR(255) NOT NULL,
+    matKhau    VARCHAR(255)        NOT NULL,
     vaiTro     INT UNSIGNED,
-    nhanVien   INT UNSIGNED NOT NULL,
+    nhanVien   INT UNSIGNED UNIQUE NOT NULL,
 
     FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
         ON UPDATE CASCADE ON DELETE SET NULL,
@@ -130,4 +130,24 @@ INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuy
 -- Them vai tro vao trong csdl
 INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
-       ('nhanVien', 'Nhân viên', '');
+       ('nhanVien', 'Nhân viên', ''),
+       ('kho', 'test1', '');
+
+
+SELECT *
+FROM nhanvien;
+SELECT *
+FROM taikhoan;
+
+SELECT *
+FROM nhomQuyen;
+
+SELECT COUNT(*)
+FROM nhanvien;
+
+
+SELECT COUNT(*)
+FROM ptpm_doitac.khachhang;
+DELETE
+FROM ptpm_doitac.khachhang
+WHERE maKhachHang > 200;

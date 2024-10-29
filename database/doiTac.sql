@@ -25,3 +25,13 @@ CREATE TABLE nhaCungCap
 );
 
 SHOW DATABASES ;
+
+
+SELECT COUNT(*) FROM khachhang;
+SELECT COUNT(*) FROM nhaCungCap;
+
+
+
+SELECT * FROM khachhang ORDER BY ngaySinh;
+
+SELECT * FROM nhaCungCap;

@@ -27,6 +27,24 @@ async function insertProduct(conn, {
   }
 }
 
+async function insertMultipleProducts(conn, products = []) {
+  try {
+    const [result] = await conn.query(
+      `INSERT INTO ptpm_sanpham.danhMucSanPham
+           (tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, hinhAnh, xuatXu, heDieuHanh, thuongHieu)
+       VALUES ?`,
+      [products.map(({
+                       tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, hinhAnh, xuatXu, heDieuHanh, thuongHieu
+                     }) => [
+        tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, hinhAnh, xuatXu, heDieuHanh, thuongHieu
+      ])])
+    return {message: "Products added", success: true};
+  } catch (e) {
+    console.log(e)
+    return {message: "Added fail", success: false};
+  }
+}
+
 async function updateProduct(conn, {
   tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, hinhAnh, xuatXu, heDieuHanh, thuongHieu, maDanhMucSanPham
 }) {
@@ -67,5 +85,5 @@ async function deleteProduct(conn, {maDanhMucSanPham}) {
 }
 
 module.exports = {
-  getProducts, insertProduct, updateProduct, deleteProduct
+  getProducts, insertProduct, updateProduct, deleteProduct, insertMultipleProducts
 }

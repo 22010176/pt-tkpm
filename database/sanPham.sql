@@ -128,40 +128,13 @@ VALUES ('đỏ'),
        ('vàng');
 
 
-SELECT *
-FROM danhMucSanPham
-ORDER BY maDanhMucSanPham DESC
-LIMIT 10000;
+SELECT COUNT(*) FROM danhMucSanPham;
 
+SELECT COUNT(*) FROM cauhinh;
 
-
-
-SELECT AVG(b.C)
-FROM (SELECT COUNT(*) as C
-      FROM cauhinh
-      GROUP BY danhMucSanPham
-      LIMIT 10000) as b;
-
-DELETE
-FROM danhmucsanpham
-WHERE maDanhMucSanPham = 2;
-
-SELECT *
-FROM xuatXu
-ORDER BY maXuatXu;
-
-SELECT *
-FROM cauhinh
-ORDER BY maCauHinh;
-
-INSERT INTO cauhinh (giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac)
-VALUES (33, 44, 1, 2, 3, 4);
-
-UPDATE cauhinh
-SET giaNhap        = 0,
-    giaXuat        = 0,
-    danhMucSanPham = 0,
-    ram            = 0,
-    rom            = 0,
-    mauSac         = 0
-WHERE maCauHinh = 3;
+SELECT COUNT(*) FROM ram;
+SELECT COUNT(*) FROM rom;
+SELECT COUNT(*) FROM mauSac;
+SELECT COUNT(*) FROM thuongHieu;
+SELECT COUNT(*) FROM heDieuHanh;
+SELECT COUNT(*) FROM xuatXu;

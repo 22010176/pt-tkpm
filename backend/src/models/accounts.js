@@ -20,12 +20,12 @@ async function getAccounts(conn) {
   }
 }
 
-async function insertAccount(conn, account) {
+async function insertAccount(conn, {matKhau, vaiTro, nhanVien}) {
   try {
     const [result] = await conn.query(
       `INSERT INTO ptpm_taikhoan.taiKhoan (matKhau, vaiTro, nhanVien)
        VALUES (?, ?, ?);`,
-      [account.matKhau, account.vaiTro, account.nhanVien])
+      [matKhau, vaiTro, nhanVien])
     return {message: "Account added", success: true};
   } catch (e) {
     console.log(e)
@@ -60,5 +60,5 @@ async function deleteAccount(conn, account) {
 }
 
 module.exports = {
-  deleteAccount, insertAccount, updateAccount,getAccounts
+  deleteAccount, insertAccount, updateAccount, getAccounts
 }

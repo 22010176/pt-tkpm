@@ -12,12 +12,26 @@ async function getSuppliers(conn) {
   }
 }
 
-async function insertSupplier(conn, supplier) {
+async function insertSupplier(conn, {tenNhaCungCap, diaChi, mail, soDienThoai}) {
   try {
     const [result] = await conn.query(
       `INSERT INTO ptpm_doitac.nhaCungCap (tenNhaCungCap, diaChi, mail, soDienThoai)
        VALUES (?, ?, ?, ?)`,
-      [supplier.tenNhaCungCap, supplier.diaChi, supplier.mail, supplier.soDienThoai]);
+      [tenNhaCungCap, diaChi, mail, soDienThoai]);
+
+    return {message: "Supplier added", success: true};
+
+  } catch (e) {
+    return {message: "Added fail", success: false};
+  }
+}
+
+async function insertMultipleSuppliers(conn, suppliers = []) {
+  try {
+    const [result] = await conn.query(
+      `INSERT INTO ptpm_doitac.nhaCungCap (tenNhaCungCap, diaChi, mail, soDienThoai)
+       VALUES ?`,
+      [suppliers.map(({tenNhaCungCap, diaChi, mail, soDienThoai}) => [tenNhaCungCap, diaChi, mail, soDienThoai])]);
 
     return {message: "Supplier added", success: true};
 
@@ -52,7 +66,7 @@ async function deleteSupplier(conn, supplier) {
        FROM ptpm_doitac.nhaCungCap
        WHERE maNhaCungCap = ?;`,
       [supplier.maNhaCungCap]);
-    
+
     return {message: "Supplier deleted", success: true};
 
   } catch (e) {
@@ -60,4 +74,4 @@ async function deleteSupplier(conn, supplier) {
   }
 }
 
-module.exports = {deleteSupplier, getSuppliers, insertSupplier, updateSupplier}
+module.exports = {deleteSupplier, getSuppliers, insertSupplier, updateSupplier, insertMultipleSuppliers}

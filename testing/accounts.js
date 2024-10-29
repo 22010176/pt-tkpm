@@ -1,4 +1,7 @@
-const getKhachHang = () =>
+const {v4} = require('uuid')
+const {randInt, randStr} = require('./utitlies')
+
+const getTaiKhoan = () =>
   fetch('http://localhost:3001/api/accounts', {
     method: 'GET',
     headers: {
@@ -8,10 +11,11 @@ const getKhachHang = () =>
   })
   .then(response => response.json())
   .then(console.log);
-// getKhachHang()
+// getTaiKhoan()
 
-const insertKhachHang = (khachHang) =>
-  fetch('http://localhost:3001/api/customers', {
+
+const insertTaiKhoan = (khachHang) =>
+  fetch('http://localhost:3001/api/accounts', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -22,8 +26,8 @@ const insertKhachHang = (khachHang) =>
   .then(response => response.json())
   .then(console.log);
 
-const updateKhachHang = khachHang =>
-  fetch('http://localhost:3001/api/customers', {
+const updateTaiKhoan = khachHang =>
+  fetch('http://localhost:3001/api/accounts', {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
@@ -34,8 +38,8 @@ const updateKhachHang = khachHang =>
   .then(response => response.json())
   .then(console.log);
 
-const deleteKhachHang = khachHang =>
-  fetch('http://localhost:3001/api/customers', {
+const deleteTaiKhoan = khachHang =>
+  fetch('http://localhost:3001/api/accounts', {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -46,13 +50,9 @@ const deleteKhachHang = khachHang =>
   .then(response => response.json())
   .then(console.log);
 
-// getKhachHang()
 
-deleteKhachHang({
-  maKhachHang: 3,
-  tenKhachHang: "te3st1",
-  ngaySinh: "2004-01-22",
-  diaChi: "teest",
-  soDienThoai: Math.random() + "-Dadd",
-  mail: Math.random() + "test@test.com",
-}).then(getKhachHang);
+function genTaiKhoan() {
+  return {matKhau: v4(), vaiTro: randInt(1, 3), nhanVien: randInt(1, 100)}
+}
+
+for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());

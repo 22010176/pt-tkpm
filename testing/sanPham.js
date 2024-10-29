@@ -1,14 +1,11 @@
 const {v4} = require('uuid');
 
-const insertSanPham = sp =>
-  fetch('http://localhost:3001/api/products', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(sp)
-  })
-  .then(response => response.json())
+const insertSanPham = sp => fetch('http://localhost:3001/api/products', {
+  method: 'POST', headers: {
+    'Content-Type': 'application/json'
+  }, body: JSON.stringify(sp)
+})
+.then(response => response.json())
 
 
 const getSanPham = sp => fetch('http://localhost:3001/api/products', {
@@ -38,19 +35,7 @@ const deleteSanPham = sp => fetch('http://localhost:3001/api/products', {
 
 function genSanPham(maDanhMucSanPham = 0) {
   return {
-    chipXuLy: v4(),
-    tenDanhMucSanPham: v4(),
-    dungLuongPin: randInt(10, 100),
-    kichThuongManHinh: randInt(10, 100),
-    cameraTruoc: randInt(10, 100),
-    cameraSau: randInt(10, 100),
-    phienBanHeDieuHanh: v4(),
-    thoiGianBaoHanh: randInt(10, 100),
-    hinhAnh: v4(),
-    xuatXu: randInt(1, 100),
-    heDieuHanh: randInt(1, 100),
-    thuongHieu: randInt(1, 100),
-    maDanhMucSanPham
+    chipXuLy: v4(), tenDanhMucSanPham: v4(), dungLuongPin: randInt(10, 100), kichThuongManHinh: randInt(10, 100), cameraTruoc: randInt(10, 100), cameraSau: randInt(10, 100), phienBanHeDieuHanh: v4(), thoiGianBaoHanh: randInt(10, 100), hinhAnh: v4(), xuatXu: randInt(1, 100), heDieuHanh: randInt(1, 100), thuongHieu: randInt(1, 100), maDanhMucSanPham
   }
 }
 
@@ -59,7 +44,6 @@ function genSanPham(maDanhMucSanPham = 0) {
 // })
 
 
-for (let i = 0; i < 5000; ++i)
-  insertSanPham(genSanPham()).then(console.log)
+for (let i = 0; i < 5000; ++i) insertSanPham(genSanPham()).then(console.log)
 
 // .then(getSanPham)
