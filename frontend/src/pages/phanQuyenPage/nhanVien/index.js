@@ -74,6 +74,7 @@ function NhanVien() {
 
     setFormData({...defaultNhanVien})
     updateTableData()
+
   }
 
   async function onUpdate() {

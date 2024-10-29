@@ -113,13 +113,6 @@ VALUES ('Xem', 'Xem'),
        ('NhapFile', 'Nhập tệp'),
        ('XuatFile', 'Xuất tệp');
 
-SELECT *
-FROM chucNang
-ORDER BY maChucNang;
-
-SELECT *
-FROM hanhDong
-ORDER BY maHanhDong;
 
 # them quyen xem cho tat cac cac chuc nang
 INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang chucNang, h.maHanhDong AS hanhDong
@@ -136,54 +129,8 @@ INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang, h.maHanhDong
 INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuyenHan quyenHan FROM quyenHan);
 
 
-SELECT *
-FROM ctquyen;
-
-SELECT q.maQuyenHan, Cn.maChucNang, cN.tenChucNang, Hd.maHanhDong, hd.tenHanhDong
-FROM quyenHan q
-         RIGHT JOIN hanhDong hD on q.hanhDong = hD.maHanhDong
-         RIGHT JOIN chucNang cN on q.chucNang = cN.maChucNang
-ORDER BY cN.maChucNang, hD.maHanhDong;
 
 -- Them vai tro vao trong csdl
 INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', '');
-
-# Lay danh sach Quyen han
-SELECT q.maQuyenHan, cN.tenChucNang, hD.tenHanhDong
-FROM quyenHan q
-         INNER JOIN chucNang cN on q.chucNang = cN.maChucNang
-         INNER join hanhDong hD on q.hanhDong = hD.maHanhDong
-ORDER BY cN.maChucNang, hD.maHanhDong;
-
-SELECT *
-FROM nhomQuyen
-ORDER BY maNhomQuyen;
-
-SELECT *
-FROM nhanVien;
-
-
-
-SELECT qh.maQuyenHan, cN.maChucNang, cN.tenChucNang, hD.maHanhDong, hD.tenHanhDong
-FROM nhomQuyen nQ
-         INNER JOIN ctquyen c ON nQ.maNhomQuyen = c.nhomQuyen
-         INNER JOIN quyenHan qH on c.quyenHan = qH.maQuyenHan
-         INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
-         INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
-WHERE nQ.maNhomQuyen = 1;
-
-INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
-VALUES ('', '', '');
-
-UPDATE nhomQuyen
-SET tenNhomQuyen = '',
-    tenHienThi   = '',
-    ghiChu       = ''
-WHERE maNhomQuyen = 1;
-
-
-DELETE
-FROM nhomQuyen
-WHERE maNhomQuyen = 1;

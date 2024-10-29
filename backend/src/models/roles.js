@@ -57,11 +57,11 @@ async function getRolePermissions(conn, roleID) {
   try {
     const [result] = await conn.query(
       `SELECT qh.maQuyenHan, cN.maChucNang, cN.tenChucNang, hD.maHanhDong, hD.tenHanhDong
-       FROM nhomQuyen nQ
-                INNER JOIN ctquyen c ON nQ.maNhomQuyen = c.nhomQuyen
-                INNER JOIN quyenHan qH on c.quyenHan = qH.maQuyenHan
-                INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
-                INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
+       FROM ptpm_taikhoan.nhomQuyen nQ
+                INNER JOIN ptpm_taikhoan.ctquyen c ON nQ.maNhomQuyen = c.nhomQuyen
+                INNER JOIN ptpm_taikhoan.quyenHan qH on c.quyenHan = qH.maQuyenHan
+                INNER JOIN ptpm_taikhoan.hanhDong hD on qH.hanhDong = hD.maHanhDong
+                INNER JOIN ptpm_taikhoan.chucNang cN on qH.chucNang = cN.maChucNang
        WHERE nQ.maNhomQuyen = ?;`, [roleID])
 
     return {permissions: result, success: true};
@@ -73,7 +73,7 @@ async function getRolePermissions(conn, roleID) {
 async function insertRole(conn, role) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
+      `INSERT INTO ptpm_taikhoan.nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
        VALUES (?, ?, ?);`,
       [role.tenNhomQuyen, role.tenHienThi, role.ghiChu])
 

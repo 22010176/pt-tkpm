@@ -1,7 +1,20 @@
 import {checkResponse} from "./authentication";
 
-export async function getEmployees(token="") {
+export async function getEmployees(token = "") {
   return fetch('/api/employees', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: token
+    }
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}
+
+export async function getEmployeeNoAccount(token = "") {
+  return fetch('/api/employees/no-account', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',

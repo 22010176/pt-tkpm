@@ -12,6 +12,20 @@ async function getEmployees(conn) {
   }
 }
 
+async function getEmployeeWithoutAccount(conn) {
+  try {
+    const [result] = await conn.query(
+      `SELECT n.maNhanVien, n.hoTen, n.mail
+       FROM ptpm_taiKhoan.nhanVien n
+                LEFT JOIN ptpm_taiKhoan.taikhoan t ON t.nhanVien = n.maNhanVien
+       WHERE t.maTaiKhoan IS NULL;`
+    )
+    return {employees: result, success: true}
+  } catch (e) {
+    return {employees: [], success: false}
+  }
+}
+
 async function insertEmployee(conn, employee) {
   try {
     const [result] = await conn.query(
@@ -58,5 +72,5 @@ async function deleteEmployee(conn, employee) {
 }
 
 module.exports = {
-  getEmployees, insertEmployee, updateEmployee, deleteEmployee
+  getEmployees, insertEmployee, updateEmployee, deleteEmployee,getEmployeeWithoutAccount
 }

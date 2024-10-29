@@ -6,7 +6,7 @@ import {useEffect} from 'react'
 
 // const clr = "table-active" //styles.tableActive
 const clr = styles.tableActive //
-function TableA({index = true, onClick, data = [], headers = []}) {
+function TableA({index = true, onClick, data = [], headers = [], subtable = false}) {
   function rowOnClick(e) {
     e.stopPropagation()
     clearRow()
@@ -27,8 +27,12 @@ function TableA({index = true, onClick, data = [], headers = []}) {
   }
 
   useEffect(function () {
+    if (subtable) return
+
     document.body.addEventListener("click", clearRow)
-    return () => document.body.removeEventListener("click", clearRow)
+    return () => {
+      document.body.removeEventListener("click", clearRow)
+    }
   }, [])
 
   return (
@@ -36,16 +40,17 @@ function TableA({index = true, onClick, data = [], headers = []}) {
       <thead>
       <tr className='text-center'>
         {!!index && <th scope='col'>Stt</th>}
-        {headers.map(({key}, j) => <th scope='col' key={j}>{key}</th>)}
+        {headers.map(({key, hide}, j) => <th key={j} scope='col' className={hide && "d-none"}>{key}</th>)}
       </tr>
       </thead>
+
       <tbody className={[styles.table_body].join(" ")} onClick={rowOnClick}>
-      {data.map((item, j) => (
+      {data.map((item, j) =>
         <tr className={[styles.table_row].join(" ")} key={j}>
           {!!index && <td>{j + 1}</td>}
-          {headers.map(({value}, _j) => <td key={_j} data-key={value} data-value={item[value]}>{item[value]}</td>)}
+          {headers.map(({value, hide}, _j) => <td key={_j} className={hide && "d-none"} data-key={value} data-value={item[value]}>{item[value]}</td>)}
         </tr>
-      ))}
+      )}
       </tbody>
     </Table>
   )

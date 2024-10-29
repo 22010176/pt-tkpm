@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertEmployee, getEmployees, deleteEmployee, updateEmployee} = require("../models/employees")
+const {insertEmployee, getEmployees, deleteEmployee, updateEmployee, getEmployeeWithoutAccount} = require("../models/employees")
 
 router.route("/")
 .get(async function (req, res) {
@@ -24,6 +24,12 @@ router.route("/")
   const result = await deleteEmployee(res.locals.conn, req.body);
   await res.locals.conn.destroy()
   res.json(result)
+})
+
+router.get("/no-account", async function (req, res) {
+  const result = await getEmployeeWithoutAccount(res.locals.conn);
+  await res.locals.conn.destroy();
+  res.json(result);
 })
 
 module.exports = router
