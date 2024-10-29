@@ -11,8 +11,6 @@ const getTaiKhoan = () =>
   })
   .then(response => response.json())
   .then(console.log);
-// getTaiKhoan()
-
 
 const insertTaiKhoan = (khachHang) =>
   fetch('http://localhost:3001/api/accounts', {
