@@ -15,8 +15,13 @@ setInterval(() => {
 }, 10000)
 
 async function initialDBConnection(req, res, next) {
-  console.log(req.path)
-  res.locals.conn = await pool.getConnection()
+  console.log(req.method, req.path)
+  try {
+    res.locals.conn = await pool.getConnection()
+  } catch (e) {
+    console.error(e)
+    return res.json({message: "Connection Error"})
+  }
   next();
 }
 
@@ -34,8 +39,8 @@ async function parseAccountData(req, res, next) {
 
 app.use(cors())
 app.use(express.static("public"))
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+app.use(express.urlencoded({extended: true, limit: "100mb"}))
+app.use(express.json({limit: "100mb"}))
 
 app.use(parseAccountData)
 app.use(initialDBConnection)
@@ -65,6 +70,9 @@ app.use("/api/suppliers",
 
 app.use("/api/warehouse",
   require("./src/routes/warehouse"))
+
+app.use("/api/configures",
+  require("./src/routes/configures"))
 
 app.use("/api/services",
   require("./src/routes/services"))

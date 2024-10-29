@@ -1,0 +1,41 @@
+const express = require("express")
+const router = express.Router({mergeParams: true})
+
+const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts} = require('../models/products')
+const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure} = require("../models/configures");
+
+router.route("/")
+.get(async function (req, res) {
+  const result = await getConfigures(res.locals.conn);
+  await res.locals.conn.destroy()
+
+  res.json(result)
+})
+.post(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await insertConfigure(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+.put(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await updateConfigure(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+.delete(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await deleteConfigure(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+
+router.post("/add-multiple", async function (req, res) {
+  const conn = res.locals.conn;
+  console.log(req.body)
+  const result = await insertMultipleConfigures(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+
+module.exports = router

@@ -2,7 +2,6 @@
   "name": "pttk",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run dev\""
@@ -12,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "concurrently": "^9.0.1"
+    "concurrently": "^9.0.1",
+    "uuid": "^11.0.2"
   }
 }

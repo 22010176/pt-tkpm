@@ -3,30 +3,46 @@ const router = express.Router({mergeParams: true})
 
 
 router.route("/import")
-.get((req, res) => {
+.get(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.post((req, res) => {
+.post(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.put((req, res) => {
+.put(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.delete((req, res) => {
+.delete(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
 
 router.route("/export")
-.get((req, res) => {
+.get(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.post((req, res) => {
+.post(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.put((req, res) => {
+.put(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
-.delete((req, res) => {
+.delete(async function (req, res) {
+  const conn = res.local.conn;
+  await res.locals.conn.destroy()
   res.json({message: req.path})
 })
 
