@@ -26,3 +26,5 @@ export function removeVietnameseTones(str) {
   str = str.replace(/[!@%^*()+=<>?\/,.:;'"&#\[\]~$_`\-{}|\\]/g, " ");
   return str;
 }
+
+export const colToName = headers => Object.fromEntries(headers.map(({key, value}) => [value, key]))
