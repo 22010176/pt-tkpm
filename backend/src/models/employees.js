@@ -26,16 +26,33 @@ async function getEmployeeWithoutAccount(conn) {
   }
 }
 
-async function insertEmployee(conn, employee) {
+async function insertEmployee(conn, {
+  hoTen, ngaySinh, soDienThoai, gioiTinh, mail
+}) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_taikhoan.nhanvien (hoTen, ngaySinh, soDienThoai, gioiTinh, mail)
+      `INSERT INTO ptpm_taikhoan.nhanvien
+           (hoTen, ngaySinh, soDienThoai, gioiTinh, mail)
        VALUES (?, ?, ?, ?, ?);`,
-      [employee.hoTen, employee.ngaySinh, employee.soDienThoai, employee.gioiTinh, employee.mail])
+      [hoTen, ngaySinh, soDienThoai, gioiTinh, mail])
     return {message: "Employee added", success: true}
   } catch (e) {
     console.log(e)
     return {message: "Added failed", success: false}
+  }
+}
+
+async function insertMultipleEmployees(conn, employees = []) {
+  try {
+    await conn.query(
+      `INSERT INTO ptpm_doitac.khachhang
+           (tenKhachHang, ngaySinh, diaChi, soDienThoai, mail)
+       VALUES ?`,
+      [employees.map(({hoTen, ngaySinh, soDienThoai, gioiTinh, mail}) => [hoTen, ngaySinh, soDienThoai, gioiTinh, mail])]
+    )
+    return {message: "Customers added", success: true};
+  } catch (e) {
+    return {message: "Added fail", success: false};
   }
 }
 
@@ -72,5 +89,5 @@ async function deleteEmployee(conn, employee) {
 }
 
 module.exports = {
-  getEmployees, insertEmployee, updateEmployee, deleteEmployee,getEmployeeWithoutAccount
+  getEmployees, insertEmployee, updateEmployee, deleteEmployee, getEmployeeWithoutAccount, insertMultipleEmployees
 }

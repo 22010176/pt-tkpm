@@ -32,7 +32,6 @@ router.route("/")
 
 router.post("/add-multiple", async function (req, res) {
   const conn = res.locals.conn;
-  console.log(req.body)
   const result = await insertMultipleConfigures(conn, req.body);
   await res.locals.conn.destroy()
   res.json(result)

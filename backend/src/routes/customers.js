@@ -1,8 +1,7 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertCustomer, getCustomers, deleteCustomer, updateCustomer} = require('../models/customers')
-
+const {insertCustomer, getCustomers, deleteCustomer, updateCustomer, insertMultipleCustomers} = require('../models/customers')
 
 router.route("/")
 .get(async function (req, res) {
@@ -34,6 +33,13 @@ router.route("/")
   const result = await deleteCustomer(conn, customer)
 
   await conn.destroy()
+  res.json(result)
+})
+
+router.post("/add-multiple", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await insertMultipleCustomers(conn, req.body);
+  await res.locals.conn.destroy()
   res.json(result)
 })
 
