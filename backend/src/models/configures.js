@@ -3,7 +3,23 @@ async function getConfigures(conn) {
     const [result] = await conn.query(
       `SELECT *
        FROM ptpm_sanpham.cauhinh
-       ORDER BY maCauHinh;`)
+       ORDER BY maCauHinh DESC
+       LIMIT 200;`)
+    return {configurations: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {configurations: [], success: false}
+  }
+}
+
+async function getProductConfigures(conn, productID) {
+  try {
+    const [result] = await conn.query(
+      `SELECT *
+       FROM ptpm_sanpham.cauhinh
+       WHERE danhMucSanPham = ?
+       ORDER BY maCauHinh;`, [productID])
+
     return {configurations: result, success: true};
   } catch (e) {
     console.log(e)
@@ -73,5 +89,5 @@ async function deleteConfigure(conn, {maCauHinh}) {
 }
 
 module.exports = {
-  getConfigures, insertConfigure, updateConfigure, deleteConfigure, insertMultipleConfigures
+  getConfigures, insertConfigure, updateConfigure, deleteConfigure, insertMultipleConfigures, getProductConfigures
 }

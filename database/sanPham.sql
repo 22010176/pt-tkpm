@@ -128,13 +128,37 @@ VALUES ('đỏ'),
        ('vàng');
 
 
-SELECT COUNT(*) FROM danhMucSanPham;
+SELECT COUNT(*)
+FROM danhMucSanPham;
 
-SELECT COUNT(*) FROM cauhinh;
+SELECT COUNT(*)
+FROM cauhinh;
 
-SELECT COUNT(*) FROM ram;
-SELECT COUNT(*) FROM rom;
-SELECT COUNT(*) FROM mauSac;
-SELECT COUNT(*) FROM thuongHieu;
-SELECT COUNT(*) FROM heDieuHanh;
-SELECT COUNT(*) FROM xuatXu;
+SELECT COUNT(*)
+FROM ram;
+SELECT COUNT(*)
+FROM rom;
+SELECT COUNT(*)
+FROM mauSac;
+SELECT COUNT(*)
+FROM thuongHieu;
+SELECT COUNT(*)
+FROM heDieuHanh;
+SELECT COUNT(*)
+FROM xuatXu;
+
+SELECT *
+FROM danhMucSanPham
+WHERE tenDanhMucSanPham
+  AND chipXuLy = ''
+  AND dungLuongPin = ''
+  AND kichThuongManHinh = ''
+  AND cameraTruoc = ''
+  AND cameraSau = ''
+  AND phienBanHeDieuHanh = ''
+  AND thoiGianBaoHanh = ''
+  AND xuatXu = ''
+  AND heDieuHanh = ''
+  AND thuongHieu = ''
+ORDER BY maDanhMucSanPham DESC
+LIMIT 1;

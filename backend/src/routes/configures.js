@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router({mergeParams: true})
 
 const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts} = require('../models/products')
-const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure} = require("../models/configures");
+const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure, getProductConfigures} = require("../models/configures");
 
 router.route("/")
 .get(async function (req, res) {
@@ -33,6 +33,13 @@ router.route("/")
 router.post("/add-multiple", async function (req, res) {
   const conn = res.locals.conn;
   const result = await insertMultipleConfigures(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+
+router.get("/:productID", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await getProductConfigures(conn, req.params.productID);
   await res.locals.conn.destroy()
   res.json(result)
 })

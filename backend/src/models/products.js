@@ -22,7 +22,26 @@ async function insertProduct(conn, {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu])
 
-    return {message: "Products added", success: true};
+    const [result] = await conn.query(
+      `SELECT *
+       FROM ptpm_sanpham.danhMucSanPham
+       WHERE tenDanhMucSanPham = ?
+         AND chipXuLy = ?
+         AND dungLuongPin = ?
+         AND kichThuongManHinh = ?
+         AND cameraTruoc = ?
+         AND cameraSau = ?
+         AND phienBanHeDieuHanh = ?
+         AND thoiGianBaoHanh = ?
+         AND xuatXu = ?
+         AND heDieuHanh = ?
+         AND thuongHieu = ?
+       ORDER BY maDanhMucSanPham DESC
+       LIMIT 1;`,
+      [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu]
+    )
+    console.log(result  )
+    return {message: "Products added", success: true, body: result};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};
