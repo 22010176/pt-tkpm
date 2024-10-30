@@ -6,7 +6,7 @@ const {insertMultipleEmployees} = require("../models/employees");
 
 router.route("/")
 .get(async function (req, res) {
-  const result = await getProducts();
+  const result = await getProducts(res.locals.conn);
   await res.locals.conn.destroy()
 
   res.json(result)

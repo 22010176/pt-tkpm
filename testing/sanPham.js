@@ -16,6 +16,8 @@ const getSanPham = sp => fetch('http://localhost:3001/api/products', {
 .then(response => response.json())
 .then(content => console.log(content))
 
+getSanPham()
+
 const updateSanPham = sp => fetch('http://localhost:3001/api/products', {
   method: 'PUT', headers: {
     'Content-Type': 'application/json'
@@ -44,6 +46,6 @@ function genSanPham(maDanhMucSanPham = 0) {
 // })
 
 
-for (let i = 0; i < 5000; ++i) insertSanPham(genSanPham()).then(console.log)
-
+// for (let i = 0; i < 5000; ++i) insertSanPham(genSanPham()).then(console.log)
+// getProducts
 // .then(getSanPham)
