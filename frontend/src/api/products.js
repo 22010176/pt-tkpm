@@ -13,6 +13,16 @@ export async function getProducts(token = "") {
   .then(checkResponse);
 }
 
+export async function updateProductImage(product, token = "") {
+  console.log(product.hinhAnh.type)
+  // return await fetch(`/api/products/upload-img/${product.maDanhMucSanPham}`, {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "image/jpeg",
+  //   }
+  // })
+}
+
 export async function insertProduct(product, token = "") {
   return await fetch("/api/products", {
     method: "POST",

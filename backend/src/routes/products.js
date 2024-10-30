@@ -2,7 +2,6 @@ const express = require("express")
 const router = express.Router({mergeParams: true})
 
 const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts, insertMultipleProducts} = require('../models/products')
-const {insertMultipleEmployees} = require("../models/employees");
 
 router.route("/")
 .get(async function (req, res) {
@@ -37,5 +36,12 @@ router.post("/add-multiple", async function (req, res) {
   res.json(result)
 })
 
+router.post("/upload-img/:productID", async function (req, res) {
+  const productID = req.params.productID
+
+
+  await res.locals.conn.destroy()
+  res.json({})
+})
 
 module.exports = router

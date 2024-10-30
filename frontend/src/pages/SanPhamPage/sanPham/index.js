@@ -18,7 +18,7 @@ import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 
 import {colToName} from "../../../utilities/others";
-import {deleteProduct, getProducts, insertProduct, updateProduct} from "../../../api/products";
+import {deleteProduct, getProducts, insertProduct, updateProduct, updateProductImage} from "../../../api/products";
 import {getProductAttributes} from "../../../api/product-attributes";
 import {deleteConfigure, getConfigures, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/configures";
 import InputGroupText from "react-bootstrap/InputGroupText";
@@ -157,13 +157,20 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
   const [data, setData] = useState({})
 
   async function onInsert() {
-    const result = await insertProduct(data)
+    // if (data.maDanhMucSanPham) {
+    //   await updateProduct(data)
+    //   setModal('cauHinh')
+    //   return
+    // }
 
-    if (!result.success || result.body.length === 0) return;
-
-    setData(result.body[0])
-    if (typeof onSubmit === 'function') onSubmit()
-    setModal('cauHinh')
+    await updateProductImage(data)
+    // let result = await insertProduct(data)
+    //
+    // if (!result.success || result.body.length === 0) return;
+    //
+    // setData(result.body[0])
+    // if (typeof onSubmit === 'function') onSubmit()
+    // setModal('cauHinh')
   }
 
   async function onClose() {
@@ -171,6 +178,7 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
     console.log(result)
     if (typeof onHide === 'function') onHide()
   }
+
 
   return (<>
     <Modal {...props} scrollable centered size='xl' backdrop="static">
@@ -208,6 +216,7 @@ function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
     if (typeof onSubmit === 'function') onSubmit()
     if (typeof onHide === 'function') onHide()
   }
+
 
   return (<>
     <Modal {...prop} scrollable centered size='xl' backdrop="static">
@@ -271,13 +280,13 @@ function SanPhamForm({data, setData, ...props}) {
 
   function onDataChange(key, e) {
     if (key !== 'hinhAnh') return setData(src => ({...src, [key]: e.target.value}))
-    setData(src => ({...src, [key]: URL.createObjectURL(e.target.files[0])}))
+    setData(src => ({...src, [key]: e.target.files[0]}))
   }
 
   return (<Form className='d-flex gap-5 mx-5 justify-content-center'>
     <FormGroup className='d-flex flex-column gap-3 ' style={{width: "40%"}}>
       <InputShadow type='file' onChange={onDataChange.bind({}, "hinhAnh")}/>
-      <Image className='w-100 h-100 shadow' src={data?.hinhAnh}/>
+      <Image className='w-100 h-100 shadow' src={data?.hinhAnh && URL.createObjectURL(data?.hinhAnh)}/>
       {/*src={img}*/}
     </FormGroup>
     <FormGroup className='d-flex gap-4 flex-wrap w-100'>
