@@ -155,3 +155,10 @@ FROM ptpm_doitac.khachhang;
 DELETE
 FROM ptpm_doitac.khachhang
 WHERE maKhachHang > 200;
+
+SELECT qh.maQuyenHan, cN.*, hD.*
+FROM ctquyen c
+         INNER JOIN quyenHan qH on c.quyenHan = qH.maQuyenHan
+         INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
+         INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
+WHERE c.nhomQuyen = 41;

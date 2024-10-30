@@ -57,33 +57,53 @@ async function getRolePermissions(conn, roleID) {
   try {
     const [result] = await conn.query(
       `SELECT qh.maQuyenHan, cN.maChucNang, cN.tenChucNang, hD.maHanhDong, hD.tenHanhDong
-       FROM ptpm_taikhoan.nhomQuyen nQ
-                INNER JOIN ptpm_taikhoan.ctquyen c ON nQ.maNhomQuyen = c.nhomQuyen
+       FROM ptpm_taikhoan.ctquyen c
                 INNER JOIN ptpm_taikhoan.quyenHan qH on c.quyenHan = qH.maQuyenHan
-                INNER JOIN ptpm_taikhoan.hanhDong hD on qH.hanhDong = hD.maHanhDong
                 INNER JOIN ptpm_taikhoan.chucNang cN on qH.chucNang = cN.maChucNang
-       WHERE nQ.maNhomQuyen = ?;`, [roleID])
+                INNER JOIN ptpm_taikhoan.hanhDong hD on qH.hanhDong = hD.maHanhDong
+       WHERE c.nhomQuyen = ?;`, [roleID])
 
-    return {permissions: result, success: true};
+    const [role] = await conn.query(
+      `SELECT *
+       FROM ptpm_taikhoan.nhomquyen
+       WHERE maNhomQuyen = ?;`, [roleID])
+
+    return {permissions: result, role, success: true};
   } catch (err) {
     return {permissions: [], success: false}
   }
 }
 
-async function insertRole(conn, {tenNhomQuyen, tenHienThi, ghiChu}) {
+async function insertRole(conn, {tenNhomQuyen, tenHienThi, ghiChu, danhSachQuyen = []}) {
   try {
-    const [result] = await conn.query(
+    await conn.query(
       `INSERT INTO ptpm_taikhoan.nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
        VALUES (?, ?, ?);`,
       [tenNhomQuyen, tenHienThi, ghiChu])
 
-    return {message: "Role added", success: true};
+    const [result] = await conn.query(
+      `SELECT *
+       FROM ptpm_taikhoan.nhomquyen
+       WHERE tenNhomQuyen = ?
+         AND tenHienThi = ?
+         AND ghiChu = ?
+       ORDER BY maNhomQuyen DESC
+       LIMIT 1;`, [tenNhomQuyen, tenHienThi, ghiChu]
+    )
+
+    await conn.query(
+      `INSERT INTO ptpm_taikhoan.ctquyen (nhomQuyen, quyenHan)
+       VALUES ?`, [danhSachQuyen.map(({maQuyenHan}) => [result[0]?.maNhomQuyen, maQuyenHan])]
+    )
+    console.log(danhSachQuyen)
+
+    return {message: "Role added", success: true, body: result};
   } catch (e) {
     return {message: "Added fail", success: false};
   }
 }
 
-async function updateRole(conn, {tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen}) {
+async function updateRole(conn, {tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen, danhSachQuyen = []}) {
   try {
     const [result] = await conn.query(
       `UPDATE ptpm_taikhoan.nhomQuyen
@@ -92,8 +112,13 @@ async function updateRole(conn, {tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen})
            ghiChu       = ?
        WHERE maNhomQuyen = ?;`,
       [tenNhomQuyen, tenHienThi, ghiChu, maNhomQuyen]);
+    console.log(maNhomQuyen)
+    const test = await insertPermissionQuery(
+      conn,
+      danhSachQuyen.map(({maQuyenHan}) => ({maNhomQuyen, maQuyenHan})))
+    console.log(test)
 
-    return {message: "Role updated", success: true};
+    return {message: "Role updated", success: test};
 
   } catch (e) {
     console.log(e)
@@ -116,22 +141,23 @@ async function deleteRole(conn, role) {
   }
 }
 
-async function insertPermission(conn, perms = []) {
+async function insertPermissionQuery(conn, perms = []) {
   try {
     await conn.query(`DELETE
                       FROM ptpm_taikhoan.ctquyen
-                      WHERE nhomQuyen IN ?`, [perms.map(i => i.maNhomQuyen)]);
-
+                      WHERE nhomQuyen IN ?`, [[perms.map(i => i.maNhomQuyen)]]);
+    console.log(perms)
     const [result] = await conn.query(
       `INSERT INTO ptpm_taikhoan.ctquyen (nhomQuyen, quyenHan)
        VALUES ?`,
       [perms.map(({maNhomQuyen, maQuyenHan}) => [maNhomQuyen, maQuyenHan])]);
-    return {message: "Role updated", success: true};
+    return true
   } catch (e) {
-    return {message: "Updated fail", success: false};
+    console.log(e)
+    return false
   }
 }
 
 module.exports = {
-  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermission
+  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermissionQuery
 }

@@ -7,6 +7,16 @@ async function getQuyenHan() {
   }).then(a => a.json())
   .then(console.log)
 }
+async function getQuyenHanNhomQuyen(roleID) {
+  return fetch(`http://localhost:3001/api/roles/${roleID}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(a => a.json())
+  .then(console.log)
+}
+getQuyenHanNhomQuyen(41)
 
 
 async function insertNhomQuyen(nhomQuyen) {
@@ -43,6 +53,6 @@ async function deleteNhomQuyen(nhomQuyen) {
 
 
 
-getQuyenHan()
-
-deleteNhomQuyen({tenNhomQuyen: "test123", tenHienThi: "test2", ghiChu: "", maNhomQuyen: 7})
+// getQuyenHan()
+//
+// deleteNhomQuyen({tenNhomQuyen: "test123", tenHienThi: "test2", ghiChu: "", maNhomQuyen: 7})
