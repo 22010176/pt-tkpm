@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS phieuDoiTra;
 CREATE TABLE phieuDoiTra
 (
     maPhieuDoiTra  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    ngayDoiTra     DATE,
+    ngayDoiTra     DATE NOT NULL,
     nhanVienDoiTra INT UNSIGNED,
 
     FOREIGN KEY (nhanVienDoiTra) REFERENCES ptpm_taikhoan.nhanvien (maNhanVien)

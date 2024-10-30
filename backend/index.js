@@ -15,7 +15,7 @@ setInterval(() => {
 }, 10000)
 
 async function initialDBConnection(req, res, next) {
-  console.log(req.method, req.path)
+  console.log(req.method.padEnd(10, " "), req.path)
   try {
     res.locals.conn = await pool.getConnection()
   } catch (e) {

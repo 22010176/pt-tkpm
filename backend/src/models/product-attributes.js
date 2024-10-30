@@ -6,6 +6,7 @@ async function getAttributes(conn, attribute) {
     return {attributes: result, success: true}
 
   } catch (e) {
+    console.log(e)
     return {attributes: [], success: false}
   }
 
@@ -57,6 +58,7 @@ async function insertAttribute(conn, attribute, data) {
         return {error: "Add failed", success: false};
     }
   } catch (e) {
+    console.log(e)
     return {error: "Add failed", success: false};
   }
 
@@ -114,6 +116,7 @@ async function updateAttribute(conn, attribute, data) {
         return {error: "Update failed", success: false};
     }
   } catch (e) {
+    console.log(e)
     return {error: "Update failed", success: false};
   }
 
@@ -171,6 +174,7 @@ async function deleteAttribute(conn, attribute, data) {
         return {error: "Delete failed", success: false};
     }
   } catch (e) {
+    console.log(e)
     return {error: "Delete failed", success: false};
   }
 

@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS nhanVien;
 CREATE TABLE nhanVien
 (
     maNhanVien  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    hoTen       VARCHAR(255),
+    hoTen       VARCHAR(255) NOT NULL,
     ngaySinh    DATE,
     mail        VARCHAR(255) NOT NULL UNIQUE,
     soDienThoai VARCHAR(20) UNIQUE,
@@ -120,13 +120,12 @@ INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang chucNang, h.maHan
 
 INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang, h.maHanhDong
                                            FROM chucNang c
-                                                    INNER JOIN hanhdong h
-                                           WHERE c.maChucNang IN (1, 2, 6, 7, 8, 9)
-                                             AND h.maHanhDong IN (4, 5, 6));
+                                                    INNER JOIN hanhdong h);
 
 INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuyenHan quyenHan FROM quyenHan);
 
-
+SELECT *
+FROM ctquyen;
 -- Them vai tro vao trong csdl
 INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
 VALUES ('root', 'Quản lý kho', ''),
@@ -162,3 +161,5 @@ FROM ctquyen c
          INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
          INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
 WHERE c.nhomQuyen = 41;
+
+SHOW DATABASES ;

@@ -27,42 +27,29 @@ const defaultSanPham = {
   maDanhMucSanPham: "", tenDanhMucSanPham: "", chipXuLy: "", dungLuongPin: "", kichThuongManHinh: "", cameraTruoc: "", cameraSau: "", phienBanHeDieuHanh: "", thoiGianBaoHanh: "", hinhAnh: "", xuatXu: "", heDieuHanh: "", thuongHieu: "",
 }
 
-const spHeader = [
-  {key: "Mã SP", value: "maDanhMucSanPham"},
-  {key: "Tên sản phẩm", value: "tenDanhMucSanPham"},
+const spHeader = [{key: "Mã SP", value: "maDanhMucSanPham"}, {key: "Tên sản phẩm", value: "tenDanhMucSanPham"}, {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"}, {key: "Thương hiệu", value: "tenThuongHieu"}, {key: "Hệ điều hành", value: "tenHeDieuHanh"}, {key: "Xuất xứ", value: "tenXuatXu"},
+
   {key: "Tồn kho", value: "soLuong"},
-  {key: "Thương hiệu", value: "thuongHieu"},
-  {key: "Hệ điều hành", value: "heDieuHanh"},
-  {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"},
-  {key: "Xuất xứ", value: "xuatXu"},
 
 //   hide
-  {key: "chipXuLy", value: "chipXuLy", hide: true},
-  {key: "dungLuongPin", value: "dungLuongPin", hide: true},
-  {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true},
-  {key: "cameraTruoc", value: "cameraTruoc", hide: true},
-  {key: "cameraSau", value: "cameraSau", hide: true},
-  {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true},
-  {key: "hinhAnh", value: "hinhAnh", hide: true}
-]
+  {key: "thuongHieu", value: "thuongHieu", hide: true}, {key: "heDieuHanh", value: "heDieuHanh", hide: true}, {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}]
 
 
-const imeiHeader = [
-  {key: "IMEI", value: "imei"},
-  {key: "Mã phiếu nhập", value: "phieuNhap"},
-  {key: "Mã phiếu xuất", value: "phieuXuat"},
-  {key: "Tình trạng", value: "tinhTrang"},
-]
+const imeiHeader = [{key: "IMEI", value: "imei"}, {key: "Mã phiếu nhập", value: "phieuNhap"}, {key: "Mã phiếu xuất", value: "phieuXuat"}, {key: "Tình trạng", value: "tinhTrang"},]
 
 const defaultCauHinh = {maCauHinh: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: ""}
 const chHeader = [
-  {key: "RAM", value: "ram"},
-  {key: "ROM", value: "rom"},
-  {key: "Màu sắc", value: "mauSac"},
+  {key: "RAM", value: "dungLuongRam"},
+  {key: "ROM", value: "dungLuongRom"},
+  {key: "Màu sắc", value: "tenMauSac"},
   {key: "Giá nhập", value: "giaNhap"},
   {key: "Giá xuất", value: "giaXuat"},
   {key: "maCauHinh", value: "maCauHinh", hide: true},
+  {key: "ram", value: "ram", hide: true},
+  {key: "rom", value: "rom", hide: true},
+  {key: "mauSac", value: "mauSac", hide: true},
 ]
+
 const SanPhamContext = createContext({})
 
 function SanPham() {
@@ -185,24 +172,22 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
     if (typeof onHide === 'function') onHide()
   }
 
-  return (
-    <>
-      <Modal {...props} scrollable centered size='xl' backdrop="static">
-        <HeaderModalA title={"THÊM SẢN PHẨM MỚI"}/>
+  return (<>
+    <Modal {...props} scrollable centered size='xl' backdrop="static">
+      <HeaderModalA title={"THÊM SẢN PHẨM MỚI"}/>
 
-        <ModalBody>
-          <SanPhamForm data={data} setData={setData}/>
-        </ModalBody>
+      <ModalBody>
+        <SanPhamForm data={data} setData={setData}/>
+      </ModalBody>
 
-        <ModalFooter className='justify-content-center gap-5'>
-          <Button variant='primary' style={{width: "15%"}} onClick={onInsert}>Tạo cấu hình</Button>
-          <Button variant='danger' style={{width: "15%"}} onClick={onClose}>Hủy bỏ</Button>
-        </ModalFooter>
-      </Modal>
+      <ModalFooter className='justify-content-center gap-5'>
+        <Button variant='primary' style={{width: "15%"}} onClick={onInsert}>Tạo cấu hình</Button>
+        <Button variant='danger' style={{width: "15%"}} onClick={onClose}>Hủy bỏ</Button>
+      </ModalFooter>
+    </Modal>
 
-      <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onSubmit={onHide} onModalHide={setModal.bind({}, "")}/>
-    </>
-  )
+    <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onSubmit={onHide} onModalHide={setModal.bind({}, "")}/>
+  </>)
 }
 
 function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
@@ -224,25 +209,23 @@ function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
     if (typeof onHide === 'function') onHide()
   }
 
-  return (
-    <>
-      <Modal {...prop} scrollable centered size='xl' backdrop="static">
-        <HeaderModalA title={"CHỈNH SỬA SẢN PHẨM MỚI"}/>
+  return (<>
+    <Modal {...prop} scrollable centered size='xl' backdrop="static">
+      <HeaderModalA title={"CHỈNH SỬA SẢN PHẨM MỚI"}/>
 
-        <ModalBody>
-          <SanPhamForm data={data} setData={setData}/>
-        </ModalBody>
+      <ModalBody>
+        <SanPhamForm data={data} setData={setData}/>
+      </ModalBody>
 
-        <ModalFooter className='justify-content-center gap-5'>
-          <Button variant='primary' style={{width: "15%"}} onClick={onUpdate}>Lưu thông tin</Button>
-          <Button variant='warning' style={{width: "15%"}} onClick={setModal.bind({}, "cauHinh")}>Sửa cấu hình</Button>
-          <Button variant='danger' style={{width: "15%"}} onClick={onHide}>Hủy bỏ</Button>
-        </ModalFooter>
-      </Modal>
+      <ModalFooter className='justify-content-center gap-5'>
+        <Button variant='primary' style={{width: "15%"}} onClick={onUpdate}>Lưu thông tin</Button>
+        <Button variant='warning' style={{width: "15%"}} onClick={setModal.bind({}, "cauHinh")}>Sửa cấu hình</Button>
+        <Button variant='danger' style={{width: "15%"}} onClick={onHide}>Hủy bỏ</Button>
+      </ModalFooter>
+    </Modal>
 
-      <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onModalHide={setModal.bind({}, "")}/>
-    </>
-  )
+    <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onModalHide={setModal.bind({}, "")}/>
+  </>)
 }
 
 function SanPhamForm({data, setData, ...props}) {
@@ -257,20 +240,32 @@ function SanPhamForm({data, setData, ...props}) {
   function updateInfo() {
     getProductAttributes('xuatXu')
     .then(({attributes}) => {
-      setXuatXu(attributes)
-      if (!data?.xuatXu) setData(src => ({...src, xuatXu: attributes[0]?.maXuatXu}))
+      try {
+
+        setXuatXu(attributes)
+        if (!data?.xuatXu) setData(src => ({...src, xuatXu: attributes[0]?.maXuatXu}))
+      } catch (e) {
+
+      }
     })
 
     getProductAttributes('heDieuHanh')
     .then(({attributes}) => {
-      setHeDieuHanh(attributes)
-      if (!data?.heDieuHanh) setData(src => ({...src, heDieuHanh: attributes[0]?.maHeDieuHanh}))
+      try {
+        setHeDieuHanh(attributes)
+        if (!data?.heDieuHanh) setData(src => ({...src, heDieuHanh: attributes[0]?.maHeDieuHanh}))
+      } catch (e) {
+
+      }
     })
 
     getProductAttributes('thuongHieu')
     .then(({attributes}) => {
-      setThuongHieu(attributes)
-      if (!data?.thuongHieu) setData(src => ({...src, thuongHieu: attributes[0]?.maThuongHieu}))
+      try {
+        setThuongHieu(attributes)
+        if (!data?.thuongHieu) setData(src => ({...src, thuongHieu: attributes[0]?.maThuongHieu}))
+      } catch (e) {
+      }
     })
   }
 
@@ -385,22 +380,28 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, ...prop}) {
 
     setData({...defaultCauHinh})
 
-    getProductConfigures(sanPham?.maDanhMucSanPham)
-    .then(data => setTableData(data.configurations))
+    try {
+      getProductConfigures(sanPham?.maDanhMucSanPham)
+      .then(data => setTableData(data.configurations))
 
-    getProductAttributes('ram').then(({attributes}) => {
-      setRam(attributes)
-      setData(src => ({...src, ram: attributes[0].maRam}))
-    })
-    getProductAttributes('rom').then(({attributes}) => {
-      setRom(attributes)
-      setData(src => ({...src, rom: attributes[0].maRom}))
-    })
+      getProductAttributes('ram').then(({attributes}) => {
+        setRam(attributes)
+        setData(src => ({...src, ram: attributes[0]?.maRam}))
+      })
 
-    getProductAttributes('mauSac').then(({attributes}) => {
-      setMauSac(attributes)
-      setData(src => ({...src, mauSac: attributes[0].maMauSac}))
-    })
+      getProductAttributes('rom').then(({attributes}) => {
+        setRom(attributes)
+        setData(src => ({...src, rom: attributes[0]?.maRom}))
+      })
+
+      getProductAttributes('mauSac').then(({attributes}) => {
+        setMauSac(attributes)
+        setData(src => ({...src, mauSac: attributes[0]?.maMauSac}))
+      })
+
+    } catch (e) {
+
+    }
   }
 
   function onHide() {
@@ -446,77 +447,75 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, ...prop}) {
     if (typeof onSubmit === 'function') onSubmit();
   }
 
-  return (
-    <Modal {...prop} scrollable size='xl' centered backdrop="static">
-      <HeaderModalA title="TẠO CẤU HÌNH"/>
+  return (<Modal {...prop} scrollable size='xl' centered backdrop="static">
+    <HeaderModalA title="TẠO CẤU HÌNH"/>
 
-      <ModalBody className='d-flex p-5 flex-column gap-4'>
-        <Form className='d-flex justify-content-between gap-4'>
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>RAM</FormLabel>
-            <GroupShadow>
-              <FormSelect value={data?.ram} onChange={onDataChange.bind({}, "ram")}>
-                {ram.map((i, j) => <option key={j} value={i.maRam}>{i.dungLuongRam}</option>)}
-              </FormSelect>
-              <InputGroupText>GB</InputGroupText>
-            </GroupShadow>
-          </FormGroup>
+    <ModalBody className='d-flex p-5 flex-column gap-4'>
+      <Form className='d-flex justify-content-between gap-4'>
+        <FormGroup className='flex-grow-1'>
+          <FormLabel className='fw-bold'>RAM</FormLabel>
+          <GroupShadow>
+            <FormSelect value={data?.ram} onChange={onDataChange.bind({}, "ram")}>
+              {ram.map((i, j) => <option key={j} value={i.maRam}>{i.dungLuongRam}</option>)}
+            </FormSelect>
+            <InputGroupText>GB</InputGroupText>
+          </GroupShadow>
+        </FormGroup>
 
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>ROM</FormLabel>
-            <GroupShadow>
-              <FormSelect value={data?.rom} onChange={onDataChange.bind({}, "rom")}>
-                {rom.map((i, j) => <option key={j} value={i.maRom}>{i.dungLuongRom}</option>)}
-              </FormSelect>
-              <InputGroupText>GB</InputGroupText>
-            </GroupShadow>
-          </FormGroup>
+        <FormGroup className='flex-grow-1'>
+          <FormLabel className='fw-bold'>ROM</FormLabel>
+          <GroupShadow>
+            <FormSelect value={data?.rom} onChange={onDataChange.bind({}, "rom")}>
+              {rom.map((i, j) => <option key={j} value={i.maRom}>{i.dungLuongRom}</option>)}
+            </FormSelect>
+            <InputGroupText>GB</InputGroupText>
+          </GroupShadow>
+        </FormGroup>
 
 
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>Màu sắc</FormLabel>
+        <FormGroup className='flex-grow-1'>
+          <FormLabel className='fw-bold'>Màu sắc</FormLabel>
 
-            <InputShadow as={FormSelect} value={data?.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
-              {mauSac.map((i, j) => <option key={j} value={i.maMauSac}>{i.tenMauSac}</option>)}
-            </InputShadow>
-          </FormGroup>
+          <InputShadow as={FormSelect} value={data?.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
+            {mauSac.map((i, j) => <option key={j} value={i.maMauSac}>{i.tenMauSac}</option>)}
+          </InputShadow>
+        </FormGroup>
 
-          <FormGroup className='shadow-1 flex-grow-1'>
-            <FormLabel className='fw-bold'>Giá nhập</FormLabel>
-            <InputGroup className='shadow-sm'>
-              <FormControl type='number' value={data?.giaNhap} onChange={onDataChange.bind({}, "giaNhap")}/>
-              <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
-          </FormGroup>
+        <FormGroup className='shadow-1 flex-grow-1'>
+          <FormLabel className='fw-bold'>Giá nhập</FormLabel>
+          <InputGroup className='shadow-sm'>
+            <FormControl type='number' value={data?.giaNhap} onChange={onDataChange.bind({}, "giaNhap")}/>
+            <InputGroup.Text>VNĐ</InputGroup.Text>
+          </InputGroup>
+        </FormGroup>
 
-          <FormGroup className='flex-grow-1'>
-            <FormLabel className='fw-bold'>Giá xuất</FormLabel>
-            <GroupShadow className='shadow-sm'>
-              <FormControl type='number' value={data?.giaXuat} onChange={onDataChange.bind({}, "giaXuat")}/>
-              <InputGroup.Text>VNĐ</InputGroup.Text>
-            </GroupShadow>
-          </FormGroup>
-        </Form>
+        <FormGroup className='flex-grow-1'>
+          <FormLabel className='fw-bold'>Giá xuất</FormLabel>
+          <GroupShadow className='shadow-sm'>
+            <FormControl type='number' value={data?.giaXuat} onChange={onDataChange.bind({}, "giaXuat")}/>
+            <InputGroup.Text>VNĐ</InputGroup.Text>
+          </GroupShadow>
+        </FormGroup>
+      </Form>
 
-        <div className='d-flex gap-4' style={{height: "40vh"}}>
-          <ContentA style={{width: "80%"}}>
-            <TableA index headers={chHeader} data={tableData} onClick={setData}/>
-          </ContentA>
-          <div className='d-flex flex-column justify-content-around flex-grow-1'>
-            <Button className='py-2 fw-semibold shadow-sm' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
-            <Button className='py-2 fw-semibold shadow-sm' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
-            <Button className='py-2 fw-semibold shadow-sm' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
-            <Button className='py-2 fw-semibold shadow-sm' variant='success' onClick={updateInfo}>Làm mới</Button>
-          </div>
+      <div className='d-flex gap-4' style={{height: "40vh"}}>
+        <ContentA style={{width: "80%"}}>
+          <TableA index headers={chHeader} data={tableData} onClick={setData}/>
+        </ContentA>
+        <div className='d-flex flex-column justify-content-around flex-grow-1'>
+          <Button className='py-2 fw-semibold shadow-sm' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='success' onClick={updateInfo}>Làm mới</Button>
         </div>
-      </ModalBody>
+      </div>
+    </ModalBody>
 
-      <ModalFooter className='justify-content-center gap-5'>
-        <Button className="shadow-sm" variant='primary' style={{width: "15%"}} onClick={onFormSubmit}>Tạo cấu hình</Button>
-        <Button className="shadow-sm" variant='danger' style={{width: "15%"}} onClick={onHide}>Hủy bỏ</Button>
-      </ModalFooter>
-    </Modal>
-  )
+    <ModalFooter className='justify-content-center gap-5'>
+      <Button className="shadow-sm" variant='primary' style={{width: "15%"}} onClick={onFormSubmit}>Tạo cấu hình</Button>
+      <Button className="shadow-sm" variant='danger' style={{width: "15%"}} onClick={onHide}>Hủy bỏ</Button>
+    </ModalFooter>
+  </Modal>)
 }
 
 function ImeiModal({onHide, ...prop}) {

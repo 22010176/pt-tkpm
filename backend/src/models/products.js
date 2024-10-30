@@ -1,8 +1,11 @@
 async function getProducts(conn) {
   try {
     const [result] = await conn.query(
-      `SELECT *
-       FROM ptpm_sanpham.danhmucsanpham
+      `SELECT d.*, x.tenXuatXu, h.tenHeDieuHanh, t.tenThuongHieu
+       FROM ptpm_sanpham.danhmucsanpham d
+                INNER JOIN ptpm_sanpham.xuatxu x ON d.xuatXu = x.maXuatXu
+                INNER JOIN ptpm_sanpham.hedieuhanh h ON h.maHeDieuHanh = d.heDieuHanh
+                INNER JOIN ptpm_sanpham.thuonghieu t ON t.maThuongHieu = d.thuongHieu
        ORDER BY maDanhMucSanPham DESC
        LIMIT 200;`)
     return {products: result, success: true};

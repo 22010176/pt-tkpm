@@ -15,10 +15,13 @@ async function getConfigures(conn) {
 async function getProductConfigures(conn, productID) {
   try {
     const [result] = await conn.query(
-      `SELECT *
-       FROM ptpm_sanpham.cauhinh
+      `SELECT *, ra.dungLuongRam, ro.dungLuongRom, m.tenMauSac
+       FROM ptpm_sanpham.cauhinh c
+                INNER JOIN ptpm_sanpham.ram ra ON c.ram = ra.maRam
+                INNER JOIN ptpm_sanpham.rom ro ON ro.maRom = c.rom
+                INNER JOIN ptpm_sanpham.mausac m ON m.maMauSac = c.mauSac
        WHERE danhMucSanPham = ?
-       ORDER BY maCauHinh;`, [productID])
+       ORDER BY maCauHinh DESC;`, [productID])
 
     return {configurations: result, success: true};
   } catch (e) {

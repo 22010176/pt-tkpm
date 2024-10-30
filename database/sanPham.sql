@@ -48,36 +48,41 @@ DROP TABLE IF EXISTS danhMucSanPham;
 CREATE TABLE danhMucSanPham
 (
     maDanhMucSanPham   INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenDanhMucSanPham  VARCHAR(255),
-    chipXuLy           VARCHAR(255),
-    dungLuongPin       INT UNSIGNED,
-    kichThuongManHinh  INT UNSIGNED,
-    cameraTruoc        INT UNSIGNED,
-    cameraSau          INT UNSIGNED,
-    phienBanHeDieuHanh VARCHAR(255),
-    thoiGianBaoHanh    INT UNSIGNED,
+    tenDanhMucSanPham  VARCHAR(255) NOT NULL,
+    chipXuLy           VARCHAR(255) NOT NULL,
+    dungLuongPin       INT UNSIGNED NOT NULL,
+    kichThuongManHinh  INT UNSIGNED NOT NULL,
+    cameraTruoc        INT UNSIGNED NOT NULL,
+    cameraSau          INT UNSIGNED NOT NULL,
+    phienBanHeDieuHanh VARCHAR(255) NOT NULL,
+    thoiGianBaoHanh    INT UNSIGNED NOT NULL,
     hinhAnh            VARCHAR(255),
 
     xuatXu             INT UNSIGNED,
     heDieuHanh         INT UNSIGNED,
     thuongHieu         INT UNSIGNED,
 
-    FOREIGN KEY (xuatXu) REFERENCES xuatXu (maXuatXu),
-    FOREIGN KEY (heDieuHanh) REFERENCES heDieuHanh (maHeDieuHanh),
+    FOREIGN KEY (xuatXu) REFERENCES xuatXu (maXuatXu)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (heDieuHanh) REFERENCES heDieuHanh (maHeDieuHanh)
+        ON DELETE SET NULL ON UPDATE CASCADE,
     FOREIGN KEY (thuongHieu) REFERENCES thuongHieu (maThuongHieu)
+        ON DELETE SET NULL ON UPDATE CASCADE
 );
+
+
 
 DROP TABLE IF EXISTS cauHinh;
 CREATE TABLE cauHinh
 (
     maCauHinh      INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    giaNhap        INT UNSIGNED,
-    giaXuat        INT UNSIGNED,
+    giaNhap        INT UNSIGNED NOT NULL,
+    giaXuat        INT UNSIGNED NOT NULL,
 
-    danhMucSanPham INT UNSIGNED,
-    ram            INT UNSIGNED,
-    rom            INT UNSIGNED,
-    mauSac         INT UNSIGNED,
+    danhMucSanPham INT UNSIGNED NOT NULL,
+    ram            INT UNSIGNED NOT NULL,
+    rom            INT UNSIGNED NOT NULL,
+    mauSac         INT UNSIGNED NOT NULL,
 
     FOREIGN KEY (danhMucSanPham) REFERENCES danhMucSanPham (maDanhMucSanPham)
         ON UPDATE CASCADE ON DELETE CASCADE,

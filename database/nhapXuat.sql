@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS phieuNhapKho;
 CREATE TABLE phieuNhapKho
 (
     maPhieuNhap  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    thoiGianNhap DATE,
+    thoiGianNhap DATE NOT NULL,
     nhaCungCap   INT UNSIGNED,
     nhanVienNhap INT UNSIGNED,
 
@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS phieuXuatKho;
 CREATE TABLE phieuXuatKho
 (
     maPhieuXuat  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    thoiGianXuat DATE,
+    thoiGianXuat DATE NOT NULL,
     khachHang    INT UNSIGNED,
     nhanVienXuat INT UNSIGNED,
 
@@ -58,8 +58,8 @@ CREATE TABLE sanPham
 (
     maSanPham    INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     maIMEI       VARCHAR(255) UNIQUE,
-    cauHinh      INT UNSIGNED,
-    phieuNhap    INT UNSIGNED,
+    cauHinh      INT UNSIGNED NOT NULL,
+    phieuNhap    INT UNSIGNED NOT NULL,
     phuongAnXuat INT UNSIGNED,
 
     FOREIGN KEY (cauHinh) REFERENCES ptpm_sanpham.cauhinh (maCauHinh)
@@ -69,3 +69,5 @@ CREATE TABLE sanPham
     FOREIGN KEY (phuongAnXuat) REFERENCES phuongAnXuat (maPhuongAnXuat)
         ON UPDATE CASCADE ON DELETE SET NULL
 );
+
+SHOW DATABASES;
