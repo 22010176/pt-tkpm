@@ -42,7 +42,7 @@ async function parseAccountData(req, res, next) {
 app.use(cors())
 app.use(express.urlencoded({extended: true, limit: "100mb"}))
 app.use(express.json({limit: "100mb"}))
-app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/api/images', express.static(path.join(__dirname, 'images')))
 
 
 app.use(parseAccountData)

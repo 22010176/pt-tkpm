@@ -1,10 +1,10 @@
 async function getProducts(conn) {
   try {
     const [result] = await conn.query(`SELECT d.*, x.tenxuatxu, h.tenhedieuhanh, t.tenthuonghieu
-                                       FROM ptpm_sanpham.danhmucsanpham d
-                                                INNER JOIN ptpm_sanpham.xuatxu x ON d.xuatxu = x.maxuatxu
-                                                INNER JOIN ptpm_sanpham.hedieuhanh h ON h.mahedieuhanh = d.hedieuhanh
-                                                INNER JOIN ptpm_sanpham.thuonghieu t ON t.mathuonghieu = d.thuonghieu
+                                       FROM danhmucsanpham d
+                                                INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
+                                                INNER JOIN hedieuhanh h ON h.mahedieuhanh = d.hedieuhanh
+                                                INNER JOIN thuonghieu t ON t.mathuonghieu = d.thuonghieu
                                        ORDER BY madanhmucsanpham DESC
                                        LIMIT 200;`)
     return {products: result, success: true};
@@ -15,15 +15,17 @@ async function getProducts(conn) {
 }
 
 async function insertProduct(conn, {
-  tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu
+  tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu
 }) {
   try {
-    await conn.query(`INSERT INTO ptpm_sanpham.danhmucsanpham
-                      (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu])
+    await conn.query(
+      `INSERT INTO danhmucsanpham
+       (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu])
 
     const [result] = await conn.query(`SELECT *
-                                       FROM ptpm_sanpham.danhmucsanpham
+                                       FROM danhmucsanpham
                                        WHERE tendanhmucsanpham = ?
                                          AND chipxuly = ?
                                          AND dungluongpin = ?
@@ -32,11 +34,8 @@ async function insertProduct(conn, {
                                          AND camerasau = ?
                                          AND phienbanhedieuhanh = ?
                                          AND thoigianbaohanh = ?
-                                         AND xuatxu = ?
-                                         AND hedieuhanh = ?
-                                         AND thuonghieu = ?
                                        ORDER BY madanhmucsanpham DESC
-                                       LIMIT 1;`, [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu])
+                                       LIMIT 1;`, [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh])
     console.log(result)
     return {message: "Products added", success: true, body: result};
   } catch (e) {
@@ -47,11 +46,14 @@ async function insertProduct(conn, {
 
 async function insertMultipleProducts(conn, products = []) {
   try {
-    const [result] = await conn.query(`INSERT INTO ptpm_sanpham.danhmucsanpham
-                                       (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
-                                       VALUES ?`, [products.map(({
-                                                                   tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu
-                                                                 }) => [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu])])
+    const [result] = await conn.query(
+      `INSERT INTO danhmucsanpham
+       (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
+       VALUES ?`, [
+        products.map(({
+          tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu
+        }) => [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu])
+      ])
     return {message: "Products added", success: true};
   } catch (e) {
     console.log(e)
@@ -60,10 +62,10 @@ async function insertMultipleProducts(conn, products = []) {
 }
 
 async function updateProduct(conn, {
-  tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu, maDanhMucSanPham
+  tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham
 }) {
   try {
-    await conn.query(`UPDATE ptpm_sanpham.danhmucsanpham
+    await conn.query(`UPDATE danhmucsanpham
                       SET tendanhmucsanpham  = ?,
                           chipxuly           = ?,
                           dungluongpin       = ?,
@@ -75,7 +77,8 @@ async function updateProduct(conn, {
                           xuatxu             = ?,
                           hedieuhanh         = ?,
                           thuonghieu         = ?
-                      WHERE madanhmucsanpham = ?;`, [tenDanhMucSanPham, chipXuLy, dungLuongPin, kichThuongManHinh, cameraTruoc, cameraSau, phienBanHeDieuHanh, thoiGianBaoHanh, xuatXu, heDieuHanh, thuongHieu, maDanhMucSanPham])
+                      WHERE madanhmucsanpham = ?;`,
+      [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham])
     return {message: "Product updated", success: true}
   } catch (e) {
     console.log((e))
@@ -83,24 +86,24 @@ async function updateProduct(conn, {
   }
 }
 
-async function deleteProduct(conn, {maDanhMucSanPham}) {
+async function deleteProduct(conn, {madanhmucsanpham}) {
   try {
     await conn.query(`DELETE
-                      FROM ptpm_sanpham.danhmucsanpham
-                      WHERE madanhmucsanpham = ?`, [maDanhMucSanPham])
+                      FROM danhmucsanpham
+                      WHERE madanhmucsanpham = ?`, [madanhmucsanpham])
     return {message: "Product deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}
   }
 }
 
-async function updateProductImage(conn, {maDanhMucSanPham, hinhAnh}) {
+async function updateProductImage(conn, {madanhmucsanpham, hinhanh}) {
   try {
     await conn.query(
-      `UPDATE ptpm_sanpham.danhmucsanpham
+      `UPDATE danhmucsanpham
        SET hinhanh = ?
-       WHERE madanhmucsanpham = ?`, [hinhAnh, maDanhMucSanPham])
-    return {message: "success", success: true, url: hinhAnh}
+       WHERE madanhmucsanpham = ?`, [hinhanh, madanhmucsanpham])
+    return {message: "success", success: true, hinhanh}
   } catch (e) {
     return {message: "fail", success: false}
   }

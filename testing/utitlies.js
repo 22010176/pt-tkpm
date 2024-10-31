@@ -1,3 +1,6 @@
+const {generatePhoneNumber} = require('phone-number-generator-js');
+const randomEmail = require('random-email');
+
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -9,11 +12,41 @@ function randStr(len = 10) {
   return result;
 }
 
-function randDate() {
-  return `${randInt(1950, 2030)}-${randInt(1, 12)}-${randInt(1, 28)}`;
+function getDayMonth(month) {
+  switch (month) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+      return 31;
+    case 2:
+      return 28;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+      return 30;
+  }
 }
 
-console.log(randDate())
+function randDate() {
+  let month = randInt(1, 12)
+  return `${randInt(1950, 2030)}-${month}-${randInt(1, getDayMonth(month))}`;
+}
+
+function generatePhoneNum() {
+  return generatePhoneNumber({countryName: CountryNames.Viet_Nam, withoutCountryCode: true})
+}
+
+function randomDate(start, end) {
+  const result = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  return result.toISOString().split("T")[0];
+}
+
+
 module.exports = {
-  randInt, randDate, randStr
+  randInt, randDate, randStr, generatePhoneNum, randomEmail
 }

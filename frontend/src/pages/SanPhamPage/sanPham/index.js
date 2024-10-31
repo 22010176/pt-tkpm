@@ -1,75 +1,110 @@
-import {createContext, useContext, useEffect, useState} from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+}                        from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faRectangleList, faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Image, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faFileExcel,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil,
+  faRectangleList,
+  faTrashCan
+}                        from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  Image,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
+}                        from 'react-bootstrap'
 
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import Page2 from '../../../components/layouts/Page2'
-import TableA from '../../../components/tables/tableA'
+import SideNavbar   from '../../../components/layouts/sideBar'
+import ToolBtn      from '../../../components/buttons/toolBtn'
+import Page2        from '../../../components/layouts/Page2'
+import TableA       from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
-import ContentA from '../../../components/layouts/blockContent'
-import ErrorModal from '../../../components/modals/errorModal'
-import exportExcel from '../../../components/excel'
-import FlexForm from '../../../components/Forms/FlexForm'
+import ContentA     from '../../../components/layouts/blockContent'
+import ErrorModal   from '../../../components/modals/errorModal'
+import exportExcel  from '../../../components/excel'
+import FlexForm     from '../../../components/Forms/FlexForm'
 
-import colors from '../../../utilities/colors'
+import colors      from '../../../utilities/colors'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 
-import {colToName} from "../../../utilities/others";
-import {deleteProduct, getProducts, insertProduct, updateProduct, updateProductImage} from "../../../api/products";
+import {colToName}            from "../../../utilities/others";
+import {
+  deleteProduct,
+  getProducts,
+  insertProduct,
+  updateProduct,
+  updateProductImage
+}                             from "../../../api/products";
 import {getProductAttributes} from "../../../api/product-attributes";
-import {deleteConfigure, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/configures";
-import InputGroupText from "react-bootstrap/InputGroupText";
+import {
+  deleteConfigure,
+  getProductConfigures,
+  insertConfigure,
+  updateConfigure
+}                             from "../../../api/configures";
+import InputGroupText         from "react-bootstrap/InputGroupText";
 
 const defaultSanPham = {
   maDanhMucSanPham: "", tenDanhMucSanPham: "", chipXuLy: "", dungLuongPin: "", kichThuongManHinh: "", cameraTruoc: "", cameraSau: "", phienBanHeDieuHanh: "", thoiGianBaoHanh: "", hinhAnh: "", xuatXu: "", heDieuHanh: "", thuongHieu: "",
 }
 
 const spHeader = [
-  {key: "Mã SP", value: "maDanhMucSanPham"},
-  {key: "Tên sản phẩm", value: "tenDanhMucSanPham"},
-  {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"},
-  {key: "Thương hiệu", value: "tenthuonghieu"},
-  {key: "Hệ điều hành", value: "tenhedieuhanh"},
-  {key: "Xuất xứ", value: "tenxuatxu"},
-
-  {key: "Tồn kho", value: "soLuong"},
+  {key: "Mã SP", value: "maDanhMucSanPham"}, {key: "Tên sản phẩm", value: "tenDanhMucSanPham"}, {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"}, {key: "Thương hiệu", value: "tenthuonghieu"}, {key: "Hệ điều hành", value: "tenhedieuhanh"}, {key: "Xuất xứ", value: "tenxuatxu"}, {key: "Tồn kho", value: "soLuong"},
 
 //   hide
-  {key: "thuongHieu", value: "thuongHieu", hide: true},
-  {key: "heDieuHanh", value: "heDieuHanh", hide: true},
-  {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}]
+  {key: "thuongHieu", value: "thuongHieu", hide: true}, {key: "heDieuHanh", value: "heDieuHanh", hide: true}, {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}
+]
 
 
-const imeiHeader = [{key: "IMEI", value: "imei"}, {key: "Mã phiếu nhập", value: "phieuNhap"}, {key: "Mã phiếu xuất", value: "phieuXuat"}, {key: "Tình trạng", value: "tinhTrang"},]
+const imeiHeader = [
+  {key: "IMEI", value: "imei"}, {key: "Mã phiếu nhập", value: "phieuNhap"}, {key: "Mã phiếu xuất", value: "phieuXuat"}, {key: "Tình trạng", value: "tinhTrang"},
+]
 
-const defaultCauHinh = {maCauHinh: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: ""}
-const chHeader = [{key: "RAM", value: "dungLuongRam"}, {key: "ROM", value: "dungLuongRom"}, {key: "Màu sắc", value: "tenMauSac"}, {key: "Giá nhập", value: "giaNhap"}, {key: "Giá xuất", value: "giaXuat"}, {key: "maCauHinh", value: "maCauHinh", hide: true}, {key: "ram", value: "ram", hide: true}, {key: "rom", value: "rom", hide: true}, {key: "mauSac", value: "mauSac", hide: true},]
+const defaultCauHinh = {
+  maCauHinh: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: ""
+}
+const chHeader = [
+  {key: "RAM", value: "dungLuongRam"}, {key: "ROM", value: "dungLuongRom"}, {key: "Màu sắc", value: "tenMauSac"}, {key: "Giá nhập", value: "giaNhap"}, {key: "Giá xuất", value: "giaXuat"}, {key: "maCauHinh", value: "maCauHinh", hide: true}, {key: "ram", value: "ram", hide: true}, {key: "rom", value: "rom", hide: true}, {key: "mauSac", value: "mauSac", hide: true},
+]
 
 const SanPhamContext = createContext({})
+
+async function getSanPhamFormData() {
+  return Object.fromEntries(await Promise.all(['xuatXu', 'thuongHieu', 'heDieuHanh', 'ram', 'rom', 'mauSac']
+  .map(async i => [i, await getProductAttributes(i).then(i => i.attributes)])));
+}
 
 function SanPham() {
   const [modal, setModal] = useState("");
   const [table, setTable] = useState([])
   const [rowClick, setRowClick] = useState()
 
+  const [formData, setFormData] = useState()
+
   useEffect(function () {
     getSPData();
+    getSanPhamFormData().then(setFormData)
   }, [])
 
   async function getSPData() {
     setTable([])
     getProducts().then(data => setTable(data.products))
-  }
-
-  function openModal(key, e) {
-    setModal(key);
-  }
-
-  function closeModal() {
-    setModal("");
   }
 
   function onImportExcel() {
@@ -97,10 +132,9 @@ function SanPham() {
   }
 
   async function onDelete() {
-    if (!rowClick) return openModal("error")
+    if (!rowClick) return setModal("error")
     const result = await deleteProduct(rowClick)
 
-    console.log(result)
     if (!result.success) return;
 
     setRowClick(undefined)
@@ -134,25 +168,29 @@ function SanPham() {
 
     <SanPhamContext.Provider value={[rowClick, setRowClick]}>
       {/* Add SanPham */}
-      <InsertSanPhamModal show={modal === 'add'} onSubmit={onInsert} onHide={closeModal}/>
+      <InsertSanPhamModal formData={formData} show={modal === 'add'} onSubmit={onInsert} onHide={setModal.bind({}, "")}/>
 
       {/* Update SanPham */}
-      <UpdateSanPhamModal show={modal === 'edit'} onSubmit={onUpdate} onHide={closeModal}/>
+      <UpdateSanPhamModal formData={formData} show={modal === 'edit'} onSubmit={onUpdate} onHide={setModal.bind({}, "")}/>
 
       {/* IMEI */}
-      <ImeiModal show={modal === 'imei'} onHide={closeModal}/>
+      <ImeiModal show={modal === 'imei'} onHide={setModal.bind({}, "")}/>
     </SanPhamContext.Provider>
 
-    <ErrorModal show={modal === "error"} onHide={closeModal}>
+    <ErrorModal show={modal === "error"} onHide={setModal.bind({}, "")}>
       Phải chọn 1 sản phẩm!!!
     </ErrorModal>
   </>)
 }
 
-function InsertSanPhamModal({onHide, onSubmit, ...props}) {
-  // const DataContext = createContext({})
+
+function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
   const [modal, setModal] = useState()
   const [data, setData] = useState({...defaultSanPham})
+
+  useEffect(() => {
+    if (props.show) setData({...defaultSanPham})
+  }, [props.show]);
 
   async function onInsert() {
     if (data.maDanhMucSanPham) {
@@ -171,8 +209,7 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
   }
 
   async function onClose() {
-    const result = await deleteProduct(data)
-    console.log(result)
+    await deleteProduct(data)
     if (typeof onHide === 'function') onHide()
   }
 
@@ -181,7 +218,7 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
       <HeaderModalA title={"THÊM SẢN PHẨM MỚI"}/>
 
       <ModalBody>
-        <SanPhamForm data={data} setData={setData}/>
+        <SanPhamForm {...formData} data={data} setData={setData}/>
       </ModalBody>
 
       <ModalFooter className='justify-content-center gap-5'>
@@ -190,14 +227,13 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
       </ModalFooter>
     </Modal>
 
-    <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onSubmit={onHide} onModalHide={setModal.bind({}, "")}/>
+    <CauHinhModal {...formData} sanPham={data} show={modal === 'cauHinh'} onSubmit={onHide} onModalHide={setModal.bind({}, "")}/>
   </>)
 }
 
-function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
+function UpdateSanPhamModal({onHide, onSubmit, formData, ...prop}) {
   const [rowClick,] = useContext(SanPhamContext)
   const [modal, setModal] = useState("")
-
   const [data, setData] = useState()
 
   useEffect(() => {
@@ -215,13 +251,12 @@ function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
     if (typeof onHide === 'function') onHide()
   }
 
-
   return (<>
     <Modal {...prop} scrollable centered size='xl' backdrop="static">
       <HeaderModalA title={"CHỈNH SỬA SẢN PHẨM MỚI"}/>
 
       <ModalBody>
-        <SanPhamForm data={data} setData={setData}/>
+        <SanPhamForm {...formData} data={data} setData={setData}/>
       </ModalBody>
 
       <ModalFooter className='justify-content-center gap-5'>
@@ -231,50 +266,15 @@ function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
       </ModalFooter>
     </Modal>
 
-    <CauHinhModal sanPham={data} show={modal === 'cauHinh'} onModalHide={setModal.bind({}, "")}/>
+    <CauHinhModal {...formData} sanPham={data} show={modal === 'cauHinh'} onModalHide={setModal.bind({}, "")}/>
   </>)
 }
 
-function SanPhamForm({data, setData, ...props}) {
-  const [xuatXu, setXuatXu] = useState([])
-  const [heDieuHanh, setHeDieuHanh] = useState([])
-  const [thuongHieu, setThuongHieu] = useState([])
 
+function SanPhamForm({data, setData, xuatXu = [], heDieuHanh = [], thuongHieu = []}) {
   useEffect(() => {
-    updateInfo()
-  }, [])
-
-  function updateInfo() {
-    getProductAttributes('xuatXu')
-    .then(({attributes}) => {
-      try {
-
-        setXuatXu(attributes)
-        if (!data?.xuatXu) setData(src => ({...src, xuatXu: attributes[0]?.maXuatXu}))
-      } catch (e) {
-
-      }
-    })
-
-    getProductAttributes('heDieuHanh')
-    .then(({attributes}) => {
-      try {
-        setHeDieuHanh(attributes)
-        if (!data?.heDieuHanh) setData(src => ({...src, heDieuHanh: attributes[0]?.maHeDieuHanh}))
-      } catch (e) {
-
-      }
-    })
-
-    getProductAttributes('thuongHieu')
-    .then(({attributes}) => {
-      try {
-        setThuongHieu(attributes)
-        if (!data?.thuongHieu) setData(src => ({...src, thuongHieu: attributes[0]?.maThuongHieu}))
-      } catch (e) {
-      }
-    })
-  }
+    setData(data => ({...data, xuatXu: xuatXu[0]?.maXuatXu, heDieuHanh: heDieuHanh[0]?.maHeDieuHanh, thuongHieu: thuongHieu[0]?.maThuongHieu}))
+  }, [xuatXu, heDieuHanh, thuongHieu])
 
   function onDataChange(key, e) {
     if (key !== 'hinhAnh') return setData(src => ({...src, [key]: e.target.value}))
@@ -285,7 +285,7 @@ function SanPhamForm({data, setData, ...props}) {
     <FormGroup className='d-flex flex-column gap-3 ' style={{width: "40%"}}>
       <InputShadow type='file' onChange={onDataChange.bind({}, "hinhAnh")}/>
       <Image className='w-100 h-100 shadow'
-             src={typeof data?.hinhAnh === 'string' ? data?.hinhAnh : data?.hinhAnh && URL.createObjectURL(data?.hinhAnh)}/>
+             src={typeof data?.hinhAnh === 'string' ? data.hinhAnh : data?.hinhAnh && URL.createObjectURL(data.hinhAnh)}/>
       {/*src={img}*/}
     </FormGroup>
     <FormGroup className='d-flex gap-4 flex-wrap w-100'>
@@ -297,7 +297,7 @@ function SanPhamForm({data, setData, ...props}) {
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Xuất xứ</FormLabel>
         <InputShadow as={FormSelect} value={data?.xuatXu} onChange={onDataChange.bind({}, "xuatXu")}>
-          {xuatXu.map((i, j) => <option key={j} value={i.maXuatXu}>{i.tenXuatXu}</option>)}
+          {xuatXu?.map((i, j) => <option key={j} value={i.maXuatXu}>{i.tenXuatXu}</option>)}
         </InputShadow>
       </FormGroup>
 
@@ -341,7 +341,7 @@ function SanPhamForm({data, setData, ...props}) {
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Hệ điều hành</FormLabel>
         <InputShadow as={FormSelect} value={data?.heDieuHanh} onChange={onDataChange.bind({}, "heDieuHanh")}>
-          {heDieuHanh.map((i, j) => <option key={j} value={i.maHeDieuHanh}>{i.tenHeDieuHanh}</option>)}
+          {heDieuHanh?.map((i, j) => <option key={j} value={i.maHeDieuHanh}>{i.tenHeDieuHanh}</option>)}
         </InputShadow>
       </FormGroup>
 
@@ -361,55 +361,29 @@ function SanPhamForm({data, setData, ...props}) {
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Thương hiệu</FormLabel>
         <InputShadow as={FormSelect} value={data?.thuongHieu} onChange={onDataChange.bind({}, "thuongHieu")}>
-          {thuongHieu.map((i, j) => <option key={j} value={i.maThuongHieu}>{i.tenThuongHieu}</option>)}
+          {thuongHieu?.map((i, j) => <option key={j} value={i.maThuongHieu}>{i.tenThuongHieu}</option>)}
         </InputShadow>
       </FormGroup>
     </FormGroup>
   </Form>)
 }
 
-function CauHinhModal({sanPham, onSubmit, onModalHide, ...prop}) {
+function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [], mauSac = [],}) {
   const [data, setData] = useState({...defaultCauHinh})
   const [tableData, setTableData] = useState([]);
 
-  const [ram, setRam] = useState([])
-  const [rom, setRom] = useState([])
-  const [mauSac, setMauSac] = useState([])
-
-
-  useEffect(function () {
+  useEffect(() => {
+    resetCauHinh()
     updateInfo()
   }, [sanPham])
 
-  // console.log(sanPham)
+  function resetCauHinh() {
+    setData({maCauHinh: undefined, ram: ram[0]?.maRam, rom: rom[0]?.maRom, mauSac: mauSac[0]?.maMauSac, giaNhap: "", giaXuat: ""})
+  }
 
   function updateInfo() {
     setTableData([])
-
-    setData({...defaultCauHinh})
-
-    try {
-      getProductConfigures(sanPham?.maDanhMucSanPham)
-      .then(data => setTableData(data.configurations))
-
-      getProductAttributes('ram').then(({attributes}) => {
-        setRam(attributes)
-        setData(src => ({...src, ram: attributes[0]?.maRam}))
-      })
-
-      getProductAttributes('rom').then(({attributes}) => {
-        setRom(attributes)
-        setData(src => ({...src, rom: attributes[0]?.maRom}))
-      })
-
-      getProductAttributes('mauSac').then(({attributes}) => {
-        setMauSac(attributes)
-        setData(src => ({...src, mauSac: attributes[0]?.maMauSac}))
-      })
-
-    } catch (e) {
-
-    }
+    getProductConfigures(sanPham?.maDanhMucSanPham).then(data => setTableData(data.configurations))
   }
 
   function onHide() {
@@ -427,6 +401,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, ...prop}) {
     if (!result.success) return;
 
     updateInfo();
+    resetCauHinh()
   }
 
   async function onUpdateCauHinh() {
@@ -436,26 +411,26 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, ...prop}) {
     if (!result.success) return;
 
     updateInfo();
+    resetCauHinh()
   }
 
   async function onDeleteCauHinh() {
-    // send data
-
     const result = await deleteConfigure(data)
 
     if (!result.success) return
     // return
     updateInfo();
+    resetCauHinh()
   }
 
   function onFormSubmit() {
-    if (tableData.length == 0) return;
+    if (tableData.length === 0) return;
 
     onModalHide()
     if (typeof onSubmit === 'function') onSubmit();
   }
 
-  return (<Modal {...prop} scrollable size='xl' centered backdrop="static">
+  return (<Modal show={show} scrollable size='xl' centered backdrop="static">
     <HeaderModalA title="TẠO CẤU HÌNH"/>
 
     <ModalBody className='d-flex p-5 flex-column gap-4'>
@@ -566,6 +541,5 @@ function ImeiModal({onHide, ...prop}) {
     </ModalFooter>
   </Modal>)
 }
-
 
 export default SanPham;

@@ -2,8 +2,8 @@ async function getCustomers(conn) {
   try {
     const [result] = await conn.query(
       `SELECT *
-       FROM ptpm_doitac.khachhang
-       ORDER BY maKhachHang;`)
+       FROM khachhang
+       ORDER BY makhachhang;`)
     return {customers: result, success: true};
   } catch (e) {
     console.log(e)
@@ -12,13 +12,13 @@ async function getCustomers(conn) {
 }
 
 async function insertCustomer(conn, {
-  tenKhachHang, ngaySinh, diaChi, soDienThoai, mail
+  tenkhachhang, ngaysinh, diachi, sodienthoai, mail
 }) {
   try {
     await conn.query(
-      `INSERT INTO ptpm_doitac.khachhang (tenKhachHang, ngaySinh, diaChi, soDienThoai, mail)
+      `INSERT INTO khachhang (tenkhachhang, ngaysinh, diachi, sodienthoai, mail)
        VALUES (?, ?, ?, ?, ?)`,
-      [tenKhachHang, ngaySinh, diaChi, soDienThoai, mail]
+      [tenkhachhang, ngaysinh, diachi, sodienthoai, mail]
     )
     return {message: "Customer added", success: true};
   } catch (e) {
@@ -29,9 +29,12 @@ async function insertCustomer(conn, {
 async function insertMultipleCustomers(conn, customers = []) {
   try {
     await conn.query(
-      `INSERT INTO ptpm_doitac.khachhang (tenKhachHang, ngaySinh, diaChi, soDienThoai, mail)
+      `INSERT INTO khachhang (tenkhachhang, ngaysinh, diachi, sodienthoai, mail)
        VALUES ?`,
-      [customers.map(({tenKhachHang, ngaySinh, diaChi, soDienThoai, mail}) => [tenKhachHang, ngaySinh, diaChi, soDienThoai, mail])]
+      [
+        customers.map(({tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) =>
+          [tenkhachhang, ngaysinh, diachi, sodienthoai, mail])
+      ]
     )
     return {message: "Customers added", success: true};
   } catch (e) {
@@ -39,17 +42,17 @@ async function insertMultipleCustomers(conn, customers = []) {
   }
 }
 
-async function updateCustomer(conn, khachHang) {
+async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) {
   try {
     await conn.query(
-      `UPDATE ptpm_doitac.khachhang
-       SET tenKhachHang = ?,
-           ngaySinh     = ?,
-           diaChi       = ?,
-           soDienThoai  = ?,
+      `UPDATE khachhang
+       SET tenkhachhang = ?,
+           ngaysinh     = ?,
+           diachi       = ?,
+           sodienthoai  = ?,
            mail         = ?
-       WHERE maKhachHang = ?;`,
-      [khachHang.tenKhachHang, khachHang.ngaySinh, khachHang.diaChi, khachHang.soDienThoai, khachHang.mail, khachHang.maKhachHang])
+       WHERE makhachhang = ?;`,
+      [tenkhachhang, ngaysinh, diachi, sodienthoai, mail])
     return {message: "Customer updated", success: true}
   } catch (e) {
     console.log((e))
@@ -57,12 +60,12 @@ async function updateCustomer(conn, khachHang) {
   }
 }
 
-async function deleteCustomer(conn, customer) {
+async function deleteCustomer(conn, {makhachhang}) {
   try {
     await conn.query(
       `DELETE
-       FROM ptpm_doitac.khachHang
-       WHERE maKhachHang = ?;`, [customer.maKhachHang])
+       FROM khachhang
+       WHERE makhachhang = ?;`, [makhachhang])
     return {message: "Customer deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

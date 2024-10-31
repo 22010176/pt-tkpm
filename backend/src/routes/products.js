@@ -58,10 +58,10 @@ router.post("/add-multiple", async function (req, res) {
 router.post("/upload-img/:maDanhMucSanPham", upload.single("hinhAnh"), async function (req, res) {
   const result = await updateProductImage(res.locals.conn, {
     maDanhMucSanPham: req.params.maDanhMucSanPham,
-    hinhAnh: '/images/products/' + req.file.filename
+    hinhAnh: '/api/images/products/' + req.file.filename
   })
+  console.log(result)
   await res.locals.conn.destroy()
-
 
   res.json(result)
 })

@@ -1,18 +1,18 @@
 async function getAccounts(conn) {
   try {
     const [result] = await conn.query(
-      `SELECT t.maTaiKhoan,
-              nV.maNhanVien,
-              nV.hoTen,
+      `SELECT t.mataikhoan,
+              nv.manhanvien,
+              nv.hoten,
               nv.mail,
-              nV.soDienThoai,
-              nQ.maNhomQuyen,
-              nQ.tenNhomQuyen,
-              nQ.tenHienThi,
-              nQ.ghiChu
-       FROM ptpm_taikhoan.taiKhoan t
-                INNER JOIN ptpm_taikhoan.nhanVien nV on t.nhanVien = nV.maNhanVien
-                INNER JOIN ptpm_taikhoan.nhomQuyen nQ on t.vaiTro = nQ.maNhomQuyen;`)
+              nv.sodienthoai,
+              nq.manhomquyen,
+              nq.tennhomquyen,
+              nq.tenhienthi,
+              nq.ghichu
+       FROM taikhoan t
+                INNER JOIN nhanvien nv ON t.nhanvien = nv.manhanvien
+                INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen;`)
     return {accounts: result, success: true};
   } catch (e) {
     console.log(e)
@@ -20,12 +20,12 @@ async function getAccounts(conn) {
   }
 }
 
-async function insertAccount(conn, {matKhau, vaiTro, nhanVien}) {
+async function insertAccount(conn, {matkhau, vaitro, nhanvien}) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_taikhoan.taiKhoan (matKhau, vaiTro, nhanVien)
+      `INSERT INTO taikhoan (matkhau, vaitro, nhanvien)
        VALUES (?, ?, ?);`,
-      [matKhau, vaiTro, nhanVien])
+      [matkhau, vaitro, nhanvien])
     return {message: "Account added", success: true};
   } catch (e) {
     console.log(e)
@@ -33,13 +33,13 @@ async function insertAccount(conn, {matKhau, vaiTro, nhanVien}) {
   }
 }
 
-async function updateAccount(conn, {vaiTro, maTaiKhoan}) {
+async function updateAccount(conn, {vaitro, mataikhoan}) {
   try {
     await conn.query(
-      `UPDATE ptpm_taikhoan.taikhoan
-       SET vaiTro = ?
-       WHERE maTaiKhoan = ?;`,
-      [vaiTro, maTaiKhoan])
+      `UPDATE taikhoan
+       SET vaitro = ?
+       WHERE mataikhoan = ?;`,
+      [vaitro, mataikhoan])
     return {message: "Account updated", success: true}
   } catch (e) {
     console.log((e))
@@ -51,8 +51,8 @@ async function deleteAccount(conn, account) {
   try {
     await conn.query(
       `DELETE
-       FROM ptpm_taikhoan.taikhoan
-       WHERE maTaiKhoan = ?;`, [account.maTaiKhoan])
+       FROM taikhoan
+       WHERE mataikhoan = ?;`, [account.mataikhoan])
     return {message: "Account deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

@@ -1,65 +1,61 @@
-DROP DATABASE IF EXISTS ptpm_nhapxuat;
-DROP DATABASE IF EXISTS ptpm_sanpham;
-DROP DATABASE IF EXISTS ptpm_doitac;
-DROP DATABASE IF EXISTS ptpm_doitra;
-DROP DATABASE IF EXISTS ptpm_taikhoan;
+USE ptpm;
 
 # Doi Tac
 SELECT COUNT(*)
-FROM ptpm_doitac.khachhang;
+FROM khachhang;
 
 SELECT COUNT(*)
-FROM ptpm_doitac.nhacungcap;
+FROM nhacungcap;
 
 # San pham
 SELECT COUNT(*)
-FROM ptpm_sanpham.rom;
+FROM rom;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.ram;
+FROM ram;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.mausac;
+FROM mausac;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.thuonghieu;
+FROM thuonghieu;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.xuatxu;
+FROM xuatxu;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.hedieuhanh;
+FROM hedieuhanh;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.danhmucsanpham;
+FROM danhmucsanpham;
 
 SELECT COUNT(*)
-FROM ptpm_sanpham.cauhinh;
+FROM cauhinh;
 
 # Tai khoan
 SELECT COUNT(*)
-FROM ptpm_taikhoan.nhanvien;
+FROM nhanvien;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.taikhoan;
+FROM taikhoan;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.chucnang;
+FROM chucnang;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.hanhdong;
+FROM hanhdong;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.nhomquyen;
+FROM nhomquyen;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.quyenhan;
+FROM quyenhan;
 
 SELECT COUNT(*)
-FROM ptpm_taikhoan.nhanvien;
+FROM nhanvien;
 
 
-
+DESCRIBE nhanvien;
 
 
 

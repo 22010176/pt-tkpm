@@ -50,7 +50,7 @@ const deleteTaiKhoan = khachHang =>
 
 
 function genTaiKhoan() {
-  return {matKhau: v4(), vaiTro: randInt(1, 3), nhanVien: randInt(1, 100)}
+  return {matkhau: v4(), vaitro: randInt(1, 3), nhanvien: randInt(1, 100)}
 }
 
 for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());

@@ -2,8 +2,8 @@ async function getConfigures(conn) {
   try {
     const [result] = await conn.query(
       `SELECT *
-       FROM ptpm_sanpham.cauhinh
-       ORDER BY maCauHinh DESC
+       FROM cauhinh
+       ORDER BY macauhinh DESC
        LIMIT 200;`)
     return {configurations: result, success: true};
   } catch (e) {
@@ -12,16 +12,16 @@ async function getConfigures(conn) {
   }
 }
 
-async function getProductConfigures(conn, productID) {
+async function getProductConfigures(conn, macauhinh) {
   try {
     const [result] = await conn.query(
-      `SELECT *, ra.dungLuongRam, ro.dungLuongRom, m.tenMauSac
-       FROM ptpm_sanpham.cauhinh c
-                INNER JOIN ptpm_sanpham.ram ra ON c.ram = ra.maRam
-                INNER JOIN ptpm_sanpham.rom ro ON ro.maRom = c.rom
-                INNER JOIN ptpm_sanpham.mausac m ON m.maMauSac = c.mauSac
-       WHERE danhMucSanPham = ?
-       ORDER BY maCauHinh DESC;`, [productID])
+      `SELECT *, ra.dungluongram, ro.dungluongrom, m.tenmausac
+       FROM cauhinh c
+                INNER JOIN ram ra ON c.ram = ra.maram
+                INNER JOIN rom ro ON ro.marom = c.rom
+                INNER JOIN mausac m ON m.mamausac = c.mausac
+       WHERE danhmucsanpham = ?
+       ORDER BY macauhinh DESC;`, [macauhinh])
 
     return {configurations: result, success: true};
   } catch (e) {
@@ -30,12 +30,15 @@ async function getProductConfigures(conn, productID) {
   }
 }
 
-async function insertMultipleConfigures(conn, configurations) {
+async function insertMultipleConfigures(conn, configurations = []) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_sanpham.cauhinh (giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac)
+      `INSERT INTO cauhinh (gianhap, giaxuat, danhmucsanpham, ram, rom, mausac)
        VALUES ?`,
-      [configurations.map(({giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac}) => [giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac])])
+      [
+        configurations.map(({gianhap, giaxuat, danhmucsanpham, ram, rom, mausac}) =>
+          [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
+      ])
     return {message: "Configuress added", success: true};
   } catch (e) {
     console.log(e)
@@ -44,13 +47,13 @@ async function insertMultipleConfigures(conn, configurations) {
 }
 
 async function insertConfigure(conn, {
-  giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac
+  gianhap, giaxuat, danhmucsanpham, ram, rom, mausac
 }) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_sanpham.cauhinh (giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac)
+      `INSERT INTO cauhinh (gianhap, giaxuat, danhmucsanpham, ram, rom, mausac)
        VALUES (?, ?, ?, ?, ?, ?);`,
-      [giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac])
+      [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
     return {message: "configuress added", success: true};
   } catch (e) {
     console.log(e)
@@ -59,19 +62,19 @@ async function insertConfigure(conn, {
 }
 
 async function updateConfigure(conn, {
-  giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac, maCauHinh
+  gianhap, giaxuat, danhmucsanpham, ram, rom, mausac, macauhinh
 }) {
   try {
     await conn.query(
-      `UPDATE ptpm_sanpham.cauhinh
-       SET giaNhap        = ?,
-           giaXuat        = ?,
-           danhMucSanPham = ?,
+      `UPDATE cauhinh
+       SET gianhap        = ?,
+           giaxuat        = ?,
+           danhmucsanpham = ?,
            ram            = ?,
            rom            = ?,
-           mauSac         = ?
-       WHERE maCauHinh = ?;`,
-      [giaNhap, giaXuat, danhMucSanPham, ram, rom, mauSac, maCauHinh])
+           mausac         = ?
+       WHERE macauhinh = ?;`,
+      [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac, macauhinh])
     return {message: "configures updated", success: true}
   } catch (e) {
     console.log((e))
@@ -79,12 +82,12 @@ async function updateConfigure(conn, {
   }
 }
 
-async function deleteConfigure(conn, {maCauHinh}) {
+async function deleteConfigure(conn, {macauhinh}) {
   try {
     await conn.query(
       `DELETE
-       FROM ptpm_sanpham.cauhinh
-       WHERE maCauHinh = ?`, [maCauHinh])
+       FROM cauhinh
+       WHERE macauhinh = ?`, [macauhinh])
     return {message: "configures deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

@@ -1,92 +1,92 @@
-DROP DATABASE IF EXISTS ptpm_taiKhoan;
-CREATE DATABASE IF NOT EXISTS ptpm_taiKhoan;
-USE ptpm_taiKhoan;
+DROP DATABASE IF EXISTS ptpm_taikhoan;
+CREATE DATABASE IF NOT EXISTS ptpm_taikhoan;
+USE ptpm_taikhoan;
 
-DROP TABLE IF EXISTS chucNang;
-CREATE TABLE chucNang
+DROP TABLE IF EXISTS chucnang;
+CREATE TABLE chucnang
 (
-    maChucNang  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenChucNang VARCHAR(255) UNIQUE,
-    tenHienThi  VARCHAR(255)
+  machucnang  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  tenchucnang VARCHAR(255) UNIQUE,
+  tenhienthi  VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS hanhDong;
-CREATE TABLE hanhDong
+DROP TABLE IF EXISTS hanhdong;
+CREATE TABLE hanhdong
 (
-    maHanhDong  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenHanhDong VARCHAR(255) UNIQUE,
-    tenHienThi  VARCHAR(255)
+  mahanhdong  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  tenhanhdong VARCHAR(255) UNIQUE,
+  tenhienthi  VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS quyenHan;
-CREATE TABLE quyenHan
+DROP TABLE IF EXISTS quyenhan;
+CREATE TABLE quyenhan
 (
-    maQuyenHan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    chucNang   INT UNSIGNED NOT NULL,
-    hanhDong   INT UNSIGNED NOT NULL,
+  maquyenhan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  chucnang   INT UNSIGNED NOT NULL,
+  hanhdong   INT UNSIGNED NOT NULL,
 
-    UNIQUE (chucNang, hanhDong),
+  UNIQUE (chucnang, hanhdong),
 
-    FOREIGN KEY (chucNang) REFERENCES chucNang (maChucNang)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (hanhDong) REFERENCES hanhDong (maHanhDong)
-        ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (chucnang) REFERENCES chucnang (machucnang)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (hanhdong) REFERENCES hanhdong (mahanhdong)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS nhomQuyen;
-CREATE TABLE nhomQuyen
+DROP TABLE IF EXISTS nhomquyen;
+CREATE TABLE nhomquyen
 (
-    maNhomQuyen  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    tenNhomQuyen VARCHAR(255) UNIQUE,
-    tenHienThi   VARCHAR(255),
-    ghiChu       VARCHAR(255)
+  manhomquyen  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  tennhomquyen VARCHAR(255) UNIQUE,
+  tenhienthi   VARCHAR(255),
+  ghichu       VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS CTQuyen;
-CREATE TABLE CTQuyen
+DROP TABLE IF EXISTS ctquyen;
+CREATE TABLE ctquyen
 (
-    maCTQuyen INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    nhomQuyen INT UNSIGNED NOT NULL,
-    quyenHan  INT UNSIGNED NOT NULL,
+  mactquyen INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  nhomquyen INT UNSIGNED NOT NULL,
+  quyenhan  INT UNSIGNED NOT NULL,
 
-    UNIQUE (nhomQuyen, quyenHan),
+  UNIQUE (nhomquyen, quyenhan),
 
-    FOREIGN KEY (nhomQuyen) REFERENCES nhomQuyen (maNhomQuyen)
-        ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (nhomquyen) REFERENCES nhomquyen (manhomquyen)
+    ON DELETE CASCADE ON UPDATE CASCADE,
 
-    FOREIGN KEY (quyenHan) REFERENCES quyenHan (maQuyenHan)
-        ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (quyenhan) REFERENCES quyenhan (maquyenhan)
+    ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS nhanVien;
-CREATE TABLE nhanVien
+DROP TABLE IF EXISTS nhanvien;
+CREATE TABLE nhanvien
 (
-    maNhanVien  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    hoTen       VARCHAR(255) NOT NULL,
-    ngaySinh    DATE,
-    mail        VARCHAR(255) NOT NULL UNIQUE,
-    soDienThoai VARCHAR(20) UNIQUE,
-    gioiTinh    ENUM ('Nam', 'Nữ') DEFAULT 'Nam'
+  manhanvien  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  hoten       VARCHAR(255) NOT NULL,
+  ngaysinh    DATE,
+  mail        VARCHAR(255) NOT NULL UNIQUE,
+  sodienthoai VARCHAR(20) UNIQUE,
+  gioitinh    ENUM ('Nam', 'Nữ') DEFAULT 'Nam'
 );
 
-DROP TABLE IF EXISTS taiKhoan;
-CREATE TABLE taiKhoan
+DROP TABLE IF EXISTS taikhoan;
+CREATE TABLE taikhoan
 (
-    maTaiKhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    matKhau    VARCHAR(255)        NOT NULL,
-    vaiTro     INT UNSIGNED,
-    nhanVien   INT UNSIGNED UNIQUE NOT NULL,
+  mataikhoan INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  matkhau    VARCHAR(255)        NOT NULL,
+  vaitro     INT UNSIGNED,
+  nhanvien   INT UNSIGNED UNIQUE NOT NULL,
 
-    FOREIGN KEY (vaiTro) REFERENCES nhomQuyen (maNhomQuyen)
-        ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (vaitro) REFERENCES nhomquyen (manhomquyen)
+    ON UPDATE CASCADE ON DELETE SET NULL,
 
-    FOREIGN KEY (nhanVien) REFERENCES nhanVien (maNhanVien)
-        ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (nhanvien) REFERENCES nhanvien (manhanvien)
+    ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 
 # Them gia tri chuc nang
-INSERT INTO chucNang (tenChucNang, tenHienThi)
+INSERT INTO chucnang (tenchucnang, tenhienthi)
 VALUES ('QuanLySanPham', 'Quản lý sản phẩm'),
        ('QuanLyThuocTinh', 'Quản lý thuộc tính'),
        ('QuanLyNhapKho', 'Quản lý nhập kho'),
@@ -101,7 +101,7 @@ VALUES ('QuanLySanPham', 'Quản lý sản phẩm'),
        ('QuanLyQuyenHan', 'Quản lý quyền hạn');
 
 # Them gia tri hanh dong
-INSERT INTO hanhDong (tenHanhDong, tenHienThi)
+INSERT INTO hanhdong (tenhanhdong, tenhienthi)
 VALUES ('Xem', 'Xem'),
        ('XemCaNhan', 'Xem cá nhân'),
        ('XemChiTiet', 'Xem chi tiết'),
@@ -113,28 +113,28 @@ VALUES ('Xem', 'Xem'),
 
 
 # them quyen xem cho tat cac cac chuc nang
-INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang chucNang, h.maHanhDong AS hanhDong
-                                           FROM chucNang c
-                                                    INNER JOIN hanhdong h
-                                           WHERE h.maHanhDong = 1);
+INSERT INTO quyenhan (chucnang, hanhdong) (SELECT c.machucnang chucnang, h.mahanhdong AS hanhdong
+                                           FROM chucnang c
+                                                  INNER JOIN hanhdong h
+                                           WHERE h.mahanhdong = 1);
 
-INSERT INTO quyenHan (chucNang, hanhDong) (SELECT c.maChucNang, h.maHanhDong
-                                           FROM chucNang c
-                                                    INNER JOIN hanhdong h);
+INSERT INTO quyenhan (chucnang, hanhdong) (SELECT c.machucnang, h.mahanhdong
+                                           FROM chucnang c
+                                                  INNER JOIN hanhdong h);
 
-INSERT INTO ctquyen (nhomQuyen, quyenHan) (SELECT 1 AS nhomQuyen, quyenHan.maQuyenHan quyenHan FROM quyenHan);
+INSERT INTO ctquyen (nhomquyen, quyenhan) (SELECT 1 AS nhomquyen, quyenhan.maquyenhan quyenhan FROM quyenhan);
 
 SELECT *
 FROM ctquyen;
 -- Them vai tro vao trong csdl
-INSERT INTO nhomQuyen (tenNhomQuyen, tenHienThi, ghiChu)
+INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
 VALUES ('root', 'Quản lý kho', ''),
        ('nhanVien', 'Nhân viên', ''),
        ('kho', 'test1', '');
 
 DELETE
 FROM ctquyen
-WHERE nhomQuyen IN (3, 3);
+WHERE nhomquyen IN (3, 3);
 
 
 SELECT *
@@ -143,7 +143,7 @@ SELECT *
 FROM taikhoan;
 
 SELECT *
-FROM nhomQuyen;
+FROM nhomquyen;
 
 SELECT COUNT(*)
 FROM nhanvien;
@@ -153,13 +153,13 @@ SELECT COUNT(*)
 FROM ptpm_doitac.khachhang;
 DELETE
 FROM ptpm_doitac.khachhang
-WHERE maKhachHang > 200;
+WHERE makhachhang > 200;
 
-SELECT qh.maQuyenHan, cN.*, hD.*
+SELECT qh.maquyenhan, cn.*, hd.*
 FROM ctquyen c
-         INNER JOIN quyenHan qH on c.quyenHan = qH.maQuyenHan
-         INNER JOIN chucNang cN on qH.chucNang = cN.maChucNang
-         INNER JOIN hanhDong hD on qH.hanhDong = hD.maHanhDong
-WHERE c.nhomQuyen = 41;
+       INNER JOIN quyenhan qh ON c.quyenhan = qh.maquyenhan
+       INNER JOIN chucnang cn ON qh.chucnang = cn.machucnang
+       INNER JOIN hanhdong hd ON qh.hanhdong = hd.mahanhdong
+WHERE c.nhomquyen = 41;
 
-SHOW DATABASES ;
+SHOW DATABASES;

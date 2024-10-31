@@ -1,9 +1,9 @@
 async function getSuppliers(conn) {
   try {
-    const [result] = await conn.query(`
-        SELECT *
-        FROM ptpm_doitac.nhaCungCap
-        ORDER BY maNhaCungCap;`);
+    const [result] = await conn.query(
+      `SELECT *
+       FROM nhacungcap
+       ORDER BY manhacungcap;`);
 
     return {suppliers: result, success: true};
 
@@ -12,12 +12,12 @@ async function getSuppliers(conn) {
   }
 }
 
-async function insertSupplier(conn, {tenNhaCungCap, diaChi, mail, soDienThoai}) {
+async function insertSupplier(conn, {tennhacungcap, diachi, mail, sodienthoai}) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_doitac.nhaCungCap (tenNhaCungCap, diaChi, mail, soDienThoai)
+      `INSERT INTO nhacungcap (tennhacungcap, diachi, mail, sodienthoai)
        VALUES (?, ?, ?, ?)`,
-      [tenNhaCungCap, diaChi, mail, soDienThoai]);
+      [tennhacungcap, diachi, mail, sodienthoai]);
 
     return {message: "Supplier added", success: true};
 
@@ -29,9 +29,12 @@ async function insertSupplier(conn, {tenNhaCungCap, diaChi, mail, soDienThoai}) 
 async function insertMultipleSuppliers(conn, suppliers = []) {
   try {
     const [result] = await conn.query(
-      `INSERT INTO ptpm_doitac.nhaCungCap (tenNhaCungCap, diaChi, mail, soDienThoai)
+      `INSERT INTO nhacungcap (tennhacungcap, diachi, mail, sodienthoai)
        VALUES ?`,
-      [suppliers.map(({tenNhaCungCap, diaChi, mail, soDienThoai}) => [tenNhaCungCap, diaChi, mail, soDienThoai])]);
+      [
+        suppliers.map(({tennhacungcap, diachi, mail, sodienthoai}) =>
+          [tennhacungcap, diachi, mail, sodienthoai])
+      ]);
 
     return {message: "Supplier added", success: true};
 
@@ -41,16 +44,16 @@ async function insertMultipleSuppliers(conn, suppliers = []) {
 }
 
 
-async function updateSupplier(conn, supplier) {
+async function updateSupplier(conn, {tennhacungcap, diachi, mail, sodienthoai, manhacungcap}) {
   try {
     const [result] = await conn.query(
-      `UPDATE ptpm_doitac.nhaCungCap
-       SET tenNhaCungCap = ?,
-           diaChi        = ?,
+      `UPDATE nhacungcap
+       SET tennhacungcap = ?,
+           diachi        = ?,
            mail          = ?,
-           soDienThoai   = ?
-       WHERE maNhaCungCap = ?;`,
-      [supplier.tenNhaCungCap, supplier.diaChi, supplier.mail, supplier.soDienThoai, supplier.maNhaCungCap]);
+           sodienthoai   = ?
+       WHERE manhacungcap = ?;`,
+      [tennhacungcap, diachi, mail, sodienthoai, manhacungcap]);
 
     return {message: "Supplier updated", success: true};
 
@@ -59,13 +62,13 @@ async function updateSupplier(conn, supplier) {
   }
 }
 
-async function deleteSupplier(conn, supplier) {
+async function deleteSupplier(conn, {manhacungcap}) {
   try {
     const [result] = await conn.query(
       `DELETE
-       FROM ptpm_doitac.nhaCungCap
-       WHERE maNhaCungCap = ?;`,
-      [supplier.maNhaCungCap]);
+       FROM nhacungcap
+       WHERE manhacungcap = ?;`,
+      [manhacungcap]);
 
     return {message: "Supplier deleted", success: true};
 
