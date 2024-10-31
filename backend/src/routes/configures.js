@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts} = require('../models/products')
-const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure, getProductConfigures} = require("../models/configures");
+const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts} = require('../models/quanLySanPham/products')
+const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure, getProductConfigures} = require("../models/quanLySanPham/configures");
 
 router.route("/")
 .get(async function (req, res) {

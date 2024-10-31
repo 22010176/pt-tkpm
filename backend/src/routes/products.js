@@ -1,7 +1,26 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
+const path = require("path")
 
-const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts, insertMultipleProducts} = require('../models/products')
+const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts, insertMultipleProducts, updateProductImage} = require('../models/quanLySanPham/products')
+
+const multer = require("multer");
+const {v4} = require("uuid");
+
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "../../images/products"),
+  filename: function (req, file, cb) {
+    console.log(file)
+    return cb(null, `${file.fieldname}_${v4()}${path.extname(file.originalname)}`)
+  },
+})
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 1024
+  }
+})
 
 router.route("/")
 .get(async function (req, res) {
@@ -36,12 +55,15 @@ router.post("/add-multiple", async function (req, res) {
   res.json(result)
 })
 
-router.post("/upload-img/:productID", async function (req, res) {
-  const productID = req.params.productID
-
-
+router.post("/upload-img/:maDanhMucSanPham", upload.single("hinhAnh"), async function (req, res) {
+  const result = await updateProductImage(res.locals.conn, {
+    maDanhMucSanPham: req.params.maDanhMucSanPham,
+    hinhAnh: '/images/products/' + req.file.filename
+  })
   await res.locals.conn.destroy()
-  res.json({})
+
+
+  res.json(result)
 })
 
 module.exports = router

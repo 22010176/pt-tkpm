@@ -1,13 +1,14 @@
 const express = require("express")
 const cors = require('cors')
 
+const {authAccount, authPermission, getAllPerm} = require('./src/utilities/permissions')
 const app = express()
+
 const port = 3001
 
 const {parseToken} = require('./src/utilities/validateToken')
 const pool = require('./src/models')
-
-const {authAccount, authPermission, getAllPerm} = require('./src/utilities/permissions')
+const path = require("node:path");
 
 
 setInterval(() => {
@@ -16,6 +17,7 @@ setInterval(() => {
 
 async function initialDBConnection(req, res, next) {
   console.log(req.method.padEnd(10, " "), req.path)
+
   try {
     res.locals.conn = await pool.getConnection()
   } catch (e) {
@@ -38,9 +40,10 @@ async function parseAccountData(req, res, next) {
 }
 
 app.use(cors())
-app.use(express.static("public"))
 app.use(express.urlencoded({extended: true, limit: "100mb"}))
 app.use(express.json({limit: "100mb"}))
+app.use('/images', express.static(path.join(__dirname, 'images')))
+
 
 app.use(parseAccountData)
 app.use(initialDBConnection)
@@ -87,7 +90,6 @@ app.all('/*', async (req, res) => {
   await res.locals.conn.destroy()
   res.json({success: false, message: "not found entry"})
 });
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)

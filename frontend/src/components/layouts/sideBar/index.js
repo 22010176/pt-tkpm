@@ -24,7 +24,7 @@ const navLinks = [
     ]
   },
   {
-    title: "Nhập xuất", force: true, eventKey: "nhapXuat", icon: faWarehouse, links: [
+    title: "Nhập xuất", force: true, eventKey: "NhapXuatPage", icon: faWarehouse, links: [
       {title: "Nhập kho", force: true, eventKey: "QuanLyNhapKho", link: "/nhap-kho", visible: true,},
       {title: "Nhập kho", force: true, eventKey: "QuanLyNhapKho", link: "/nhap-kho/them", visible: false,},
       {title: "Xuất kho", force: true, eventKey: "QuanLyXuatKho", link: "/xuat-kho", visible: true,},

@@ -7,7 +7,7 @@ const pool = mysql2.createPool({
   database: process.env.db_database || 'ptpm_taiKhoan',
   password: process.env.db_password || "admin",
   waitForConnections: true,
-  connectionLimit: 10000,
+  connectionLimit: 10,
   maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
   idleTimeout: 20, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit: 0,

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertAttribute, getAttributes, updateAttribute, deleteAttribute} = require('../models/product-attributes')
+const {insertAttribute, getAttributes, updateAttribute, deleteAttribute} = require('../models/quanLySanPham/product-attributes')
 
 router.route("/:attribute")
 // Lay du lieu thuoc tinh

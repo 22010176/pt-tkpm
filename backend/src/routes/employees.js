@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertEmployee, getEmployees, deleteEmployee, updateEmployee, getEmployeeWithoutAccount, insertMultipleEmployees} = require("../models/employees")
-const {insertMultipleConfigures} = require("../models/configures");
+const {insertEmployee, getEmployees, deleteEmployee, updateEmployee, getEmployeeWithoutAccount, insertMultipleEmployees} = require("../models/quanLyTaiKhoan/employees")
+const {insertMultipleConfigures} = require("../models/quanLySanPham/configures");
 
 router.route("/")
 .get(async function (req, res) {

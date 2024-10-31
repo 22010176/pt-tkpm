@@ -1,7 +1,7 @@
 import {createContext, useContext, useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCirclePlus, faArrowRotateRight, faMagnifyingGlass, faPencil, faTrashCan, faRectangleList, faFileExcel, faFileExport} from '@fortawesome/free-solid-svg-icons'
-import {Modal, Button, Form, ModalBody, ModalFooter, FormGroup, FormControl, Image, FormLabel, FormSelect, InputGroup} from 'react-bootstrap'
+import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faRectangleList, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Image, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
@@ -20,35 +20,33 @@ import GroupShadow from '../../../components/Forms/GroupShadow'
 import {colToName} from "../../../utilities/others";
 import {deleteProduct, getProducts, insertProduct, updateProduct, updateProductImage} from "../../../api/products";
 import {getProductAttributes} from "../../../api/product-attributes";
-import {deleteConfigure, getConfigures, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/configures";
+import {deleteConfigure, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/configures";
 import InputGroupText from "react-bootstrap/InputGroupText";
 
 const defaultSanPham = {
   maDanhMucSanPham: "", tenDanhMucSanPham: "", chipXuLy: "", dungLuongPin: "", kichThuongManHinh: "", cameraTruoc: "", cameraSau: "", phienBanHeDieuHanh: "", thoiGianBaoHanh: "", hinhAnh: "", xuatXu: "", heDieuHanh: "", thuongHieu: "",
 }
 
-const spHeader = [{key: "Mã SP", value: "maDanhMucSanPham"}, {key: "Tên sản phẩm", value: "tenDanhMucSanPham"}, {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"}, {key: "Thương hiệu", value: "tenThuongHieu"}, {key: "Hệ điều hành", value: "tenHeDieuHanh"}, {key: "Xuất xứ", value: "tenXuatXu"},
+const spHeader = [
+  {key: "Mã SP", value: "maDanhMucSanPham"},
+  {key: "Tên sản phẩm", value: "tenDanhMucSanPham"},
+  {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"},
+  {key: "Thương hiệu", value: "tenthuonghieu"},
+  {key: "Hệ điều hành", value: "tenhedieuhanh"},
+  {key: "Xuất xứ", value: "tenxuatxu"},
 
   {key: "Tồn kho", value: "soLuong"},
 
 //   hide
-  {key: "thuongHieu", value: "thuongHieu", hide: true}, {key: "heDieuHanh", value: "heDieuHanh", hide: true}, {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}]
+  {key: "thuongHieu", value: "thuongHieu", hide: true},
+  {key: "heDieuHanh", value: "heDieuHanh", hide: true},
+  {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}]
 
 
 const imeiHeader = [{key: "IMEI", value: "imei"}, {key: "Mã phiếu nhập", value: "phieuNhap"}, {key: "Mã phiếu xuất", value: "phieuXuat"}, {key: "Tình trạng", value: "tinhTrang"},]
 
 const defaultCauHinh = {maCauHinh: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: ""}
-const chHeader = [
-  {key: "RAM", value: "dungLuongRam"},
-  {key: "ROM", value: "dungLuongRom"},
-  {key: "Màu sắc", value: "tenMauSac"},
-  {key: "Giá nhập", value: "giaNhap"},
-  {key: "Giá xuất", value: "giaXuat"},
-  {key: "maCauHinh", value: "maCauHinh", hide: true},
-  {key: "ram", value: "ram", hide: true},
-  {key: "rom", value: "rom", hide: true},
-  {key: "mauSac", value: "mauSac", hide: true},
-]
+const chHeader = [{key: "RAM", value: "dungLuongRam"}, {key: "ROM", value: "dungLuongRom"}, {key: "Màu sắc", value: "tenMauSac"}, {key: "Giá nhập", value: "giaNhap"}, {key: "Giá xuất", value: "giaXuat"}, {key: "maCauHinh", value: "maCauHinh", hide: true}, {key: "ram", value: "ram", hide: true}, {key: "rom", value: "rom", hide: true}, {key: "mauSac", value: "mauSac", hide: true},]
 
 const SanPhamContext = createContext({})
 
@@ -154,23 +152,22 @@ function SanPham() {
 function InsertSanPhamModal({onHide, onSubmit, ...props}) {
   // const DataContext = createContext({})
   const [modal, setModal] = useState()
-  const [data, setData] = useState({})
+  const [data, setData] = useState({...defaultSanPham})
 
   async function onInsert() {
-    // if (data.maDanhMucSanPham) {
-    //   await updateProduct(data)
-    //   setModal('cauHinh')
-    //   return
-    // }
+    if (data.maDanhMucSanPham) {
+      await updateProduct(data)
+      setModal('cauHinh')
+      return
+    }
 
-    await updateProductImage(data)
-    // let result = await insertProduct(data)
-    //
-    // if (!result.success || result.body.length === 0) return;
-    //
-    // setData(result.body[0])
-    // if (typeof onSubmit === 'function') onSubmit()
-    // setModal('cauHinh')
+    let result = await insertProduct(data)
+
+    if (!result.success || result.body.length === 0) return;
+
+    setData(result.body[0])
+    if (typeof onSubmit === 'function') onSubmit()
+    setModal('cauHinh')
   }
 
   async function onClose() {
@@ -178,7 +175,6 @@ function InsertSanPhamModal({onHide, onSubmit, ...props}) {
     console.log(result)
     if (typeof onHide === 'function') onHide()
   }
-
 
   return (<>
     <Modal {...props} scrollable centered size='xl' backdrop="static">
@@ -210,6 +206,8 @@ function UpdateSanPhamModal({onHide, onSubmit, ...prop}) {
 
   async function onUpdate() {
     const result = await updateProduct(data)
+
+    if (typeof data?.hinhAnh !== 'string') await updateProductImage(data)
 
     if (!result.success) return;
 
@@ -286,7 +284,8 @@ function SanPhamForm({data, setData, ...props}) {
   return (<Form className='d-flex gap-5 mx-5 justify-content-center'>
     <FormGroup className='d-flex flex-column gap-3 ' style={{width: "40%"}}>
       <InputShadow type='file' onChange={onDataChange.bind({}, "hinhAnh")}/>
-      <Image className='w-100 h-100 shadow' src={data?.hinhAnh && URL.createObjectURL(data?.hinhAnh)}/>
+      <Image className='w-100 h-100 shadow'
+             src={typeof data?.hinhAnh === 'string' ? data?.hinhAnh : data?.hinhAnh && URL.createObjectURL(data?.hinhAnh)}/>
       {/*src={img}*/}
     </FormGroup>
     <FormGroup className='d-flex gap-4 flex-wrap w-100'>

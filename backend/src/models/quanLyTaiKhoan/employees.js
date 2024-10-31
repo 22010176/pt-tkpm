@@ -1,9 +1,10 @@
 async function getEmployees(conn) {
   try {
-    const [result] = await conn.query(`SELECT nV.maNhanVien, nv.hoTen, nV.gioiTinh, nV.ngaySinh, nV.mail, nV.soDienThoai, nQ.tenNhomQuyen
-                                       FROM ptpm_taikhoan.nhanVien nV
-                                                LEFT JOIN ptpm_taikhoan.taiKhoan tK on nV.maNhanVien = tK.nhanVien
-                                                LEFT JOIN ptpm_taikhoan.nhomQuyen nQ on tK.vaiTro = nQ.maNhomQuyen;`)
+    const [result] = await conn.query(
+      `SELECT nv.manhanvien, nv.hoten, nv.gioitinh, nv.ngaysinh, nv.mail, nv.sodienthoai, nq.tennhomquyen,nq.tenhienthi
+       FROM ptpm_taikhoan.nhanvien nv
+                LEFT JOIN ptpm_taikhoan.taikhoan tk ON nv.manhanvien = tk.nhanvien
+                LEFT JOIN ptpm_taikhoan.nhomquyen nq ON tk.vaitro = nq.manhomquyen;`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
@@ -12,10 +13,10 @@ async function getEmployees(conn) {
 
 async function getEmployeeWithoutAccount(conn) {
   try {
-    const [result] = await conn.query(`SELECT n.maNhanVien, n.hoTen, n.mail
-                                       FROM ptpm_taiKhoan.nhanVien n
-                                                LEFT JOIN ptpm_taiKhoan.taikhoan t ON t.nhanVien = n.maNhanVien
-                                       WHERE t.maTaiKhoan IS NULL;`)
+    const [result] = await conn.query(`SELECT n.manhanvien, n.hoten, n.mail
+                                       FROM ptpm_taikhoan.nhanvien n
+                                                LEFT JOIN ptpm_taikhoan.taikhoan t ON t.nhanvien = n.manhanvien
+                                       WHERE t.mataikhoan IS NULL;`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
@@ -24,7 +25,7 @@ async function getEmployeeWithoutAccount(conn) {
 
 async function insertEmployee(conn, {hoTen, ngaySinh, soDienThoai, gioiTinh, mail}) {
   try {
-    const [result] = await conn.query(`INSERT INTO ptpm_taikhoan.nhanvien (hoTen, ngaySinh, soDienThoai, gioiTinh, mail)
+    const [result] = await conn.query(`INSERT INTO ptpm_taikhoan.nhanvien (hoten, ngaysinh, sodienthoai, gioitinh, mail)
                                        VALUES (?, ?, ?, ?, ?);`, [hoTen, ngaySinh, soDienThoai, gioiTinh, mail])
     return {message: "Employee added", success: true}
   } catch (e) {
@@ -36,7 +37,7 @@ async function insertEmployee(conn, {hoTen, ngaySinh, soDienThoai, gioiTinh, mai
 async function insertMultipleEmployees(conn, employees = []) {
   try {
     const [result] = await conn.query(`INSERT INTO ptpm_taikhoan.nhanvien
-                                           (hoTen, ngaySinh, soDienThoai, gioiTinh, mail)
+                                           (hoten, ngaysinh, sodienthoai, gioitinh, mail)
                                        VALUES ?`, [employees.map(({hoTen, ngaySinh, soDienThoai, gioiTinh, mail}) => [hoTen, ngaySinh, soDienThoai, gioiTinh, mail])])
     return {message: "Customers added", success: true};
   } catch (e) {
@@ -48,12 +49,12 @@ async function insertMultipleEmployees(conn, employees = []) {
 async function updateEmployee(conn, employee) {
   try {
     const [result] = await conn.query(`UPDATE ptpm_taikhoan.nhanvien
-                                       SET hoTen       = ?,
-                                           ngaySinh    = ?,
-                                           soDienThoai = ?,
-                                           gioiTinh    = ?,
+                                       SET hoten       = ?,
+                                           ngaysinh    = ?,
+                                           sodienthoai = ?,
+                                           gioitinh    = ?,
                                            mail        = ?
-                                       WHERE maNhanVien = ?;`, [employee.hoTen, employee.ngaySinh, employee.soDienThoai, employee.gioiTinh, employee.mail, employee.maNhanVien])
+                                       WHERE manhanvien = ?;`, [employee.hoTen, employee.ngaySinh, employee.soDienThoai, employee.gioiTinh, employee.mail, employee.maNhanVien])
 
     return {message: "Employee updated", success: true}
   } catch (e) {
@@ -66,7 +67,7 @@ async function deleteEmployee(conn, employee) {
   try {
     const [result] = await conn.query(`DELETE
                                        FROM ptpm_taikhoan.nhanvien
-                                       WHERE maNhanVien = ?;`, [employee.maNhanVien])
+                                       WHERE manhanvien = ?;`, [employee.maNhanVien])
 
     return {message: "Employee deleted", success: true}
   } catch (e) {

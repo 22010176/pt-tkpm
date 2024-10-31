@@ -1,5 +1,5 @@
 const express = require("express")
-const {insertAccount, updateAccount, deleteAccount, getAccounts} = require("../models/accounts");
+const {insertAccount, updateAccount, deleteAccount, getAccounts} = require("../models/quanLyTaiKhoan/accounts");
 const router = express.Router({mergeParams: true})
 
 router.route("/")

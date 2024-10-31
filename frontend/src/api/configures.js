@@ -14,7 +14,7 @@ export async function getConfigures(token = "") {
 }
 
 export async function getProductConfigures(product, token = "") {
-  return fetch(`api/configures/${product}`, {
+  return fetch(`/api/configures/${product}`, {
     method: 'GET',
     headers: {
       'Authorization': token,
@@ -27,7 +27,7 @@ export async function getProductConfigures(product, token = "") {
 }
 
 export async function insertConfigure(config, token = "") {
-  return fetch('api/configures', {
+  return fetch('/api/configures', {
     method: 'POST',
     headers: {
       'Authorization': token,
@@ -41,7 +41,7 @@ export async function insertConfigure(config, token = "") {
 }
 
 export async function updateConfigure(config, token = "") {
-  return fetch('api/configures', {
+  return fetch('/api/configures', {
     method: 'PUT',
     headers: {
       'Authorization': token,
@@ -55,7 +55,7 @@ export async function updateConfigure(config, token = "") {
 }
 
 export async function deleteConfigure(config, token = "") {
-  return fetch('api/configures', {
+  return fetch('/api/configures', {
     method: 'DELETE',
     headers: {
       'Authorization': token,

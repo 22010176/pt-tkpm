@@ -1,5 +1,5 @@
 const express = require('express')
-const {getRoles, getActionsQuery, deleteRole, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertRole, updateRole, insertPermission} = require("../models/roles");
+const {getRoles, getActionsQuery, deleteRole, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertRole, updateRole, insertPermission} = require("../models/quanLyTaiKhoan/roles");
 
 const router = express.Router({mergeParams: true})
 

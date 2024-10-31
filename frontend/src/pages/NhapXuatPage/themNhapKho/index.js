@@ -1,22 +1,7 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  ButtonGroup,
-  CloseButton,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  InputGroup,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-  ModalBody,
-  ModalHeader
-} from 'react-bootstrap'
+import {Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalHeader} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
@@ -24,6 +9,8 @@ import BarCodeScanner from '../../../components/barcode'
 import Page4 from '../../../components/layouts/Page4'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
+import {getProducts} from "../../../api/products";
+import {getConfigures, getProductConfigures} from "../../../api/configures";
 
 const spHeader = [
   {key: "Mã SP", value: "ma"},
@@ -36,13 +23,30 @@ const spHeader = [
 ]
 
 const khoHeader = [
-  {key: "Tên sp", value: "tenSP"},
+  {key: "Tên sp", value: "tenDanhMucSanPham"},
   {key: "Số lượng tồn kho", value: "tonKho"},
+
+  {key: "maDanhMucSanPham", value: "maDanhMucSanPham", hide: true}
 ]
 
 function ThemNhapKho() {
   const [modal, setModal] = useState("")
   const [imei, setImei] = useState({})
+
+  const [sanPham, setSanPham] = useState([])
+  const [cauHinh, setCauHinh] = useState([])
+
+  useEffect(() => {
+    getProducts().then(data => {
+      setSanPham(data.products)
+      console.log(data)
+    })
+  }, [])
+
+
+  useEffect(() => {
+
+  }, [sanPham]);
 
   function scanImei(data) {
     openModal("")
@@ -64,6 +68,11 @@ function ThemNhapKho() {
     elem.value = ""
   }
 
+  function onWarehouseRowClick(row) {
+    if (!row) return;
+    getProductConfigures(row.maDanhMucSanPham).then(data=>setCauHinh(data.configurations))
+  }
+
   return (
     <>
       <Page4
@@ -78,7 +87,7 @@ function ThemNhapKho() {
             </Button>
           </GroupShadow>
         }
-        table={<TableA headers={khoHeader} index/>}
+        table={<TableA headers={khoHeader} data={sanPham} onClick={onWarehouseRowClick}/>}
         tableForm={
           <Form className='p-3 d-flex gap-3 w-100 flex-column'>
             <FormGroup className='d-flex justify-content-between gap-4'>
@@ -96,10 +105,11 @@ function ThemNhapKho() {
             <FormGroup>
               <FormLabel className='fw-bold'>Cấu hình</FormLabel>
               <InputShadow as={FormSelect} size='sm'>
-                <option>test</option>
-                <option>tes2</option>
-                <option>tes4</option>
-                <option>tes5</option>
+                {cauHinh.map((i,j)=><option key={j}>{i.rom}GB - {i.ram}GB - {i.tenMauSac}</option>)}
+                {/*<option>test</option>*/}
+                {/*<option>tes2</option>*/}
+                {/*<option>tes4</option>*/}
+                {/*<option>tes5</option>*/}
               </InputShadow>
             </FormGroup>
 

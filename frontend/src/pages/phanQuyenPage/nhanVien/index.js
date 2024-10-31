@@ -20,16 +20,17 @@ import Error from "../../UtilitesPage/error";
 const nhanVienContext = createContext()
 
 const nhanVienHeader = [
-  {key: "Mã NV", value: "maNhanVien"},
-  {key: "Tên nhân viên", value: "hoTen"},
-  {key: "Giới tính", value: "gioiTinh"},
-  {key: "Ngày sinh", value: "ngaySinh"},
+  {key: "Mã NV", value: "manhanvien"},
+  {key: "Tên nhân viên", value: "hoten"},
+  {key: "Giới tính", value: "gioitinh"},
+  {key: "Ngày sinh", value: "ngaysinh"},
   {key: "Email", value: "mail"},
-  {key: "Số điện thoại", value: "soDienThoai"},
-  {key: "Vai trò", value: "tenNhomQuyen"},
+  {key: "Số điện thoại", value: "sodienthoai"},
+  {key: "Vai trò", value: "tenhienthi"},
+  {key: "tennhomquyen", value: "tennhomquyen", hide: true},
 ]
 const defaultNhanVien = {
-  maNhanVien: "", hoTen: "", gioiTinh: "Nam", ngaySinh: "", mail: "", soDienThoai: ""
+  manhanvien: "", hoten: "", gioitinh: "Nam", ngaysinh: "", mail: "", sodienthoai: ""
 }
 
 function NhanVien() {
@@ -48,7 +49,7 @@ function NhanVien() {
   function updateTableData() {
     setTableData([])
     getEmployees().then(data => setTableData(data.employees.map(i => {
-        i.ngaySinh = i.ngaySinh.split('T')[0]
+        i.ngaysinh = i.ngaysinh?.split('T')[0]
         return i;
       }))
     )
@@ -207,13 +208,13 @@ function NhanVienForm() {
       {/*Tên nhân viên*/}
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Tên nhân viên</Form.Label>
-        <Form.Control type="text" value={data.hoTen} onChange={onDataChange.bind({}, "hoTen")}/>
+        <Form.Control type="text" value={data.hoten} onChange={onDataChange.bind({}, "hoten")}/>
       </Form.Group>
 
       {/*Giới tính*/}
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Giới tính</Form.Label>
-        <InputShadow as={FormSelect} value={data.gioiTinh} onChange={onDataChange.bind({}, "gioiTinh")}>
+        <InputShadow as={FormSelect} value={data.gioitinh} onChange={onDataChange.bind({}, "gioitinh")}>
           <option value="Nam">Nam</option>
           <option value="Nữ">Nữ</option>
         </InputShadow>
@@ -222,13 +223,13 @@ function NhanVienForm() {
       {/*Ngày sinh*/}
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Ngày sinh</Form.Label>
-        <Form.Control type="date" value={data.ngaySinh} onChange={onDataChange.bind({}, "ngaySinh")}/>
+        <Form.Control type="date" value={data.ngaysinh} onChange={onDataChange.bind({}, "ngaysinh")}/>
       </Form.Group>
 
       {/*Số điện thoại*/}
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Số điện thoại</Form.Label>
-        <Form.Control type="email" value={data.soDienThoai} onChange={onDataChange.bind({}, "soDienThoai")}/>
+        <Form.Control type="email" value={data.sodienthoai} onChange={onDataChange.bind({}, "sodienthoai")}/>
       </Form.Group>
 
       {/*Email*/}

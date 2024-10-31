@@ -8,7 +8,7 @@ async function getAllPerm() {
               INNER JOIN ptpm_taikhoan.chucNang cN on q.chucNang = cN.maChucNang
               INNER join ptpm_taikhoan.hanhDong hD on q.hanhDong = hD.maHanhDong
      ORDER BY cN.maChucNang, hD.maHanhDong;`)
-  console.log('permissions', res)
+  // console.log('permissions', res)
 
   return Object.freeze(res)
 }

@@ -3,6 +3,7 @@ import {createContext} from "react"
 export const UserContext = createContext()
 
 export async function checkResponse(response) {
+  console.log(response)
   return response
 }
 

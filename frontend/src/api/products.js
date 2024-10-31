@@ -14,13 +14,22 @@ export async function getProducts(token = "") {
 }
 
 export async function updateProductImage(product, token = "") {
-  console.log(product.hinhAnh.type)
-  // return await fetch(`/api/products/upload-img/${product.maDanhMucSanPham}`, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "image/jpeg",
-  //   }
-  // })
+  console.log(product)
+  if (!product.hinhAnh) return;
+  const formData = new FormData();
+  formData.append("hinhAnh", product.hinhAnh);
+
+  return await fetch(`/api/products/upload-img/${product.maDanhMucSanPham}`, {
+    method: "POST",
+    headers: {
+      // "Content-Type": product.hinhAnh.type,
+      // "Accept": "application/json",
+      "Authorization": token
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
 export async function insertProduct(product, token = "") {
