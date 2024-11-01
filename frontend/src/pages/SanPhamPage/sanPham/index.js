@@ -201,9 +201,9 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
 
     let result = await insertProduct(data)
 
-    if (!result.success || result.body.length === 0) return;
+    // if (!result.success || result.body.length === 0) return;
 
-    setData(result.body[0])
+    // setData(result.body[0])
     if (typeof onSubmit === 'function') onSubmit()
     setModal('cauHinh')
   }

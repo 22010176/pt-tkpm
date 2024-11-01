@@ -39,7 +39,7 @@ async function getEmployeeWithAccount(conn) {
 
 async function insertEmployee(conn, employees = []) {
   try {
-    const [result] = await conn.query(
+    await conn.query(
       `INSERT INTO nhanvien (hoten, ngaysinh, sodienthoai, gioitinh, mail)
        VALUES ?`,
       [
@@ -47,7 +47,15 @@ async function insertEmployee(conn, employees = []) {
           hoten, ngaysinh, sodienthoai, gioitinh, mail
         ])
       ])
-    return {message: "Customers added", success: true};
+
+    const [res] = await conn.query(
+      `SELECT *
+       FROM nhanvien nv
+       WHERE mail IN ?`,
+      [[employees.map(({mail}) => mail)]]
+    )
+
+    return {message: "Customers added", success: true, employees: res};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};
@@ -65,7 +73,7 @@ async function updateEmployee(conn, {hoten, ngaysinh, sodienthoai, gioitinh, mai
            mail        = ?
        WHERE manhanvien = ?;`,
       [hoten, ngaysinh, sodienthoai, gioitinh, mail, manhanvien])
-
+    
     return {message: "Employee updated", success: true}
   } catch (e) {
     console.log(e)

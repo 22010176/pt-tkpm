@@ -62,12 +62,16 @@ DESCRIBE nhanvien;
 SELECT *
 FROM quyenhan
 ORDER BY chucnang, hanhdong;
+SELECT *
+FROM thuonghieu;
 
 
 
-
-
-
+SELECT *
+FROM thuonghieu
+WHERE tenthuonghieu IN ('333', '44')
+ORDER BY mathuonghieu DESC
+LIMIT 3
 
 
 

@@ -46,6 +46,10 @@ function randomDate(start, end) {
   return result.toISOString().split("T")[0];
 }
 
+function formatDate(date) {
+  return date.split("T")[0];
+}
+
 function  randGender() {
   return randInt(0, 1) == 0 ? "Nam" : "Nữ"
 }
@@ -55,5 +59,5 @@ function getRand(arr=[]){
 }
 
 module.exports = {
-  getRand, randInt, randDate, randStr, genPhoneNum, randomEmail,randGender
+  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail,randGender
 }

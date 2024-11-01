@@ -13,50 +13,98 @@ async function getAttributes(conn, attribute) {
 }
 
 async function insertAttribute(conn, attribute, data) {
-  let result;
+  let result = [];
+  console.log(attribute, data)
   try {
     switch (attribute.toLowerCase()) {
       case "xuatxu":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO xuatxu (tenxuatxu)
-           VALUES (?)`, [data.tenxuatxu])
+           VALUES ?`,
+          [data.map(({tenxuatxu}) => [tenxuatxu])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM xuatxu
+           WHERE tenxuatxu IN ?`,
+          [[data.map(({tenxuatxu}) => tenxuatxu)]]
+        )
         break;
       case "hedieuhanh":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO hedieuhanh (tenhedieuhanh)
-           VALUES (?)`, [data.tenhedieuhanh])
+           VALUES ?`,
+          [data.map(({tenhedieuhanh}) => [tenhedieuhanh])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM hedieuhanh
+           WHERE tenhedieuhanh IN ?`,
+          [[data.map(({tenhedieuhanh}) => tenhedieuhanh)]]
+        )
         break;
 
       case "thuonghieu":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO thuonghieu (tenthuonghieu)
-           VALUES (?)`, [data.tenthuonghieu])
+           VALUES ?`,
+          [data.map(({tenthuonghieu}) => [tenthuonghieu])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM thuonghieu
+           WHERE tenthuonghieu IN ?
+          `,
+          [[data.map(({tenthuonghieu}) => tenthuonghieu)]])
         break;
       case "ram":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO ram (dungluongram)
-           VALUES (?)`, [data.dungluongram])
+           VALUES ?`,
+          [data.map(({dungluongram}) => [dungluongram])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM ram
+           WHERE dungluongram IN ?
+           ORDER BY maram DESC
+           LIMIT ?`,
+          [[data.map(({dungluongram}) => dungluongram)]])
         break;
       case "rom":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO rom (dungluongrom)
-           VALUES (?)`, [data.dungluongrom])
+           VALUES ?`,
+          [data.map(({dungluongrom}) => [dungluongrom])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM rom
+           WHERE dungluongrom IN ?`,
+          [[data.map(({dungluongrom}) => dungluongrom)]])
         break;
       case "mausac":
-        [result] = await conn.query(
+        await conn.query(
           `INSERT INTO mausac (tenmausac)
-           VALUES (?)`, [data.tenmausac])
+           VALUES ?`,
+          [data.map(({tenmausac}) => [tenmausac])]);
+
+        [result] = await conn.query(
+          `SELECT *
+           FROM mausac
+           WHERE tenmausac IN ?`,
+          [[data.map(({tenmausac}) => tenmausac)]])
         break;
 
       default:
-        return {error: "Add failed", success: false};
+        return {error: "Add failed", success: false, attributes: []};
     }
   } catch (e) {
     console.log(e)
-    return {error: "Add failed", success: false};
+    return {error: "Add failed", success: false, attributes: []};
   }
 
-  return {message: "Attribute added", success: true};
+  return {message: "Attribute added", success: true, attributes: result};
 }
 
 async function updateAttribute(conn, attribute, data) {
@@ -94,6 +142,7 @@ async function updateAttribute(conn, attribute, data) {
            WHERE marom = ?;`, [data.dungluongrom, data.marom])
         break;
       case "mausac":
+
         [result] = await conn.query(
           `UPDATE mausac
            SET tenmausac = ?
@@ -119,37 +168,43 @@ async function deleteAttribute(conn, attribute, data) {
         [result] = await conn.query(
           `DELETE
            FROM xuatxu
-           WHERE maxuatxu = ?;`, [data.maxuatxu])
+           WHERE maxuatxu IN ?;`,
+          [[data.map(({maxuatxu}) => maxuatxu)]])
         break;
       case "hedieuhanh":
         [result] = await conn.query(
           `DELETE
            FROM hedieuhanh
-           WHERE mahedieuhanh = ?;`, [data.mahedieuhanh])
+           WHERE mahedieuhanh IN ?;`,
+          [[data.map(({mahedieuhanh}) => mahedieuhanh)]])
         break;
       case "thuonghieu":
         [result] = await conn.query(
           `DELETE
            FROM thuonghieu
-           WHERE mathuonghieu = ?;`, [data.mathuonghieu])
+           WHERE mathuonghieu IN ?;`,
+          [[data.map(({mathuonghieu}) => mathuonghieu)]])
         break;
       case "ram":
         [result] = await conn.query(
           `DELETE
            FROM ram
-           WHERE maram = ?;`, [data.maram])
+           WHERE maram IN ?;`,
+          [[data.map(({maram}) => maram)]])
         break;
       case "rom":
         [result] = await conn.query(
           `DELETE
            FROM rom
-           WHERE marom = ?;`, [data.marom])
+           WHERE marom IN ?;`,
+          [[data.map(({marom}) => marom)]])
         break;
       case "mausac":
         [result] = await conn.query(
           `DELETE
            FROM mausac
-           WHERE mamausac = ?;`, [data.mamausac])
+           WHERE mamausac IN ?;`,
+          [[data.map(({mamausac}) => mamausac)]])
         break;
 
       default:

@@ -1,25 +1,38 @@
-import {useEffect, useReducer, useState} from 'react'
 import {
-  Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter, ModalHeader
+  useEffect,
+  useState
+} from 'react'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
 } from 'react-bootstrap'
 import {
-  faCircleInfo, faCircleXmark, faFileExport, faCirclePlus, faPencil, faTrashCan, faMagnifyingGlass, faArrowRotateRight
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faCircleXmark,
+  faFileExport,
+  faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 
-import ToolBtn from '../../../components/buttons/toolBtn'
-import IconBtn from '../../../components/buttons/iconBtn'
-import HeaderModalA from '../../../components/modals/headerA'
-import SideNavbar from '../../../components/layouts/sideBar'
-import SearchForm from '../../../components/Forms/searchForm'
-import TableA from '../../../components/tables/tableA'
-import ContentA from '../../../components/layouts/blockContent'
-import Page3 from '../../../components/layouts/Page3'
-
-import styles from './style.module.css'
-import ExcelExport from '../../../components/excel'
-import colors from '../../../utilities/colors'
-import InputShadow from '../../../components/Forms/InputShadow'
-import GroupShadow from '../../../components/Forms/GroupShadow'
+import ToolBtn        from '../../../components/buttons/toolBtn'
+import IconBtn        from '../../../components/buttons/iconBtn'
+import HeaderModalA   from '../../../components/modals/headerA'
+import SideNavbar     from '../../../components/layouts/sideBar'
+import TableA         from '../../../components/tables/tableA'
+import ContentA       from '../../../components/layouts/blockContent'
+import Page3          from '../../../components/layouts/Page3'
+import colors         from '../../../utilities/colors'
+import InputShadow    from '../../../components/Forms/InputShadow'
+import GroupShadow    from '../../../components/Forms/GroupShadow'
 import {getSuppliers} from "../../../api/suppliers";
 import {getEmployees} from "../../../api/employees";
 
@@ -51,15 +64,15 @@ function NhapKho() {
 
   useEffect(() => {
     getSuppliers().then(data => {
-      setNhaCungCap(data.suppliers)
-      setFormData(src=>({...src, nhaCungCap: data.suppliers[0].maNhaCungCap}))
+      // setNhaCungCap(data.suppliers)
+      // setFormData(src=>({...src, nhaCungCap: data.suppliers[0].maNhaCungCap}))
     })
     getEmployees().then(data => {
-      setNhanVien(data.employees)
-      setFormData(src=>({...src, nhanVien: data.employees[0].maNhanVien}))
+      // setNhanVien(data.employees)
+      // setFormData(src=>({...src, nhanVien: data.employees[0].maNhanVien}))
     })
   }, []);
-console.log(nhanVien,nhaCungCap)
+  console.log(nhanVien, nhaCungCap)
   console.log(formData)
 
   return (<>

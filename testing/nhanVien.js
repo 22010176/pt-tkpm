@@ -2,12 +2,12 @@ const {v4} = require('uuid');
 const {randDate, randStr} = require('./utitlies')
 
 const insertNhanVien = sp => fetch('http://localhost:3001/api/employees', {
-  method:  'POST', headers: {
+  method:  'POST',
+  headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
-.then(console.log)
 
 const getNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   method: 'GET', headers: {
@@ -15,15 +15,14 @@ const getNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   }
 })
 .then(response => response.json())
-.then(content => console.log(content))
 
-const updateNhanVien = sp => fetch('http://localhost:3001/api/employees', {
-  method:  'PUT', headers: {
+const updateNhanVien = nhanVien => fetch('http://localhost:3001/api/employees', {
+  method:  'PUT',
+  headers: {
     'Content-Type': 'application/json'
-  }, body: JSON.stringify(sp)
+  }, body: JSON.stringify(nhanVien)
 })
 .then(response => response.json())
-.then(content => console.log(content))
 
 const deleteNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   method:  'DELETE', headers: {
@@ -31,12 +30,6 @@ const deleteNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
-.then(content => console.log(content))
-
-
-function genNhanVien() {
-  return {hoTen: v4(), ngaySinh: randDate(), soDienThoai: randStr(19), gioiTinh: Math.random() > 0.5 ? "Nam" : "Nữ", mail: v4()}
-}
 
 // insertNhanVien(genNhanVien())
 // deleteSanPham({

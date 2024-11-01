@@ -1,29 +1,56 @@
-import {Children, createContext, useContext, useEffect, useRef, useState} from 'react'
-import {faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faCircleInfo, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+}                        from 'react'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+}                        from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Form, FormControl, FormSelect, Button, Modal, ModalBody, ModalFooter, FormGroup, FormLabel, FormCheck, Table} from 'react-bootstrap'
+import {
+  Button,
+  Form,
+  FormCheck,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Table
+}                        from 'react-bootstrap'
 
-import TableA from '../../../components/tables/tableA'
-import Page2 from '../../../components/layouts/Page2'
+import TableA     from '../../../components/tables/tableA'
+import Page2      from '../../../components/layouts/Page2'
 import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
+import ToolBtn    from '../../../components/buttons/toolBtn'
 
-import InputShadow from '../../../components/Forms/InputShadow'
-import FlexForm from '../../../components/Forms/FlexForm'
-import colors from '../../../utilities/colors'
-import HeaderModalA from '../../../components/modals/headerA'
-import ContentA from '../../../components/layouts/blockContent'
-
-import styles from './style.module.css'
-import {deleteRole, getPermissionData, getRolePermissions, getRoles, insertRole, updateRole} from "../../../api/roles";
-import ErrorModal from "../../../components/modals/errorModal";
+import InputShadow             from '../../../components/Forms/InputShadow'
+import FlexForm                from '../../../components/Forms/FlexForm'
+import colors                  from '../../../utilities/colors'
+import HeaderModalA            from '../../../components/modals/headerA'
+import ContentA                from '../../../components/layouts/blockContent'
+import {
+  deleteRole,
+  getPermissionData,
+  getRolePermissions,
+  getRoles,
+  insertRole,
+  updateRole
+}                              from "../../../api/roles";
+import ErrorModal              from "../../../components/modals/errorModal";
 import {removeVietnameseTones} from "../../../utilities/others";
 
 const tableHd = [{key: "Mã nhóm quyền", value: "maNhomQuyen"}, {key: "Tên nhóm quyền", value: "tenHienThi"}, {key: "Ghi chú", value: "ghiChu"},]
 
 
-function permToStr({maChucNang, tenChucNang, maHanhDong, tenHanhDong}) {
-  return `${maChucNang}_${tenChucNang}_${maHanhDong}_${tenHanhDong}`
+function permToStr({machucnang, tenchucnang, mahanhdong, tenhanhdong}) {
+  return `${machucnang}_${tenchucnang}_${mahanhdong}_${tenhanhdong}`
 }
 
 function parsePermissions(permissions = [], value = false) {
@@ -167,13 +194,13 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
   async function onFormSubmit() {
     console.log((rowClick))
     if (typeof onSubmit === 'function') await onSubmit({
-      maNhomQuyen: +rowClick?.maNhomQuyen,
+      maNhomQuyen:   +rowClick?.maNhomQuyen,
       tenHienThi,
-      tenNhomQuyen: removeVietnameseTones(tenHienThi).replaceAll(' ', '_'),
+      tenNhomQuyen:  removeVietnameseTones(tenHienThi).replaceAll(' ', '_'),
       ghiChu,
       danhSachQuyen: Object.entries(quyenHan)
-      .filter(i => i[1])
-      .map(i => permissions.find(j => permToStr(j) === i[0]))
+                           .filter(i => i[1])
+                           .map(i => permissions.find(j => permToStr(j) === i[0]))
     })
 
     await updateInfo()
@@ -202,13 +229,13 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
               <thead className='fw-bold text-nowrap '>
               <tr>
                 <th>Danh mục chức năng</th>
-                {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenHienThi}</th>)}
+                {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenhienthi}</th>)}
               </tr>
               </thead>
 
               <tbody>
               {features.map((cn, j) => <tr key={j}>
-                <td>{cn.tenHienThi}</td>
+                <td>{cn.tenhienthi}</td>
                 {actions.map((hd, k) => {
                   const key = permToStr({...cn, ...hd})
                   return (
