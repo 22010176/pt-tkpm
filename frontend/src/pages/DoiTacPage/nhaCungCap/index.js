@@ -1,36 +1,62 @@
-import {createContext, useContext, useEffect, useState} from 'react'
-import {faArrowRotateRight, faCircleInfo, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormGroup, FormLabel, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
+import {
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
 
 
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import TableA from '../../../components/tables/tableA'
-import Page2 from '../../../components/layouts/Page2'
-import IconBtn from '../../../components/buttons/iconBtn'
+import SideNavbar   from '../../../components/layouts/sideBar'
+import ToolBtn      from '../../../components/buttons/toolBtn'
+import TableA       from '../../../components/tables/tableA'
+import Page2        from '../../../components/layouts/Page2'
+import IconBtn      from '../../../components/buttons/iconBtn'
 import HeaderModalA from '../../../components/modals/headerA'
-import ErrorModal from '../../../components/modals/errorModal'
-import FlexForm from '../../../components/Forms/FlexForm'
-import InputShadow from '../../../components/Forms/InputShadow'
-import ContentA from '../../../components/layouts/blockContent'
-import colors from '../../../utilities/colors'
-import {deleteSupplier, getSuppliers, insertSupplier, updateSupplier} from "../../../api/suppliers";
+import ErrorModal   from '../../../components/modals/errorModal'
+import FlexForm     from '../../../components/Forms/FlexForm'
+import InputShadow  from '../../../components/Forms/InputShadow'
+import ContentA     from '../../../components/layouts/blockContent'
+import colors       from '../../../utilities/colors'
+import {
+  deleteSupplier,
+  getSuppliers,
+  insertSupplier,
+  updateSupplier
+}                   from "../../../api/suppliers";
 
 const NCCContext = createContext()
-const defaultNCC = {ma: undefined, tenNhaCungCap: "", diaChi: "", mail: "", soDienThoai: ""}
+const defaultNCC = {ma: undefined, tennhacungcap: "", diachi: "", mail: "", sodienthoai: ""}
 
 const nhaCungCapHeader = [
-  {key: "Mã NCC", value: "maNhaCungCap"},
-  {key: "Tên nhà cung cấp", value: "tenNhaCungCap"},
-  {key: "Địa chỉ", value: "diaChi"},
+  {key: "Mã NCC", value: "manhacungcap"},
+  {key: "Tên nhà cung cấp", value: "tennhacungcap"},
+  {key: "Địa chỉ", value: "diachi"},
   {key: "Email", value: "mail"},
-  {key: "Số điện thoại", value: "soDienThoai"},
+  {key: "Số điện thoại", value: "sodienthoai"},
 ]
 
 const lichSuMuaHangHeader = [
   {key: "Ngày nhập hàng", value: "ma"},
   {key: "Mã phiếu nhập hàng", value: "tenNCC"},
-  {key: "Số lượng", value: "diaChi"},
+  {key: "Số lượng", value: "diachi"},
   {key: "Thành tiền", value: "mail"},
   {key: "Ghi chú", value: "sdt"},
 ]
@@ -46,15 +72,15 @@ function NhaCungCapForm() {
     <Form className='mx-5 px-5 my-4'>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label className='fw-bold'>Tên nhà cung cấp</Form.Label>
-        <Form.Control type="text" value={data.tenNhaCungCap} onChange={onDataChange.bind({}, "tenNhaCungCap")}/>
+        <Form.Control type="text" value={data.tennhacungcap} onChange={onDataChange.bind({}, "tennhacungcap")}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label className='fw-bold'>Địa chỉ</Form.Label>
-        <Form.Control type="text" value={data.diaChi} onChange={onDataChange.bind({}, "diaChi")}/>
+        <Form.Control type="text" value={data.diachi} onChange={onDataChange.bind({}, "diachi")}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label className='fw-bold'>Số điện thoại</Form.Label>
-        <Form.Control type="email" value={data.soDienThoai} onChange={onDataChange.bind({}, "soDienThoai")}/>
+        <Form.Control type="email" value={data.sodienthoai} onChange={onDataChange.bind({}, "sodienthoai")}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         <Form.Label className='fw-bold'>Email</Form.Label>
@@ -124,7 +150,7 @@ function NhaCungCap() {
     if (!rowClick) return setModal("error")
     const result = await deleteSupplier(rowClick)
     if (!result.success) return
-    
+
     setFormData({...defaultNCC})
     updateTableData()
   }

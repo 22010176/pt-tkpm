@@ -2,7 +2,8 @@ async function getAttributes(conn, attribute) {
   try {
     const [result] = await conn.query(
       `SELECT *
-       FROM ${attribute}`)
+       FROM ${attribute}
+       LIMIT 100`)
     return {attributes: result, success: true}
 
   } catch (e) {

@@ -61,14 +61,14 @@ import {
 import InputGroupText         from "react-bootstrap/InputGroupText";
 
 const defaultSanPham = {
-  maDanhMucSanPham: "", tenDanhMucSanPham: "", chipXuLy: "", dungLuongPin: "", kichThuongManHinh: "", cameraTruoc: "", cameraSau: "", phienBanHeDieuHanh: "", thoiGianBaoHanh: "", hinhAnh: "", xuatXu: "", heDieuHanh: "", thuongHieu: "",
+  madanhmucsanpham: "", tendanhmucsanpham: "", chipxuly: "", dungluongpin: "", kichthuongmanhinh: "", cameratruoc: "", camerasau: "", phienbanhedieuhanh: "", thoigianbaohanh: "", hinhanh: "", xuatxu: "", hedieuhanh: "", thuonghieu: "",
 }
 
 const spHeader = [
-  {key: "Mã SP", value: "maDanhMucSanPham"}, {key: "Tên sản phẩm", value: "tenDanhMucSanPham"}, {key: "Phiên bản HĐH", value: "phienBanHeDieuHanh"}, {key: "Thương hiệu", value: "tenthuonghieu"}, {key: "Hệ điều hành", value: "tenhedieuhanh"}, {key: "Xuất xứ", value: "tenxuatxu"}, {key: "Tồn kho", value: "soLuong"},
+  {key: "Mã SP", value: "madanhmucsanpham"}, {key: "Tên sản phẩm", value: "tendanhmucsanpham"}, {key: "Phiên bản HĐH", value: "phienbanhedieuhanh"}, {key: "Thương hiệu", value: "tenthuonghieu"}, {key: "Hệ điều hành", value: "tenhedieuhanh"}, {key: "Xuất xứ", value: "tenxuatxu"}, {key: "Tồn kho", value: "soLuong"},
 
 //   hide
-  {key: "thuongHieu", value: "thuongHieu", hide: true}, {key: "heDieuHanh", value: "heDieuHanh", hide: true}, {key: "xuatXu", value: "xuatXu", hide: true}, {key: "chipXuLy", value: "chipXuLy", hide: true}, {key: "dungLuongPin", value: "dungLuongPin", hide: true}, {key: "kichThuongManHinh", value: "kichThuongManHinh", hide: true}, {key: "cameraTruoc", value: "cameraTruoc", hide: true}, {key: "cameraSau", value: "cameraSau", hide: true}, {key: "thoiGianBaoHanh", value: "thoiGianBaoHanh", hide: true}, {key: "hinhAnh", value: "hinhAnh", hide: true}
+  {key: "thuonghieu", value: "thuonghieu", hide: true}, {key: "hedieuhanh", value: "hedieuhanh", hide: true}, {key: "xuatxu", value: "xuatxu", hide: true}, {key: "chipxuly", value: "chipxuly", hide: true}, {key: "dungluongpin", value: "dungluongpin", hide: true}, {key: "kichthuongmanhinh", value: "kichthuongmanhinh", hide: true}, {key: "cameratruoc", value: "cameratruoc", hide: true}, {key: "camerasau", value: "camerasau", hide: true}, {key: "thoigianbaohanh", value: "thoigianbaohanh", hide: true}, {key: "hinhanh", value: "hinhanh", hide: true}
 ]
 
 
@@ -77,16 +77,24 @@ const imeiHeader = [
 ]
 
 const defaultCauHinh = {
-  maCauHinh: undefined, ram: "", rom: "", mauSac: "", giaNhap: "", giaXuat: ""
+  macauhinh: undefined, ram: "", rom: "", mausac: "", gianhap: "", giaxuat: ""
 }
 const chHeader = [
-  {key: "RAM", value: "dungLuongRam"}, {key: "ROM", value: "dungLuongRom"}, {key: "Màu sắc", value: "tenMauSac"}, {key: "Giá nhập", value: "giaNhap"}, {key: "Giá xuất", value: "giaXuat"}, {key: "maCauHinh", value: "maCauHinh", hide: true}, {key: "ram", value: "ram", hide: true}, {key: "rom", value: "rom", hide: true}, {key: "mauSac", value: "mauSac", hide: true},
+  {key: "RAM", value: "dungluongram"},
+  {key: "ROM", value: "dungluongrom"},
+  {key: "Màu sắc", value: "tenmausac"},
+  {key: "Giá nhập", value: "gianhap"},
+  {key: "Giá xuất", value: "giaxuat"},
+  {key: "macauhinh", value: "macauhinh", hide: true},
+  {key: "ram", value: "ram", hide: true},
+  {key: "rom", value: "rom", hide: true},
+  {key: "mausac", value: "mausac", hide: true},
 ]
 
 const SanPhamContext = createContext({})
 
 async function getSanPhamFormData() {
-  return Object.fromEntries(await Promise.all(['xuatXu', 'thuongHieu', 'heDieuHanh', 'ram', 'rom', 'mauSac']
+  return Object.fromEntries(await Promise.all(['xuatxu', 'thuonghieu', 'hedieuhanh', 'ram', 'rom', 'mausac']
   .map(async i => [i, await getProductAttributes(i).then(i => i.attributes)])));
 }
 
@@ -193,17 +201,18 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
   }, [props.show]);
 
   async function onInsert() {
-    if (data.maDanhMucSanPham) {
+    if (data.madanhmucsanpham) {
       await updateProduct(data)
       setModal('cauHinh')
       return
     }
 
     let result = await insertProduct(data)
+    console.log(result)
 
-    // if (!result.success || result.body.length === 0) return;
+    if (!result.success || result.body.length === 0) return;
 
-    // setData(result.body[0])
+    setData(result.body[0])
     if (typeof onSubmit === 'function') onSubmit()
     setModal('cauHinh')
   }
@@ -243,7 +252,7 @@ function UpdateSanPhamModal({onHide, onSubmit, formData, ...prop}) {
   async function onUpdate() {
     const result = await updateProduct(data)
 
-    if (typeof data?.hinhAnh !== 'string') await updateProductImage(data)
+    if (typeof data?.hinhanh !== 'string') await updateProductImage(data)
 
     if (!result.success) return;
 
@@ -271,45 +280,45 @@ function UpdateSanPhamModal({onHide, onSubmit, formData, ...prop}) {
 }
 
 
-function SanPhamForm({data, setData, xuatXu = [], heDieuHanh = [], thuongHieu = []}) {
+function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = []}) {
   useEffect(() => {
-    setData(data => ({...data, xuatXu: xuatXu[0]?.maXuatXu, heDieuHanh: heDieuHanh[0]?.maHeDieuHanh, thuongHieu: thuongHieu[0]?.maThuongHieu}))
-  }, [xuatXu, heDieuHanh, thuongHieu])
+    setData(data => ({...data, xuatxu: xuatxu[0]?.maxuatxu, hedieuhanh: hedieuhanh[0]?.mahedieuhanh, thuonghieu: thuonghieu[0]?.mathuonghieu}))
+  }, [xuatxu, hedieuhanh, thuonghieu])
 
   function onDataChange(key, e) {
-    if (key !== 'hinhAnh') return setData(src => ({...src, [key]: e.target.value}))
+    if (key !== 'hinhanh') return setData(src => ({...src, [key]: e.target.value}))
     setData(src => ({...src, [key]: e.target.files[0]}))
   }
 
   return (<Form className='d-flex gap-5 mx-5 justify-content-center'>
     <FormGroup className='d-flex flex-column gap-3 ' style={{width: "40%"}}>
-      <InputShadow type='file' onChange={onDataChange.bind({}, "hinhAnh")}/>
+      <InputShadow type='file' onChange={onDataChange.bind({}, "hinhanh")}/>
       <Image className='w-100 h-100 shadow'
-             src={typeof data?.hinhAnh === 'string' ? data.hinhAnh : data?.hinhAnh && URL.createObjectURL(data.hinhAnh)}/>
+             src={typeof data?.hinhanh === 'string' ? data.hinhanh : data?.hinhanh && URL.createObjectURL(data.hinhanh)}/>
       {/*src={img}*/}
     </FormGroup>
     <FormGroup className='d-flex gap-4 flex-wrap w-100'>
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Tên sản phẩm</FormLabel>
-        <InputShadow type='text' value={data?.tenDanhMucSanPham} onChange={onDataChange.bind({}, "tenDanhMucSanPham")}/>
+        <InputShadow type='text' value={data?.tendanhmucsanpham} onChange={onDataChange.bind({}, "tendanhmucsanpham")}/>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Xuất xứ</FormLabel>
-        <InputShadow as={FormSelect} value={data?.xuatXu} onChange={onDataChange.bind({}, "xuatXu")}>
-          {xuatXu?.map((i, j) => <option key={j} value={i.maXuatXu}>{i.tenXuatXu}</option>)}
+        <InputShadow as={FormSelect} value={data?.xuatxu} onChange={onDataChange.bind({}, "xuatxu")}>
+          {xuatxu?.map((i, j) => <option key={j} value={i.maxuatxu}>{i.tenxuatxu}</option>)}
         </InputShadow>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Chip xử lý</FormLabel>
-        <InputShadow type='text' value={data?.chipXuLy} onChange={onDataChange.bind({}, "chipXuLy")}/>
+        <InputShadow type='text' value={data?.chipxuly} onChange={onDataChange.bind({}, "chipxuly")}/>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Dung lượng pin</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.dungLuongPin} onChange={onDataChange.bind({}, "dungLuongPin")}/>
+          <FormControl type='number' min={0} value={data?.dungluongpin} onChange={onDataChange.bind({}, "dungluongpin")}/>
           <InputGroup.Text>mAh</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -317,7 +326,7 @@ function SanPhamForm({data, setData, xuatXu = [], heDieuHanh = [], thuongHieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Kích thước màn</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.kichThuongManHinh} onChange={onDataChange.bind({}, "kichThuongManHinh")}/>
+          <FormControl type='number' min={0} value={data?.kichthuongmanhinh} onChange={onDataChange.bind({}, "kichthuongmanhinh")}/>
           <InputGroup.Text>inch</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -325,7 +334,7 @@ function SanPhamForm({data, setData, xuatXu = [], heDieuHanh = [], thuongHieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Camera trước</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.cameraTruoc} onChange={onDataChange.bind({}, "cameraTruoc")}/>
+          <FormControl type='number' min={0} value={data?.cameratruoc} onChange={onDataChange.bind({}, "cameratruoc")}/>
           <InputGroup.Text>MP</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -333,42 +342,42 @@ function SanPhamForm({data, setData, xuatXu = [], heDieuHanh = [], thuongHieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Camera sau</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.cameraSau} onChange={onDataChange.bind({}, "cameraSau")}/>
+          <FormControl type='number' min={0} value={data?.camerasau} onChange={onDataChange.bind({}, "camerasau")}/>
           <InputGroup.Text>MP</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Hệ điều hành</FormLabel>
-        <InputShadow as={FormSelect} value={data?.heDieuHanh} onChange={onDataChange.bind({}, "heDieuHanh")}>
-          {heDieuHanh?.map((i, j) => <option key={j} value={i.maHeDieuHanh}>{i.tenHeDieuHanh}</option>)}
+        <InputShadow as={FormSelect} value={data?.hedieuhanh} onChange={onDataChange.bind({}, "hedieuhanh")}>
+          {hedieuhanh?.map((i, j) => <option key={j} value={i.mahedieuhanh}>{i.tenhedieuhanh}</option>)}
         </InputShadow>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Phiên bản hệ điều hành</FormLabel>
-        <InputShadow type='text' value={data?.phienBanHeDieuHanh} onChange={onDataChange.bind({}, "phienBanHeDieuHanh")}/>
+        <InputShadow type='text' value={data?.phienbanhedieuhanh} onChange={onDataChange.bind({}, "phienbanhedieuhanh")}/>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Thời gian bảo hành</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.thoiGianBaoHanh} onChange={onDataChange.bind({}, "thoiGianBaoHanh")}/>
+          <FormControl type='number' min={0} value={data?.thoigianbaohanh} onChange={onDataChange.bind({}, "thoigianbaohanh")}/>
           <InputGroup.Text>Tháng</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Thương hiệu</FormLabel>
-        <InputShadow as={FormSelect} value={data?.thuongHieu} onChange={onDataChange.bind({}, "thuongHieu")}>
-          {thuongHieu?.map((i, j) => <option key={j} value={i.maThuongHieu}>{i.tenThuongHieu}</option>)}
+        <InputShadow as={FormSelect} value={data?.thuonghieu} onChange={onDataChange.bind({}, "thuonghieu")}>
+          {thuonghieu?.map((i, j) => <option key={j} value={i.mathuonghieu}>{i.tenthuonghieu}</option>)}
         </InputShadow>
       </FormGroup>
     </FormGroup>
   </Form>)
 }
 
-function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [], mauSac = [],}) {
+function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [], mausac = [],}) {
   const [data, setData] = useState({...defaultCauHinh})
   const [tableData, setTableData] = useState([]);
 
@@ -378,12 +387,12 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }, [sanPham])
 
   function resetCauHinh() {
-    setData({maCauHinh: undefined, ram: ram[0]?.maRam, rom: rom[0]?.maRom, mauSac: mauSac[0]?.maMauSac, giaNhap: "", giaXuat: ""})
+    setData({macauhinh: undefined, ram: ram[0]?.maram, rom: rom[0]?.marom, mausac: mausac[0]?.mamausac, gianhap: "", giaxuat: ""})
   }
 
   function updateInfo() {
     setTableData([])
-    getProductConfigures(sanPham?.maDanhMucSanPham).then(data => setTableData(data.configurations))
+    getProductConfigures(sanPham?.madanhmucsanpham).then(data => setTableData(data.configurations))
   }
 
   function onHide() {
@@ -395,8 +404,8 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }
 
   async function onInsertCauHinh() {
-    const configure = {danhMucSanPham: sanPham.maDanhMucSanPham, ...data}
-    const result = await insertConfigure(configure)
+    const configure = {danhmucsanpham: sanPham.madanhmucsanpham, ...data}
+    const result = await insertConfigure([configure])
 
     if (!result.success) return;
 
@@ -405,7 +414,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }
 
   async function onUpdateCauHinh() {
-    const configure = {danhMucSanPham: sanPham.maDanhMucSanPham, ...data}
+    const configure = {danhmucsanpham: sanPham.madanhmucsanpham, ...data}
     const result = await updateConfigure(configure)
 
     if (!result.success) return;
@@ -439,7 +448,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
           <FormLabel className='fw-bold'>RAM</FormLabel>
           <GroupShadow>
             <FormSelect value={data?.ram} onChange={onDataChange.bind({}, "ram")}>
-              {ram.map((i, j) => <option key={j} value={i.maRam}>{i.dungLuongRam}</option>)}
+              {ram.map((i, j) => <option key={j} value={i.maram}>{i.dungluongram}</option>)}
             </FormSelect>
             <InputGroupText>GB</InputGroupText>
           </GroupShadow>
@@ -449,7 +458,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
           <FormLabel className='fw-bold'>ROM</FormLabel>
           <GroupShadow>
             <FormSelect value={data?.rom} onChange={onDataChange.bind({}, "rom")}>
-              {rom.map((i, j) => <option key={j} value={i.maRom}>{i.dungLuongRom}</option>)}
+              {rom.map((i, j) => <option key={j} value={i.marom}>{i.dungluongrom}</option>)}
             </FormSelect>
             <InputGroupText>GB</InputGroupText>
           </GroupShadow>
@@ -459,15 +468,15 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
         <FormGroup className='flex-grow-1'>
           <FormLabel className='fw-bold'>Màu sắc</FormLabel>
 
-          <InputShadow as={FormSelect} value={data?.mauSac} onChange={onDataChange.bind({}, "mauSac")}>
-            {mauSac.map((i, j) => <option key={j} value={i.maMauSac}>{i.tenMauSac}</option>)}
+          <InputShadow as={FormSelect} value={data?.mausac} onChange={onDataChange.bind({}, "mausac")}>
+            {mausac.map((i, j) => <option key={j} value={i.mamausac}>{i.tenmausac}</option>)}
           </InputShadow>
         </FormGroup>
 
         <FormGroup className='shadow-1 flex-grow-1'>
           <FormLabel className='fw-bold'>Giá nhập</FormLabel>
           <InputGroup className='shadow-sm'>
-            <FormControl type='number' value={data?.giaNhap} onChange={onDataChange.bind({}, "giaNhap")}/>
+            <FormControl type='number' value={data?.gianhap} onChange={onDataChange.bind({}, "gianhap")}/>
             <InputGroup.Text>VNĐ</InputGroup.Text>
           </InputGroup>
         </FormGroup>
@@ -475,7 +484,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
         <FormGroup className='flex-grow-1'>
           <FormLabel className='fw-bold'>Giá xuất</FormLabel>
           <GroupShadow className='shadow-sm'>
-            <FormControl type='number' value={data?.giaXuat} onChange={onDataChange.bind({}, "giaXuat")}/>
+            <FormControl type='number' value={data?.giaxuat} onChange={onDataChange.bind({}, "giaxuat")}/>
             <InputGroup.Text>VNĐ</InputGroup.Text>
           </GroupShadow>
         </FormGroup>

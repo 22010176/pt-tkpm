@@ -28,7 +28,7 @@ async function insertCustomer(conn, customers = []) {
   }
 }
 
-async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) {
+async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai, mail, makhachhang}) {
   try {
     await conn.query(
       `UPDATE khachhang
@@ -38,7 +38,7 @@ async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai
            sodienthoai  = ?,
            mail         = ?
        WHERE makhachhang = ?;`,
-      [tenkhachhang, ngaysinh, diachi, sodienthoai, mail])
+      [tenkhachhang, ngaysinh, diachi, sodienthoai, mail, makhachhang])
     return {message: "Customer updated", success: true}
   } catch (e) {
     console.log((e))

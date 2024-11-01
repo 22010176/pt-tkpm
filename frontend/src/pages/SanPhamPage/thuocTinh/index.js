@@ -1,60 +1,83 @@
-import {useEffect, useState} from 'react'
+import {
+  useEffect,
+  useState
+}                        from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faAndroid, faEmpire,} from '@fortawesome/free-brands-svg-icons'
-import {faBrush, faComputer, faMemory, faMountainCity, faX} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, InputGroup, Modal} from 'react-bootstrap'
+import {
+  faAndroid,
+  faEmpire,
+}                        from '@fortawesome/free-brands-svg-icons'
+import {
+  faBrush,
+  faComputer,
+  faMemory,
+  faMountainCity,
+  faX
+}                        from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  InputGroup,
+  Modal
+}                        from 'react-bootstrap'
 
-import Page1 from '../../../components/layouts/Page1'
+import Page1        from '../../../components/layouts/Page1'
 import ThuocTinhBtn from '../../../components/buttons/thuocTinhBtn'
-import TableA from '../../../components/tables/tableA'
+import TableA       from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
-import SideNavbar from '../../../components/layouts/sideBar'
-import GroupShadow from '../../../components/Forms/GroupShadow'
-import {deleteProductAttributes, getProductAttributes, insertProductAttributes, updateProductAttributes} from "../../../api/product-attributes";
+import SideNavbar   from '../../../components/layouts/sideBar'
+import GroupShadow  from '../../../components/Forms/GroupShadow'
+import {
+  deleteProductAttributes,
+  getProductAttributes,
+  insertProductAttributes,
+  updateProductAttributes
+}                   from "../../../api/product-attributes";
 
 const keys = {
   thuongHieu: "thuongHieu",
-  xuatXu: "xuatXu",
+  xuatXu:     "xuatXu",
   heDieuHanh: "heDieuHanh",
-  ram: "ram",
-  rom: "rom",
-  mauSac: "mauSac"
+  ram:        "ram",
+  rom:        "rom",
+  mauSac:     "mauSac"
 }
 
 const headers = {
   [keys.thuongHieu]: [
-    {key: "Mã thương hiệu", value: "maThuongHieu"},
-    {key: "Tên thương hiệu", value: "tenThuongHieu"}
+    {key: "Mã thương hiệu", value: "mathuonghieu"},
+    {key: "Tên thương hiệu", value: "tenthuonghieu"}
   ],
-  [keys.xuatXu]: [
-    {key: "Mã xuất xứ", value: "maXuatXu"},
-    {key: "Tên xuất xứ", value: "tenXuatXu"}
+  [keys.xuatXu]:     [
+    {key: "Mã xuất xứ", value: "maxuatxu"},
+    {key: "Tên xuất xứ", value: "tenxuatxu"}
   ],
   [keys.heDieuHanh]: [
-    {key: "Mã hệ điều hành", value: "maHeDieuHanh"},
-    {key: "Tên hệ điều hành", value: "tenHeDieuHanh"}
+    {key: "Mã hệ điều hành", value: "mahedieuhanh"},
+    {key: "Tên hệ điều hành", value: "tenhedieuhanh"}
   ],
-  [keys.ram]: [
-    {key: "Mã ram", value: "maRam"},
-    {key: "Dung lượng ram (GB)", value: "dungLuongRam"}
+  [keys.ram]:        [
+    {key: "Mã ram", value: "maram"},
+    {key: "Dung lượng ram (GB)", value: "dungluongram"}
   ],
-  [keys.rom]: [
-    {key: "Mã rom", value: "maRom"},
-    {key: "Dung lượng rom (GB)", value: "dungLuongRom"}
+  [keys.rom]:        [
+    {key: "Mã rom", value: "marom"},
+    {key: "Dung lượng rom (GB)", value: "dungluongrom"}
   ],
-  [keys.mauSac]: [
-    {key: "Mã màu sắc", value: "maMauSac"},
-    {key: "Tên màu sắc", value: "tenMauSac"}
+  [keys.mauSac]:     [
+    {key: "Mã màu sắc", value: "mamausac"},
+    {key: "Tên màu sắc", value: "tenmausac"}
   ]
 }
 
 const defaultValues = {
-  [keys.thuongHieu]: {maThuongHieu: undefined, tenThuongHieu: "",},
-  [keys.xuatXu]: {maXuatXu: undefined, tenXuatXu: ""},
-  [keys.heDieuHanh]: {maHeDieuHanh: undefined, tenHeDieuHanh: ""},
-  [keys.ram]: {maRam: undefined, dungLuongRam: ""},
-  [keys.rom]: {maRom: undefined, dungLuongRom: ""},
-  [keys.mauSac]: {maMauSac: undefined, tenMauSac: ""}
+  [keys.thuongHieu]: {mathuonghieu: undefined, tenthuonghieu: "",},
+  [keys.xuatXu]:     {maxuatxu: undefined, tenxuatxu: ""},
+  [keys.heDieuHanh]: {mahedieuhanh: undefined, tenhedieuhanh: ""},
+  [keys.ram]:        {maram: undefined, dungluongram: ""},
+  [keys.rom]:        {marom: undefined, dungluongrom: ""},
+  [keys.mauSac]:     {mamausac: undefined, tenmausac: ""}
 }
 
 function ThuocTinh() {
@@ -62,11 +85,11 @@ function ThuocTinh() {
 
   const formData = {
     [keys.thuongHieu]: useState({...defaultValues[keys.thuongHieu]}),
-    [keys.xuatXu]: useState({...defaultValues[keys.xuatXu]}),
+    [keys.xuatXu]:     useState({...defaultValues[keys.xuatXu]}),
     [keys.heDieuHanh]: useState({...defaultValues[keys.heDieuHanh]}),
-    [keys.ram]: useState({...defaultValues[keys.ram]}),
-    [keys.rom]: useState({...defaultValues[keys.rom]}),
-    [keys.mauSac]: useState({...defaultValues[keys.mauSac]})
+    [keys.ram]:        useState({...defaultValues[keys.ram]}),
+    [keys.rom]:        useState({...defaultValues[keys.rom]}),
+    [keys.mauSac]:     useState({...defaultValues[keys.mauSac]})
   }
 
   const [tableData, setTableData] = useState([])
@@ -101,7 +124,8 @@ function ThuocTinh() {
   }
 
   async function onInsert(e) {
-    const result = await insertProductAttributes(modal, formData[modal][0], "")
+    console.log('ddd', formData[modal][0])
+    const result = await insertProductAttributes(modal, [formData[modal][0]], "")
     console.log({result, a: formData[modal][0]})
     if (!result) return
 
@@ -120,7 +144,7 @@ function ThuocTinh() {
   }
 
   async function onDelete(e) {
-    const result = await deleteProductAttributes(modal, formData[modal][0], "")
+    const result = await deleteProductAttributes(modal, [formData[modal][0]], "")
     console.log({result, a: formData[modal][0]})
     if (!result) return
 
@@ -182,28 +206,28 @@ function ThuocTinh() {
                 <Form.Group className='d-flex gap-2 align-items-center'>
                   <GroupShadow>
                     {modal === keys.thuongHieu
-                      && <FormControl value={formData[keys.thuongHieu][0].tenThuongHieu}
-                                      onChange={onChange.bind({}, "tenThuongHieu")}/>}
+                      && <FormControl value={formData[keys.thuongHieu][0].tenthuonghieu}
+                                      onChange={onChange.bind({}, "tenthuonghieu")}/>}
 
                     {modal === keys.xuatXu
-                      && <FormControl value={formData[keys.xuatXu][0].tenXuatXu}
-                                      onChange={onChange.bind({}, "tenXuatXu")}/>}
+                      && <FormControl value={formData[keys.xuatXu][0].tenxuatxu}
+                                      onChange={onChange.bind({}, "tenxuatxu")}/>}
 
                     {modal === keys.heDieuHanh
-                      && <FormControl value={formData[keys.heDieuHanh][0].tenHeDieuHanh}
-                                      onChange={onChange.bind({}, "tenHeDieuHanh")}/>}
+                      && <FormControl value={formData[keys.heDieuHanh][0].tenhedieuhanh}
+                                      onChange={onChange.bind({}, "tenhedieuhanh")}/>}
 
                     {modal === keys.ram
-                      && <FormControl type='number' value={formData[keys.ram][0].dungLuongRam}
-                                      onChange={onChange.bind({}, "dungLuongRam")}/>}
+                      && <FormControl type='number' value={formData[keys.ram][0].dungluongram}
+                                      onChange={onChange.bind({}, "dungluongram")}/>}
 
                     {modal === keys.rom
-                      && <FormControl type='number' value={formData[keys.rom][0].dungLuongRom}
-                                      onChange={onChange.bind({}, "dungLuongRom")}/>}
+                      && <FormControl type='number' value={formData[keys.rom][0].dungluongrom}
+                                      onChange={onChange.bind({}, "dungluongrom")}/>}
 
                     {modal === keys.mauSac
-                      && <FormControl value={formData[keys.mauSac][0].tenMauSac}
-                                      onChange={onChange.bind({}, "tenMauSac")}/>}
+                      && <FormControl value={formData[keys.mauSac][0].tenmausac}
+                                      onChange={onChange.bind({}, "tenmausac")}/>}
 
                     {(modal === keys.rom || modal === keys.ram) && <InputGroup.Text>GB</InputGroup.Text>}
                   </GroupShadow>

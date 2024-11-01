@@ -46,7 +46,7 @@ import {
 import ErrorModal              from "../../../components/modals/errorModal";
 import {removeVietnameseTones} from "../../../utilities/others";
 
-const tableHd = [{key: "Mã nhóm quyền", value: "maNhomQuyen"}, {key: "Tên nhóm quyền", value: "tenHienThi"}, {key: "Ghi chú", value: "ghiChu"},]
+const tableHd = [{key: "Mã nhóm quyền", value: "manhomquyen"}, {key: "Tên nhóm quyền", value: "tenhienthi"}, {key: "Ghi chú", value: "ghichu"},]
 
 
 function permToStr({machucnang, tenchucnang, mahanhdong, tenhanhdong}) {
@@ -115,7 +115,7 @@ function PhanQuyen() {
 
   async function onDeleteRole() {
     if (!rowClick) return setModal("error")
-    const result = await deleteRole(rowClick)
+    const result = await deleteRole([rowClick])
 
     if (!result.success) return
 
@@ -164,8 +164,8 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
   const rowClick = useContext(FormContext)
 
 
-  const [tenHienThi, setTenHienThi] = useState("")
-  const [ghiChu, setGhiChu] = useState("")
+  const [tenhienthi, setTenHienThi] = useState("")
+  const [ghichu, setGhiChu] = useState("")
   const [quyenHan, setQuyenHan] = useState({})
 
   const [actions, setActions] = useState([])
@@ -177,10 +177,10 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
   }, [rowClick])
 
   async function updateInfo() {
-    setTenHienThi(rowClick?.tenHienThi || "")
-    setGhiChu(rowClick?.ghiChu || "")
+    setTenHienThi(rowClick?.tenhienthi || "")
+    setGhiChu(rowClick?.ghichu || "")
 
-    const {permissions} = rowClick ? await getRolePermissions(rowClick?.maNhomQuyen) : []
+    const {permissions} = rowClick ? await getRolePermissions(rowClick?.manhomquyen) : []
 
     getPermissionData().then(data => {
       setActions(data.actions)
@@ -193,15 +193,18 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
 
   async function onFormSubmit() {
     console.log((rowClick))
-    if (typeof onSubmit === 'function') await onSubmit({
-      maNhomQuyen:   +rowClick?.maNhomQuyen,
-      tenHienThi,
-      tenNhomQuyen:  removeVietnameseTones(tenHienThi).replaceAll(' ', '_'),
-      ghiChu,
-      danhSachQuyen: Object.entries(quyenHan)
-                           .filter(i => i[1])
-                           .map(i => permissions.find(j => permToStr(j) === i[0]))
-    })
+    if (typeof onSubmit === 'function') {
+
+      await onSubmit({
+        manhomquyen:   +rowClick?.manhomquyen,
+        tenhienthi,
+        tennhomquyen:  removeVietnameseTones(tenhienthi).replaceAll(' ', '_'),
+        ghichu,
+        danhsachquyen: Object.entries(quyenHan)
+                             .filter(i => i[1])
+                             .map(i => permissions.find(j => permToStr(j) === i[0]))
+      })
+    }
 
     await updateInfo()
   }
@@ -215,12 +218,12 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
           <FormGroup className='d-flex gap-5'>
             <FormGroup className='w-50'>
               <FormLabel className='fw-bold'>Tên nhóm quyền</FormLabel>
-              <InputShadow value={tenHienThi} onChange={e => setTenHienThi(e.target.value)}/>
+              <InputShadow value={tenhienthi} onChange={e => setTenHienThi(e.target.value)}/>
             </FormGroup>
 
             <FormGroup className='w-50'>
               <FormLabel className='fw-bold'>Ghi chú</FormLabel>
-              <InputShadow value={ghiChu} onChange={e => setGhiChu(e.target.value)}/>
+              <InputShadow value={ghichu} onChange={e => setGhiChu(e.target.value)}/>
             </FormGroup>
           </FormGroup>
 
@@ -271,12 +274,12 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
 //         <FormGroup className='d-flex gap-5'>
 //           <FormGroup className='w-50'>
 //             <FormLabel className='fw-bold'>Tên nhóm quyền</FormLabel>
-//             <InputShadow value={tenHienThi} onChange={e => setTenHienThi(e.target.value)}/>
+//             <InputShadow value={tenhienthi} onChange={e => setTenHienThi(e.target.value)}/>
 //           </FormGroup>
 //
 //           <FormGroup className='w-50'>
 //             <FormLabel className='fw-bold'>Ghi chú</FormLabel>
-//             <InputShadow value={ghiChu} onChange={e => setGhiChu(e.target.value)}/>
+//             <InputShadow value={ghichu} onChange={e => setGhiChu(e.target.value)}/>
 //           </FormGroup>
 //         </FormGroup>
 //
@@ -285,13 +288,13 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
 //             <thead className='fw-bold text-nowrap '>
 //             <tr>
 //               <th>Danh mục chức năng</th>
-//               {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenHienThi}</th>)}
+//               {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenhienthi}</th>)}
 //             </tr>
 //             </thead>
 //
 //             <tbody>
 //             {features.map((cn, j) => <tr key={j}>
-//               <td>{cn.tenHienThi}</td>
+//               <td>{cn.tenhienthi}</td>
 //               {actions.map((hd, k) => {
 //                 const key = permToStr({...cn, ...hd})
 //                 return <td key={k}>

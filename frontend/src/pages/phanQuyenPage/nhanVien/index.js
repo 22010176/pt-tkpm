@@ -1,21 +1,43 @@
-import {createContext, useContext, useEffect, useState} from 'react'
-import {UserContext} from "../../../api/authentication";
-import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormSelect, Modal} from 'react-bootstrap'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+}                        from 'react'
+import {UserContext}     from "../../../api/authentication";
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faFileExcel,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+}                        from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormSelect,
+  Modal
+}                        from 'react-bootstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
-import InputShadow from '../../../components/Forms/InputShadow'
-import TableA from '../../../components/tables/tableA'
-import Page2 from '../../../components/layouts/Page2'
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import FlexForm from '../../../components/Forms/FlexForm'
-import colors from '../../../utilities/colors'
+import InputShadow  from '../../../components/Forms/InputShadow'
+import TableA       from '../../../components/tables/tableA'
+import Page2        from '../../../components/layouts/Page2'
+import SideNavbar   from '../../../components/layouts/sideBar'
+import ToolBtn      from '../../../components/buttons/toolBtn'
+import FlexForm     from '../../../components/Forms/FlexForm'
+import colors       from '../../../utilities/colors'
 import HeaderModalA from '../../../components/modals/headerA'
-import {deleteEmployee, getEmployees, insertEmployee, updateEmployee} from "../../../api/employees";
-import {insertCustomer} from "../../../api/customers";
-import ErrorModal from "../../../components/modals/errorModal";
-import Error from "../../UtilitesPage/error";
+import {
+  deleteEmployee,
+  getEmployees,
+  insertEmployee,
+  updateEmployee
+}                   from "../../../api/employees";
+import ErrorModal   from "../../../components/modals/errorModal";
 
 const nhanVienContext = createContext()
 
@@ -69,7 +91,7 @@ function NhanVien() {
 
 
   async function onInsert() {
-    const result = await insertEmployee(formData)
+    const result = await insertEmployee([formData])
     console.log(result)
     if (!result.success) return
 
@@ -90,7 +112,7 @@ function NhanVien() {
 
   async function onDelete() {
     if (!rowClick) return setModal("error")
-    const result = await deleteEmployee(rowClick)
+    const result = await deleteEmployee([rowClick])
 
     if (!result.success) return
 

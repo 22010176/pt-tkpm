@@ -1,40 +1,66 @@
-import {createContext, useContext, useEffect, useState} from 'react'
-import {faArrowRotateRight, faCircleInfo, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormGroup, FormLabel, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
+import {
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
 
-import ContentA from '../../../components/layouts/blockContent'
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import Page2 from '../../../components/layouts/Page2'
-import TableA from '../../../components/tables/tableA'
-import IconBtn from '../../../components/buttons/iconBtn'
+import ContentA     from '../../../components/layouts/blockContent'
+import SideNavbar   from '../../../components/layouts/sideBar'
+import ToolBtn      from '../../../components/buttons/toolBtn'
+import Page2        from '../../../components/layouts/Page2'
+import TableA       from '../../../components/tables/tableA'
+import IconBtn      from '../../../components/buttons/iconBtn'
 import HeaderModalA from '../../../components/modals/headerA'
-import ErrorModal from '../../../components/modals/errorModal'
-import FlexForm from '../../../components/Forms/FlexForm'
-import InputShadow from '../../../components/Forms/InputShadow'
-import colors from '../../../utilities/colors'
-import {deleteCustomer, getCustomers, insertCustomer, updateCustomer} from "../../../api/customers";
+import ErrorModal   from '../../../components/modals/errorModal'
+import FlexForm     from '../../../components/Forms/FlexForm'
+import InputShadow  from '../../../components/Forms/InputShadow'
+import colors       from '../../../utilities/colors'
+import {
+  deleteCustomer,
+  getCustomers,
+  insertCustomer,
+  updateCustomer
+}                   from "../../../api/customers";
 
 const KhachHangContext = createContext()
 
 const defaultKhachHang = {
-  maKhachHang: undefined, tenKhachHang: "", ngaySinh: new Date().toISOString().split('T')[0], diaChi: "", mail: "", soDienThoai: ""
+  makhachhang: undefined, tenkhachhang: "", ngaysinh: new Date().toISOString().split('T')[0], diachi: "", mail: "", sodienthoai: ""
 }
 
 const khachHangHeader = [
-  {key: "Mã KH", value: "maKhachHang"},
-  {key: "Tên khách hàng", value: "tenKhachHang"},
-  {key: "Ngày sinh", value: "ngaySinh"},
-  {key: "Địa chỉ", value: "diaChi"},
+  {key: "Mã KH", value: "makhachhang"},
+  {key: "Tên khách hàng", value: "tenkhachhang"},
+  {key: "Ngày sinh", value: "ngaysinh"},
+  {key: "Địa chỉ", value: "diachi"},
   {key: "Email", value: "mail"},
-  {key: "Số điện thoại", value: "soDienThoai"},
-  {key: "Ngày tham gia", value: "ngayThamGia"},
+  {key: "Số điện thoại", value: "sodienthoai"},
+  {key: "Ngày tham gia", value: "ngaythamgia"},
 ]
 
 const lichSuMuaHangHeader = [
   {key: "Ngày mua hàng", value: "ma"},
   {key: "Mã phiếu xuất hàng", value: "tenNCC"},
-  {key: "Số lượng", value: "diaChi"},
+  {key: "Số lượng", value: "diachi"},
   {key: "Thành tiền", value: "mail"},
   {key: "Ghi chú", value: "sdt"},
 ]
@@ -50,19 +76,19 @@ function KhachHangForm() {
     <Form className='mx-5 px-5 my-4'>
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Tên khách hàng</Form.Label>
-        <Form.Control type="text" value={data.tenKhachHang} onChange={onDataChange.bind({}, "tenKhachHang")}/>
+        <Form.Control type="text" value={data.tenkhachhang} onChange={onDataChange.bind({}, "tenkhachhang")}/>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Ngày sinh</Form.Label>
-        <Form.Control type="date" value={data.ngaySinh} onChange={onDataChange.bind({}, "ngaySinh")}/>
+        <Form.Control type="date" value={data.ngaysinh} onChange={onDataChange.bind({}, "ngaysinh")}/>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Địa chỉ</Form.Label>
-        <Form.Control type="text" value={data.diaChi} onChange={onDataChange.bind({}, "diaChi")}/>
+        <Form.Control type="text" value={data.diachi} onChange={onDataChange.bind({}, "diachi")}/>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Số điện thoại</Form.Label>
-        <Form.Control type="email" value={data.soDienThoai} onChange={onDataChange.bind({}, "soDienThoai")}/>
+        <Form.Control type="email" value={data.sodienthoai} onChange={onDataChange.bind({}, "sodienthoai")}/>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='fw-bold'>Email</Form.Label>
@@ -92,8 +118,8 @@ function KhachHang() {
     setTableData([])
     getCustomers().then(data => setTableData(data.customers.map(customer => {
 
-      customer.ngaySinh = customer.ngaySinh.split('T')[0]
-      customer.ngayThamGia = customer.ngayThamGia.split('T')[0]
+      customer.ngaysinh = customer.ngaysinh.split('T')[0]
+      customer.ngaythamgia = customer.ngaythamgia.split('T')[0]
       return customer;
     })))
 
@@ -116,7 +142,7 @@ function KhachHang() {
   }
 
   async function onInsertKhachHang() {
-    const result = await insertCustomer(formData)
+    const result = await insertCustomer([formData])
     console.log(result)
 
     if (!result.success) return
@@ -139,7 +165,7 @@ function KhachHang() {
   async function onDeleteKhachHang() {
     if (!rowClick) return openModal("error")
 
-    const result = await deleteCustomer(rowClick)
+    const result = await deleteCustomer([rowClick])
 
     if (!result.success) return
 

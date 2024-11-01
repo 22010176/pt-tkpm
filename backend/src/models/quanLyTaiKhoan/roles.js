@@ -74,9 +74,9 @@ async function getRolePermissions(conn, manhomquyen) {
 
 async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen = []}) {
   try {
-    await conn.query(
+    console.log(await conn.query(
       `INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
-       VALUES (?, ?, ?);`, [tennhomquyen, tenhienthi, ghichu])
+       VALUES (?, ?, ?);`, [tennhomquyen, tenhienthi, ghichu]))
 
     const [result] = await conn.query(
       `SELECT manhomquyen
@@ -86,6 +86,7 @@ async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen
          AND ghichu = ?
        ORDER BY manhomquyen DESC
        LIMIT 1;`, [tennhomquyen, tenhienthi, ghichu])
+    if (danhsachquyen.length === 0) return {message: "Role added", success: true, body: result};
 
     const {manhomquyen} = result[0]
     await conn.query(
@@ -94,6 +95,7 @@ async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen
       [danhsachquyen.map(({maquyenhan}) => [manhomquyen, maquyenhan])])
     return {message: "Role added", success: true, body: result};
   } catch (e) {
+    console.log(e)
     return {message: "Added fail", success: false};
   }
 }

@@ -1,5 +1,4 @@
 const {v4} = require('uuid');
-const {randInt} = require('./utitlies')
 
 const insertSanPham = sp => fetch('http://localhost:3001/api/products', {
   method: 'POST', headers: {
@@ -17,7 +16,7 @@ const getSanPham = sp => fetch('http://localhost:3001/api/products', {
 .then(response => response.json())
 .then(content => console.log(content))
 
-// getSanPham()
+getSanPham()
 
 const updateSanPham = sp => fetch('http://localhost:3001/api/products', {
   method: 'PUT', headers: {
@@ -46,7 +45,7 @@ function genSanPham(maDanhMucSanPham = 0) {
 //   chipXuLy: "test", dungLuongPin: 29, kichThuongManHinh: 33, cameraTruoc: 44, cameraSau: 55, phienBanHeDieuHanh: "dd", thoiGianBaoHanh: 44, hinhAnh: "@!12", xuatXu: 14, heDieuHanh: 9, thuongHieu: 22, maDanhMucSanPham: 7
 // })
 
-insertSanPham(genSanPham()).then(console.log)
+
 // for (let i = 0; i < 5000; ++i) insertSanPham(genSanPham()).then(console.log)
 // getProducts
 // .then(getSanPham)

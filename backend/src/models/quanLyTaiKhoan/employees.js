@@ -4,7 +4,8 @@ async function getEmployees(conn) {
       `SELECT nv.*, nq.*
        FROM nhanvien nv
                 LEFT JOIN taikhoan tk ON nv.manhanvien = tk.nhanvien
-                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen;`)
+                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen
+       LIMIT 100;`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
@@ -17,7 +18,8 @@ async function getEmployeeWithoutAccount(conn) {
       `SELECT n.*
        FROM nhanvien n
                 LEFT JOIN taikhoan t ON t.nhanvien = n.manhanvien
-       WHERE t.mataikhoan IS NULL;`)
+       WHERE t.mataikhoan IS NULL
+       LIMIT 100;`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
@@ -30,7 +32,8 @@ async function getEmployeeWithAccount(conn) {
       `SELECT n.*
        FROM nhanvien n
                 LEFT JOIN taikhoan t ON t.nhanvien = n.manhanvien
-       WHERE t.mataikhoan IS NOT NULL;`)
+       WHERE t.mataikhoan IS NOT NULL
+       LIMIT 100;`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
@@ -73,7 +76,7 @@ async function updateEmployee(conn, {hoten, ngaysinh, sodienthoai, gioitinh, mai
            mail        = ?
        WHERE manhanvien = ?;`,
       [hoten, ngaysinh, sodienthoai, gioitinh, mail, manhanvien])
-    
+
     return {message: "Employee updated", success: true}
   } catch (e) {
     console.log(e)

@@ -24,18 +24,20 @@ async function insertProduct(conn, {
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu])
 
-    const [result] = await conn.query(`SELECT *
-                                       FROM danhmucsanpham
-                                       WHERE tendanhmucsanpham = ?
-                                         AND chipxuly = ?
-                                         AND dungluongpin = ?
-                                         AND kichthuongmanhinh = ?
-                                         AND cameratruoc = ?
-                                         AND camerasau = ?
-                                         AND phienbanhedieuhanh = ?
-                                         AND thoigianbaohanh = ?
-                                       ORDER BY madanhmucsanpham DESC
-                                       LIMIT 1;`, [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh])
+    const [result] = await conn.query(
+      `SELECT *
+       FROM danhmucsanpham
+       WHERE tendanhmucsanpham = ?
+         AND chipxuly = ?
+         AND dungluongpin = ?
+         AND kichthuongmanhinh = ?
+         AND cameratruoc = ?
+         AND camerasau = ?
+         AND phienbanhedieuhanh = ?
+         AND thoigianbaohanh = ?
+       ORDER BY madanhmucsanpham DESC
+       LIMIT 1;`,
+      [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh])
     console.log(result)
     return {message: "Products added", success: true, body: result};
   } catch (e) {
@@ -65,19 +67,20 @@ async function updateProduct(conn, {
   tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham
 }) {
   try {
-    await conn.query(`UPDATE danhmucsanpham
-                      SET tendanhmucsanpham  = ?,
-                          chipxuly           = ?,
-                          dungluongpin       = ?,
-                          kichthuongmanhinh  = ?,
-                          cameratruoc        = ?,
-                          camerasau          = ?,
-                          phienbanhedieuhanh = ?,
-                          thoigianbaohanh    = ?,
-                          xuatxu             = ?,
-                          hedieuhanh         = ?,
-                          thuonghieu         = ?
-                      WHERE madanhmucsanpham = ?;`,
+    await conn.query(
+      `UPDATE danhmucsanpham
+       SET tendanhmucsanpham  = ?,
+           chipxuly           = ?,
+           dungluongpin       = ?,
+           kichthuongmanhinh  = ?,
+           cameratruoc        = ?,
+           camerasau          = ?,
+           phienbanhedieuhanh = ?,
+           thoigianbaohanh    = ?,
+           xuatxu             = ?,
+           hedieuhanh         = ?,
+           thuonghieu         = ?
+       WHERE madanhmucsanpham = ?;`,
       [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham])
     return {message: "Product updated", success: true}
   } catch (e) {
@@ -88,9 +91,10 @@ async function updateProduct(conn, {
 
 async function deleteProduct(conn, {madanhmucsanpham}) {
   try {
-    await conn.query(`DELETE
-                      FROM danhmucsanpham
-                      WHERE madanhmucsanpham = ?`, [madanhmucsanpham])
+    await conn.query(
+      `DELETE
+       FROM danhmucsanpham
+       WHERE madanhmucsanpham = ?`, [madanhmucsanpham])
     return {message: "Product deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

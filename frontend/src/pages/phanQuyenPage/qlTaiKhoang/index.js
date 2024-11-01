@@ -1,40 +1,61 @@
-import {createContext, useContext, useEffect, useState} from 'react'
-import {faCirclePlus, faPencil, faTrashCan, faArrowRotateRight, faCircleInfo, faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {
+  createContext,
+  useEffect,
+  useState
+}                        from 'react'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+}                        from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Form, FormControl, FormSelect, Button, Modal, ModalBody, ModalFooter, FormGroup, FormLabel} from 'react-bootstrap'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  Modal,
+  ModalBody,
+  ModalFooter
+}                        from 'react-bootstrap'
 
-import TableA from '../../../components/tables/tableA'
-import Page2 from '../../../components/layouts/Page2'
-import SideNavbar from '../../../components/layouts/sideBar'
-import ToolBtn from '../../../components/buttons/toolBtn'
-import SearchForm2 from '../../../components/Forms/searchForm2'
-import InputShadow from '../../../components/Forms/InputShadow'
-import FlexForm from '../../../components/Forms/FlexForm'
-import colors from '../../../utilities/colors'
-import HeaderModalA from '../../../components/modals/headerA'
-import GroupShadow from '../../../components/Forms/GroupShadow'
-import ContentA from '../../../components/layouts/blockContent'
-
-import styles from './style.module.css'
-import {getEmployeeNoAccount, getEmployees} from "../../../api/employees";
-import {getRoles} from "../../../api/roles";
-import {deleteAccount, getAccounts, insertAccount, updateAccount} from "../../../api/accounts";
-import ErrorModal from "../../../components/modals/errorModal";
+import TableA                 from '../../../components/tables/tableA'
+import Page2                  from '../../../components/layouts/Page2'
+import SideNavbar             from '../../../components/layouts/sideBar'
+import ToolBtn                from '../../../components/buttons/toolBtn'
+import InputShadow            from '../../../components/Forms/InputShadow'
+import FlexForm               from '../../../components/Forms/FlexForm'
+import colors                 from '../../../utilities/colors'
+import HeaderModalA           from '../../../components/modals/headerA'
+import ContentA               from '../../../components/layouts/blockContent'
+import {getEmployeeNoAccount} from "../../../api/employees";
+import {getRoles}             from "../../../api/roles";
+import {
+  deleteAccount,
+  getAccounts,
+  insertAccount,
+  updateAccount
+}                             from "../../../api/accounts";
+import ErrorModal             from "../../../components/modals/errorModal";
 
 const tableHd = [
-  {key: "Mã tài khoản", value: "maTaiKhoan"},
-  {key: "Mã nhân viên", value: "maNhanVien"},
-  {key: "Tên nhân viên", value: "hoTen"},
+  {key: "Mã tài khoản", value: "mataikhoan"},
+  {key: "Mã nhân viên", value: "manhanvien"},
+  {key: "Tên nhân viên", value: "hoten"},
   {key: "Email", value: "mail"},
-  {key: "Nhóm quyền", value: "tenHienThi"},
-  {key: "tenQuyen", value: "tenNhomQuyen", hide: true},
-  {key: "maQuyen", value: "maNhomQuyen", hide: true},
+  {key: "Nhóm quyền", value: "tenhienthi"},
+  {key: "tenQuyen", value: "tennhomquyen", hide: true},
+  {key: "maQuyen", value: "manhomquyen", hide: true},
   // { key: "Trạng thái", value: "" },
 ]
 
 const chonNhanVienHD = [
-  {key: "Mã nv", value: "maNhanVien"},
-  {key: "Tên nhân viên", value: "hoTen"},
+  {key: "Mã nv", value: "manhanvien"},
+  {key: "Tên nhân viên", value: "hoten"},
   {key: "Email", value: "mail", hide: true},
 ]
 
@@ -120,15 +141,15 @@ function QuanLyTaiKhoan() {
 }
 
 function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
-  const [nhomQuyen, setNhomQuyen] = useState([])
-  const [vaiTro, setVaiTro] = useState()
+  const [nhomquyen, setNhomQuyen] = useState([])
+  const [vaitro, setVaiTro] = useState()
 
   useEffect(() => {
     getRoles().then(data => setNhomQuyen(data.roles))
   }, []);
 
   useEffect(() => {
-    setVaiTro(account?.maNhomQuyen)
+    setVaiTro(account?.manhomquyen)
   }, [account])
 
   function onCloseModal() {
@@ -136,7 +157,7 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
   }
 
   async function onUpdate() {
-    const data = {vaiTro: +vaiTro, maTaiKhoan: +account?.maTaiKhoan}
+    const data = {vaitro: +vaitro, mataikhoan: +account?.mataikhoan}
     console.log(data)
     const result = await updateAccount(data)
     console.log(result)
@@ -155,12 +176,12 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
           <FormGroup className='d-flex gap-5'>
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Mã nhân viên</FormLabel>
-              <InputShadow disabled value={account?.maNhanVien}/>
+              <InputShadow disabled value={account?.manhanvien}/>
             </FormGroup>
 
             <FormGroup className='_w-100'>
               <FormLabel className='fw-bold'>Tên nhân viên</FormLabel>
-              <InputShadow disabled value={account?.hoTen}/>
+              <InputShadow disabled value={account?.hoten}/>
             </FormGroup>
           </FormGroup>
 
@@ -171,8 +192,8 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
             </FormGroup>
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
-              <InputShadow as={FormSelect} value={vaiTro} onChange={e => setVaiTro(e.target.value)}>
-                {nhomQuyen?.map(({maNhomQuyen, tenHienThi}, j) => <option key={j} value={maNhomQuyen}>{tenHienThi}</option>)}
+              <InputShadow as={FormSelect} value={vaitro} onChange={e => setVaiTro(e.target.value)}>
+                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j} value={manhomquyen}>{tenhienthi}</option>)}
               </InputShadow>
             </FormGroup>
           </FormGroup>
@@ -190,18 +211,18 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
 
 function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
   const [nhanVien, setNhanVien] = useState([]);
-  const [nhomQuyen, setNhomQuyen] = useState([])
+  const [nhomquyen, setNhomQuyen] = useState([])
 
   const [filterForm, setFilterForm] = useState("")
 
   // disabledForm
-  const [maNhanVien, setMaNhanVien] = useState()
-  const [hoTen, setHoTen] = useState("")
+  const [manhanvien, setMaNhanVien] = useState()
+  const [hoten, setHoTen] = useState("")
   const [mail, setMail] = useState("")
 
   // active Form
-  const [matKhau, setMatKhau] = useState("")
-  const [vaiTro, setVaiTro] = useState("")
+  const [matkhau, setMatKhau] = useState("")
+  const [vaitro, setVaiTro] = useState("")
 
 
   useEffect(() => {
@@ -224,13 +245,13 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
   }
 
   function onRowClick(data) {
-    setMaNhanVien(data?.maNhanVien)
-    setHoTen(data?.hoTen)
+    setMaNhanVien(data?.manhanvien)
+    setHoTen(data?.hoten)
     setMail(data?.mail)
   }
 
   async function onInsert() {
-    const result = await insertAccount({matKhau, vaiTro: vaiTro || nhomQuyen?.[0]?.maNhomQuyen, nhanVien: maNhanVien})
+    const result = await insertAccount({matkhau, vaitro: vaitro || nhomquyen?.[0]?.manhomquyen, nhanvien: manhanvien})
     if (!result.success) return;
 
     if (typeof onSubmit === "function") onSubmit()
@@ -253,7 +274,7 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
           </FormGroup>
 
           <ContentA className="h-100">
-            <TableA subtable index={false} headers={chonNhanVienHD} data={nhanVien.filter(i => (i.hoTen + i.mail).includes(filterForm))} onClick={onRowClick}/>
+            <TableA subtable index={false} headers={chonNhanVienHD} data={nhanVien.filter(i => (i.hoten + i.mail).includes(filterForm))} onClick={onRowClick}/>
             <div style={{height: "10000px"}}></div>
           </ContentA>
         </div>
@@ -262,12 +283,12 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
           <FormGroup className='d-flex gap-5'>
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Mã nhân viên</FormLabel>
-              <InputShadow disabled value={maNhanVien} onChange={onChange.bind({}, setMaNhanVien)}/>
+              <InputShadow disabled value={manhanvien} onChange={onChange.bind({}, setMaNhanVien)}/>
             </FormGroup>
 
             <FormGroup className='_w-100'>
               <FormLabel className='fw-bold'>Tên nhân viên</FormLabel>
-              <InputShadow disabled value={hoTen} onChange={onChange.bind({}, setHoTen)}/>
+              <InputShadow disabled value={hoten} onChange={onChange.bind({}, setHoTen)}/>
             </FormGroup>
           </FormGroup>
 
@@ -279,15 +300,15 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
 
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Mật khẩu</FormLabel>
-              <InputShadow type="password" value={matKhau} onChange={onChange.bind({}, setMatKhau)}/>
+              <InputShadow type="password" value={matkhau} onChange={onChange.bind({}, setMatKhau)}/>
             </FormGroup>
           </FormGroup>
 
           <FormGroup className='d-flex gap-5'>
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
-              <InputShadow as={FormSelect} value={vaiTro} onChange={onChange.bind({}, setVaiTro)}>
-                {nhomQuyen?.map(({maNhomQuyen, tenHienThi}, j) => <option key={j} value={maNhomQuyen}>{tenHienThi}</option>)}
+              <InputShadow as={FormSelect} value={vaitro} onChange={onChange.bind({}, setVaiTro)}>
+                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j} value={manhomquyen}>{tenhienthi}</option>)}
               </InputShadow>
             </FormGroup>
           </FormGroup>
