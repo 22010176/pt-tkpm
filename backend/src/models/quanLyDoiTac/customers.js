@@ -11,29 +11,15 @@ async function getCustomers(conn) {
   }
 }
 
-async function insertCustomer(conn, {
-  tenkhachhang, ngaysinh, diachi, sodienthoai, mail
-}) {
-  try {
-    await conn.query(
-      `INSERT INTO khachhang (tenkhachhang, ngaysinh, diachi, sodienthoai, mail)
-       VALUES (?, ?, ?, ?, ?)`,
-      [tenkhachhang, ngaysinh, diachi, sodienthoai, mail]
-    )
-    return {message: "Customer added", success: true};
-  } catch (e) {
-    return {message: "Added fail", success: false};
-  }
-}
-
-async function insertMultipleCustomers(conn, customers = []) {
+async function insertCustomer(conn, customers = []) {
   try {
     await conn.query(
       `INSERT INTO khachhang (tenkhachhang, ngaysinh, diachi, sodienthoai, mail)
        VALUES ?`,
       [
-        customers.map(({tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) =>
-          [tenkhachhang, ngaysinh, diachi, sodienthoai, mail])
+        customers.map(({tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) => [
+          tenkhachhang, ngaysinh, diachi, sodienthoai, mail
+        ])
       ]
     )
     return {message: "Customers added", success: true};
@@ -60,12 +46,13 @@ async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai
   }
 }
 
-async function deleteCustomer(conn, {makhachhang}) {
+async function deleteCustomer(conn, cusomters = []) {
   try {
     await conn.query(
       `DELETE
        FROM khachhang
-       WHERE makhachhang = ?;`, [makhachhang])
+       WHERE makhachhang IN ?;`,
+      [cusomters.map(({makhachhang}) => [makhachhang])])
     return {message: "Customer deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}
@@ -73,5 +60,5 @@ async function deleteCustomer(conn, {makhachhang}) {
 }
 
 module.exports = {
-  getCustomers, insertCustomer, updateCustomer, deleteCustomer, insertMultipleCustomers
+  getCustomers, insertCustomer, updateCustomer, deleteCustomer
 }

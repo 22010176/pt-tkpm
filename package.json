@@ -4,7 +4,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run dev\""
+    "front_end": "cd frontend && npm run start",
+    "back_end": "cd frontend && npm run start",
+    "init_front": "cd frontend && npm i",
+    "init_back": "cd backend && npm i",
+    "init_main": "npm i",
+    "init_project": "npm i && concurrently \"npm run init_back\" \"npm run init_front\"",
+    "start": "concurrently \"npm run front_end\" \"cd backend && npm run dev\""
   },
   "keywords": [],
   "author": "",

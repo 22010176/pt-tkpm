@@ -49,8 +49,8 @@ const deleteTaiKhoan = khachHang =>
   .then(console.log);
 
 
-function genTaiKhoan() {
-  return {matkhau: v4(), vaitro: randInt(1, 3), nhanvien: randInt(1, 100)}
-}
 
-for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());
+
+// for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());
+
+

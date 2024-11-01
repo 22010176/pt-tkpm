@@ -30,7 +30,7 @@ async function getProductConfigures(conn, macauhinh) {
   }
 }
 
-async function insertMultipleConfigures(conn, configurations = []) {
+async function insertConfigure(conn, configurations = []) {
   try {
     const [result] = await conn.query(
       `INSERT INTO cauhinh (gianhap, giaxuat, danhmucsanpham, ram, rom, mausac)
@@ -39,22 +39,7 @@ async function insertMultipleConfigures(conn, configurations = []) {
         configurations.map(({gianhap, giaxuat, danhmucsanpham, ram, rom, mausac}) =>
           [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
       ])
-    return {message: "Configuress added", success: true};
-  } catch (e) {
-    console.log(e)
-    return {message: "Added fail", success: false};
-  }
-}
-
-async function insertConfigure(conn, {
-  gianhap, giaxuat, danhmucsanpham, ram, rom, mausac
-}) {
-  try {
-    const [result] = await conn.query(
-      `INSERT INTO cauhinh (gianhap, giaxuat, danhmucsanpham, ram, rom, mausac)
-       VALUES (?, ?, ?, ?, ?, ?);`,
-      [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
-    return {message: "configuress added", success: true};
+    return {message: "Configures added", success: true};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};
@@ -82,12 +67,12 @@ async function updateConfigure(conn, {
   }
 }
 
-async function deleteConfigure(conn, {macauhinh}) {
+async function deleteConfigure(conn, configures = []) {
   try {
     await conn.query(
       `DELETE
        FROM cauhinh
-       WHERE macauhinh = ?`, [macauhinh])
+       WHERE macauhinh = ?`, [configures.map(({macauhinh}) => [macauhinh])])
     return {message: "configures deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}
@@ -95,5 +80,5 @@ async function deleteConfigure(conn, {macauhinh}) {
 }
 
 module.exports = {
-  getConfigures, insertConfigure, updateConfigure, deleteConfigure, insertMultipleConfigures, getProductConfigures
+  getConfigures, insertConfigure, updateConfigure, deleteConfigure, getProductConfigures
 }

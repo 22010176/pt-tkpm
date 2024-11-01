@@ -59,14 +59,9 @@ DESCRIBE nhanvien;
 
 
 
-
-
-
-
-
-
-
-
+SELECT *
+FROM quyenhan
+ORDER BY chucnang, hanhdong;
 
 
 

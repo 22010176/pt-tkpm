@@ -1,4 +1,4 @@
-const {generatePhoneNumber} = require('phone-number-generator-js');
+const {generatePhoneNumber, CountryNames} = require('phone-number-generator-js');
 const randomEmail = require('random-email');
 
 function randInt(min, max) {
@@ -37,8 +37,8 @@ function randDate() {
   return `${randInt(1950, 2030)}-${month}-${randInt(1, getDayMonth(month))}`;
 }
 
-function generatePhoneNum() {
-  return generatePhoneNumber({countryName: CountryNames.Viet_Nam, withoutCountryCode: true})
+function genPhoneNum() {
+  return generatePhoneNumber({countryName: CountryNames.Viet_Nam})
 }
 
 function randomDate(start, end) {
@@ -46,7 +46,14 @@ function randomDate(start, end) {
   return result.toISOString().split("T")[0];
 }
 
+function  randGender() {
+  return randInt(0, 1) == 0 ? "Nam" : "Nữ"
+}
+
+function getRand(arr=[]){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 module.exports = {
-  randInt, randDate, randStr, generatePhoneNum, randomEmail
+  getRand, randInt, randDate, randStr, genPhoneNum, randomEmail,randGender
 }

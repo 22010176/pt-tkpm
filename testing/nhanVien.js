@@ -2,21 +2,12 @@ const {v4} = require('uuid');
 const {randDate, randStr} = require('./utitlies')
 
 const insertNhanVien = sp => fetch('http://localhost:3001/api/employees', {
-  method: 'POST', headers: {
+  method:  'POST', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
 .then(console.log)
-
-const insertMultipleNhanVien = sp => fetch('http://localhost:3001/api/employees/add-multiple', {
-  method: 'POST', headers: {
-    'Content-Type': 'application/json'
-  }, body: JSON.stringify(sp)
-})
-.then(response => response.json())
-.then(console.log)
-
 
 const getNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   method: 'GET', headers: {
@@ -27,7 +18,7 @@ const getNhanVien = sp => fetch('http://localhost:3001/api/employees', {
 .then(content => console.log(content))
 
 const updateNhanVien = sp => fetch('http://localhost:3001/api/employees', {
-  method: 'PUT', headers: {
+  method:  'PUT', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
@@ -35,7 +26,7 @@ const updateNhanVien = sp => fetch('http://localhost:3001/api/employees', {
 .then(content => console.log(content))
 
 const deleteNhanVien = sp => fetch('http://localhost:3001/api/employees', {
-  method: 'DELETE', headers: {
+  method:  'DELETE', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
@@ -66,4 +57,7 @@ function genNhanVien() {
 // )
 // .then(getSanPham)
 
-insertMultipleNhanVien(new Array(100).fill(0).map(genNhanVien))
+// insertNhanVien(new Array(100).fill(0).map(genNhanVien))
+module.exports = {
+  insertNhanVien, deleteNhanVien, getNhanVien, updateNhanVien
+}

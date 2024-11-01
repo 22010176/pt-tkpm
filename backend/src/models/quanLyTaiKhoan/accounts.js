@@ -2,6 +2,7 @@ async function getAccounts(conn) {
   try {
     const [result] = await conn.query(
       `SELECT t.mataikhoan,
+              CONCAT('TK-' + t.mataikhoan) AS ma,
               nv.manhanvien,
               nv.hoten,
               nv.mail,
