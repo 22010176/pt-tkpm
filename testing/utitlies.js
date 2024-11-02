@@ -50,14 +50,14 @@ function formatDate(date) {
   return date.split("T")[0];
 }
 
-function  randGender() {
+function randGender() {
   return randInt(0, 1) == 0 ? "Nam" : "Nữ"
 }
 
-function getRand(arr=[]){
+function getRand(arr = []) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
 module.exports = {
-  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail,randGender
+  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail, randGender
 }

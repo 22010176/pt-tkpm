@@ -3,8 +3,10 @@ const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail
 
 const {insertKhachHang, getKhachHang, deleteKhachHang, updateKhachHang} = require('./khachHang')
 const {insertNhanVien, deleteNhanVien, getNhanVien, updateNhanVien} = require("./nhanVien");
-const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh} = require("./thuocTinh");
+const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh, getAllThuocTinh, insertAllThuocTinh} = require("./thuocTinh");
 const {getNCC, insertNCC, updateNCC, deleteNCC} = require("./nhaCungCap");
+const {getSanPham, insertSanPham, updateSanPham, deleteSanPham} = require("./sanPham");
+const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = require('./configures')
 
 function genNhanVien() {
   return {
@@ -13,7 +15,7 @@ function genNhanVien() {
 }
 
 function genNhaCungCap() {
-  return {tennhacungcap: v4(), diachi: v4(), mail: randomEmail(), sodienthoai: genPhoneNum(),}
+  return {tennhacungcap: v4(), diachi: v4(), mail: randomEmail(), sodienthoai: v4(),}
 }
 
 function genKhachHang() {
@@ -21,7 +23,7 @@ function genKhachHang() {
     tenkhachhang: v4(),
     ngaysinh:     randDate(new Date(1950), new Date()),
     diachi:       v4(),
-    sodienthoai:  genPhoneNum(),
+    sodienthoai:  v4(),
     mail:         randomEmail(),
   }
 }
@@ -64,7 +66,12 @@ function genDanhMucSanPham(xuatXu = [], heDieuHanh = [], thuongHieu) {
 
 function genCauHinh(danhMucSanPham = [], rom = [], ram = [], mauSac = []) {
   return {
-    gianhap: randInt(0, 100000), giaxuat: randInt(0, 100000), danhmucsanpham: getRand(danhMucSanPham).madanhmucsanpham, ram: getRand(ram).maram, rom: getRand(rom).marom, mausac: getRand(mauSac).mamausac
+    gianhap:        randInt(0, 100000),
+    giaxuat:        randInt(0, 100000),
+    danhmucsanpham: getRand(danhMucSanPham).madanhmucsanpham,
+    ram:            getRand(ram).maram,
+    rom:            getRand(rom).marom,
+    mausac:         getRand(mauSac).mamausac
   }
 }
 
@@ -86,22 +93,15 @@ function genSanPham(cauHinh = [], phieuNhap = [], phieuXuat = [], tinhTrang = []
   }
 }
 
-// getNhanVien()
-
-// insertNhanVien([
-//   genNhanVien(),
-//   genNhanVien(),
-// ])
-
 function compareArr(arr1 = [], arr2 = [], cmp) {
   if (typeof cmp !== 'function') return false;
   return arr1.length === arr2.length && arr1.every(i => arr2.some(j => cmp(i, j)))
 }
 
-function testAPI(numberRow, genFunction, getFunc, insertFunc, deleteFunc, updateFunc, keys = [], resultDataKey = '', ...genParams) {
+function testAPI(numberRow, genFunction, getFunc, insertFunc, deleteFunc, updateFunc, keys = [], resultDataKey = '') {
 
   return async function () {
-    const testSample = new Array(numberRow).fill().map(genFunction.bind({}, ...genParams))
+    const testSample = new Array(numberRow).fill().map(genFunction)
 
     const primaryKey = keys[0]
     const dataCol = keys.slice(1)
@@ -162,7 +162,7 @@ const nhanVienTest = testAPI(
 )
 // nhanVienTest()
 const khachHangTest = testAPI(
-  2000,
+  5000,
   genKhachHang,
   getKhachHang,
   insertKhachHang,
@@ -173,7 +173,7 @@ const khachHangTest = testAPI(
 )
 
 const nhaCungCapTest = testAPI(
-  1000,
+  5000,
   genNhaCungCap,
   getNCC,
   insertNCC,
@@ -248,73 +248,111 @@ const romTest = testAPI(
   'attributes'
 )
 
-// ramTest()
-// testProductAttributes()
+async function sanPhamTest() {
+  let thuongHieu = await testGetThuocTinh('thuongHieu');
+  if (thuongHieu.attributes.length < 100)
+    thuongHieu = await testInsertThuocTinh('thuonghieu', new Array(100).fill(0).map(genThuongHieu));
 
-async function testProductAttributes() {
+  let heDieuHanh = await testGetThuocTinh('heDieuHanh');
+  if (heDieuHanh.attributes.length < 100)
+    heDieuHanh = await testInsertThuocTinh('heDieuHanh', new Array(100).fill(0).map(genHedieuHanh));
+
+  let xuatXu = await testGetThuocTinh('xuatXu');
+  if (xuatXu.attributes.length < 100)
+    xuatXu = await testInsertThuocTinh('xuatXu', new Array(100).fill(0).map(genXuatXu));
+
+  return testAPI(
+    5000,
+    genDanhMucSanPham.bind({}, xuatXu.attributes, heDieuHanh.attributes, thuongHieu.attributes,),
+    getSanPham,
+    insertSanPham,
+    deleteSanPham,
+    updateSanPham,
+    ['madanhmucsanpham', 'tendanhmucsanpham', 'chipxuly', 'dungluongpin', 'kichthuongmanhinh', 'cameratruoc', 'camerasau', 'phienbanhedieuhanh', 'thoigianbaohanh', 'xuatxu', 'hedieuhanh', 'thuonghieu'],
+    'products',
+  )()
+}
+
+// sanPhamTest()
+const genThuocTinhFunc = {
+  xuatxu:     genXuatXu,
+  hedieuhanh: genHedieuHanh,
+  thuonghieu: genThuongHieu,
+  rom:        genRam,
+  ram:        genRom,
+  mausac:     genMauSac
+}
+
+async function cauHinhTest() {
+  const thuocTinh = await getAllThuocTinh()
+
+  await Promise.all(Object.entries(thuocTinh).map(async ([key, value]) =>
+      value.attributes.length < 100
+      && (thuocTinh[key] = await testInsertThuocTinh(key, new Array(100)
+      .fill(0)
+      .map(genThuocTinhFunc[key.toLowerCase()])))
+  ))
+
+  const {xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac} = thuocTinh
+
+  let danhMucSanPham = await getSanPham()
+
+  if (danhMucSanPham.products.length < 100)
+    danhMucSanPham = await insertSanPham(
+      new Array(100)
+      .fill(0)
+      .map(genDanhMucSanPham.bind({}, xuatXu.attributes, heDieuHanh.attributes, thuongHieu.attributes)))
+
+
+  return testAPI(
+    5000,
+    genCauHinh.bind({}, danhMucSanPham.products, Rom.attributes, Ram.attributes, mauSac.attributes),
+    getConfigures,
+    insertConfigure,
+    deleteConfigure,
+    updateConfigure,
+    ['gianhap', 'giaxuat', 'danhmucsanpham', 'ram', 'rom', 'mausac'],
+    'configures'
+  )()
+}
+
+const quanLySanPhamTest = [
+  {name: "San Pham", func: sanPhamTest},
+  {name: "Cau Hinh", func: cauHinhTest},
+]
+
+const thuocTinhTest = [
+  {name: "Thuong Hieu", func: thuongHieuTest},
+  {name: "Xuat Xu", func: xuatXuTest},
+  {name: "He Dieu Hanh", func: heDieuHanhTest},
+  {name: "Mau Sac", func: mauSacTest},
+  {name: "Ram", func: ramTest},
+  {name: "Rom", func: romTest},
+]
+
+const doiTacTest = [
+  {name: "Khach Hang", func: khachHangTest},
+  {name: "Nha Cung Cap", func: nhaCungCapTest},
+]
+
+async function testAPIGroup(test = []) {
   const result = []
-
-  // Thuong Hieu
-  console.log("Thuong Hieu Test")
-  try {
-    console.clear()
-    await thuongHieuTest()
-    result.push("Thuong Hieu Success\n")
-  } catch (err) {
-    result.push("Thuong Hieu Fail\n" + err)
+  for (const {name, func} of test) {
+    console.log(`${result.join('')}${name} Test`)
+    try {
+      await func()
+      console.clear()
+      result.push(`${name} Success\n`)
+    } catch (err) {
+      result.push(`${name} Fail\n` + err)
+    }
   }
-
-  // Xuat Xu
-  console.log("Xuat Xu Test")
-  try {
-    console.clear()
-    await xuatXuTest()
-    result.push("Xuat Xu Success\n")
-  } catch (err) {
-    result.push("Xuat Xu Fail\n" + err)
-  }
-
-  // He Dieu Hanh
-  console.log("He Dieu Hanh Test")
-  try {
-    console.clear()
-    await heDieuHanhTest()
-    result.push("He Dieu Hanh Success\n")
-  } catch (err) {
-    result.push("He Dieu Hanh Fail\n" + err)
-  }
-
-  // Mau Sac
-  console.log("Mau Sac Test")
-  try {
-    console.clear()
-    await heDieuHanhTest()
-    result.push("Mau Sac Success\n")
-  } catch (err) {
-    result.push("Mau Sac Fail\n" + err)
-  }
-
-  // Rom
-  console.log("Rom Test")
-  try {
-    console.clear()
-    await romTest()
-    result.push("Rom Success\n")
-  } catch (err) {
-    result.push("Rom Fail\n" + err)
-  }
-
-  // Ram
-  console.log("Ram Test")
-  try {
-    console.clear()
-    await ramTest()
-    result.push("Ram Success\n")
-  } catch (err) {
-    result.push("Ram Fail\n" + err)
-  }
-
   console.clear()
   console.log(result.join("\n"))
 }
+
+
+// testAPIGroup(thuocTinhTest)
+testAPIGroup(doiTacTest)
+// testAPIGroup(quanLySanPhamTest)
 

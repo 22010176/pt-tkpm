@@ -1,7 +1,7 @@
 const {v4} = require('uuid');
 
 const insertSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method: 'POST', headers: {
+  method:  'POST', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
@@ -14,26 +14,22 @@ const getSanPham = sp => fetch('http://localhost:3001/api/products', {
   }
 })
 .then(response => response.json())
-.then(content => console.log(content))
 
 getSanPham()
 
 const updateSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method: 'PUT', headers: {
+  method:  'PUT', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
-.then(content => console.log(content))
 
 const deleteSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method: 'DELETE', headers: {
+  method:  'DELETE', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
-.then(content => console.log(content))
-
 
 function genSanPham(maDanhMucSanPham = 0) {
   return {
@@ -41,6 +37,10 @@ function genSanPham(maDanhMucSanPham = 0) {
   }
 }
 
+
+module.exports = {
+  getSanPham, insertSanPham, updateSanPham, deleteSanPham
+}
 // deleteSanPham({
 //   chipXuLy: "test", dungLuongPin: 29, kichThuongManHinh: 33, cameraTruoc: 44, cameraSau: 55, phienBanHeDieuHanh: "dd", thoiGianBaoHanh: 44, hinhAnh: "@!12", xuatXu: 14, heDieuHanh: 9, thuongHieu: 22, maDanhMucSanPham: 7
 // })

@@ -35,7 +35,7 @@ const testDeletethuocTinh = (thuocTinh, value) =>
   .then(response => response.json())
 
 const getAllThuocTinh = async () => {
-  const result = await Promise.all([
+  const [xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac] = await Promise.all([
     testGetThuocTinh('xuatXu'),
     testGetThuocTinh('heDieuHanh'),
     testGetThuocTinh('thuongHieu'),
@@ -44,23 +44,21 @@ const getAllThuocTinh = async () => {
     testGetThuocTinh('mauSac'),
   ])
 
-  return result;
+  return {xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac};
 }
 
-const insertAllThuocTinh = async () => {
-        new Array(100).fill(0).map((_, i) => [
-          testInsertThuocTinh('ram', {dungLuongRam: (i + 1) * 2}),
-          testInsertThuocTinh('rom', {dungLuongRom: (i + 1) * 2}),
-          testInsertThuocTinh('xuatxu', {tenXuatXu: `${i + 1}`}),
-          testInsertThuocTinh('hedieuhanh', {tenHeDieuHanh: `${i + 1}`}),
-          testInsertThuocTinh('thuonghieu', {tenThuongHieu: `${i + 1}`}),
-          testInsertThuocTinh('mausac', {tenMauSac: `${i + 1}`}),
-        ])
-      }
-;
-// getAllThuocTinh()
-// .then(a => console.log(a[0]))
+const insertAllThuocTinh = async (genRam, genRom, genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac, num = 100) =>
+  new Array(num).fill(0).map((_, i) => [
+    typeof genRam === 'function' && testInsertThuocTinh('ram', genRam()),
+    typeof genRom === 'function' && testInsertThuocTinh('rom', genRom()),
+    typeof genXuatXu === 'function' && testInsertThuocTinh('xuatxu', genXuatXu()),
+    typeof genHeDieuHanh === 'function' && testInsertThuocTinh('hedieuhanh', genHeDieuHanh()),
+    typeof genThuongHieu === 'function' && testInsertThuocTinh('thuonghieu', genThuongHieu()),
+    typeof genMauSac === 'function' && testInsertThuocTinh('mausac', genMauSac()),
+  ])
+
 module.exports = {
-  testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh
+  testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh,
+  getAllThuocTinh, insertAllThuocTinh
 }
 

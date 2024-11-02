@@ -3,46 +3,72 @@ async function getConfigures(conn) {
     const [result] = await conn.query(
       `SELECT *
        FROM cauhinh
-       ORDER BY macauhinh DESC
-       LIMIT 200;`)
-    return {configurations: result, success: true};
+       ORDER BY macauhinh DESC;`)
+    return {configures: result, success: true};
   } catch (e) {
     console.log(e)
-    return {configurations: [], success: false}
+    return {configures: [], success: false}
   }
 }
 
-async function getProductConfigures(conn, macauhinh) {
+async function getProductConfigures(conn, danhmucsanpham) {
   try {
     const [result] = await conn.query(
-      `SELECT *, ra.dungluongram, ro.dungluongrom, m.tenmausac
+      `SELECT c.*, ra.dungluongram, ro.dungluongrom, m.tenmausac
        FROM cauhinh c
                 INNER JOIN ram ra ON c.ram = ra.maram
                 INNER JOIN rom ro ON ro.marom = c.rom
                 INNER JOIN mausac m ON m.mamausac = c.mausac
        WHERE danhmucsanpham = ?
-       ORDER BY macauhinh DESC;`, [macauhinh])
+       ORDER BY macauhinh DESC;`, [danhmucsanpham])
 
-    return {configurations: result, success: true};
+    return {configures: result, success: true};
   } catch (e) {
     console.log(e)
-    return {configurations: [], success: false}
+    return {configures: [], success: false}
   }
 }
 
-async function insertConfigure(conn, configurations = []) {
+async function insertConfigure(conn, configures = []) {
   try {
-    const [result] = await conn.query(
+    console.log(configures)
+    await conn.query(
       `INSERT INTO cauhinh (gianhap, giaxuat, danhmucsanpham, ram, rom, mausac)
        VALUES ?`,
       [
-        configurations.map(({gianhap, giaxuat, danhmucsanpham, ram, rom, mausac}) =>
+        configures.map(({gianhap, giaxuat, danhmucsanpham, ram, rom, mausac}) =>
           [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
       ])
-    return {message: "Configures added", success: true};
+    const arr = {
+      gianhap:        [],
+      giaxuat:        [],
+      danhmucsanpham: [],
+      ram:            [],
+      rom:            [],
+      mausac:         [],
+    }
+    configures.forEach(configure => {
+      const data = Object.entries(configure)
+      data.forEach(([key, value]) => arr[key].push(value))
+    })
+    const {gianhap, giaxuat, danhmucsanpham, ram, rom, mausac} = arr
+    const [result] = await conn.query(
+      `SELECT *
+       FROM cauhinh
+       WHERE gianhap IN ?
+         AND giaxuat IN ?
+         AND danhmucsanpham IN ?
+         AND ram IN ?
+         AND rom IN ?
+         AND mausac IN ?
+       LIMIT ?`,
+      [[gianhap], [giaxuat], [danhmucsanpham], [ram], [rom], [mausac], configures.length]
+    )
+    return {message: "Configures added", success: true, configures: result};
+
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false};
+    return {message: "Added fail", success: false, configures: []};
   }
 }
 
@@ -69,12 +95,15 @@ async function updateConfigure(conn, {
 
 async function deleteConfigure(conn, configures = []) {
   try {
+    
     await conn.query(
       `DELETE
        FROM cauhinh
-       WHERE macauhinh = ?`, [configures.map(({macauhinh}) => [macauhinh])])
+       WHERE macauhinh IN ?`,
+      [[configures.map(({macauhinh}) => macauhinh)]])
     return {message: "configures deleted", success: true}
   } catch (e) {
+    console.log(e)
     return {message: "Deleted fail", success: false}
   }
 }

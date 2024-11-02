@@ -5,37 +5,30 @@ const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts}
 const {getConfigurations, insertConfiguration, updateConfiguration, deleteConfiguration, insertMultipleConfigurations, updateConfigure, deleteConfigure, insertMultipleConfigures, getConfigures, insertConfigure, getProductConfigures} = require("../models/quanLySanPham/configures");
 
 router.route("/")
-.get(async function (req, res) {
-  const result = await getConfigures(res.locals.conn);
-  await res.locals.conn.destroy()
+      .get(async function (req, res) {
+        const result = await getConfigures(res.locals.conn);
+        await res.locals.conn.destroy()
 
-  res.json(result)
-})
-.post(async function (req, res) {
-  const conn = res.locals.conn;
-  const result = await insertConfigure(conn, req.body);
-  await res.locals.conn.destroy()
-  res.json(result)
-})
-.put(async function (req, res) {
-  const conn = res.locals.conn;
-  const result = await updateConfigure(conn, req.body);
-  await res.locals.conn.destroy()
-  res.json(result)
-})
-.delete(async function (req, res) {
-  const conn = res.locals.conn;
-  const result = await deleteConfigure(conn, req.body);
-  await res.locals.conn.destroy()
-  res.json(result)
-})
-
-router.post("/add-multiple", async function (req, res) {
-  const conn = res.locals.conn;
-  const result = await insertMultipleConfigures(conn, req.body);
-  await res.locals.conn.destroy()
-  res.json(result)
-})
+        res.json(result)
+      })
+      .post(async function (req, res) {
+        const conn = res.locals.conn;
+        const result = await insertConfigure(conn, req.body);
+        await res.locals.conn.destroy()
+        res.json(result)
+      })
+      .put(async function (req, res) {
+        const conn = res.locals.conn;
+        const result = await updateConfigure(conn, req.body);
+        await res.locals.conn.destroy()
+        res.json(result)
+      })
+      .delete(async function (req, res) {
+        const conn = res.locals.conn;
+        const result = await deleteConfigure(conn, req.body);
+        await res.locals.conn.destroy()
+        res.json(result)
+      })
 
 router.get("/:productID", async function (req, res) {
   const conn = res.locals.conn;

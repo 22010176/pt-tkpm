@@ -304,4 +304,8 @@ VALUES ('tonKho', 'tồn kho'),
 
 
 SELECT COUNT(*)
-FROM khachhang;
+FROM cauhinh;
+
+DELETE
+FROM cauhinh
+WHERE macauhinh > 0;

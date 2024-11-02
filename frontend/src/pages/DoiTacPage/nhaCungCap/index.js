@@ -127,7 +127,7 @@ function NhaCungCap() {
   }
 
   async function onInsert() {
-    const result = await insertSupplier(formData)
+    const result = await insertSupplier([formData])
     console.log(result)
     if (!result.success) return
 
@@ -148,14 +148,13 @@ function NhaCungCap() {
 
   async function onDelete() {
     if (!rowClick) return setModal("error")
-    const result = await deleteSupplier(rowClick)
+    const result = await deleteSupplier([rowClick])
     if (!result.success) return
 
     setFormData({...defaultNCC})
     updateTableData()
   }
-
-
+  
   return (
     <>
       <Page2

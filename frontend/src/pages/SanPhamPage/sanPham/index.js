@@ -141,7 +141,7 @@ function SanPham() {
 
   async function onDelete() {
     if (!rowClick) return setModal("error")
-    const result = await deleteProduct(rowClick)
+    const result = await deleteProduct([rowClick])
 
     if (!result.success) return;
 
@@ -207,7 +207,7 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
       return
     }
 
-    let result = await insertProduct(data)
+    let result = await insertProduct([data])
     console.log(result)
 
     if (!result.success || result.body.length === 0) return;
