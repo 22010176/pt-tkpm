@@ -1,19 +1,26 @@
 import './style.module.css'
-import Layout2 from "../../../components/layouts/layout2";
-import {Button, FormControl, FormGroup, FormLabel, InputGroup} from "react-bootstrap";
-import GroupShadow from "../../../components/Forms/GroupShadow";
-import InputGroupText from "react-bootstrap/InputGroupText";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Layout2             from "../../../components/layouts/layout2";
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  InputGroup
+}                          from "react-bootstrap";
+import GroupShadow         from "../../../components/Forms/GroupShadow";
+import InputGroupText      from "react-bootstrap/InputGroupText";
+import {FontAwesomeIcon}   from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import InputShadow from "../../../components/Forms/InputShadow";
-import TableA from "../../../components/tables/tableA";
-
+import InputShadow         from "../../../components/Forms/InputShadow";
+import TableA              from "../../../components/tables/tableA";
 
 const tableHD = [
-  {key: "Ngày", value: ""},
-  {key: "Vốn", value: ""},
-  {key: "Doanh thu", value: ""},
-  {key: "Lợi nhuận", value: ""},
+  {key: "Mã sản phẩm", value: ""},
+  {key: "Tên sản phẩm", value: ""},
+  {key: "Tồn đầu kỳ", value: ""},
+  {key: "Nhập trong kỳ", value: ""},
+  {key: "Xuất trong kỳ", value: ""},
+  {key: "Tồn cuối kì", value: ""},
 ]
 
 function ThongKeTonKho() {

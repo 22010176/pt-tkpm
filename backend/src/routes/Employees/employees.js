@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertEmployee, getEmployees, deleteEmployee, updateEmployee, getEmployeeWithoutAccount} = require("../models/quanLyTaiKhoan/employees")
+const {insertEmployee, getEmployees, deleteEmployee, updateEmployee, getEmployeeWithoutAccount} = require("../../models/quanLyTaiKhoan/employees")
 
 router.route("/")
       .get(async function (req, res) {

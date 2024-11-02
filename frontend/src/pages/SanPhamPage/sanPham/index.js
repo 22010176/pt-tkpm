@@ -396,6 +396,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }
 
   function onHide() {
+    if (tableData.length === 0) return
     if (typeof onModalHide === 'function') onModalHide();
   }
 
@@ -424,7 +425,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }
 
   async function onDeleteCauHinh() {
-    const result = await deleteConfigure(data)
+    const result = await deleteConfigure([data])
 
     if (!result.success) return
     // return

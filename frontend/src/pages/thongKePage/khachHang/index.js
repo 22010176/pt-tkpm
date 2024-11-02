@@ -1,12 +1,18 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon}   from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {Button, FormControl, FormGroup, FormLabel, InputGroup} from "react-bootstrap";
+import {
+  Button,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  InputGroup
+}                          from "react-bootstrap";
 
-import Layout2 from "../../../components/layouts/layout2";
-import GroupShadow from "../../../components/Forms/GroupShadow";
+import Layout2        from "../../../components/layouts/layout2";
+import GroupShadow    from "../../../components/Forms/GroupShadow";
 import InputGroupText from "react-bootstrap/InputGroupText";
-import InputShadow from "../../../components/Forms/InputShadow";
-import TableA from "../../../components/tables/tableA";
+import InputShadow    from "../../../components/Forms/InputShadow";
+import TableA         from "../../../components/tables/tableA";
 
 import './style.module.css'
 
@@ -15,6 +21,7 @@ const tableHD = [
   {key: "Tên khách hàng", value: ""},
   {key: "Số lần mua hàng", value: ""},
   {key: "Tổng số tiền", value: ""},
+  {key: "Lịch sử mua hàng", value: ""},
 ]
 
 function ThongKeKhachHang() {

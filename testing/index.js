@@ -360,5 +360,5 @@ async function testAPIGroup(test = []) {
 // nhanVienTest()
 // testAPIGroup(thuocTinhTest)
 // testAPIGroup(doiTacTest)
-// testAPIGroup(quanLySanPhamTest)
+testAPIGroup(quanLySanPhamTest)
 

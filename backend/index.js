@@ -54,16 +54,16 @@ app.use("/api/auth",
   require("./src/routes/auth"))
 
 app.use("/api/roles",
-  require("./src/routes/roles"))
+  require("./src/routes/Employees/roles"))
 
 app.use("/api/accounts",
-  require("./src/routes/accounts"))
+  require("./src/routes/Employees/accounts"))
 
 app.use("/api/products",
-  require("./src/routes/products"))
+  require("./src/routes/Products/products"))
 
 app.use("/api/product-attributes",
-  require("./src/routes/product-attributes"))
+  require("./src/routes/Products/product-attributes"))
 
 app.use("/api/customers",
   require("./src/routes/customers"))
@@ -72,19 +72,19 @@ app.use("/api/suppliers",
   require("./src/routes/suppliers"))
 
 app.use("/api/warehouse",
-  require("./src/routes/warehouse"))
+  require("./src/routes/Warehouse/warehouse"))
 
 app.use("/api/configures",
-  require("./src/routes/configures"))
+  require("./src/routes/Products/configures"))
 
 app.use("/api/services",
-  require("./src/routes/services"))
+  require("./src/routes/Warehouse/services"))
 
 app.use("/api/statistics",
   require("./src/routes/statistics"))
 
 app.use("/api/employees",
-  require("./src/routes/employees"))
+  require("./src/routes/Employees/employees"))
 
 app.all('/*', async (req, res) => {
   await res.locals.conn.destroy()

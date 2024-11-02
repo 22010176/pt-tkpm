@@ -2,7 +2,7 @@ const express = require("express")
 const path = require("path")
 const multer = require("multer");
 
-const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts, updateProductImage} = require('../models/quanLySanPham/products')
+const {deleteProduct, updateProduct, insertProduct, getProductById, getProducts, updateProductImage} = require('../../models/quanLySanPham/products')
 
 const router = express.Router({mergeParams: true})
 
