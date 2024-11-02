@@ -301,3 +301,7 @@ VALUES ('tonKho', 'tồn kho'),
        ('daBan', 'đã bán'),
        ('hoanTra', 'hoàn trả'),
        ('biDoi', 'bị đổi');
+
+
+SELECT COUNT(*)
+FROM khachhang;

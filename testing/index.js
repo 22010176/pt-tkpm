@@ -1,10 +1,10 @@
-const {v4} = require("uuid");
+const {v4, MAX} = require("uuid");
 const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail, randGender} = require("./utitlies");
 
+const {insertKhachHang, getKhachHang, deleteKhachHang, updateKhachHang} = require('./khachHang')
 const {insertNhanVien, deleteNhanVien, getNhanVien, updateNhanVien} = require("./nhanVien");
-const {
-        testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh
-      } = require("./thuocTinh");
+const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh} = require("./thuocTinh");
+const {getNCC, insertNCC, updateNCC, deleteNCC} = require("./nhaCungCap");
 
 function genNhanVien() {
   return {
@@ -13,13 +13,17 @@ function genNhanVien() {
 }
 
 function genNhaCungCap() {
-  return {
-    tennhacungcap: v4(), diachi: v4(), mail: randomEmail(), sodienthoai: genPhoneNum(),
-  }
+  return {tennhacungcap: v4(), diachi: v4(), mail: randomEmail(), sodienthoai: genPhoneNum(),}
 }
 
 function genKhachHang() {
-  return {tenkhachhang: v4(), ngaysinh: randDate(new Date(1950), new Date()), diachi: v4(), sodienthoai: genPhoneNum(), mail: randomEmail(),}
+  return {
+    tenkhachhang: v4(),
+    ngaysinh:     randDate(new Date(1950), new Date()),
+    diachi:       v4(),
+    sodienthoai:  genPhoneNum(),
+    mail:         randomEmail(),
+  }
 }
 
 function genXuatXu() {
@@ -39,11 +43,11 @@ function genMauSac() {
 }
 
 function genRam() {
-  return {dungluongram: randInt(1, 999999999)}
+  return {dungluongram: randInt(1, 0xffffffff)}
 }
 
 function genRom() {
-  return {dungluongrom: randInt(0, 999999999)}
+  return {dungluongrom: randInt(0, 0xffffffff)}
 }
 
 function genTaiKhoan(nhanVien = [], vaiTro = []) {
@@ -94,58 +98,60 @@ function compareArr(arr1 = [], arr2 = [], cmp) {
   return arr1.length === arr2.length && arr1.every(i => arr2.some(j => cmp(i, j)))
 }
 
-function testAPI(genFunction, getFunc, insertFunc, deleteFunc, updateFunc, keys = [], resultDataKey = '', ...genParams) {
-  const numberRow = 5
+function testAPI(numberRow, genFunction, getFunc, insertFunc, deleteFunc, updateFunc, keys = [], resultDataKey = '', ...genParams) {
 
   return async function () {
     const testSample = new Array(numberRow).fill().map(genFunction.bind({}, ...genParams))
-    console.log(testSample)
+
     const primaryKey = keys[0]
     const dataCol = keys.slice(1)
-    try {
-      // Insert
-      console.log("Testing insert")
-      const insertResult = await insertFunc(testSample)
-      console.log(insertResult)
-      if (!compareArr(
-        insertResult[resultDataKey],
-        testSample,
-        (i, j) => dataCol.every(key => i[key] === j[key]) // remove first primary key column
-      )) throw "Insert error"
-      console.log("Insert Success\n")
 
-      // Delete
-      console.log("Testing delete")
-      await deleteFunc(insertResult[resultDataKey])
-      let query = await getFunc()
-      if (!query.success) throw "Delete error"
-      if (insertResult[resultDataKey].some(i => query[resultDataKey].some(j => i[primaryKey] === j[primaryKey]))) throw deleteFunc.name + " error"
-      console.log("Delete success\n")
+    // Insert
+    console.log("Testing insert")
+    const insertResult = await insertFunc(testSample)
+    // console.log(insertResult[resultDataKey])
 
-      // Update
-      console.log("Testing update")
-      const temp = await insertFunc([genFunction()])
-      const newEmp = genFunction()
-      newEmp[primaryKey] = temp[resultDataKey][0][primaryKey]
+    if (!compareArr(
+      insertResult[resultDataKey], testSample,
+      (i, j) => dataCol.every(key => {
+        const result = i[key] === j[key]
+        // console.log(i[key], j[key], result)
+        return result;
+      })
+    )) throw "Insert error"
+    console.log("Insert Success\n")
 
-      const result = await updateFunc(newEmp)
+    // Delete
+    console.log("Testing delete")
+    await deleteFunc(insertResult[resultDataKey])
+    let query = await getFunc()
+    if (!query.success) throw "Delete error"
+    if (insertResult[resultDataKey]
+    .some(i => {
+      const result = query[resultDataKey].some(j => i[primaryKey] === j[primaryKey])
+      return result
+    })
+    ) throw deleteFunc.name + " error"
+    console.log("Delete success\n")
 
-      query = await getFunc()
-      if (!query[resultDataKey]
-      .some(i => (i, j) => keys.every(key => i[key] === j[key]))) throw 'Update Error'
-      console.log("Update success\n")
+    // Update
+    console.log("Testing update")
+    const temp = await insertFunc([genFunction()])
+    const newEmp = genFunction()
+    newEmp[primaryKey] = temp[resultDataKey][0][primaryKey]
 
-      console.log("Clean up")
-      await deleteFunc([newEmp])
+    query = await getFunc()
+    if (!query[resultDataKey]
+    .some(i => (i, j) => keys.every(key => i[key] === j[key]))) throw 'Update Error'
+    console.log("Update success\n")
 
-    } catch (e) {
-      console.error(e)
-    }
+    console.log("Clean up")
+    await deleteFunc([newEmp])
   }
-
 }
 
 const nhanVienTest = testAPI(
+  2000,
   genNhanVien,
   getNhanVien,
   insertNhanVien,
@@ -154,8 +160,31 @@ const nhanVienTest = testAPI(
   ['manhanvien', 'hoten', 'sodienthoai', 'gioitinh', 'mail'],
   'employees'
 )
+// nhanVienTest()
+const khachHangTest = testAPI(
+  2000,
+  genKhachHang,
+  getKhachHang,
+  insertKhachHang,
+  deleteKhachHang,
+  updateKhachHang,
+  ['makhachhang', 'tenkhachhang', 'diachi', 'sodienthoai', 'mail'],
+  'customers'
+)
 
-const ramTest = testAPI(
+const nhaCungCapTest = testAPI(
+  1000,
+  genNhaCungCap,
+  getNCC,
+  insertNCC,
+  deleteNCC,
+  updateNCC,
+  ['manhacungcap', 'tennhacungcap', 'diachi', 'mail', 'sodienthoai'],
+  'suppliers'
+)
+
+const thuongHieuTest = testAPI(
+  10000,
   genThuongHieu,
   testGetThuocTinh.bind({}, 'thuonghieu'),
   testInsertThuocTinh.bind({}, 'thuonghieu'),
@@ -164,46 +193,128 @@ const ramTest = testAPI(
   ['mathuonghieu', 'tenthuonghieu'],
   'attributes'
 )
-// nhanVienTest()
-ramTest()
-// async function testNhanVien(num = 3000) {
-//   if (!num) return
-//   const testSample = new Array(num).fill(0).map(genNhanVien)
-//
-//   try {
-//     // Insert test
-//     let insertResult = await insertNhanVien(testSample)
-//     if (!compareArr(
-//       insertResult.employees,
-//       testSample,
-//       (i, j) => i.hoten === j.hoten && i.mail === j.mail && i.sodienthoai === j.sodienthoai && i.gioitinh === j.gioitinh)) throw "Insert NhanVien Error"
-//
-//     // Delete test
-//     await deleteNhanVien(insertResult.employees)
-//     let query = await getNhanVien()
-//     if (!query.success) throw "Delete: Get NhanVien Error"
-//     if (insertResult.employees.some(i => query.employees.some(j => i.manhanvien === j.manhanvien))) throw "Delete NhanVien Error"
-//
-//     // Update test
-//     const temp = await insertNhanVien([genNhanVien()])
-//     const newEmp = genNhanVien()
-//     newEmp.manhanvien = temp.employees[0].manhanvien
-//
-//     const result = await updateNhanVien(newEmp)
-//
-//     query = await getNhanVien()
-//     if (!query.employees
-//               .some(i => i.manhanvien === newEmp.manhanvien && i.hoten === newEmp.hoten && i.mail === newEmp.mail && i.gioitinh === newEmp.gioitinh && i.sodienthoai === newEmp.sodienthoai)) throw 'Update NhanVien Error'
-//
-//
-//     console.log("Success NhanVien API")
-//   } catch (e) {
-//     console.error(e)
-//   }
-// }
+const mauSacTest = testAPI(
+  10000,
+  genMauSac,
+  testGetThuocTinh.bind({}, 'mausac'),
+  testInsertThuocTinh.bind({}, 'mausac'),
+  testDeletethuocTinh.bind({}, 'mausac'),
+  testUpdateThuocTinh.bind({}, 'mausac'),
+  ['mamausac', 'tenmausac'],
+  'attributes'
+)
 
-// testNhanVien()
+const xuatXuTest = testAPI(
+  10000,
+  genXuatXu,
+  testGetThuocTinh.bind({}, 'xuatxu'),
+  testInsertThuocTinh.bind({}, 'xuatxu'),
+  testDeletethuocTinh.bind({}, 'xuatxu'),
+  testUpdateThuocTinh.bind({}, 'xuatxu'),
+  ['maxuatxu', 'tenxuatxu'],
+  'attributes'
+)
 
-function genRandomSample() {
+const heDieuHanhTest = testAPI(
+  10000,
+  genHedieuHanh,
+  testGetThuocTinh.bind({}, 'hedieuhanh'),
+  testInsertThuocTinh.bind({}, 'hedieuhanh'),
+  testDeletethuocTinh.bind({}, 'hedieuhanh'),
+  testUpdateThuocTinh.bind({}, 'hedieuhanh'),
+  ['mahedieuhanh', 'tenhedieuhanh'],
+  'attributes'
+)
 
+const ramTest = testAPI(
+  10000,
+  genRam,
+  testGetThuocTinh.bind({}, 'ram'),
+  testInsertThuocTinh.bind({}, 'ram'),
+  testDeletethuocTinh.bind({}, 'ram'),
+  testUpdateThuocTinh.bind({}, 'ram'),
+  ['maram', 'dungluongram'],
+  'attributes'
+)
+
+const romTest = testAPI(
+  10000,
+  genRom,
+  testGetThuocTinh.bind({}, 'rom'),
+  testInsertThuocTinh.bind({}, 'rom'),
+  testDeletethuocTinh.bind({}, 'rom'),
+  testUpdateThuocTinh.bind({}, 'rom'),
+  ['marom', 'dungluongrom'],
+  'attributes'
+)
+
+// ramTest()
+// testProductAttributes()
+
+async function testProductAttributes() {
+  const result = []
+
+  // Thuong Hieu
+  console.log("Thuong Hieu Test")
+  try {
+    console.clear()
+    await thuongHieuTest()
+    result.push("Thuong Hieu Success\n")
+  } catch (err) {
+    result.push("Thuong Hieu Fail\n" + err)
+  }
+
+  // Xuat Xu
+  console.log("Xuat Xu Test")
+  try {
+    console.clear()
+    await xuatXuTest()
+    result.push("Xuat Xu Success\n")
+  } catch (err) {
+    result.push("Xuat Xu Fail\n" + err)
+  }
+
+  // He Dieu Hanh
+  console.log("He Dieu Hanh Test")
+  try {
+    console.clear()
+    await heDieuHanhTest()
+    result.push("He Dieu Hanh Success\n")
+  } catch (err) {
+    result.push("He Dieu Hanh Fail\n" + err)
+  }
+
+  // Mau Sac
+  console.log("Mau Sac Test")
+  try {
+    console.clear()
+    await heDieuHanhTest()
+    result.push("Mau Sac Success\n")
+  } catch (err) {
+    result.push("Mau Sac Fail\n" + err)
+  }
+
+  // Rom
+  console.log("Rom Test")
+  try {
+    console.clear()
+    await romTest()
+    result.push("Rom Success\n")
+  } catch (err) {
+    result.push("Rom Fail\n" + err)
+  }
+
+  // Ram
+  console.log("Ram Test")
+  try {
+    console.clear()
+    await ramTest()
+    result.push("Ram Success\n")
+  } catch (err) {
+    result.push("Ram Fail\n" + err)
+  }
+
+  console.clear()
+  console.log(result.join("\n"))
 }
+

@@ -15,7 +15,6 @@ async function getAttributes(conn, attribute) {
 
 async function insertAttribute(conn, attribute, data) {
   let result = [];
-  console.log(attribute, data)
   try {
     switch (attribute.toLowerCase()) {
       case "xuatxu":
@@ -54,8 +53,7 @@ async function insertAttribute(conn, attribute, data) {
         [result] = await conn.query(
           `SELECT *
            FROM thuonghieu
-           WHERE tenthuonghieu IN ?
-          `,
+           WHERE tenthuonghieu IN ?`,
           [[data.map(({tenthuonghieu}) => tenthuonghieu)]])
         break;
       case "ram":
@@ -67,9 +65,7 @@ async function insertAttribute(conn, attribute, data) {
         [result] = await conn.query(
           `SELECT *
            FROM ram
-           WHERE dungluongram IN ?
-           ORDER BY maram DESC
-           LIMIT ?`,
+           WHERE dungluongram IN ?`,
           [[data.map(({dungluongram}) => dungluongram)]])
         break;
       case "rom":

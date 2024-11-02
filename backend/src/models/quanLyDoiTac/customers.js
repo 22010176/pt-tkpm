@@ -22,9 +22,17 @@ async function insertCustomer(conn, customers = []) {
         ])
       ]
     )
-    return {message: "Customers added", success: true};
+    const [result] = await conn.query(
+      `SELECT *
+       FROM khachhang
+       WHERE sodienthoai IN ?`,
+      [[customers.map(({sodienthoai}) => sodienthoai)]]
+    )
+    // console.log(result)
+    return {message: "Customers added", success: true, customers: result};
   } catch (e) {
-    return {message: "Added fail", success: false};
+    console.log(e)
+    return {message: "Added fail", success: false, customers: []};
   }
 }
 
@@ -46,13 +54,13 @@ async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai
   }
 }
 
-async function deleteCustomer(conn, cusomters = []) {
+async function deleteCustomer(conn, customers = []) {
   try {
     await conn.query(
       `DELETE
        FROM khachhang
        WHERE makhachhang IN ?;`,
-      [cusomters.map(({makhachhang}) => [makhachhang])])
+      [[customers.map(({makhachhang}) => makhachhang)]])
     return {message: "Customer deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

@@ -38,7 +38,7 @@ function randDate() {
 }
 
 function genPhoneNum() {
-  return generatePhoneNumber({countryName: CountryNames.Viet_Nam})
+  return generatePhoneNumber()
 }
 
 function randomDate(start, end) {

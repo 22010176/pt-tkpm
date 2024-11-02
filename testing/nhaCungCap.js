@@ -2,62 +2,49 @@ const {v4} = require("uuid");
 
 const getNCC = () =>
   fetch('http://localhost:3001/api/suppliers', {
-    method: 'GET',
+    method:  'GET',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     }
   })
   .then(response => response.json())
-  .then(console.log);
+
 
 const insertNCC = (khachHang) =>
   fetch('http://localhost:3001/api/suppliers', {
-    method: 'POST',
+    method:  'POST',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(khachHang)
   })
   .then(response => response.json())
-  .then(console.log);
 
-const insertMultipleNCC = (khachHang = []) =>
-  fetch('http://localhost:3001/api/suppliers/add-multiple', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(khachHang)
-  })
-  .then(response => response.json())
-  .then(console.log);
 
 const updateNCC = khachHang =>
   fetch('http://localhost:3001/api/suppliers', {
-    method: 'PUT',
+    method:  'PUT',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(khachHang)
   })
   .then(response => response.json())
-  .then(console.log);
+
 
 const deleteNCC = khachHang =>
   fetch('http://localhost:3001/api/suppliers', {
-    method: 'DELETE',
+    method:  'DELETE',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(khachHang)
   })
   .then(response => response.json())
-  .then(console.log);
 
 
 function genNCC() {
@@ -66,5 +53,7 @@ function genNCC() {
 
 // insertNCC(genNCC())
 // insertMultipleNCC(new Array(100).fill().map(genNCC))
-getNCC()
+module.exports = {
+  getNCC, insertNCC, updateNCC, deleteNCC
+}
 
