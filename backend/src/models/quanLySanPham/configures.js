@@ -1,4 +1,5 @@
 async function getConfigures(conn) {
+
   try {
     const [result] = await conn.query(
       `SELECT *
@@ -95,7 +96,6 @@ async function updateConfigure(conn, {
 
 async function deleteConfigure(conn, configures = []) {
   try {
-    
     await conn.query(
       `DELETE
        FROM cauhinh

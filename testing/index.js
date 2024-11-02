@@ -10,7 +10,7 @@ const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = requ
 
 function genNhanVien() {
   return {
-    hoten: v4(), ngaysinh: randDate(new Date(1950), new Date()), sodienthoai: genPhoneNum(), gioitinh: randGender(), mail: randomEmail(),
+    hoten: v4(), ngaysinh: randDate(new Date(1950), new Date()), sodienthoai: v4(), gioitinh: randGender(), mail: randomEmail(),
   }
 }
 
@@ -151,7 +151,7 @@ function testAPI(numberRow, genFunction, getFunc, insertFunc, deleteFunc, update
 }
 
 const nhanVienTest = testAPI(
-  2000,
+  5000,
   genNhanVien,
   getNhanVien,
   insertNhanVien,
@@ -160,6 +160,13 @@ const nhanVienTest = testAPI(
   ['manhanvien', 'hoten', 'sodienthoai', 'gioitinh', 'mail'],
   'employees'
 )
+
+// const taiKhoan = testAPI()
+
+// const nhomQuyenTest = testAPI(
+//
+// )
+
 // nhanVienTest()
 const khachHangTest = testAPI(
   5000,
@@ -278,8 +285,8 @@ const genThuocTinhFunc = {
   xuatxu:     genXuatXu,
   hedieuhanh: genHedieuHanh,
   thuonghieu: genThuongHieu,
-  rom:        genRam,
-  ram:        genRom,
+  rom:        genRom,
+  ram:        genRam,
   mausac:     genMauSac
 }
 
@@ -350,9 +357,8 @@ async function testAPIGroup(test = []) {
   console.clear()
   console.log(result.join("\n"))
 }
-
-
+// nhanVienTest()
 // testAPIGroup(thuocTinhTest)
-testAPIGroup(doiTacTest)
+// testAPIGroup(doiTacTest)
 // testAPIGroup(quanLySanPhamTest)
 

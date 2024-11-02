@@ -46,28 +46,34 @@ const keys = {
 
 const headers = {
   [keys.thuongHieu]: [
-    {key: "Mã thương hiệu", value: "mathuonghieu"},
-    {key: "Tên thương hiệu", value: "tenthuonghieu"}
+    {key: "Mã thương hiệu", value: "ma"},
+    {key: "Tên thương hiệu", value: "tenthuonghieu"},
+    {key: "mathuonghieu", value: "mathuonghieu", hide: true},
   ],
   [keys.xuatXu]:     [
-    {key: "Mã xuất xứ", value: "maxuatxu"},
-    {key: "Tên xuất xứ", value: "tenxuatxu"}
+    {key: "Mã xuất xứ", value: "ma"},
+    {key: "Tên xuất xứ", value: "tenxuatxu"},
+    {key: "maxuatxu", value: "maxuatxu", hide: true},
   ],
   [keys.heDieuHanh]: [
-    {key: "Mã hệ điều hành", value: "mahedieuhanh"},
-    {key: "Tên hệ điều hành", value: "tenhedieuhanh"}
+    {key: "Mã hệ điều hành", value: "ma"},
+    {key: "Tên hệ điều hành", value: "tenhedieuhanh"},
+    {key: "mahedieuhanh", value: "mahedieuhanh", hide: true},
   ],
   [keys.ram]:        [
-    {key: "Mã ram", value: "maram"},
-    {key: "Dung lượng ram (GB)", value: "dungluongram"}
+    {key: "Mã ram", value: "ma"},
+    {key: "Dung lượng ram (GB)", value: "dungluongram"},
+    {key: "maram", value: "maram", hide: true},
   ],
   [keys.rom]:        [
-    {key: "Mã rom", value: "marom"},
-    {key: "Dung lượng rom (GB)", value: "dungluongrom"}
+    {key: "Mã rom", value: "ma"},
+    {key: "Dung lượng rom (GB)", value: "dungluongrom"},
+    {key: "marom", value: "marom", hide: true},
   ],
   [keys.mauSac]:     [
-    {key: "Mã màu sắc", value: "mamausac"},
-    {key: "Tên màu sắc", value: "tenmausac"}
+    {key: "Mã màu sắc", value: "ma"},
+    {key: "Tên màu sắc", value: "tenmausac"},
+    {key: "mamausac", value: "mamausac"},
   ]
 }
 
@@ -240,7 +246,7 @@ function ThuocTinh() {
 
             <div className='justify-content-center mx-3' style={{height: "70%"}}>
               <div className='overflow-y-auto h-100 border border-black' style={{}}>
-                <TableA headers={headers[modal]} data={tableData} onClick={onRowclick}/>
+                <TableA headers={headers[modal]} data={tableData.slice(0, 100)} onClick={onRowclick}/>
               </div>
             </div>
           </div>

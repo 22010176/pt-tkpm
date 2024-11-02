@@ -210,9 +210,9 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
     let result = await insertProduct([data])
     console.log(result)
 
-    if (!result.success || result.body.length === 0) return;
+    if (!result.success || result.products.length === 0) return;
 
-    setData(result.body[0])
+    setData(result.products[0])
     if (typeof onSubmit === 'function') onSubmit()
     setModal('cauHinh')
   }
@@ -306,7 +306,7 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Xuất xứ</FormLabel>
         <InputShadow as={FormSelect} value={data?.xuatxu} onChange={onDataChange.bind({}, "xuatxu")}>
-          {xuatxu?.map((i, j) => <option key={j} value={i.maxuatxu}>{i.tenxuatxu}</option>)}
+          {xuatxu?.slice(0, 50).map((i, j) => <option key={j} value={i.maxuatxu}>{i.tenxuatxu}</option>)}
         </InputShadow>
       </FormGroup>
 
@@ -350,7 +350,7 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Hệ điều hành</FormLabel>
         <InputShadow as={FormSelect} value={data?.hedieuhanh} onChange={onDataChange.bind({}, "hedieuhanh")}>
-          {hedieuhanh?.map((i, j) => <option key={j} value={i.mahedieuhanh}>{i.tenhedieuhanh}</option>)}
+          {hedieuhanh?.slice(0, 50).map((i, j) => <option key={j} value={i.mahedieuhanh}>{i.tenhedieuhanh}</option>)}
         </InputShadow>
       </FormGroup>
 
@@ -370,7 +370,7 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Thương hiệu</FormLabel>
         <InputShadow as={FormSelect} value={data?.thuonghieu} onChange={onDataChange.bind({}, "thuonghieu")}>
-          {thuonghieu?.map((i, j) => <option key={j} value={i.mathuonghieu}>{i.tenthuonghieu}</option>)}
+          {thuonghieu?.slice(0, 50).map((i, j) => <option key={j} value={i.mathuonghieu}>{i.tenthuonghieu}</option>)}
         </InputShadow>
       </FormGroup>
     </FormGroup>
@@ -392,7 +392,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
 
   function updateInfo() {
     setTableData([])
-    getProductConfigures(sanPham?.madanhmucsanpham).then(data => setTableData(data.configurations))
+    getProductConfigures(sanPham?.madanhmucsanpham).then(data => setTableData(data.configures))
   }
 
   function onHide() {

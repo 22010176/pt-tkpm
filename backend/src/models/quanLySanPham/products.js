@@ -40,7 +40,7 @@ async function insertProduct(conn, products = []) {
     }
     products.forEach(product => {
       const data = Object.entries(product)
-      data.forEach(([key, value]) => arr[key].push(value))
+      data.forEach(([key, value]) => arr[key]?.push(value))
     })
 
     const {tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu} = arr

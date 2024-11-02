@@ -74,12 +74,12 @@ async function getRolePermissions(conn, manhomquyen) {
 
 async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen = []}) {
   try {
-    console.log(await conn.query(
+    await conn.query(
       `INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
-       VALUES (?, ?, ?);`, [tennhomquyen, tenhienthi, ghichu]))
+       VALUES (?, ?, ?);`, [tennhomquyen, tenhienthi, ghichu])
 
     const [result] = await conn.query(
-      `SELECT manhomquyen
+      `SELECT *
        FROM nhomquyen
        WHERE tennhomquyen = ?
          AND tenhienthi = ?
@@ -89,14 +89,14 @@ async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen
     if (danhsachquyen.length === 0) return {message: "Role added", success: true, body: result};
 
     const {manhomquyen} = result[0]
-    await conn.query(
-      `INSERT INTO ctquyen (nhomquyen, quyenhan)
-       VALUES ?`,
-      [danhsachquyen.map(({maquyenhan}) => [manhomquyen, maquyenhan])])
-    return {message: "Role added", success: true, body: result};
+    const test = await insertPermissionQuery(
+      conn,
+      danhsachquyen.map(({maquyenhan}) => ({manhomquyen, maquyenhan})))
+
+    return {message: "Role added", success: test, body: [{...result[0], danhsachquyen: test}]};
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false};
+    return {message: "Added fail", success: false, body: []};
   }
 }
 
@@ -110,8 +110,9 @@ async function updateRole(conn, {tennhomquyen, tenhienthi, ghichu, manhomquyen, 
        WHERE manhomquyen = ?;`,
       [tennhomquyen, tenhienthi, ghichu, manhomquyen]);
 
-    const test = await insertPermissionQuery(conn, danhsachquyen.map(({maquyenhan}) => ({manhomquyen, maquyenhan})))
-    console.log(test)
+    const test = await insertPermissionQuery(
+      conn,
+      danhsachquyen.map(({maquyenhan}) => ({manhomquyen, maquyenhan})))
 
     return {message: "Role updated", success: test};
 
@@ -127,17 +128,18 @@ async function deleteRole(conn, roles = []) {
       `DELETE
        FROM nhomquyen
        WHERE manhomquyen IN ?`,
-      [roles.map(({manhomquyen}) => [manhomquyen])]);
+      [[roles.map(({manhomquyen}) => manhomquyen)]]);
     return {message: "Role deleted", success: true};
 
   } catch (e) {
+    console.log(e)
     return {message: "Deleted fail", success: false};
   }
 }
 
 async function insertPermissionQuery(conn, perms = []) {
   try {
-    await conn.query(
+    if (perms.length > 0) await conn.query(
       `DELETE
        FROM ctquyen
        WHERE nhomquyen IN ?`,
@@ -147,10 +149,16 @@ async function insertPermissionQuery(conn, perms = []) {
       `INSERT INTO ctquyen (nhomquyen, quyenhan)
        VALUES ?`,
       [perms.map(({manhomquyen, maquyenhan}) => [manhomquyen, maquyenhan])]);
-    return true
+
+    return (await conn.query(
+      `SELECT *
+       FROM ctquyen
+       WHERE nhomquyen IN ?`,
+      [[perms.map(({manhomquyen}) => manhomquyen)]]
+    ))[0]
   } catch (e) {
     console.log(e)
-    return false
+    return []
   }
 }
 

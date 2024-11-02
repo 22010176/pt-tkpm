@@ -89,7 +89,7 @@ CREATE TABLE nhanvien
   hoten       VARCHAR(255) NOT NULL,
   ngaysinh    DATE,
   mail        VARCHAR(255) NOT NULL UNIQUE,
-  sodienthoai VARCHAR(20) UNIQUE,
+  sodienthoai VARCHAR(50) UNIQUE,
   gioitinh    ENUM ('Nam', 'Nữ') DEFAULT 'Nam'
 );
 
@@ -303,9 +303,6 @@ VALUES ('tonKho', 'tồn kho'),
        ('biDoi', 'bị đổi');
 
 
-SELECT COUNT(*)
-FROM cauhinh;
 
-DELETE
-FROM cauhinh
-WHERE macauhinh > 0;
+SELECT COUNT(*)
+FROM quyenhan;

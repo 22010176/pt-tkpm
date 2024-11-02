@@ -1,9 +1,29 @@
+function genPrefix(key) {
+  switch (key.toLowerCase()) {
+    case "xuatxu":
+      return "XuatXu-"
+    case "hedieuhanh":
+      return "HeDieuHanh-"
+    case "thuonghieu":
+      return "ThuongHieu-"
+    case "ram":
+      return "Ram-"
+    case "rom":
+      return "Rom-"
+    case "mausac":
+      return "MauSac-"
+  }
+}
+
 async function getAttributes(conn, attribute) {
+  const prefix = genPrefix(attribute)
   try {
+    console.log(attribute);
     const [result] = await conn.query(
-      `SELECT *
+      `SELECT *, CONCAT(?, ma${attribute}) AS ma
        FROM ${attribute}
-       LIMIT 100`)
+       ORDER BY ma${attribute} DESC`,
+      [prefix])
     return {attributes: result, success: true}
 
   } catch (e) {

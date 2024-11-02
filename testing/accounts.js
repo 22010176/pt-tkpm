@@ -3,53 +3,55 @@ const {randInt, randStr} = require('./utitlies')
 
 const getTaiKhoan = () =>
   fetch('http://localhost:3001/api/accounts', {
-    method: 'GET',
+    method:  'GET',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     }
   })
   .then(response => response.json())
   .then(console.log);
 
-const insertTaiKhoan = (khachHang) =>
+const insertTaiKhoan = (accounts) =>
   fetch('http://localhost:3001/api/accounts', {
-    method: 'POST',
+    method:  'POST',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(accounts)
   })
   .then(response => response.json())
   .then(console.log);
 
-const updateTaiKhoan = khachHang =>
+const updateTaiKhoan = accounts =>
   fetch('http://localhost:3001/api/accounts', {
-    method: 'PUT',
+    method:  'PUT',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(accounts)
   })
   .then(response => response.json())
   .then(console.log);
 
-const deleteTaiKhoan = khachHang =>
+const deleteTaiKhoan = accounts =>
   fetch('http://localhost:3001/api/accounts', {
-    method: 'DELETE',
+    method:  'DELETE',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(khachHang)
+    body:    JSON.stringify(accounts)
   })
   .then(response => response.json())
   .then(console.log);
 
 
-
+module.exports = {
+  insertTaiKhoan, deleteTaiKhoan, getTaiKhoan, updateTaiKhoan
+}
 
 // for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());
 

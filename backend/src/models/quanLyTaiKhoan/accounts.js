@@ -21,13 +21,18 @@ async function getAccounts(conn) {
   }
 }
 
-async function insertAccount(conn, {matkhau, vaitro, nhanvien}) {
+async function insertAccount(conn, accounts = []) {
   try {
-    const [result] = await conn.query(
+    await conn.query(
       `INSERT INTO taikhoan (matkhau, vaitro, nhanvien)
-       VALUES (?, ?, ?);`,
-      [matkhau, vaitro, nhanvien])
-    return {message: "Account added", success: true};
+       VALUES ?;`,
+      [accounts.map(({matkhau, vaitro, nhanvien}) => [matkhau, vaitro, nhanvien])])
+
+    const [result] = await conn.query(
+      `SELECT *
+       FROM taikhoan
+       WHERE nhanvien IN ?`, [[accounts.map(({nhanvien}) => nhanvien)]])
+    return {message: "Account added", success: true, accounts: result};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};
@@ -39,8 +44,7 @@ async function updateAccount(conn, {vaitro, mataikhoan}) {
     await conn.query(
       `UPDATE taikhoan
        SET vaitro = ?
-       WHERE mataikhoan = ?;`,
-      [vaitro, mataikhoan])
+       WHERE mataikhoan = ?;`, [vaitro, mataikhoan])
     return {message: "Account updated", success: true}
   } catch (e) {
     console.log((e))
@@ -48,12 +52,12 @@ async function updateAccount(conn, {vaitro, mataikhoan}) {
   }
 }
 
-async function deleteAccount(conn, account) {
+async function deleteAccount(conn, accounts = []) {
   try {
     await conn.query(
       `DELETE
        FROM taikhoan
-       WHERE mataikhoan = ?;`, [account.mataikhoan])
+       WHERE mataikhoan = ?;`, [[accounts.map(({mataikhoan}) => mataikhoan)]])
     return {message: "Account deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}
