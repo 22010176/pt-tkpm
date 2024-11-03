@@ -28,7 +28,8 @@ const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethu
 const {getNCC, insertNCC, updateNCC, deleteNCC} = require("./API/nhaCungCap");
 const {getDanhMucSanPham, insertDanhMucSanPham, updateDanhMucSanPham, deleteDanhMucSanPham} = require("./API/sanPham");
 const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = require('./API/configures')
-
+const {updateImport, deleteImport, insertImport, getImports} = require('./API/imports')
+const {updateExport, deleteExport, insertExport, getExports} = require('./API/exports')
 
 async function createNhanVien(number) {
   return await insertNhanVien(new Array(number).fill(0).map(genNhanVien));
@@ -79,18 +80,28 @@ async function createPhieuNhap(number) {
     getNhanVien().then(i => i.employees)
   ])
 
-
+  return insertImport(new Array(number).fill(0).map(genPhieuNhapKho.bind({}, nhaCungCap, nhanVien)))
 }
-createPhieuNhap()
+
+async function createPhieuXuat(number) {
+  const [khachHang, nhanVien] = await Promise.all([
+    getKhachHang().then(i => i.suppliers),
+    getNhanVien().then(i => i.employees)
+  ])
+  return insertExport(new Array(number).fill(0).map(genPhieuNhapKho.bind({}, khachHang, nhanVien)))
+}
+
+// createPhieuNhap()
 // createNhaCungCap(1000).then(console.log)
 
 // createKhachHang(1000).then(console.log)
-
+//
 // createNhanVien(1000).then(console.log);
+// createPhieuNhap(1000).then(console.log)
 
-// createThuocTinh(100).then(console.log)
+// createThuocTinh(1000).then(console.log)
+// createPhieuXuat(1000).then(console.log)
 
-// createDanhMucSanPham(100)
 // createDanhMucSanPham(10000).then(console.log)
 
 // createCauHinh(100000).then(console.log)

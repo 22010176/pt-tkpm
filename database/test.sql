@@ -54,4 +54,24 @@ FROM quyenhan;
 SELECT COUNT(*)
 FROM nhanvien;
 
+SELECT *
+FROM nhanvien
+WHERE manhanvien = 343;
 
+SELECT *
+FROM nhacungcap;
+
+
+
+INSERT INTO phieunhapkho (nhacungcap, nhanviennhap)
+VALUES (1, 2);
+
+SELECT *
+FROM phieuxuatkho
+;
+
+SELECT *
+FROM sanpham;
+
+SELECT *
+FROM cauhinh;

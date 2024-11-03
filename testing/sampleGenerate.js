@@ -86,7 +86,6 @@ function genCauHinh(danhMucSanPham = [], rom = [], ram = [], mauSac = []) {
 
 function genPhieuNhapKho(nhaCungCap = [], nhanVien = []) {
   return {
-    thoigiannhap: randDate(new Date(2010), new Date()),
     nhacungcap:   getRand(nhaCungCap)?.manhacungcap,
     nhanviennhap: getRand(nhanVien)?.manhanvien
   }
@@ -94,7 +93,6 @@ function genPhieuNhapKho(nhaCungCap = [], nhanVien = []) {
 
 function genPhieuXuatKho(khachHang = [], nhanVien = []) {
   return {
-    thoigianxuat: randDate(new Date(2010), new Date()),
     khachhang:    getRand(khachHang)?.makhachhang,
     nhanvienxuat: getRand(nhanVien)?.manhanvien
   }

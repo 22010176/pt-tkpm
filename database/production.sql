@@ -257,9 +257,9 @@ CREATE TABLE phieunhapkho
   nhacungcap   INT UNSIGNED,
   nhanviennhap INT UNSIGNED,
 
-  FOREIGN KEY (nhacungcap) REFERENCES ptpm_doitac.nhacungcap (manhacungcap)
+  FOREIGN KEY (nhacungcap) REFERENCES nhacungcap (manhacungcap)
     ON UPDATE CASCADE ON DELETE SET NULL,
-  FOREIGN KEY (nhanviennhap) REFERENCES ptpm_taikhoan.nhanvien (manhanvien)
+  FOREIGN KEY (nhanviennhap) REFERENCES nhanvien (manhanvien)
     ON UPDATE CASCADE ON DELETE SET NULL
 );
 
@@ -271,9 +271,9 @@ CREATE TABLE phieuxuatkho
   khachhang    INT UNSIGNED,
   nhanvienxuat INT UNSIGNED,
 
-  FOREIGN KEY (khachhang) REFERENCES ptpm_doitac.khachhang (makhachhang)
+  FOREIGN KEY (khachhang) REFERENCES khachhang (makhachhang)
     ON UPDATE CASCADE ON DELETE SET NULL,
-  FOREIGN KEY (nhanvienxuat) REFERENCES ptpm_taikhoan.nhanvien (manhanvien)
+  FOREIGN KEY (nhanvienxuat) REFERENCES nhanvien (manhanvien)
     ON UPDATE CASCADE ON DELETE SET NULL
 );
 
@@ -281,19 +281,23 @@ DROP TABLE IF EXISTS sanpham;
 CREATE TABLE sanpham
 (
   masanpham INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  maimei    VARCHAR(255) UNIQUE,
-  cauhinh   INT UNSIGNED NOT NULL,
-  phieunhap INT UNSIGNED NOT NULL,
-  phieuxuat INT UNSIGNED NOT NULL,
+  maimei    VARCHAR(255) UNIQUE NOT NULL,
+  cauhinh   INT UNSIGNED        NOT NULL,
+  phieunhap INT UNSIGNED        NOT NULL,
+  phieuxuat INT UNSIGNED,
+  tinhtrang INT UNSIGNED        NOT NULL DEFAULT 5,
 
-  FOREIGN KEY (cauhinh) REFERENCES ptpm_sanpham.cauhinh (macauhinh)
+  FOREIGN KEY (cauhinh) REFERENCES cauhinh (macauhinh)
     ON UPDATE CASCADE ON DELETE CASCADE,
 
-  FOREIGN KEY (phieunhap) REFERENCES ptpm_nhapxuat.phieunhapkho (maphieunhap)
+  FOREIGN KEY (phieunhap) REFERENCES phieunhapkho (maphieunhap)
     ON UPDATE CASCADE ON DELETE CASCADE,
 
-  FOREIGN KEY (phieunhap) REFERENCES phieuxuatkho (maphieuxuat)
-    ON UPDATE CASCADE ON DELETE CASCADE
+  FOREIGN KEY (phieuxuat) REFERENCES phieuxuatkho (maphieuxuat)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+
+  FOREIGN KEY (tinhtrang) REFERENCES tinhtrang (matinhtrang)
+    ON UPDATE CASCADE
 );
 
 INSERT INTO tinhtrang (tentinhtrang, tenhienthi)
@@ -302,7 +306,34 @@ VALUES ('tonKho', 'tồn kho'),
        ('hoanTra', 'hoàn trả'),
        ('biDoi', 'bị đổi');
 
+INSERT INTO tinhtrang (tentinhtrang, tenhienthi)
+VALUES ('koTinhTrang', '');
+
+SELECT *
+FROM cauhinh;
+
+SELECT *
+FROM phieuxuatkho;
 
 
-SELECT COUNT(*)
-FROM quyenhan;
+SELECT *
+FROM phieunhapkho;
+
+
+
+SELECT *
+FROM sanpham
+;
+
+
+
+
+
+
+
+
+
+
+
+
+

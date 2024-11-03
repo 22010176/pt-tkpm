@@ -22,16 +22,13 @@ async function insertRole(roles = []) {
   return {roles: result.map(role => role.body).flat()}
 }
 
-// getRoles().then(console.log)
-
-
-insertRole(new Array(20).fill().map(i => {
-  const perms = new Array(96).fill().map(i => i + 1)
-  const role = {
-    tennhomquyen:  v4(),
-    tenhienthi:    v4(),
-    ghichu:        "",
-    danhsachquyen: new Array(10).fill().map((j, k) => ({maquyenhan: k + 1}))
-  }
-  return role;
-})).then(data => console.log(data.roles[0]))
+// insertRole(new Array(20).fill().map(i => {
+//   const perms = new Array(96).fill().map(i => i + 1)
+//   const role = {
+//     tennhomquyen:  v4(),
+//     tenhienthi:    v4(),
+//     ghichu:        "",
+//     danhsachquyen: new Array(10).fill().map((j, k) => ({maquyenhan: k + 1}))
+//   }
+//   return role;
+// })).then(data => console.log(data.roles[0]))

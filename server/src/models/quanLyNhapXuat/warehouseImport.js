@@ -17,19 +17,20 @@ async function insertImport(conn, imports = []) {
       `INSERT INTO phieunhapkho (nhacungcap, nhanviennhap)
        VALUES ?`,
       [imports.map(({nhacungcap, nhanviennhap}) => [nhacungcap, nhanviennhap])])
-
-    const result = await conn.query(
+    
+    const [result] = await conn.query(
       `SELECT *
        FROM phieunhapkho
        WHERE nhanviennhap IN ?
-         AND thoigiannhap IN ?
+         AND nhacungcap IN ?
        ORDER BY thoigiannhap DESC
        LIMIT ?`,
       [
-        [imports.map(({nhacungcap}) => nhacungcap)],
         [imports.map(({nhanviennhap}) => nhanviennhap)],
+        [imports.map(({nhacungcap}) => nhacungcap)],
         imports.length
       ])
+    // console.log(result, imports)
 
     return {message: "Import added", success: true, entries: result}
   } catch (err) {
