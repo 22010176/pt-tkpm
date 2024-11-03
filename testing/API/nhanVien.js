@@ -1,5 +1,5 @@
 const {v4} = require('uuid');
-const {randDate, randStr} = require('./utitlies')
+const {randDate, randStr} = require('../utitlies')
 
 const insertNhanVien = sp => fetch('http://localhost:3001/api/employees', {
   method:  'POST',

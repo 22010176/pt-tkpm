@@ -48,13 +48,13 @@ const getAllThuocTinh = async () => {
 }
 
 const insertAllThuocTinh = async (genRam, genRom, genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac, num = 100) =>
-  new Array(num).fill(0).map((_, i) => [
-    typeof genRam === 'function' && testInsertThuocTinh('ram', genRam()),
-    typeof genRom === 'function' && testInsertThuocTinh('rom', genRom()),
-    typeof genXuatXu === 'function' && testInsertThuocTinh('xuatxu', genXuatXu()),
-    typeof genHeDieuHanh === 'function' && testInsertThuocTinh('hedieuhanh', genHeDieuHanh()),
-    typeof genThuongHieu === 'function' && testInsertThuocTinh('thuonghieu', genThuongHieu()),
-    typeof genMauSac === 'function' && testInsertThuocTinh('mausac', genMauSac()),
+  Promise.all([
+    typeof genRam === 'function' && testInsertThuocTinh('ram', new Array(num).fill(0).map(genRam)),
+    typeof genRom === 'function' && testInsertThuocTinh('rom', new Array(num).fill(0).map(genRom)),
+    typeof genXuatXu === 'function' && testInsertThuocTinh('xuatxu', new Array(num).fill(0).map(genXuatXu)),
+    typeof genHeDieuHanh === 'function' && testInsertThuocTinh('hedieuhanh', new Array(num).fill(0).map(genHeDieuHanh)),
+    typeof genThuongHieu === 'function' && testInsertThuocTinh('thuonghieu', new Array(num).fill(0).map(genThuongHieu)),
+    typeof genMauSac === 'function' && testInsertThuocTinh('mausac', new Array(num).fill(0).map(genMauSac)),
   ])
 
 module.exports = {

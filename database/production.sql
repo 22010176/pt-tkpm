@@ -253,7 +253,7 @@ DROP TABLE IF EXISTS phieunhapkho;
 CREATE TABLE phieunhapkho
 (
   maphieunhap  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  thoigiannhap DATE NOT NULL,
+  thoigiannhap DATETIME DEFAULT CURRENT_TIMESTAMP,
   nhacungcap   INT UNSIGNED,
   nhanviennhap INT UNSIGNED,
 
@@ -267,7 +267,7 @@ DROP TABLE IF EXISTS phieuxuatkho;
 CREATE TABLE phieuxuatkho
 (
   maphieuxuat  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  thoigianxuat DATE NOT NULL,
+  thoigianxuat DATETIME DEFAULT CURRENT_TIMESTAMP,
   khachhang    INT UNSIGNED,
   nhanvienxuat INT UNSIGNED,
 

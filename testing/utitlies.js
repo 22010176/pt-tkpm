@@ -58,6 +58,24 @@ function getRand(arr = []) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function compareArr(arr1 = [], arr2 = [], cmp = (i, j) => i === j) {
+  const a = [...arr2],
+        b = [...arr1]
+
+  while (a.length) {
+    const _a     = a.splice(0, 1)[0],
+          curLen = b.length
+
+    for (let i = 0; i < b.length; ++i) {
+      if (!cmp(_a, b[i])) continue
+      b.splice(i, 1)
+      break
+    }
+    if (b.length === curLen) return false;
+  }
+  return true
+}
+
 module.exports = {
-  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail, randGender
+  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail, randGender, compareArr
 }

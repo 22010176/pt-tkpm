@@ -6,8 +6,7 @@ async function getProducts(conn) {
                 INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
                 INNER JOIN hedieuhanh h ON h.mahedieuhanh = d.hedieuhanh
                 INNER JOIN thuonghieu t ON t.mathuonghieu = d.thuonghieu
-       ORDER BY madanhmucsanpham DESC
-       LIMIT 200;`)
+       ORDER BY madanhmucsanpham DESC`)
     return {products: result, success: true};
   } catch (e) {
     console.log(e)

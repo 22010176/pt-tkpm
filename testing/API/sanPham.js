@@ -1,6 +1,6 @@
 const {v4} = require('uuid');
 
-const insertSanPham = sp => fetch('http://localhost:3001/api/products', {
+const insertDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
   method:  'POST', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
@@ -8,23 +8,22 @@ const insertSanPham = sp => fetch('http://localhost:3001/api/products', {
 .then(response => response.json())
 
 
-const getSanPham = sp => fetch('http://localhost:3001/api/products', {
+const getDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
   method: 'GET', headers: {
     'Content-Type': 'application/json'
   }
 })
 .then(response => response.json())
 
-getSanPham()
 
-const updateSanPham = sp => fetch('http://localhost:3001/api/products', {
+const updateDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
   method:  'PUT', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
 .then(response => response.json())
 
-const deleteSanPham = sp => fetch('http://localhost:3001/api/products', {
+const deleteDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
   method:  'DELETE', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
@@ -39,7 +38,7 @@ function genSanPham(maDanhMucSanPham = 0) {
 
 
 module.exports = {
-  getSanPham, insertSanPham, updateSanPham, deleteSanPham
+  getDanhMucSanPham, insertDanhMucSanPham, updateDanhMucSanPham, deleteDanhMucSanPham
 }
 // deleteSanPham({
 //   chipXuLy: "test", dungLuongPin: 29, kichThuongManHinh: 33, cameraTruoc: 44, cameraSau: 55, phienBanHeDieuHanh: "dd", thoiGianBaoHanh: 44, hinhAnh: "@!12", xuatXu: 14, heDieuHanh: 9, thuongHieu: 22, maDanhMucSanPham: 7

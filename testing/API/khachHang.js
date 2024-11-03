@@ -1,5 +1,5 @@
 const {v4} = require('uuid');
-const {randDate, randInt} = require('./utitlies');
+const {randDate, randInt} = require('../utitlies');
 
 
 const getKhachHang = () => fetch('http://localhost:3001/api/customers', {
@@ -50,11 +50,3 @@ module.exports = {
   insertKhachHang, getKhachHang, deleteKhachHang, updateKhachHang
 }
 
-// deleteKhachHang({
-//   maKhachHang: 3,
-//   tenKhachHang: "te3st1",
-//   ngaySinh: "2004-01-22",
-//   diaChi: "teest",
-//   soDienThoai: Math.random() + "-Dadd",
-//   mail: Math.random() + "test@test.com",
-// }).then(getAccount);

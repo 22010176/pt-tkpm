@@ -55,9 +55,3 @@ SELECT COUNT(*)
 FROM nhanvien;
 
 
-
-
-
-
-
-

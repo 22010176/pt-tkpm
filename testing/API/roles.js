@@ -1,4 +1,4 @@
-const {randInt} = require('./utitlies');
+const {randInt} = require('../utitlies');
 const {v4} = require('uuid');
 
 async function getRoles() {

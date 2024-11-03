@@ -1,4 +1,4 @@
-const {randInt} = require("./utitlies");
+const {randInt} = require("../utitlies");
 
 async function getConfigures() {
   return fetch('http://localhost:3001/api/configures', {

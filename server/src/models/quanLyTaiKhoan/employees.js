@@ -4,8 +4,7 @@ async function getEmployees(conn) {
       `SELECT nv.*, nq.*
        FROM nhanvien nv
                 LEFT JOIN taikhoan tk ON nv.manhanvien = tk.nhanvien
-                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen
-       LIMIT 100;`)
+                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen`)
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}
