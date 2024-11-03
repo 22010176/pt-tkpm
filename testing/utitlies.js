@@ -77,5 +77,5 @@ function compareArr(arr1 = [], arr2 = [], cmp = (i, j) => i === j) {
 }
 
 module.exports = {
-  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail, randGender, compareArr
+  formatDate, getRand, randInt, randDate, randStr, genPhoneNum, randomEmail, randGender, compareArr, randomDate
 }

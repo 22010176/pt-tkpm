@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true})
 
 const {deleteImport, updateImport, insertImport, getImports} = require("../../models/quanLyNhapXuat/warehouseImport");
 const {getExports, insertExport, updateExport, deleteExport} = require("../../models/quanLyNhapXuat/warehouseExport");
-const {getItems, insertItem, updateItem, deleteItem} = require("../../models/quanLyNhapXuat/items");
+const {getItems, insertItem, updateItem, deleteItem, getTinhTrang} = require("../../models/quanLyNhapXuat/items");
 
 router.route("/import")
       .get(async function (req, res) {
@@ -80,6 +80,14 @@ router.route("/items")
       .delete(async function (req, res) {
         const conn = res.locals.conn;
         const result = await deleteItem(conn, req.body)
+        await res.locals.conn.destroy()
+        res.json(result)
+      })
+
+router.route("/item-state")
+      .get(async function (req, res) {
+        const conn = res.locals.conn;
+        const result = await getTinhTrang(conn, req.body)
         await res.locals.conn.destroy()
         res.json(result)
       })

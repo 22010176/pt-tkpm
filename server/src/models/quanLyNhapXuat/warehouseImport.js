@@ -14,10 +14,10 @@ async function getImports(conn) {
 async function insertImport(conn, imports = []) {
   try {
     await conn.query(
-      `INSERT INTO phieunhapkho (nhacungcap, nhanviennhap)
+      `INSERT INTO phieunhapkho (nhacungcap, nhanviennhap, thoigiannhap)
        VALUES ?`,
-      [imports.map(({nhacungcap, nhanviennhap}) => [nhacungcap, nhanviennhap])])
-    
+      [imports.map(({nhacungcap, nhanviennhap, thoigiannhap}) => [nhacungcap, nhanviennhap, thoigiannhap])])
+
     const [result] = await conn.query(
       `SELECT *
        FROM phieunhapkho

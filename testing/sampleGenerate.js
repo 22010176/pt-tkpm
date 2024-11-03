@@ -1,10 +1,10 @@
 const {v4, MAX} = require("uuid");
-const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail, randGender} = require("./utitlies");
+const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail, randGender, randomDate} = require("./utitlies");
 
 function genNhanVien() {
   return {
     hoten:       v4(),
-    ngaysinh:    randDate(new Date(1950), new Date()),
+    ngaysinh:    randomDate(new Date(2010), new Date()),
     sodienthoai: v4(),
     gioitinh:    randGender(),
     mail:        randomEmail(),
@@ -18,7 +18,7 @@ function genNhaCungCap() {
 function genKhachHang() {
   return {
     tenkhachhang: v4(),
-    ngaysinh:     randDate(new Date(1950), new Date()),
+    ngaysinh:     randomDate(new Date(2010), new Date()),
     diachi:       v4(),
     sodienthoai:  v4(),
     mail:         randomEmail(),
@@ -87,23 +87,25 @@ function genCauHinh(danhMucSanPham = [], rom = [], ram = [], mauSac = []) {
 function genPhieuNhapKho(nhaCungCap = [], nhanVien = []) {
   return {
     nhacungcap:   getRand(nhaCungCap)?.manhacungcap,
-    nhanviennhap: getRand(nhanVien)?.manhanvien
+    nhanviennhap: getRand(nhanVien)?.manhanvien,
+    thoigiannhap: randomDate(new Date(2010, 0, 1), new Date())
   }
 }
 
 function genPhieuXuatKho(khachHang = [], nhanVien = []) {
   return {
     khachhang:    getRand(khachHang)?.makhachhang,
-    nhanvienxuat: getRand(nhanVien)?.manhanvien
+    nhanvienxuat: getRand(nhanVien)?.manhanvien,
+    thoigianxuat: randomDate(new Date(2010, 0, 1), new Date())
   }
 }
 
 function genSanPham(cauHinh = [], phieuNhap = [], phieuXuat = [], tinhTrang = []) {
   return {
-    maIMEI:    v4(),
+    maimei:    v4(),
     cauhinh:   getRand(cauHinh)?.macauhinh,
-    phieunhap: getRand(phieuNhap)?.maphieunhapkho,
-    phieuxuat: getRand(phieuXuat)?.maphieuxuatkho,
+    phieunhap: getRand(phieuNhap)?.maphieunhap,
+    phieuxuat: getRand(phieuXuat)?.maphieuxuat,
     tinhtrang: getRand(tinhTrang)?.matinhtrang
   }
 }

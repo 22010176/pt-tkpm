@@ -14,9 +14,9 @@ async function getExports(conn) {
 async function insertExport(conn, imports = []) {
   try {
     await conn.query(
-      `INSERT INTO phieuxuatkho (khachhang, nhanvienxuat)
+      `INSERT INTO phieuxuatkho (khachhang, nhanvienxuat, thoigianxuat)
        VALUES ?`,
-      [imports.map(({khachhang, nhanvienxuat}) => [khachhang, nhanvienxuat])])
+      [imports.map(({khachhang, nhanvienxuat, thoigianxuat}) => [khachhang, nhanvienxuat, thoigianxuat])])
 
     const [result] = await conn.query(
       `SELECT *

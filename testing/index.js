@@ -1,23 +1,13 @@
 const {
-        genNhanVien,
-        genTaiKhoan,
+        genNhanVien, genTaiKhoan,
 
-        genNhaCungCap,
-        genKhachHang,
+        genNhaCungCap, genKhachHang,
 
-        genXuatXu,
-        genHeDieuHanh,
-        genThuongHieu,
-        genMauSac,
-        genRam,
-        genRom,
+        genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac, genRam, genRom,
 
-        genDanhMucSanPham,
-        genCauHinh,
+        genDanhMucSanPham, genCauHinh,
 
-        genSanPham,
-        genPhieuNhapKho,
-        genPhieuXuatKho
+        genSanPham, genPhieuNhapKho, genPhieuXuatKho
       } = require('./sampleGenerate');
 
 const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail, randGender, compareArr} = require("./utitlies");
@@ -30,6 +20,7 @@ const {getDanhMucSanPham, insertDanhMucSanPham, updateDanhMucSanPham, deleteDanh
 const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = require('./API/configures')
 const {updateImport, deleteImport, insertImport, getImports} = require('./API/imports')
 const {updateExport, deleteExport, insertExport, getExports} = require('./API/exports')
+const {updateItem, deleteItem, insertItem, getItems, getTinhTrang} = require('./API/items')
 
 async function createNhanVien(number) {
   return await insertNhanVien(new Array(number).fill(0).map(genNhanVien));
@@ -44,30 +35,25 @@ async function createNhaCungCap(number) {
 }
 
 async function createThuocTinh(number) {
-  return insertAllThuocTinh(genRam, genRom, genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac)
+  return insertAllThuocTinh(genRam, genRom, genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac, number)
 }
 
 async function createDanhMucSanPham(number) {
   const [xuatXu, heDieuHanh, thuongHieu] = await Promise.all([
-    testGetThuocTinh("xuatXu").then(i => i.attributes),
-    testGetThuocTinh("heDieuHanh").then(i => i.attributes),
-    testGetThuocTinh("thuongHieu").then(i => i.attributes),
+    testGetThuocTinh("xuatXu").then(i => i.attributes), testGetThuocTinh("heDieuHanh").then(i => i.attributes), testGetThuocTinh("thuongHieu").then(i => i.attributes),
   ])
   // console.log(xuatXu, heDieuHanh, thuongHieu)
 
   // console.log(xuatXu)
-  return insertDanhMucSanPham(
-    new Array(number)
-    .fill(0)
-    .map(genDanhMucSanPham.bind({}, xuatXu, heDieuHanh, thuongHieu)))
+  return insertDanhMucSanPham(new Array(number)
+  .fill(0)
+  .map(genDanhMucSanPham.bind({}, xuatXu, heDieuHanh, thuongHieu)))
 }
 
 
 async function createCauHinh(number) {
   const [ram, rom, mauSac] = await Promise.all([
-    testGetThuocTinh("ram").then(i => i.attributes),
-    testGetThuocTinh("rom").then(i => i.attributes),
-    testGetThuocTinh("mauSac").then(i => i.attributes),
+    testGetThuocTinh("ram").then(i => i.attributes), testGetThuocTinh("rom").then(i => i.attributes), testGetThuocTinh("mauSac").then(i => i.attributes),
   ])
   const danhMucSanPham = await getDanhMucSanPham().then(i => i.products)
 
@@ -76,8 +62,7 @@ async function createCauHinh(number) {
 
 async function createPhieuNhap(number) {
   const [nhaCungCap, nhanVien] = await Promise.all([
-    getNCC().then(i => i.suppliers),
-    getNhanVien().then(i => i.employees)
+    getNCC().then(i => i.suppliers), getNhanVien().then(i => i.employees)
   ])
 
   return insertImport(new Array(number).fill(0).map(genPhieuNhapKho.bind({}, nhaCungCap, nhanVien)))
@@ -85,11 +70,52 @@ async function createPhieuNhap(number) {
 
 async function createPhieuXuat(number) {
   const [khachHang, nhanVien] = await Promise.all([
-    getKhachHang().then(i => i.suppliers),
-    getNhanVien().then(i => i.employees)
+    getKhachHang().then(i => i.customers), getNhanVien().then(i => i.employees)
   ])
-  return insertExport(new Array(number).fill(0).map(genPhieuNhapKho.bind({}, khachHang, nhanVien)))
+  return insertExport(new Array(number).fill(0).map(genPhieuXuatKho.bind({}, khachHang, nhanVien)))
 }
+
+async function createItems(number) {
+  const [
+          cauHinh,
+          nhapKho,
+          xuatKho,
+          tinhTrang
+        ] = await Promise.all([
+    getConfigures().then(i => i.configures),
+    getImports().then(i => i.entries),
+    getExports().then(i => i.entries),
+    getTinhTrang().then(i => i.itemState)
+  ])
+
+  return insertItem(new Array(number).fill(0).map(genSanPham.bind({}, cauHinh, nhapKho, xuatKho, tinhTrang)))
+}
+
+async function genSampleData(number) {
+  console.log("Create KhachHang, NhaCungCap, NhanVien, ThuocTinhn")
+  console.log(await Promise.all([
+    createKhachHang(number),
+    createNhaCungCap(number),
+    createNhanVien(number),
+    createThuocTinh(number)
+  ]).then(a => a.map(i => i.success)))
+
+  console.log("Create DanhMucSanPham, PhieuNhap, PhieuXuat")
+  console.log(await Promise.all([
+    createDanhMucSanPham(number),
+    createPhieuNhap(number * 10),
+    createPhieuXuat(number * 10),
+  ]).then(a => a.map(i => i.success)))
+
+  console.log("Create Items")
+  await createCauHinh(number * 100).then(A => console.log(A.success))
+  await createItems(number * 100).then(A => console.log(A.success))
+}
+
+// createItems(50).then(console.log)
+genSampleData(500)
+// createItems()
+// createPhieuXuat(100).then(console.log)
 
 // createPhieuNhap()
 // createNhaCungCap(1000).then(console.log)

@@ -54,9 +54,14 @@ FROM quyenhan;
 SELECT COUNT(*)
 FROM nhanvien;
 
+SELECT COUNT(*)
+FROM phieunhapkho;
+
+SELECT COUNT(*)
+FROM phieuxuatkho;
+
 SELECT *
-FROM nhanvien
-WHERE manhanvien = 343;
+FROM sanpham;
 
 SELECT *
 FROM nhacungcap;

@@ -1,3 +1,5 @@
+const conn = require("express");
+
 async function getItems(conn) {
   try {
     const [result] = await conn.query(
@@ -11,13 +13,26 @@ async function getItems(conn) {
   }
 }
 
+async function getTinhTrang(conn) {
+  try {
+    const [result] = await conn.query(
+      `SELECT *
+       FROM tinhtrang
+       ORDER BY matinhtrang DESC`)
+    return {itemState: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {itemState: [], success: false}
+  }
+}
 
 async function insertItem(conn, items = []) {
   try {
+    
     await conn.query(
-      `INSERT INTO sanpham (maimei, cauhinh, phieunhap, phieuxuat)
+      `INSERT INTO sanpham (maimei, cauhinh, phieunhap, phieuxuat, tinhtrang)
        VALUES ?`,
-      [items.map(({maimei, cauhinh, phieunhap, phieuxuat}) => [maimei, cauhinh, phieunhap, phieuxuat])])
+      [items.map(({maimei, cauhinh, phieunhap, phieuxuat, tinhtrang}) => [maimei, cauhinh, phieunhap, phieuxuat, tinhtrang])])
 
     const [result] = await conn.query(
       `SELECT *
@@ -64,5 +79,5 @@ async function deleteItem(conn, items = []) {
 
 
 module.exports = {
-  deleteItem, updateItem, getItems, insertItem
+  deleteItem, updateItem, getItems, insertItem, getTinhTrang
 }

@@ -327,11 +327,10 @@ FROM sanpham
 
 
 
-
-
-
-
-
+SELECT MONTH(thoigianxuat) month, YEAR(thoigianxuat) year, COUNT(1)
+FROM phieuxuatkho
+GROUP BY YEAR(thoigianxuat), MONTH(thoigianxuat)
+ORDER BY year, month
 
 
 
