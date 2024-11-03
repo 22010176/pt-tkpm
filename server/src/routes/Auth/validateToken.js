@@ -1,4 +1,4 @@
-const pool = require('../models')
+const pool = require('../../models')
 const jwt = require('jsonwebtoken')
 
 const {permissions} = require('./permissions')
@@ -28,10 +28,10 @@ async function verifyToken(conn, token) {
   const data = parseToken(token)
   const [result] = await conn.query(
     `SELECT 1
-     FROM taiKhoan
-     WHERE matKhau = ?
+     FROM taikhoan
+     WHERE matkhau = ?
        AND mail = ?
-       AND maTaiKhoan = ?
+       AND mataikhoan = ?
      LIMIT 1;`,
     [data.password, data.email, data.userID])
 

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {insertCustomer, getCustomers, deleteCustomer, updateCustomer} = require('../models/quanLyDoiTac/customers')
+const {insertCustomer, getCustomers, deleteCustomer, updateCustomer} = require('../../models/quanLyDoiTac/customers')
 
 router.route("/")
       .get(async function (req, res) {

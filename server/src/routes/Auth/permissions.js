@@ -1,13 +1,13 @@
-const pool = require('../models')
+const pool = require('../../models')
 
 
 async function getAllPerm() {
   const [res] = await pool.query(
-    `SELECT q.maQuyenHan, cN.tenChucNang chucNang, hD.tenHanhDong hanhDong
-     FROM ptpm_taikhoan.quyenHan q
-              INNER JOIN ptpm_taikhoan.chucNang cN on q.chucNang = cN.maChucNang
-              INNER join ptpm_taikhoan.hanhDong hD on q.hanhDong = hD.maHanhDong
-     ORDER BY cN.maChucNang, hD.maHanhDong;`)
+    `SELECT q.maquyenhan, cn.tenchucnang chucnang, hd.tenhanhdong hanhdong
+     FROM ptpm_taikhoan.quyenhan q
+              INNER JOIN ptpm_taikhoan.chucnang cn ON q.chucnang = cn.machucnang
+              INNER JOIN ptpm_taikhoan.hanhdong hd ON q.hanhdong = hd.mahanhdong
+     ORDER BY cn.machucnang, hd.mahanhdong;`)
   // console.log('permissions', res)
 
   return Object.freeze(res)

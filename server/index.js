@@ -1,12 +1,12 @@
 const express = require("express")
 const cors = require('cors')
 
-const {authAccount, authPermission, getAllPerm} = require('./src/utilities/permissions')
+const {authAccount, authPermission, getAllPerm} = require('./src/routes/Auth/permissions')
 const app = express()
 
 const port = 3001
 
-const {parseToken} = require('./src/utilities/validateToken')
+const {parseToken} = require('./src/routes/Auth/validateToken')
 const pool = require('./src/models')
 const path = require("node:path");
 
@@ -51,7 +51,7 @@ app.use(getPermission)
 
 
 app.use("/api/auth",
-  require("./src/routes/auth"))
+  require("./src/routes/Auth"))
 
 app.use("/api/roles",
   require("./src/routes/Employees/roles"))
@@ -66,10 +66,10 @@ app.use("/api/product-attributes",
   require("./src/routes/Products/product-attributes"))
 
 app.use("/api/customers",
-  require("./src/routes/customers"))
+  require("./src/routes/Partners/customers"))
 
 app.use("/api/suppliers",
-  require("./src/routes/suppliers"))
+  require("./src/routes/Partners/suppliers"))
 
 app.use("/api/warehouse",
   require("./src/routes/Warehouse/warehouse"))
@@ -81,7 +81,7 @@ app.use("/api/services",
   require("./src/routes/Warehouse/services"))
 
 app.use("/api/statistics",
-  require("./src/routes/statistics"))
+  require("./src/routes/Statistics"))
 
 app.use("/api/employees",
   require("./src/routes/Employees/employees"))

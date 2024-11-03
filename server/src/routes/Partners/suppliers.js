@@ -1,8 +1,8 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {updateSupplier, insertSupplier, getSuppliers, deleteSupplier} = require('../models/quanLyDoiTac/suppliers')
-const {insertMultipleConfigures} = require("../models/quanLySanPham/configures");
+const {updateSupplier, insertSupplier, getSuppliers, deleteSupplier} = require('../../models/quanLyDoiTac/suppliers')
+const {insertMultipleConfigures} = require("../../models/quanLySanPham/configures");
 
 router.route("/")
       .get(async function (req, res) {
