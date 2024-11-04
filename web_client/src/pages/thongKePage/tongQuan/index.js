@@ -9,84 +9,108 @@ import {
 import {Button}          from "react-bootstrap";
 import TableA            from "../../../components/tables/tableA";
 
-import Chart      from 'react-apexcharts'
-import {useState} from "react";
-import colors     from "../../../utilities/colors";
+import Chart        from 'react-apexcharts'
+import {
+  useEffect,
+  useRef,
+  useState
+}                   from "react";
+import colors       from "../../../utilities/colors";
+import {getOverall} from "../../../api/statistics";
 
 const tableHD = [
-  {key: "Ngày", value: ""},
-  {key: "Vốn", value: ""},
-  {key: "Doanh thu", value: ""},
-  {key: "Lợi nhuận", value: ""},
+  {key: "Ngày", value: "thoigian"},
+  {key: "Vốn (VNĐ)", value: "von"},
+  {key: "Doanh thu (VNĐ)", value: "doanhthu"},
+  {key: "Lợi nhuận (VNĐ)", value: "loinhuan"},
 ]
 
+const defaultOptions = {
+  chart:      {
+    type: 'line',
+    // dropShadow: {enabled: true, color: '#000', top: 18, left: 7, blur: 10, opacity: 0.2},
+    zoom:    {enabled: false},
+    toolbar: {show: false}
+  },
+  colors:     [colors.orange, colors.green, colors.blue],
+  dataLabels: {enabled: true},
+  stroke:     {curve: 'smooth'},
+  // title:      {text: 'Thống kê doanh thu 7 ngày gần nhất', align: 'center'},
+  markers: {size: 1},
+  xaxis:   {
+    title:      {text: "Ngày"},
+    categories: [],
+  },
+  yaxis:   {
+    title: {text: 'Số tiền'},
+  },
+  legend:  {position: 'bottom', horizontalAlign: 'center', offsetY: 0, offsetX: 0}
+}
+
 function ThongKeTongQuan() {
-  const [state, setState] = useState({
-
-    series:  [
-      {name: "Vốn", data: new Array(7).fill(0).map(i => Math.floor(Math.random() * 1000) - 500)},
-      {name: "Doanh thu", data: new Array(7).fill(0).map(i => Math.floor(Math.random() * 1000) - 500)},
-      {name: "Lợi nhuận", data: new Array(7).fill(0).map(i => Math.floor(Math.random() * 1000) - 500)},
-    ],
-    options: {
-      chart:      {
-        type: 'line',
-        // dropShadow: {enabled: true, color: '#000', top: 18, left: 7, blur: 10, opacity: 0.2},
-        zoom:    {enabled: false},
-        toolbar: {show: false}
-      },
-      colors:     [colors.orange, colors.green, colors.blue],
-      dataLabels: {enabled: true},
-      stroke:     {curve: 'smooth'},
-      // title:      {text: 'Thống kê doanh thu 7 ngày gần nhất', align: 'center'},
-      markers: {size: 1},
-      xaxis:   {
+  const [data, setData] = useState({})
+  const chart = useRef(null)
+  useEffect(() => {
+    getOverall().then(({data}) => {
+      // data.doanhthu.forEach(item => item.thoigian = item.thoigian.split("T")[0])
+      setData(data)
+    })
+  }, []);
+  let options = {},
+      series  = []
+  try {
+    options = {
+      ...defaultOptions,
+      xaxis: {
         title:      {text: "Ngày"},
-        categories: ['1-1-2003', '1-1-2003', '1-1-2003', '1-1-2003', '1-1-2003', '1-1-2003', '1-1-2003'],
+        categories: data.doanhthu.map(i => i.thoigian.split("T")[0]),
       },
-      yaxis:   {
-        title: {text: 'Số tiền'},
-      },
-      legend:  {position: 'bottom', horizontalAlign: 'center', offsetY: 0, offsetX: 0}
-    },
-  });
+    }
 
+    series = [
+      {name: "Vốn", data: data?.doanhthu?.map(i => +i.von)},
+      {name: "Doanh thu", data: data?.doanhthu?.map(i => +i.doanhthu)},
+      {name: "Lợi nhuận", data: data?.doanhthu?.map(i => +i.loinhuan)},
+    ]
+
+  } catch {
+
+  }
   return (
     <Layout1
       topPart={<>
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faMobileScreen} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">100</h3>
+            <h3 className="m-0">{data?.sanpham?.length ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Sản phẩm hiện có</p>
           </div>
         </div>
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faUserGroup} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">12</h3>
+            <h3 className="m-0">{data?.khachhang?.length ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Khách hàng</p>
           </div>
         </div>
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faUserGear} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">25</h3>
+            <h3 className="m-0">{data?.nhanvien?.length ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Nhân viên</p>
           </div>
         </div>
       </>}
       middlePart={<>
         <h4 className="text-center">Thống kê doanh thu 7 ngày gần nhất</h4>
-        <Chart options={state.options} series={state.series} type='line' width={"100%"} height={"100%"}/>
+        <Chart options={options} series={series} type='line' width={"100%"} height={"100%"}/>
       </>}
       bottomPart={<>
         <div className="justify-content-end d-flex">
           <Button variant="success">Xuất Excel</Button>
         </div>
-        <div className=" border overflow-auto">
-          <TableA headers={tableHD}/>
-          <div style={{height: "1000px"}}></div>
+        <div className="border overflow-auto h-100">
+          <TableA headers={tableHD} data={data.doanhthu}/>
         </div>
       </>}
     />

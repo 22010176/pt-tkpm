@@ -1,5 +1,5 @@
 const {v4} = require('uuid');
-const {randDate, randInt} = require('../utitlies');
+const {randDate, randInt} = require('../../utitlies');
 
 
 const getKhachHang = () => fetch('http://localhost:3001/api/customers', {

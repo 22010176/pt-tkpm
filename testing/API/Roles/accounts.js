@@ -1,5 +1,5 @@
 const {v4} = require('uuid')
-const {randInt, randStr} = require('../utitlies')
+const {randInt, randStr} = require('../../utitlies')
 
 const getTaiKhoan = () =>
   fetch('http://localhost:3001/api/accounts', {

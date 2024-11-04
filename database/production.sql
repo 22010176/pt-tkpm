@@ -304,10 +304,8 @@ INSERT INTO tinhtrang (tentinhtrang, tenhienthi)
 VALUES ('tonKho', 'tồn kho'),
        ('daBan', 'đã bán'),
        ('hoanTra', 'hoàn trả'),
-       ('biDoi', 'bị đổi');
-
-INSERT INTO tinhtrang (tentinhtrang, tenhienthi)
-VALUES ('koTinhTrang', '');
+       ('biDoi', 'bị đổi'),
+       ('koTinhTrang', '');
 
 SELECT *
 FROM cauhinh;

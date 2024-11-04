@@ -12,15 +12,16 @@ const {
 
 const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail, randGender, compareArr} = require("./utitlies");
 
-const {insertKhachHang, getKhachHang, deleteKhachHang, updateKhachHang} = require('./API/khachHang')
-const {insertNhanVien, deleteNhanVien, getNhanVien, updateNhanVien} = require("./API/nhanVien");
-const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh, getAllThuocTinh, insertAllThuocTinh} = require("./API/thuocTinh");
-const {getNCC, insertNCC, updateNCC, deleteNCC} = require("./API/nhaCungCap");
-const {getDanhMucSanPham, insertDanhMucSanPham, updateDanhMucSanPham, deleteDanhMucSanPham} = require("./API/sanPham");
-const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = require('./API/configures')
-const {updateImport, deleteImport, insertImport, getImports} = require('./API/imports')
-const {updateExport, deleteExport, insertExport, getExports} = require('./API/exports')
-const {updateItem, deleteItem, insertItem, getItems, getTinhTrang} = require('./API/items')
+const {insertKhachHang, getKhachHang, deleteKhachHang, updateKhachHang} = require('./API/Partners/khachHang')
+const {insertNhanVien, deleteNhanVien, getNhanVien, updateNhanVien} = require("./API/Roles/nhanVien");
+const {testGetThuocTinh, testInsertThuocTinh, testUpdateThuocTinh, testDeletethuocTinh, getAllThuocTinh, insertAllThuocTinh} = require("./API/Products/thuocTinh");
+const {getNCC, insertNCC, updateNCC, deleteNCC} = require("./API/Partners/nhaCungCap");
+const {getDanhMucSanPham, insertDanhMucSanPham, updateDanhMucSanPham, deleteDanhMucSanPham} = require("./API/Products/sanPham");
+const {getConfigures, insertConfigure, updateConfigure, deleteConfigure,} = require('./API/Products/configures')
+const {updateImport, deleteImport, insertImport, getImports} = require('./API/Warehouse/imports')
+
+const {updateExport, deleteExport, insertExport, getExports} = require('./API/Warehouse/exports')
+const {updateItem, deleteItem, insertItem, getItems, getTinhTrang} = require('./API/Warehouse/items')
 
 async function createNhanVien(number) {
   return await insertNhanVien(new Array(number).fill(0).map(genNhanVien));
@@ -113,7 +114,7 @@ async function genSampleData(number) {
 }
 
 // createItems(50).then(console.log)
-genSampleData(500)
+genSampleData(700)
 // createItems()
 // createPhieuXuat(100).then(console.log)
 
