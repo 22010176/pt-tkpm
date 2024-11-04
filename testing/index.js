@@ -114,7 +114,14 @@ async function genSampleData(number) {
 }
 
 // createItems(50).then(console.log)
-genSampleData(700)
+async function genData() {
+  // for (let i = 0; i < 10; ++i)
+  Promise.all(
+    new Array(5).fill(0).map(genSampleData.bind({}, 500))
+  )
+}
+
+genData()
 // createItems()
 // createPhieuXuat(100).then(console.log)
 

@@ -60,7 +60,7 @@ FROM phieunhapkho;
 SELECT COUNT(*)
 FROM phieuxuatkho;
 
-SELECT *
+SELECT COUNT(*)
 FROM sanpham;
 
 SELECT *
@@ -82,59 +82,131 @@ SELECT *
 FROM cauhinh;
 
 
-SELECT DATE(thoigiannhap) thoigian, COUNT(masanpham), SUM(c.gianhap)
-FROM phieunhapkho n
-       INNER JOIN sanpham s ON s.phieunhap = n.maphieunhap
-       INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-GROUP BY thoigiannhap
-ORDER BY thoigiannhap DESC;
+SELECT COUNT(*)
+FROM danhmucsanpham;
 
-SELECT DATE(thoigianxuat) thoigian, COUNT(masanpham), SUM(c.giaxuat)
-FROM phieuxuatkho x
-       INNER JOIN sanpham s ON s.phieuxuat = x.maphieuxuat
-       INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-GROUP BY thoigianxuat
-ORDER BY thoigianxuat DESC
-LIMIT 7;
-
-
-SELECT DATE(d.thoigian), SUM(d.doanhthu) doanhthu, SUM(v.von) von, SUM(doanhthu - von) loinhuan
-FROM (SELECT DATE(thoigianxuat) thoigian, SUM(c.giaxuat) doanhthu
-      FROM phieuxuatkho x
-             INNER JOIN sanpham s ON s.phieuxuat = x.maphieuxuat
-             INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-      GROUP BY thoigianxuat) d
-
-       CROSS JOIN (SELECT DATE(thoigiannhap) thoigian, SUM(c.gianhap) von
-                   FROM phieunhapkho n
-                          INNER JOIN sanpham s ON s.phieunhap = n.maphieunhap
-                          INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-                   GROUP BY thoigiannhap) v ON d.thoigian = v.thoigian
-GROUP BY v.thoigian
-ORDER BY d.thoigian DESC, v.thoigian DESC
-LIMIT 7;
-
-SELECT COUNT(*), SUM(gianhap)
-FROM phieunhapkho n
-       INNER JOIN sanpham ON n.maphieunhap = sanpham.phieunhap
-       INNER JOIN cauhinh c ON c.macauhinh = sanpham.cauhinh
-WHERE thoigiannhap = '2024-11-03'
-
-SELECT COUNT(*), SUM(giaxuat)
-FROM phieuxuatkho x
-       INNER JOIN sanpham ON x.maphieuxuat = sanpham.phieuxuat
-       INNER JOIN cauhinh c ON c.macauhinh = sanpham.cauhinh
-WHERE thoigianxuat = '2024-11-03';
-
-
-
-SELECT n.manhacungcap, n.tennhacungcap, COUNT(s.masanpham) soluong, SUM(c.gianhap) tongtien
+SELECT n.manhacungcap, COUNT(DISTINCT d.madanhmucsanpham) lannhap, SUM(c.gianhap) tongtien
 FROM nhacungcap n
-       LEFT JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
-       INNER JOIN sanpham s ON s.phieunhap = p.maphieunhap
-       INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-WHERE p.thoigiannhap BETWEEN '2010-1-1' AND '2020-1-1'
-GROUP BY n.manhacungcap
-ORDER BY manhacungcap DESC
+       INNER JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
+       INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+       INNER JOIN danhmucsanpham d ON c.danhmucsanpham = d.madanhmucsanpham
+WHERE p.thoigiannhap BETWEEN ? AND ?
+GROUP BY n.manhacungcap;
+
+
+SELECT COUNT(*)
+FROM (SELECT DISTINCT madanhmucsanpham, n.manhacungcap
+      FROM nhacungcap n
+
+             INNER JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
+             INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+             INNER JOIN danhmucsanpham d ON c.danhmucsanpham = d.madanhmucsanpham
+      WHERE n.manhacungcap = 2) t;
+
+SELECT SUM(c.gianhap)
+FROM nhacungcap n
+       INNER JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
+       INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+WHERE n.manhacungcap = 3;
+
+
+
+SELECT k.makhachhang, k.tenkhachhang, COUNT(DISTINCT p.maphieuxuat) muahang, SUM(c.giaxuat) tongtien
+FROM khachhang k
+       INNER JOIN phieuxuatkho p ON k.makhachhang = p.khachhang
+       INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+WHERE p.thoigianxuat BETWEEN ? AND ?
+GROUP BY k.makhachhang
+
+
+SELECT d.madanhmucsanpham, d.tendanhmucsanpham
+FROM danhmucsanpham d
+       INNER JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+       INNER JOIN sanpham s ON c.macauhinh = s.cauhinh
+       INNER JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+       INNER JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+GROUP BY d.madanhmucsanpham;
+
+
+SELECT YEAR(x.thoigianxuat)              nam,
+       SUM(c1.gianhap)                   von,
+       SUM(c2.giaxuat)                   doanhthu,
+       SUM(c2.giaxuat) - SUM(c1.gianhap) loinhuan
+FROM phieuxuatkho x
+       CROSS JOIN phieunhapkho n ON YEAR(x.thoigianxuat) = YEAR(n.thoigiannhap)
+       INNER JOIN sanpham s1 ON n.maphieunhap = s1.phieunhap
+       INNER JOIN cauhinh c1 ON s1.cauhinh = c1.macauhinh
+
+       INNER JOIN sanpham s2 ON x.maphieuxuat = s2.phieuxuat
+       INNER JOIN cauhinh c2 ON s2.cauhinh = c2.macauhinh
+GROUP BY nam;
+
+
+
+SELECT YEAR(p.thoigiannhap) nam, SUM(c.gianhap) von
+FROM phieunhapkho p
+       INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+GROUP BY nam;
+
+
+SELECT YEAR(x.thoigianxuat) nam, SUM(c.giaxuat) doanhthu
+FROM phieuxuatkho x
+       INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+GROUP BY nam;
+
+SELECT a.nam, a.von, b.doanhthu, b.doanhthu - a.von loinhuan
+FROM (SELECT YEAR(p.thoigiannhap) nam, SUM(c.gianhap) von
+      FROM phieunhapkho p
+             INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY nam) a
+       INNER JOIN (SELECT YEAR(x.thoigianxuat) nam, SUM(c.giaxuat) doanhthu
+                   FROM phieuxuatkho x
+                          INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+                          INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                   GROUP BY nam) b ON a.nam = b.nam
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

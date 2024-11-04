@@ -24,21 +24,26 @@ import {getSupplierStat} from "../../../api/statistics";
 const tableHD = [
   {key: "Mã nhà cung cấp", value: "manhacungcap"},
   {key: "Tên nhà cung cấp", value: "tennhacungcap"},
-  {key: "Số lượng nhập", value: "soluong"},
+  {key: "Số lượng nhập", value: "lannhap"},
   {key: "Tổng số tiền", value: "tongtien"},
+  {key: "Chi tiết", value: ""},
+
 ]
 
 function ThongKeNhaCungCap() {
   const [startDate, setStartDate] = useState("2010-01-01");
   const [endDate, setEndDate] = useState(new Date().toISOString().split("T")[0]);
   const [search, setSearch] = useState("")
-  
+
   const [table, setTable] = useState([]);
 
   useEffect(() => {
     updateData()
   }, []);
 
+  useEffect(() => {
+    updateData()
+  }, [endDate, startDate]);
 
   function updateData() {
     setTable([])
@@ -71,7 +76,10 @@ function ThongKeNhaCungCap() {
         </FormGroup>
         <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
           <Button className="w-75" variant="success">Xuất excel</Button>
-          <Button className="w-75" variant="primary" onClick={updateData}>Làm mới</Button>
+          <Button className="w-75" variant="primary" onClick={() => {
+            setStartDate("2010-01-01");
+            setEndDate(new Date().toISOString().split("T")[0]);
+          }}>Làm mới</Button>
         </div>
       </>}
       rightPart={<>

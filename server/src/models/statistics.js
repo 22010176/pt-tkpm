@@ -26,11 +26,12 @@ async function getOverall(conn) {
                         INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
                GROUP BY thoigianxuat) d
 
-                  CROSS JOIN (SELECT DATE(thoigiannhap) thoigian, SUM(c.gianhap) von
-                              FROM phieunhapkho n
-                                       INNER JOIN sanpham s ON s.phieunhap = n.maphieunhap
-                                       INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
-                              GROUP BY thoigiannhap) v ON d.thoigian = v.thoigian
+            , (SELECT DATE(thoigiannhap) thoigian, SUM(c.gianhap) von
+               FROM phieunhapkho n
+                        INNER JOIN sanpham s ON s.phieunhap = n.maphieunhap
+                        INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
+               GROUP BY thoigiannhap) v
+         WHERE d.thoigian = v.thoigian
          GROUP BY v.thoigian
          ORDER BY d.thoigian DESC, v.thoigian DESC
          LIMIT 7;`),
@@ -46,14 +47,14 @@ async function getOverall(conn) {
 async function getNhaCungCapStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc = "3000-01-01"}) {
   try {
     const [result] = await conn.query(
-      `SELECT n.manhacungcap, n.tennhacungcap, COUNT(s.masanpham) soluong, SUM(c.gianhap) tongtien
+      `SELECT n.manhacungcap, n.tennhacungcap, COUNT(DISTINCT d.madanhmucsanpham) lannhap, SUM(c.gianhap) tongtien
        FROM nhacungcap n
-                LEFT JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
-                INNER JOIN sanpham s ON s.phieunhap = p.maphieunhap
-                INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
+                INNER JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
+                INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                INNER JOIN danhmucsanpham d ON c.danhmucsanpham = d.madanhmucsanpham
        WHERE p.thoigiannhap BETWEEN ? AND ?
-       GROUP BY n.manhacungcap
-       ORDER BY manhacungcap DESC`,
+       GROUP BY n.manhacungcap;`,
       [ngaybatdau, ngayketthuc])
 
     return {data: result, success: true}
@@ -63,6 +64,46 @@ async function getNhaCungCapStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc =
   }
 }
 
+async function getKhachHangStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc = "3000-01-01"}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT k.makhachhang, k.tenkhachhang, COUNT(DISTINCT p.maphieuxuat) muahang, SUM(c.giaxuat) tongtien
+       FROM khachhang k
+                INNER JOIN phieuxuatkho p ON k.makhachhang = p.khachhang
+                INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+       WHERE p.thoigianxuat BETWEEN ? AND ?
+       GROUP BY k.makhachhang`,
+      [ngaybatdau, ngayketthuc])
+    return {data: result, success: true}
+  } catch (e) {
+    console.log(e)
+    return {data: [], success: false}
+  }
+}
+
+async function getYearProfit(conn) {
+  try {
+    const [result] = await conn.query(
+      `SELECT a.nam, a.von, b.doanhthu, b.doanhthu - a.von loinhuan
+       FROM (SELECT YEAR(p.thoigiannhap) nam, SUM(c.gianhap) von
+             FROM phieunhapkho p
+                      INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                      INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+             GROUP BY nam) a,
+            (SELECT YEAR(x.thoigianxuat) nam, SUM(c.giaxuat) doanhthu
+             FROM phieuxuatkho x
+                      INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+                      INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+             GROUP BY nam) b
+       WHERE a.nam = b.nam`)
+    return {data: result, success: true}
+  } catch (e) {
+    console.log(e)
+    return {data: [], success: false}
+  }
+}
+
 module.exports = {
-  getOverall, getNhaCungCapStat
+  getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit
 }

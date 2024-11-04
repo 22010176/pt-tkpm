@@ -284,7 +284,7 @@ CREATE TABLE sanpham
   maimei    VARCHAR(255) UNIQUE NOT NULL,
   cauhinh   INT UNSIGNED        NOT NULL,
   phieunhap INT UNSIGNED        NOT NULL,
-  phieuxuat INT UNSIGNED,
+  phieuxuat INT UNSIGNED                 DEFAULT 0,
   tinhtrang INT UNSIGNED        NOT NULL DEFAULT 5,
 
   FOREIGN KEY (cauhinh) REFERENCES cauhinh (macauhinh)
@@ -307,28 +307,6 @@ VALUES ('tonKho', 'tồn kho'),
        ('biDoi', 'bị đổi'),
        ('koTinhTrang', '');
 
-SELECT *
-FROM cauhinh;
-
-SELECT *
-FROM phieuxuatkho;
-
-
-SELECT *
-FROM phieunhapkho;
-
-
-
-SELECT *
-FROM sanpham
-;
-
-
-
-SELECT MONTH(thoigianxuat) month, YEAR(thoigianxuat) year, COUNT(1)
-FROM phieuxuatkho
-GROUP BY YEAR(thoigianxuat), MONTH(thoigianxuat)
-ORDER BY year, month
 
 
 

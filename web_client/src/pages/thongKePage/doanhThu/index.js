@@ -55,7 +55,7 @@ function ThongKeDoanhThu() {
   )
 }
 
-const options = {}
+const defaultOptions = {}
 
 function NgayTab() {
   const namHD = [

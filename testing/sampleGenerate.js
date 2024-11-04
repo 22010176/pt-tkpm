@@ -4,7 +4,7 @@ const {randInt, formatDate, randDate, randStr, genPhoneNum, getRand, randomEmail
 function genNhanVien() {
   return {
     hoten:       v4(),
-    ngaysinh:    randomDate(new Date(2010), new Date()),
+    ngaysinh:    randomDate(new Date(2020), new Date()),
     sodienthoai: v4(),
     gioitinh:    randGender(),
     mail:        randomEmail(),
@@ -18,7 +18,7 @@ function genNhaCungCap() {
 function genKhachHang() {
   return {
     tenkhachhang: v4(),
-    ngaysinh:     randomDate(new Date(2010), new Date()),
+    ngaysinh:     randomDate(new Date(2020), new Date()),
     diachi:       v4(),
     sodienthoai:  v4(),
     mail:         randomEmail(),
@@ -76,7 +76,7 @@ function genDanhMucSanPham(xuatXu = [], heDieuHanh = [], thuongHieu) {
 function genCauHinh(danhMucSanPham = [], rom = [], ram = [], mauSac = []) {
   return {
     gianhap:        randInt(0, 1000000),
-    giaxuat:        randInt(0, 1000000),
+    giaxuat:        randInt(0, 1000000) * randInt(0, 10),
     danhmucsanpham: getRand(danhMucSanPham)?.madanhmucsanpham,
     ram:            getRand(ram)?.maram,
     rom:            getRand(rom)?.marom,
@@ -88,7 +88,7 @@ function genPhieuNhapKho(nhaCungCap = [], nhanVien = []) {
   return {
     nhacungcap:   getRand(nhaCungCap)?.manhacungcap,
     nhanviennhap: getRand(nhanVien)?.manhanvien,
-    thoigiannhap: randomDate(new Date(2010, 0, 1), new Date())
+    thoigiannhap: randomDate(new Date(2020, 0, 1), new Date())
   }
 }
 
@@ -96,7 +96,7 @@ function genPhieuXuatKho(khachHang = [], nhanVien = []) {
   return {
     khachhang:    getRand(khachHang)?.makhachhang,
     nhanvienxuat: getRand(nhanVien)?.manhanvien,
-    thoigianxuat: randomDate(new Date(2010, 0, 1), new Date())
+    thoigianxuat: randomDate(new Date(2020, 0, 1), new Date())
   }
 }
 
@@ -105,7 +105,7 @@ function genSanPham(cauHinh = [], phieuNhap = [], phieuXuat = [], tinhTrang = []
     maimei:    v4(),
     cauhinh:   getRand(cauHinh)?.macauhinh,
     phieunhap: getRand(phieuNhap)?.maphieunhap,
-    phieuxuat: getRand(phieuXuat)?.maphieuxuat,
+    phieuxuat: Math.random() > 0.1 ? getRand(phieuXuat)?.maphieuxuat : undefined,
     tinhtrang: getRand(tinhTrang)?.matinhtrang
   }
 }
