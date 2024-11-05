@@ -1,33 +1,50 @@
-import {useState} from 'react'
-import {Button, Form, FormControl, FormGroup, FormLabel, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
-import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import {
+  useEffect,
+  useState
+} from 'react'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
+import {
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faCircleXmark,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil
+} from '@fortawesome/free-solid-svg-icons'
 
-import ToolBtn from '../../../components/buttons/toolBtn'
-import HeaderModalA from '../../../components/modals/headerA'
-import IconBtn from '../../../components/buttons/iconBtn'
-import ContentA from '../../../components/layouts/blockContent'
-import TableA from '../../../components/tables/tableA'
-import Page3 from '../../../components/layouts/Page3'
-import SideNavbar from '../../../components/layouts/sideBar'
-import colors from '../../../utilities/colors'
-import InputShadow from '../../../components/Forms/InputShadow'
-import HeaderModalB from "../../../components/modals/headerB";
+import ToolBtn        from '../../../components/buttons/toolBtn'
+import HeaderModalA   from '../../../components/modals/headerA'
+import IconBtn        from '../../../components/buttons/iconBtn'
+import ContentA       from '../../../components/layouts/blockContent'
+import TableA         from '../../../components/tables/tableA'
+import Page3          from '../../../components/layouts/Page3'
+import SideNavbar     from '../../../components/layouts/sideBar'
+import colors         from '../../../utilities/colors'
+import InputShadow    from '../../../components/Forms/InputShadow'
+import HeaderModalB   from "../../../components/modals/headerB";
+import GroupShadow    from "../../../components/Forms/GroupShadow";
+import {getCustomers} from "../../../api/Partners/customers";
+import {getEmployees} from "../../../api/Roles/employees";
+import {findExports}  from "../../../api/Warehouse/exports";
 
 const phieuNhapHd = [
-  {key: "Mã phiếu nhập", value: "ma"},
-  {key: "Nhà cung cấp", value: "nhaCungCap"},
-  {key: "Nhân viên nhập", value: "nhanVien"},
-  {key: "Thời gian", value: "thoiGian"},
-  {key: "Tổng tiền", value: "tongTien"},
-]
-
-const chiTietPhieuHd = [
-  {key: "Mã SP", value: "ma"},
-  {key: "Tên sản phẩm", value: "tenSP"},
-  {key: "RAM", value: "ram"},
-  {key: "rom", value: "rom"},
-  {key: "Màu sắc", value: "mauSac"},
-  {key: "Đơn giá", value: "gia"},
+  {key: "Mã phiếu xuất", value: "maphieuxuat"},
+  {key: "Khách hàng", value: "tenkhachhang"},
+  {key: "Nhân viên xuất", value: "hoten"},
+  {key: "Thời gian", value: "thoigian"},
+  {key: "Tổng tiền", value: "tongtien"},
 ]
 
 const phieuXuatHeader = [
@@ -50,22 +67,39 @@ const phieuBaoHanhHD = [
   {key: "Đơn giá", value: ""},
   {key: "Thời gian bảo hành", value: ""},
 ]
+const defaultForm = {
+  makhachhang: "*",
+  manhanvien:  "*",
+  tungay:      new Date(2010, 0, 1).toISOString().split("T")[0],
+  denngay:     new Date().toISOString().split("T")[0],
+  tusotien:    0,
+  densotien:   10_000_000_000
+}
 
 function XuatKho() {
+  const [data, setData] = useState({})
+  const [form, setForm] = useState(defaultForm)
+
   const [modal, setModal] = useState("")
 
-  function openModal(key, e) {
-    setModal(key);
-  }
+  useEffect(() => {
+    getCustomers().then(({customers}) => setData(src => ({...src, customers})))
+    getEmployees().then(({employees}) => setData(src => ({...src, employees})))
+
+  }, [])
+
+  useEffect(() => {
+    findExports(form).then(({entries}) => setData(src => ({...src, table: entries})))
+  }, [form])
 
   return (
     <>
       <Page3
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus}
-                   title="Thêm"/>
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "info")}/>
+          <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm"/>
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết"/>
+          <ToolBtn as="a" className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"/>
           <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy"/>
           <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel"/>
         </>}
@@ -77,49 +111,59 @@ function XuatKho() {
         leftForm={<>
           <Form.Group>
             <Form.Label className='fw-bold'>Khách hàng</Form.Label>
-            <Form.Select>
-              <option>a</option>
-              <option>b</option>
-              <option>c</option>
-            </Form.Select>
+            <InputShadow as={FormSelect} value={form.makhachhang}
+                         onChange={e => setForm(src => ({...src, makhachhang: e.target.value}))}>
+              <option value="*">Tất cả</option>
+              {data.customers?.map((i, j) => <option key={j} value={i.makhachhang}>{i.tenkhachhang}</option>)}
+            </InputShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Nhân viên xuất</Form.Label>
-            <Form.Select>
-              <option>a</option>
-              <option>b</option>
-              <option>c</option>
-            </Form.Select>
+            <InputShadow as={FormSelect}
+                         value={form.manhanvien}
+                         onChange={e => setForm(src => ({...src, manhanvien: e.target.value}))}>
+              <option value="*">Tất cả</option>
+              {data.employees?.map((i, j) => <option key={j} value={i.manhanvien}>{i.hoten}</option>)}
+
+            </InputShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Từ ngày</Form.Label>
-            <Form.Control type='date'/>
+            <InputShadow type='date'
+                         value={form.tungay}
+                         onChange={e => setForm(src => ({...src, tungay: e.target.value}))}/>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Đến ngày</Form.Label>
-            <Form.Control type='date'/>
+            <InputShadow type='date'
+                         value={form.denngay}
+                         onChange={e => setForm(src => ({...src, denngay: e.target.value}))}/>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Từ số tiền</Form.Label>
-            <InputGroup>
-              <Form.Control type='number'/>
+            <GroupShadow>
+              <Form.Control type='number'
+                            value={form.tusotien}
+                            onChange={e => setForm(src => ({...src, tusotien: e.target.value}))}/>
               <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
+            </GroupShadow>
           </Form.Group>
 
           <Form.Group>
             <Form.Label className='fw-bold'>Đến số tiền</Form.Label>
-            <InputGroup>
-              <Form.Control type='number'/>
+            <GroupShadow>
+              <Form.Control type='number'
+                            value={form.densotien}
+                            onChange={e => setForm(src => ({...src, densotien: e.target.value}))}/>
               <InputGroup.Text>VNĐ</InputGroup.Text>
-            </InputGroup>
+            </GroupShadow>
           </Form.Group>
         </>}
-        table={<TableA headers={phieuNhapHd}/>}
+        table={<TableA headers={phieuNhapHd} data={data.table?.slice(0, 100)}/>}
       />
 
 
@@ -154,8 +198,8 @@ function XuatKho() {
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
-          <Button variant='danger' style={{width: "20%"}} onClick={openModal.bind({}, "")}>Hủy</Button>
-          <Button variant='success' style={{width: "20%"}} onClick={openModal.bind({}, "baoHanh")}>Xem phiếu bảo
+          <Button variant='danger' style={{width: "20%"}}>Hủy</Button>
+          <Button variant='success' style={{width: "20%"}}>Xem phiếu bảo
             hành</Button>
         </ModalFooter>
       </Modal>
@@ -213,7 +257,7 @@ function XuatKho() {
 
         <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
           <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
-          <Button variant='danger' style={{width: "20%"}} onClick={openModal.bind({}, "")}>Hủy</Button>
+          <Button variant='danger' style={{width: "20%"}}>Hủy</Button>
         </ModalFooter>
       </Modal>
     </>

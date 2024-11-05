@@ -11,6 +11,94 @@ async function getImports(conn) {
   }
 }
 
+async function findImportProduct(conn, {maphieunhap}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT s.masanpham,
+              s.maimei,
+              d.tendanhmucsanpham,
+              ram.dungluongram,
+              rom.dungluongrom,
+              mausac.tenmausac,
+              c.gianhap
+       FROM sanpham s
+                INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                INNER JOIN ptpm.danhmucsanpham d ON c.danhmucsanpham = d.madanhmucsanpham
+                INNER JOIN ram ON c.ram = ram.maram
+                INNER JOIN rom ON c.rom = rom.marom
+                INNER JOIN mausac ON c.mausac = mausac.mamausac
+       WHERE phieunhap = ?;`, [maphieunhap])
+    return {success: true, entries: result}
+  } catch (err) {
+    console.error(err);
+    return {success: false, entries: []};
+  }
+}
+
+async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tusotien, densotien}) {
+  try {
+    let result
+    if (manhacungcap === '*' && manhanvien === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieunhap, n.tennhacungcap, nv.hoten, p.thoigiannhap thoigian, SUM(c.gianhap) tongtien
+         FROM phieunhapkho p
+                  INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+                  INNER JOIN nhanvien nv ON p.nhanviennhap = nv.manhanvien
+                  RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         GROUP BY p.maphieunhap, thoigiannhap
+         ORDER BY thoigian DESC`)
+    else if (manhacungcap === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieunhap, n.tennhacungcap, nv.hoten, p.thoigiannhap thoigian, SUM(c.gianhap) tongtien
+         FROM phieunhapkho p
+                  INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+                  INNER JOIN nhanvien nv ON p.nhanviennhap = nv.manhanvien
+                  RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE manhanvien = ?
+           AND p.thoigiannhap BETWEEN ? AND ?
+         GROUP BY p.maphieunhap, thoigiannhap
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY thoigian DESC`,
+        [manhanvien, tungay, denngay, tusotien, densotien])
+    else if (manhanvien === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieunhap, n.tennhacungcap, nv.hoten, p.thoigiannhap thoigian, SUM(c.gianhap) tongtien
+         FROM phieunhapkho p
+                  INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+                  INNER JOIN nhanvien nv ON p.nhanviennhap = nv.manhanvien
+                  RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE n.manhacungcap = ?
+           AND p.thoigiannhap BETWEEN ? AND ?
+         GROUP BY p.maphieunhap, thoigiannhap
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY thoigian DESC`,
+        [manhacungcap, tungay, denngay, tusotien, densotien])
+    else [result] = await conn.query(
+        `SELECT p.maphieunhap, n.tennhacungcap, nv.hoten, p.thoigiannhap thoigian, SUM(c.gianhap) tongtien
+         FROM phieunhapkho p
+                  INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+                  INNER JOIN nhanvien nv ON p.nhanviennhap = nv.manhanvien
+                  RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE n.manhacungcap = ?
+           AND manhanvien = ?
+           AND p.thoigiannhap BETWEEN ? AND ?
+         GROUP BY p.maphieunhap, thoigiannhap
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY thoigian DESC`,
+        [manhacungcap, manhanvien, tungay, denngay, tusotien, densotien])
+
+    return {success: true, entries: result}
+  } catch (err) {
+    console.error(err);
+    return {success: false, entries: []};
+  }
+}
+
+
 async function insertImport(conn, imports = []) {
   try {
     await conn.query(
@@ -71,5 +159,5 @@ async function deleteImport(conn, imports = []) {
 }
 
 module.exports = {
-  getImports, insertImport, updateImport, deleteImport
+  getImports, insertImport, updateImport, deleteImport, findImports, findImportProduct
 }

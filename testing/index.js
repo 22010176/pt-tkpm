@@ -95,10 +95,10 @@ async function createItems(number) {
 async function genSampleData(number) {
   console.log("Create KhachHang, NhaCungCap, NhanVien, ThuocTinhn")
   console.log(await Promise.all([
-    createKhachHang(number),
-    createNhaCungCap(number),
-    createNhanVien(number),
-    createThuocTinh(number)
+    createKhachHang(10),
+    createNhaCungCap(10),
+    createNhanVien(10),
+    createThuocTinh(10)
   ]).then(a => a.map(i => i.success)))
 
   console.log("Create DanhMucSanPham, PhieuNhap, PhieuXuat")
@@ -109,7 +109,7 @@ async function genSampleData(number) {
   ]).then(a => a.map(i => i.success)))
 
   console.log("Create Items")
-  await createCauHinh(number * 100).then(A => console.log(A.success))
+  await createCauHinh(number * 10).then(A => console.log(A.success))
   await createItems(number * 100).then(A => console.log(A.success))
 }
 

@@ -1,12 +1,12 @@
-import {checkResponse} from "./authentication";
+import {checkResponse} from "../authentication";
 
 export async function getConfigures(token = "") {
   return fetch('api/configures', {
-    method: 'GET',
+    method:  'GET',
     headers: {
       'Authorization': token,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
     }
   })
   .then(response => response.json())
@@ -15,11 +15,11 @@ export async function getConfigures(token = "") {
 
 export async function getProductConfigures(product, token = "") {
   return fetch(`/api/configures/${product}`, {
-    method: 'GET',
+    method:  'GET',
     headers: {
       'Authorization': token,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
     }
   })
   .then(response => response.json())
@@ -28,13 +28,13 @@ export async function getProductConfigures(product, token = "") {
 
 export async function insertConfigure(config, token = "") {
   return fetch('/api/configures', {
-    method: 'POST',
+    method:  'POST',
     headers: {
       'Authorization': token,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
     },
-    body: JSON.stringify(config)
+    body:    JSON.stringify(config)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -42,13 +42,13 @@ export async function insertConfigure(config, token = "") {
 
 export async function updateConfigure(config, token = "") {
   return fetch('/api/configures', {
-    method: 'PUT',
+    method:  'PUT',
     headers: {
       'Authorization': token,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
     },
-    body: JSON.stringify(config)
+    body:    JSON.stringify(config)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -56,13 +56,13 @@ export async function updateConfigure(config, token = "") {
 
 export async function deleteConfigure(config, token = "") {
   return fetch('/api/configures', {
-    method: 'DELETE',
+    method:  'DELETE',
     headers: {
       'Authorization': token,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
     },
-    body: JSON.stringify(config)
+    body:    JSON.stringify(config)
   })
   .then(response => response.json())
   .then(checkResponse)

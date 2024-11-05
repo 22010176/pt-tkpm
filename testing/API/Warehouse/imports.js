@@ -7,7 +7,7 @@ async function getImports() {
   })
   .then(res => res.json())
 }
-
+getImports().then(console.log)
 async function insertImport(imports = [], token = "") {
   return fetch(`http://localhost:3001/api/warehouse/import/`, {
     method:  'POST',

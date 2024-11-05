@@ -1,10 +1,10 @@
-import {checkResponse} from "./authentication";
+import {checkResponse} from "../authentication";
 
 export async function getSuppliers(token = '') {
   return fetch('/api/suppliers', {
-    method: 'GET',
+    method:  'GET',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type':  'application/json',
       'authorization': token
     }
   })
@@ -14,13 +14,13 @@ export async function getSuppliers(token = '') {
 
 export async function insertSupplier(supplier, token = '') {
   return fetch('/api/suppliers', {
-    method: 'POST',
+    method:  'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       'authorization': token,
     },
-    body: JSON.stringify(supplier)
+    body:    JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)
@@ -29,13 +29,13 @@ export async function insertSupplier(supplier, token = '') {
 export async function updateSupplier(supplier, token = '') {
   console.log(supplier)
   return fetch('/api/suppliers', {
-    method: 'PUT',
+    method:  'PUT',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       'authorization': token,
     },
-    body: JSON.stringify(supplier)
+    body:    JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)
@@ -43,13 +43,13 @@ export async function updateSupplier(supplier, token = '') {
 
 export async function deleteSupplier(supplier, token = '') {
   return fetch('/api/suppliers', {
-    method: 'DELETE',
+    method:  'DELETE',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       'authorization': token,
     },
-    body: JSON.stringify(supplier)
+    body:    JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)

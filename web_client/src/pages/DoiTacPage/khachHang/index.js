@@ -39,7 +39,7 @@ import {
   getCustomers,
   insertCustomer,
   updateCustomer
-}                   from "../../../api/customers";
+}                   from "../../../api/Partners/customers";
 
 const KhachHangContext = createContext()
 

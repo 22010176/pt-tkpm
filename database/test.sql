@@ -212,7 +212,7 @@ SELECT x.thoigianxuat thoigian, SUM(c.giaxuat) doanhthu
 FROM phieuxuatkho x
        INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
        INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
-GROUP BY x.thoigianxuatl;
+GROUP BY x.thoigianxuat;
 
 SELECT a.thoigian, a.von, b.doanhthu, doanhthu - von loinhuan
 FROM (SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
@@ -229,6 +229,130 @@ WHERE a.thoigian = b.thoigian
   AND MONTH(a.thoigian) = ?
   AND YEAR(a.thoigian) = ?
 ORDER BY a.thoigian;
+
+
+SELECT p.maphieunhap, n.tennhacungcap, nv.hoten, p.thoigiannhap thoigian, SUM(c.gianhap) tongtien
+FROM phieunhapkho p
+       INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+       INNER JOIN nhanvien nv ON p.nhanviennhap = nv.manhanvien
+       RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+# WHERE n.manhacungcap = ?
+#   AND manhanvien = ?
+#   AND p.thoigiannhap BETWEEN ? AND ?
+GROUP BY p.maphieunhap, thoigiannhap
+# HAVING tongtien BETWEEN ? AND ?
+ORDER BY thoigian DESC
+
+
+SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
+FROM phieuxuatkho p
+       INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+       INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+       INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+WHERE k.makhachhang = ?
+  AND n.manhanvien = ?
+  AND p.thoigianxuat BETWEEN ? AND ?
+GROUP BY p.maphieuxuat, p.thoigianxuat
+HAVING tongtien BETWEEN ? AND ?
+ORDER BY p.thoigianxuat DESC;
+
+
+
+SELECT MAX(thoigianxuat),
+       MAX(thoigiannhap),
+       MIN(thoigianxuat),
+       MIN(thoigiannhap)
+FROM phieuxuatkho x,
+     phieunhapkho n
+GROUP BY x.thoigianxuat, n.thoigiannhap;
+
+
+SELECT(SELECT thoigianxuat thoigian
+       FROM phieuxuatkho
+       UNION
+       SELECT thoigiannhap thoigian
+       FROM phieunhapkho
+       ORDER BY thoigian
+       LIMIT 1) mindate,
+      (SELECT thoigianxuat thoigian
+       FROM phieuxuatkho
+       UNION
+       SELECT thoigiannhap thoigian
+       FROM phieunhapkho
+       ORDER BY thoigian DESC
+       LIMIT 1) maxdate;
+
+SELECT thoigiannhap
+FROM phieunhapkho
+ORDER BY thoigiannhap
+LIMIT 1;
+
+
+
+SELECT thoigianxuat
+FROM phieuxuatkho
+ORDER BY thoigianxuat
+LIMIT 1;
+
+
+
+SELECT s.masanpham,
+       s.maimei,
+       d.tendanhmucsanpham,
+       ram.dungluongram,
+       rom.dungluongrom,
+       mausac.tenmausac,
+       c.gianhap
+FROM sanpham s
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+       INNER JOIN ptpm.danhmucsanpham d ON c.danhmucsanpham = d.madanhmucsanpham
+       INNER JOIN ram ON c.ram = ram.maram
+       INNER JOIN rom ON c.rom = rom.marom
+       INNER JOIN mausac ON c.mausac = mausac.mamausac
+WHERE phieunhap = ?;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

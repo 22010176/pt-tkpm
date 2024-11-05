@@ -33,7 +33,7 @@ import {
   getProductAttributes,
   insertProductAttributes,
   updateProductAttributes
-}                   from "../../../api/product-attributes";
+}                   from "../../../api/Products/product-attributes";
 
 const keys = {
   thuongHieu: "thuongHieu",

@@ -62,3 +62,14 @@ export async function getDayProfit(date = new Date(), token = '') {
   .then((response) => response.json())
   .then(checkResponse);
 }
+
+export async function getMaxAndDay(token = '') {
+  return fetch(`/api/statistics/date`, {
+    method:  'GET',
+    headers: {
+      authorization: token,
+    }
+  })
+  .then((response) => response.json())
+  .then(checkResponse);
+}

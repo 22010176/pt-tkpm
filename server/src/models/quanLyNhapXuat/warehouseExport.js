@@ -11,6 +11,71 @@ async function getExports(conn) {
   }
 }
 
+async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tusotien, densotien}) {
+  try {
+    let result;
+    if (makhachhang === '*' && manhanvien === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
+         FROM phieuxuatkho p
+                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         GROUP BY p.maphieuxuat, p.thoigianxuat
+         ORDER BY p.thoigianxuat DESC`)
+
+    else if (makhachhang === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
+         FROM phieuxuatkho p
+                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE n.manhanvien = ?
+           AND p.thoigianxuat BETWEEN ? AND ?
+         GROUP BY p.maphieuxuat, p.thoigianxuat
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY p.thoigianxuat DESC`,
+        [manhanvien, tungay, denngay, tusotien, densotien])
+    else if (manhanvien === '*')
+      [result] = await conn.query(
+        `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
+         FROM phieuxuatkho p
+                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE k.makhachhang = ?
+           AND p.thoigianxuat BETWEEN ? AND ?
+         GROUP BY p.maphieuxuat, p.thoigianxuat
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY p.thoigianxuat DESC`,
+        [makhachhang, tungay, denngay, tusotien, densotien])
+    else [result] = await conn.query(
+        `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
+         FROM phieuxuatkho p
+                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+         WHERE k.makhachhang = ?
+           AND n.manhanvien = ?
+           AND p.thoigianxuat BETWEEN ? AND ?
+         GROUP BY p.maphieuxuat, p.thoigianxuat
+         HAVING tongtien BETWEEN ? AND ?
+         ORDER BY p.thoigianxuat DESC`,
+        [makhachhang, manhanvien, tungay, denngay, tusotien, densotien])
+
+
+    return {entries: result, success: true}
+  } catch (e) {
+    console.log(e)
+    return {success: false, entries: []};
+  }
+}
+
 async function insertExport(conn, imports = []) {
   try {
     await conn.query(
@@ -71,5 +136,5 @@ async function deleteExport(conn, imports = []) {
 }
 
 module.exports = {
-  getExports, insertExport, updateExport, deleteExport
+  getExports, insertExport, updateExport, deleteExport, findExports
 }

@@ -1,10 +1,10 @@
-import {checkResponse} from "./authentication";
+import {checkResponse} from "../authentication";
 
 export function getRoles(token = "") {
   return fetch("/api/roles", {
-    method: "GET",
+    method:  "GET",
     headers: {
-      Authorization: token,
+      Authorization:  token,
       "Content-Type": "application/json"
     }
   })
@@ -14,12 +14,12 @@ export function getRoles(token = "") {
 
 export function insertRole(role, token = "") {
   return fetch("/api/roles", {
-    method: "POST",
+    method:  "POST",
     headers: {
-      Authorization: token,
+      Authorization:  token,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(role)
+    body:    JSON.stringify(role)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -27,12 +27,12 @@ export function insertRole(role, token = "") {
 
 export function updateRole(role, token = "") {
   return fetch("/api/roles", {
-    method: "PUT",
+    method:  "PUT",
     headers: {
-      Authorization: token,
+      Authorization:  token,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(role)
+    body:    JSON.stringify(role)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -40,12 +40,12 @@ export function updateRole(role, token = "") {
 
 export function deleteRole(role, token = "") {
   return fetch("/api/roles", {
-    method: "DELETE",
+    method:  "DELETE",
     headers: {
-      Authorization: token,
+      Authorization:  token,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(role)
+    body:    JSON.stringify(role)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -53,9 +53,9 @@ export function deleteRole(role, token = "") {
 
 export function getPermissionData(token = "") {
   return fetch("/api/roles/permissions", {
-    method: "GET",
+    method:  "GET",
     headers: {
-      Authorization: token,
+      Authorization:  token,
       "Content-Type": "application/json"
     }
   })
@@ -65,7 +65,7 @@ export function getPermissionData(token = "") {
 
 export function getRolePermissions(role, token = "") {
   return fetch(`/api/roles/${role}`, {
-    method: "GET",
+    method:  "GET",
     headers: {
       authorization: token,
     }

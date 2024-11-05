@@ -32,14 +32,14 @@ import FlexForm               from '../../../components/Forms/FlexForm'
 import colors                 from '../../../utilities/colors'
 import HeaderModalA           from '../../../components/modals/headerA'
 import ContentA               from '../../../components/layouts/blockContent'
-import {getEmployeeNoAccount} from "../../../api/employees";
-import {getRoles}             from "../../../api/roles";
+import {getEmployeeNoAccount} from "../../../api/Roles/employees";
+import {getRoles}             from "../../../api/Roles/roles";
 import {
   deleteAccount,
   getAccounts,
   insertAccount,
   updateAccount
-}                             from "../../../api/accounts";
+}                             from "../../../api/Roles/accounts";
 import ErrorModal             from "../../../components/modals/errorModal";
 
 const tableHd = [

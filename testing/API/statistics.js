@@ -17,5 +17,5 @@ async function getCustomerStat(startDate = '2010-1-1', endDate = '2010-01-01') {
     method: 'GET',
   }).then((response) => response.json());
 }
-getCustomerStat(startDate = '2010-1-1', endDate = '2013-01-01') .then(console.log)
+// getCustomerStat(startDate = '2010-1-1', endDate = '2013-01-01') .then(console.log)
 // getSupplierStat().then(console.log)

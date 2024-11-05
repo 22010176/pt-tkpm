@@ -10,6 +10,8 @@ import {
 }             from 'react-bootstrap'
 import Chart  from 'react-apexcharts'
 import {
+  createContext,
+  useContext,
   useEffect,
   useState
 }             from "react";
@@ -17,16 +19,22 @@ import TableA from "../../../components/tables/tableA";
 import colors from "../../../utilities/colors";
 import {
   getDayProfit,
+  getMaxAndDay,
   getMonthProfits,
   getYearProfits
 }             from "../../../api/statistics";
 
-
-const namHD = [
-  {key: "Năm", value: ""}, {key: "Chi phí", value: ""}, {key: "Doanh thu", value: ""}, {key: "Lợi nhuận", value: ""},
-]
+const DayContext = createContext({});
 
 function ThongKeDoanhThu() {
+  const [day, setDay] = useState({})
+  useEffect(() => {
+    getMaxAndDay().then(({data}) => {
+      // console.log(data[0])
+      setDay({max: new Date(data[0].maxdate), min: new Date(data[0].mindate)})
+    })
+  }, [])
+
   return (<div className="w-100 _h-100 d-flex flex-column p-2 overflow-hidden">
     <Tab.Container defaultActiveKey="nam">
       <Nav variant="tabs ">
@@ -41,19 +49,21 @@ function ThongKeDoanhThu() {
         </Nav.Item>
       </Nav>
 
-      <Tab.Content className="h-100 w-100  ">
-        <Tab.Pane eventKey="nam" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0 ">
-          <NamTab/>
-        </Tab.Pane>
+      <DayContext.Provider value={day}>
+        <Tab.Content className="h-100 w-100  ">
+          <Tab.Pane eventKey="nam" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0 ">
+            <NamTab/>
+          </Tab.Pane>
 
-        <Tab.Pane eventKey="thang" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
-          <ThangTab/>
-        </Tab.Pane>
+          <Tab.Pane eventKey="thang" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
+            <ThangTab/>
+          </Tab.Pane>
 
-        <Tab.Pane eventKey="ngay" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
-          <NgayTab/>
-        </Tab.Pane>
-      </Tab.Content>
+          <Tab.Pane eventKey="ngay" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
+            <NgayTab/>
+          </Tab.Pane>
+        </Tab.Content>
+      </DayContext.Provider>
     </Tab.Container>
   </div>)
 }
@@ -75,7 +85,7 @@ function NgayTab() {
     {key: "Doanh thu", value: "doanhthu"},
     {key: "Lợi nhuận", value: "loinhuan"},
   ]
-
+  const day = useContext(DayContext)
   const [month, setMonth] = useState(new Date().getMonth() + 1)
   const [year, setYear] = useState(new Date().getFullYear())
 
@@ -89,7 +99,6 @@ function NgayTab() {
   ])
 
   useEffect(function () {
-
     getDayProfit(new Date(year, month - 1)).then(({data}) => setData(data))
   }, [])
 
@@ -112,7 +121,7 @@ function NgayTab() {
 
     setOptions({
       ...defaultOptions,
-      xaxis: {categories: data.map(i => i.thoigian.split("T")[0]),}
+      xaxis: {categories: data.map(i => new Date(i.thoigian).getDate())}
     })
   }, [data]);
 
@@ -129,7 +138,8 @@ function NgayTab() {
       <FormGroup className="d-flex gap-2 align-items-center">
         <FormLabel className="fw-bold text-nowrap">Chọn năm</FormLabel>
         <FormSelect value={year} onChange={e => setYear(e.target.value)}>
-          {new Array(22).fill().map((_, j) => <option key={j} value={j + 2010}>{2010 + j}</option>)}
+
+          {!!day.max && new Array(day.max?.getFullYear() - day.min?.getFullYear() + 1).fill().map((_, j) => <option key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)}
         </FormSelect>
       </FormGroup>
 
@@ -156,6 +166,7 @@ function ThangTab() {
     {key: "Lợi nhuận", value: "loinhuan"},
   ]
 
+  const day = useContext(DayContext)
   const [year, setYear] = useState(2024)
 
   const [data, setData] = useState([])
@@ -166,7 +177,13 @@ function ThangTab() {
   const [series, setSeries] = useState([{data: [], name: ''}])
 
   useEffect(() => {
-    getMonthProfits(year).then(({data}) => setData(data))
+    getMonthProfits(year).then(({data}) => {
+      setData(data)
+      setOptions({
+        ...defaultOptions,
+        xaxis: {categories: data.map(i => i.thang),}
+      })
+    })
   }, [year])
 
   useEffect(() => {
@@ -188,7 +205,12 @@ function ThangTab() {
       <FormGroup className="d-flex gap-2 align-items-center">
         <FormLabel className="fw-bold text-nowrap">Chọn năm</FormLabel>
         <FormSelect value={year} onChange={e => setYear(e.target.value)}>
-          {new Array(20).fill().map((_, j) => <option key={j} value={j + 2010}>{2010 + j}</option>)}
+          {!!day.max
+            && new Array(day.max?.getFullYear() - day.min?.getFullYear() + 1)
+            .fill(0)
+            .map((_, j) => (
+              <option key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)
+            )}
         </FormSelect>
       </FormGroup>
 
@@ -214,9 +236,6 @@ function NamTab() {
     {key: "Lợi nhuận", value: "loinhuan"},
   ]
   const [data, setData] = useState([])
-
-  const [startYear, setStartYear] = useState()
-  const [endYear, setEndYear] = useState()
 
   let options = {...defaultOptions},
       series  = []

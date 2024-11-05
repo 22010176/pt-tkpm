@@ -132,7 +132,7 @@ async function getMonthProfit(conn, {nam = 2024}) {
 async function getDayProfit(conn, {nam = 2024, thang = 1}) {
   try {
     const [result] = await conn.query(
-      `SELECT a.thoigian, a.von, b.doanhthu, doanhthu - von loinhuan
+      `SELECT DATE(a.thoigian) thoigian, a.von, b.doanhthu, doanhthu - von loinhuan
        FROM (SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
              FROM phieunhapkho p
                       INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
@@ -146,7 +146,32 @@ async function getDayProfit(conn, {nam = 2024, thang = 1}) {
        WHERE a.thoigian = b.thoigian
          AND MONTH(a.thoigian) = ?
          AND YEAR(a.thoigian) = ?
-       ORDER BY a.thoigian;`, [thang, nam])
+       ORDER BY thoigian;`, [thang, nam])
+    return {data: result, success: true}
+  } catch (e) {
+    console.log(e)
+    return {data: [], success: false}
+  }
+}
+
+async function getLastAndFirstDay(conn) {
+  try {
+    const [result] = await conn.query(
+      `SELECT(SELECT thoigianxuat thoigian
+       FROM phieuxuatkho
+       UNION
+       SELECT thoigiannhap thoigian
+       FROM phieunhapkho
+       ORDER BY thoigian
+       LIMIT 1) mindate,
+      (SELECT thoigianxuat thoigian
+       FROM phieuxuatkho
+       UNION
+       SELECT thoigiannhap thoigian
+       FROM phieunhapkho
+       ORDER BY thoigian DESC
+       LIMIT 1) maxdate;`)
+
     return {data: result, success: true}
   } catch (e) {
     console.log(e)
@@ -155,5 +180,5 @@ async function getDayProfit(conn, {nam = 2024, thang = 1}) {
 }
 
 module.exports = {
-  getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit, getMonthProfit, getDayProfit
+  getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit, getMonthProfit, getDayProfit, getLastAndFirstDay
 }

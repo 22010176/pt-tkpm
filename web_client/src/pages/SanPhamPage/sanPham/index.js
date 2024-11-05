@@ -50,14 +50,14 @@ import {
   insertProduct,
   updateProduct,
   updateProductImage
-}                             from "../../../api/products";
-import {getProductAttributes} from "../../../api/product-attributes";
+}                             from "../../../api/Products/products";
+import {getProductAttributes} from "../../../api/Products/product-attributes";
 import {
   deleteConfigure,
   getProductConfigures,
   insertConfigure,
   updateConfigure
-}                             from "../../../api/configures";
+}                             from "../../../api/Products/configures";
 import InputGroupText         from "react-bootstrap/InputGroupText";
 
 const defaultSanPham = {
@@ -171,7 +171,7 @@ function SanPham() {
           <span>Làm mới</span>
         </Button>
       </FlexForm>}
-      dataTable={<TableA headers={spHeader} data={table} onClick={setRowClick}/>}
+      dataTable={<TableA headers={spHeader} data={table?.slice(0, 100)} onClick={setRowClick}/>}
     />
 
     <SanPhamContext.Provider value={[rowClick, setRowClick]}>

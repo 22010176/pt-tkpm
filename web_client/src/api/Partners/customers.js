@@ -1,10 +1,10 @@
-import {checkResponse} from "./authentication";
+import {checkResponse} from "../authentication";
 
 export async function getCustomers() {
   return fetch('/api/customers', {
-    method: 'GET',
+    method:  'GET',
     headers: {
-      'Accept': 'application/json',
+      'Accept':       'application/json',
       'Content-Type': 'application/json'
     }
   })
@@ -14,13 +14,13 @@ export async function getCustomers() {
 
 export async function insertCustomer(customer, token = "") {
   return fetch('/api/customers', {
-    method: 'POST',
+    method:  'POST',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       "authorization": token,
     },
-    body: JSON.stringify(customer)
+    body:    JSON.stringify(customer)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -28,13 +28,13 @@ export async function insertCustomer(customer, token = "") {
 
 export async function updateCustomer(customer, token = "") {
   return fetch('/api/customers', {
-    method: 'PUT',
+    method:  'PUT',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       "authorization": token,
     },
-    body: JSON.stringify(customer)
+    body:    JSON.stringify(customer)
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -42,13 +42,13 @@ export async function updateCustomer(customer, token = "") {
 
 export async function deleteCustomer(customer, token = "") {
   return fetch('/api/customers', {
-    method: 'DELETE',
+    method:  'DELETE',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
       "authorization": token,
     },
-    body: JSON.stringify(customer)
+    body:    JSON.stringify(customer)
   })
   .then(response => response.json())
   .then(checkResponse)

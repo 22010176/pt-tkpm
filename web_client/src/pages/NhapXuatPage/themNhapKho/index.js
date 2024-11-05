@@ -1,16 +1,37 @@
-import {useEffect, useState} from 'react'
+import {
+  useEffect,
+  useState
+}                        from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalHeader} from 'react-bootstrap'
+import {
+  faMagnifyingGlass,
+  faPlus
+}                        from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  ButtonGroup,
+  CloseButton,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  ModalBody,
+  ModalHeader
+}                        from 'react-bootstrap'
 
-import SideNavbar from '../../../components/layouts/sideBar'
-import TableA from '../../../components/tables/tableA'
-import BarCodeScanner from '../../../components/barcode'
-import Page4 from '../../../components/layouts/Page4'
-import InputShadow from '../../../components/Forms/InputShadow'
-import GroupShadow from '../../../components/Forms/GroupShadow'
-import {getProducts} from "../../../api/products";
-import {getConfigures, getProductConfigures} from "../../../api/configures";
+import SideNavbar             from '../../../components/layouts/sideBar'
+import TableA                 from '../../../components/tables/tableA'
+import BarCodeScanner         from '../../../components/barcode'
+import Page4                  from '../../../components/layouts/Page4'
+import InputShadow            from '../../../components/Forms/InputShadow'
+import GroupShadow            from '../../../components/Forms/GroupShadow'
+import {getProducts}          from "../../../api/Products/products";
+import {getProductConfigures} from "../../../api/Products/configures";
 
 const spHeader = [
   {key: "Mã SP", value: "ma"},
@@ -70,7 +91,7 @@ function ThemNhapKho() {
 
   function onWarehouseRowClick(row) {
     if (!row) return;
-    getProductConfigures(row.maDanhMucSanPham).then(data=>setCauHinh(data.configurations))
+    getProductConfigures(row.maDanhMucSanPham).then(data => setCauHinh(data.configurations))
   }
 
   return (
@@ -105,7 +126,7 @@ function ThemNhapKho() {
             <FormGroup>
               <FormLabel className='fw-bold'>Cấu hình</FormLabel>
               <InputShadow as={FormSelect} size='sm'>
-                {cauHinh.map((i,j)=><option key={j}>{i.rom}GB - {i.ram}GB - {i.tenMauSac}</option>)}
+                {cauHinh.map((i, j) => <option key={j}>{i.rom}GB - {i.ram}GB - {i.tenMauSac}</option>)}
                 {/*<option>test</option>*/}
                 {/*<option>tes2</option>*/}
                 {/*<option>tes4</option>*/}

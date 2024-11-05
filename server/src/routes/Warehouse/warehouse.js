@@ -1,15 +1,14 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {deleteImport, updateImport, insertImport, getImports} = require("../../models/quanLyNhapXuat/warehouseImport");
-const {getExports, insertExport, updateExport, deleteExport} = require("../../models/quanLyNhapXuat/warehouseExport");
+const {deleteImport, updateImport, insertImport, getImports, findImports, findImportProduct} = require("../../models/quanLyNhapXuat/warehouseImport");
+const {getExports, insertExport, updateExport, deleteExport, findExports} = require("../../models/quanLyNhapXuat/warehouseExport");
 const {getItems, insertItem, updateItem, deleteItem, getTinhTrang} = require("../../models/quanLyNhapXuat/items");
 
 router.route("/import")
       .get(async function (req, res) {
         const conn = res.locals.conn;
-        const result = await getImports(conn);
-
+        const result = await (Object.keys(req.query).length > 0 ? findImports(conn, req.query) : getImports(conn, req.query))
         await res.locals.conn.destroy()
         res.json(result)
       })
@@ -36,7 +35,7 @@ router.route("/import")
 router.route("/export")
       .get(async function (req, res) {
         const conn = res.locals.conn;
-        const result = await getExports(conn)
+        const result = await (Object.keys(req.query).length === 0 ? getExports(conn) : findExports(conn, req.query))
         await res.locals.conn.destroy()
         res.json(result)
       })
@@ -91,5 +90,12 @@ router.route("/item-state")
         await res.locals.conn.destroy()
         res.json(result)
       })
+
+router.get("/import/:maphieunhap", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await findImportProduct(conn, req.params)
+  await res.locals.conn.destroy()
+  res.json(result)
+})
 
 module.exports = router

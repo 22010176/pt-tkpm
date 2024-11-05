@@ -40,7 +40,7 @@ import {
   getSuppliers,
   insertSupplier,
   updateSupplier
-}                   from "../../../api/suppliers";
+}                   from "../../../api/Partners/suppliers";
 
 const NCCContext = createContext()
 const defaultNCC = {ma: undefined, tennhacungcap: "", diachi: "", mail: "", sodienthoai: ""}
@@ -154,7 +154,7 @@ function NhaCungCap() {
     setFormData({...defaultNCC})
     updateTableData()
   }
-  
+
   return (
     <>
       <Page2

@@ -1,4 +1,4 @@
-import {checkResponse} from "./authentication";
+import {checkResponse} from "../authentication";
 
 
 export async function getAccounts(token = "") {

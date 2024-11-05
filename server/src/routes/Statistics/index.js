@@ -1,6 +1,6 @@
 const express = require("express")
 const {updateItem} = require("../../models/quanLyNhapXuat/items");
-const {getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit, getMonthProfit, getDayProfit} = require("../../models/statistics");
+const {getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit, getMonthProfit, getDayProfit, getLastAndFirstDay} = require("../../models/statistics");
 const {getCustomers} = require("../../models/quanLyDoiTac/customers");
 const router = express.Router({mergeParams: true})
 
@@ -43,5 +43,10 @@ router.get("/profits/date", async function (req, res) {
   await res.locals.conn.destroy()
   res.json(result)
 })
-
+router.get("/date", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await getLastAndFirstDay(conn);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
 module.exports = router
