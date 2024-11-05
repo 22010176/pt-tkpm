@@ -173,11 +173,62 @@ FROM (SELECT YEAR(p.thoigiannhap) nam, SUM(c.gianhap) von
                    GROUP BY nam) b ON a.nam = b.nam
 
 
+SELECT MONTH(a.thoigian) thang, SUM(a.von) von, SUM(b.doanhthu) doanhthu, SUM(doanhthu - von) loinhuan
+FROM (SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
+      FROM phieunhapkho p
+             INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY p.thoigiannhap) a,
+     (SELECT x.thoigianxuat thoigian, SUM(c.giaxuat) doanhthu
+      FROM phieuxuatkho x
+             INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY x.thoigianxuat) b
+WHERE a.thoigian = b.thoigian
+  AND YEAR(a.thoigian) = ?
+GROUP BY thang
+ORDER BY thang;
+
+SELECT a.thoigian, SUM(a.von) von, SUM(b.doanhthu) doanhthu, SUM(doanhthu - von) loinhuan
+FROM (SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
+      FROM phieunhapkho p
+             INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY p.thoigiannhap) a,
+     (SELECT x.thoigianxuat thoigian, SUM(c.giaxuat) doanhthu
+      FROM phieuxuatkho x
+             INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY x.thoigianxuat) b
+WHERE a.thoigian = b.thoigian;
 
 
+SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
+FROM phieunhapkho p
+       INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+GROUP BY p.thoigiannhap;
+SELECT x.thoigianxuat thoigian, SUM(c.giaxuat) doanhthu
+FROM phieuxuatkho x
+       INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+       INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+GROUP BY x.thoigianxuatl;
 
-
-
+SELECT a.thoigian, a.von, b.doanhthu, doanhthu - von loinhuan
+FROM (SELECT p.thoigiannhap thoigian, SUM(c.gianhap) von
+      FROM phieunhapkho p
+             INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY p.thoigiannhap) a,
+     (SELECT x.thoigianxuat thoigian, SUM(c.giaxuat) doanhthu
+      FROM phieuxuatkho x
+             INNER JOIN sanpham s ON x.maphieuxuat = s.phieunhap
+             INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+      GROUP BY x.thoigianxuat) b
+WHERE a.thoigian = b.thoigian
+  AND MONTH(a.thoigian) = ?
+  AND YEAR(a.thoigian) = ?
+ORDER BY a.thoigian;
 
 
 

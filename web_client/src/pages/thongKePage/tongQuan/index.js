@@ -82,21 +82,21 @@ function ThongKeTongQuan() {
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faMobileScreen} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">{data?.sanpham?.length ?? "..."}</h3>
+            <h3 className="m-0">{data?.sanpham?.[0]?.sanpham ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Sản phẩm hiện có</p>
           </div>
         </div>
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faUserGroup} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">{data?.khachhang?.length ?? "..."}</h3>
+            <h3 className="m-0">{data?.khachhang?.[0]?.khachhang ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Khách hàng</p>
           </div>
         </div>
         <div className="p-1 d-flex gap-5 border border-3 border-black w-100 align-items-center justify-content-center">
           <FontAwesomeIcon icon={faUserGear} size="3x"/>
           <div className="text-center">
-            <h3 className="m-0">{data?.nhanvien?.length ?? "..."}</h3>
+            <h3 className="m-0">{data?.nhanvien?.[0]?.nhanvien ?? "..."}</h3>
             <p className="m-0 fw-bold fs-5">Nhân viên</p>
           </div>
         </div>

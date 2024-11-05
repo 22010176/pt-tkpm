@@ -115,10 +115,10 @@ async function genSampleData(number) {
 
 // createItems(50).then(console.log)
 async function genData() {
-  // for (let i = 0; i < 10; ++i)
-  Promise.all(
-    new Array(5).fill(0).map(genSampleData.bind({}, 500))
-  )
+  for (let i = 0; i < 5; ++i)
+    await genSampleData( 500)
+  // Promise.all(
+  // )
 }
 
 genData()
