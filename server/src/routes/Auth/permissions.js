@@ -1,15 +1,16 @@
 const pool = require('../../models')
+const {verifyAccount} = require("../../models/auth");
 
 
 async function getAllPerm() {
-  const [res] = await pool.query(
+  const conn = await pool.getConnection()
+  const [res] = await conn.query(
     `SELECT q.maquyenhan, cn.tenchucnang chucnang, hd.tenhanhdong hanhdong
      FROM ptpm_taikhoan.quyenhan q
               INNER JOIN ptpm_taikhoan.chucnang cn ON q.chucnang = cn.machucnang
               INNER JOIN ptpm_taikhoan.hanhdong hd ON q.hanhdong = hd.mahanhdong
      ORDER BY cn.machucnang, hd.mahanhdong;`)
-  // console.log('permissions', res)
-
+  await conn.destroy()
   return Object.freeze(res)
 }
 
@@ -17,21 +18,33 @@ const permissions = getAllPerm()
 
 async function authAccount(req, res, next) {
 
+  if (res.locals.user) return next()
+
+  await res.locals.conn.destroy()
+  return res.json({susccess: false, message: "User is not authenticated."})
 }
 
-function authPermission({maQuyenHan = 0, optional = true, last = false}) {
+function authPermission(maQuyenHan = 0, last = false, optional = true) {
   return async function (req, res, next) {
+    if (res.locals.permissions == null) {
+      await res.locals.conn.destroy()
+      return res.json({message: "Action is prohibited", success: false})
+    }
+
     if (res.locals.permissionCheck && optional) return next()
     res.locals.permissionCheck = false;
 
     const perms = res.locals.permissions
     for (let perm of perms)
-      if (perm.maQuyenHan === maQuyenHan) {
+      if (perm.quyen === maQuyenHan) {
         res.locals.permissionCheck = true;
         return next()
       }
 
-    if (last) return res.json({body: [], message: "invalid action", success: false})
+    if (last || !optional) {
+      await res.locals.conn.destroy()
+      return res.json({message: "Action is prohibited", success: false})
+    }
     next()
   }
 }

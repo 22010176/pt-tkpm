@@ -1,4 +1,7 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getEmployees() {
   return fetch('/api/employees', {
@@ -6,7 +9,7 @@ export async function getEmployees() {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -19,7 +22,7 @@ export async function getEmployeeNoAccount() {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -32,7 +35,7 @@ export async function insertEmployee(employee,) {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(employee)
   })
@@ -46,7 +49,7 @@ export async function updateEmployee(employee,) {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(employee)
   })
@@ -60,7 +63,7 @@ export async function deleteEmployee(employee,) {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(employee)
   })

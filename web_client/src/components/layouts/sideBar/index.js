@@ -1,12 +1,31 @@
-import {useContext, useEffect, useState} from 'react';
-import Accordion from 'react-bootstrap/Accordion'
+import {
+  useContext,
+  useEffect,
+  useState
+}                           from 'react';
+import Accordion            from 'react-bootstrap/Accordion'
 import {useAccordionButton} from 'react-bootstrap/esm/AccordionButton';
-import {AccordionContext, Image} from 'react-bootstrap';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAngleRight, faCircleCheck, faCircleUser, faClipboardUser, faHandshakeSimple, faHouse, faLaptop, faRightFromBracket, faShieldHalved, faUnlockKeyhole, faWarehouse} from "@fortawesome/free-solid-svg-icons"
+import {
+  AccordionContext,
+  Image
+}                           from 'react-bootstrap';
+import {FontAwesomeIcon}    from '@fortawesome/react-fontawesome';
+import {
+  faAngleRight,
+  faCircleCheck,
+  faCircleUser,
+  faClipboardUser,
+  faHandshakeSimple,
+  faHouse,
+  faLaptop,
+  faRightFromBracket,
+  faShieldHalved,
+  faUnlockKeyhole,
+  faWarehouse
+}                           from "@fortawesome/free-solid-svg-icons"
 
 import {UserContext} from '../../../api/authentication';
-import styles from './style.module.css'
+import styles        from './style.module.css'
 
 
 const navLinks = [
@@ -100,7 +119,7 @@ export default function SideNavbar({navItem = navLinks}) {
         && navItem.find(i => i.eventKey === j.tenChucNang || i.links?.map(i => i.eventKey).includes(j.tenChucNang))
       ).map(i => i.tenChucNang)
     )
-    console.log(perm)
+    // console.log(perm)
   }, [navItem, perm])
 
   function onNavlinkClick(key) {

@@ -1,4 +1,7 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 
 export async function getAccounts(token = "") {
@@ -6,7 +9,7 @@ export async function getAccounts(token = "") {
     method:  "GET",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
 
   })
@@ -20,7 +23,7 @@ export async function insertAccount(account) {
     method:  "POST",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(account)
   })
@@ -33,7 +36,7 @@ export async function updateAccount(account) {
     method:  "PUT",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(account)
   })
@@ -46,7 +49,7 @@ export async function deleteAccount(account) {
     method:  "DELETE",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(account)
   })

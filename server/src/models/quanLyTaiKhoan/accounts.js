@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 async function getEmployeeAccounts(conn) {
   try {
     const [result] = await conn.query(
@@ -13,7 +15,8 @@ async function getEmployeeAccounts(conn) {
               nq.ghichu
        FROM taikhoan t
                 INNER JOIN nhanvien nv ON t.nhanvien = nv.manhanvien
-                INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen;`)
+                INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen
+       WHERE nq.manhomquyen != 1;`)
     return {accounts: result, success: true};
   } catch (e) {
     console.log(e)
@@ -23,10 +26,17 @@ async function getEmployeeAccounts(conn) {
 
 async function insertEmployeeAccount(conn, accounts = []) {
   try {
+    const saveData = []
+    for (const account of accounts) saveData.push({
+      nhanvien: account.nhanvien,
+      vaitro:   account.vaitro,
+      matkhau:  await bcrypt.hash(account.matkhau, account.vaitro === 1 ? 12 : 10),
+    })
+
     await conn.query(
       `INSERT INTO taikhoan (matkhau, vaitro, nhanvien)
        VALUES ?;`,
-      [accounts.map(({matkhau, vaitro, nhanvien}) => [matkhau, vaitro, nhanvien])])
+      [saveData.map(({matkhau, vaitro, nhanvien}) => [matkhau, vaitro, nhanvien])])
 
     const [result] = await conn.query(
       `SELECT *
@@ -54,12 +64,16 @@ async function updateEmployeeAccount(conn, {vaitro, mataikhoan}) {
 
 async function deleteEmployeeAccount(conn, accounts = []) {
   try {
+    console.log(accounts)
+    const temp = accounts.filter(i => +i.manhomquyen !== 1).map(({mataikhoan}) => mataikhoan)
+    if (temp.length === 0) return {message: "Deleted fail", success: false}
     await conn.query(
       `DELETE
        FROM taikhoan
-       WHERE mataikhoan = ?;`, [[accounts.map(({mataikhoan}) => mataikhoan)]])
+       WHERE mataikhoan IN ?;`, [[temp]])
     return {message: "Account deleted", success: true}
   } catch (e) {
+    console.log(e)
     return {message: "Deleted fail", success: false}
   }
 }

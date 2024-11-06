@@ -1,4 +1,7 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getProductState() {
 
@@ -6,7 +9,7 @@ export async function getProductState() {
     method:  "GET",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -18,7 +21,7 @@ export async function getProductFromConfigureState({madanhmucsanpham, macauhinh,
     method:  "GET",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())

@@ -93,12 +93,11 @@ function QuanLyTaiKhoan() {
 
   async function onDelete() {
     if (!row) return setModal('error')
-    console.log(row)
-    const result = await deleteAccount(row)
+    const result = await deleteAccount([row])
 
     if (!result.success) return;
 
-    updateInfo()
+    await updateInfo()
   }
 
   return (

@@ -22,7 +22,6 @@ function DangNhap() {
 
   async function onSubmit(e) {
     e.preventDefault()
-    console.log("Sent")
     const result = await loginAccount(formData)
 
     if (!result.result) return
@@ -45,7 +44,7 @@ function DangNhap() {
         <div className='d-flex h-100'>
           <div className='w-100 bg-light'></div>
           <Form className='w-100 d-flex flex-column align-items-center justify-content-center gap-5' onSubmit={onSubmit}>
-            <FormLabel className='fw-bold fs-3 _text-blue-3'>Đăng nhập</FormLabel>
+            <FormLabel className='fw-bold fs-3 _text-blue-3'>Đăng kí</FormLabel>
 
             <FormGroup className='d-flex gap-3 align-items-center w-50'>
               <FormLabel>
@@ -61,9 +60,16 @@ function DangNhap() {
               <InputShadow placeholder="Mật khẩu" type="password" value={formData.password} onChange={e => setFormData(src => ({...src, password: e.target.value}))}/>
             </FormGroup>
 
+            <FormGroup className='d-flex gap-3 w-50'>
+              <FormLabel>
+                <FontAwesomeIcon icon={faKey} width={"40px"}/>
+              </FormLabel>
+              <InputShadow placeholder="Nhập lại mật khẩu" type="password" value={formData.password} onChange={e => setFormData(src => ({...src, password: e.target.value}))}/>
+            </FormGroup>
+
             <FormGroup className='d-flex flex-column gap-3 text-center'>
-              <Button type='submit'>Đăng nhập</Button>
-              <Button variant='outline'>Quên mật khẩu?</Button>
+              <Button type='submit'>Đăng kí</Button>
+              {/*<Button variant='outline'>Quên mật khẩu?</Button>*/}
             </FormGroup>
           </Form>
         </div>

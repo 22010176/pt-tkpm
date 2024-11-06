@@ -335,22 +335,37 @@ FROM sanpham s
 WHERE madanhmucsanpham = 2
 ORDER BY masanpham DESC;
 
+SELECT *
+FROM taikhoan t
+       CROSS JOIN nhanvien n ON t.nhanvien = n.manhanvien
+WHERE mail = 'root@mail';
+
+SELECT *
+FROM nhanvien
+WHERE mail = 'root@mail';
+
+INSERT INTO nhanvien (hoten, ngaysinh, mail, sodienthoai)
+VALUES ('test', '2000/1/1', 'root@mail', '333');
 
 
+SELECT q.maquyenhan quyen, h.tenhienthi hanhdong, c2.tenhienthi chucnang
+FROM taikhoan
+       INNER JOIN ptpm.nhomquyen n ON taikhoan.vaitro = n.manhomquyen
+       INNER JOIN ctquyen c ON n.manhomquyen = c.nhomquyen
+       INNER JOIN quyenhan q ON c.quyenhan = q.maquyenhan
+       INNER JOIN chucnang c2 ON q.chucnang = c2.machucnang
+       INNER JOIN hanhdong h ON q.hanhdong = h.mahanhdong
+WHERE taikhoan.mataikhoan = 1
+ORDER BY maquyenhan;
 
+SELECT *
+FROM nhanvien n
+       LEFT JOIN taikhoan t ON n.manhanvien = t.nhanvien
+GROUP BY n.manhanvien;
 
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT *
+FROM taikhoan t
+       LEFT JOIN nhanvien ON t.nhanvien = nhanvien.manhanvien
 
 
 

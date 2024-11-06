@@ -135,10 +135,16 @@ VALUES ('Xem', 'Xem'),
        ('NhapFile', 'Nhập tệp'),
        ('XuatFile', 'Xuất tệp');
 
+SELECT *
+FROM chucnang;
+
 INSERT INTO quyenhan (chucnang, hanhdong)
 SELECT c.machucnang, h.mahanhdong
 FROM chucnang c
-       INNER JOIN hanhdong h;
+       INNER JOIN hanhdong h
+WHERE (c.machucnang IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+  AND h.mahanhdong = 1)
+ORDER BY c.machucnang, h.mahanhdong;
 
 INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
 VALUES ('root', 'Quản lý kho', '');
@@ -309,6 +315,8 @@ VALUES ('tonKho', 'tồn kho'),
        ('koTinhTrang', '');
 
 
+INSERT INTO nhanvien (hoten, ngaysinh, mail, sodienthoai)
+VALUES ('test', '2000/1/1', 'root@mail', '333');
 
 
 

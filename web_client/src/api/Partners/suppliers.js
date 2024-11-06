@@ -1,11 +1,14 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getSuppliers(token = '') {
   return fetch('/api/suppliers', {
     method:  'GET',
     headers: {
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     }
   })
   .then(res => res.json())
@@ -18,7 +21,7 @@ export async function insertSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(supplier)
   })
@@ -33,7 +36,7 @@ export async function updateSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(supplier)
   })
@@ -47,7 +50,7 @@ export async function deleteSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(supplier)
   })

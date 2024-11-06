@@ -144,7 +144,7 @@ async function insertPermission(conn, perms = []) {
        FROM ctquyen
        WHERE nhomquyen IN ?`,
       [[perms.map(({manhomquyen}) => manhomquyen)]])
-    
+
     return {success: true, permissions: result}
   } catch (e) {
     console.log(e)
@@ -152,6 +152,24 @@ async function insertPermission(conn, perms = []) {
   }
 }
 
+async function getAccountPermisisonsQuery(conn, {mataikhoan}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT q.maquyenhan quyen, h.tenhienthi hanhdong, c2.tenhienthi chucnang
+       FROM taikhoan
+                INNER JOIN ptpm.nhomquyen n ON taikhoan.vaitro = n.manhomquyen
+                INNER JOIN ctquyen c ON n.manhomquyen = c.nhomquyen
+                INNER JOIN quyenhan q ON c.quyenhan = q.maquyenhan
+                INNER JOIN chucnang c2 ON q.chucnang = c2.machucnang
+                INNER JOIN hanhdong h ON q.hanhdong = h.mahanhdong
+       WHERE taikhoan.mataikhoan = ?
+       ORDER BY maquyenhan`, [mataikhoan])
+    return result
+  } catch (e) {
+    return []
+  }
+}
+
 module.exports = {
-  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermission
+  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermission, getAccountPermisisonsQuery
 }

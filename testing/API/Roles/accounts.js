@@ -24,6 +24,9 @@ const insertTaiKhoan = (accounts) =>
   .then(response => response.json())
   .then(console.log);
 
+insertTaiKhoan([{vaitro: 1, matkhau: "admin", nhanvien: 1}])
+// login({mail: "root@mail", password: "admin"})
+
 const updateTaiKhoan = accounts =>
   fetch('http://localhost:3001/api/accounts', {
     method:  'PUT',
@@ -52,6 +55,21 @@ const deleteTaiKhoan = accounts =>
 module.exports = {
   insertTaiKhoan, deleteTaiKhoan, getTaiKhoan, updateTaiKhoan
 }
+
+
+async function login({mail, password}) {
+  return fetch(`http://localhost:3001/api/auth/login`, {
+    method:  "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body:    JSON.stringify({mail, password})
+  })
+  .then(response => response.json())
+  .then(console.log);
+}
+
+
 
 // for (let i = 0; i < 50; ++i) insertTaiKhoan(genTaiKhoan());
 

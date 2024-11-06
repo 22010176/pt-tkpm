@@ -4,9 +4,9 @@ export async function findExports({makhachhang, manhanvien, tungay, denngay, tus
   return fetch(`/api/warehouse/export?makhachhang=${makhachhang}&manhanvien=${manhanvien}&tungay=${tungay}&denngay=${denngay}&tusotien=${tusotien}&densotien=${densotien}`, {
     method:  'GET',
     headers: {
-      'Content-Type': 'application/json',
-      'Accept':       'application/json',
-      authorization:  token
+      'Content-Type':  'application/json',
+      'Accept':        'application/json',
+      'authorization': sessionStorage.getItem('Authorization')
     }
   })
   .then(response => response.json())

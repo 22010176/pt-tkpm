@@ -1,4 +1,7 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getProducts(token = "") {
   return await fetch("/api/products", {
@@ -6,7 +9,7 @@ export async function getProducts(token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -24,7 +27,7 @@ export async function updateProductImage(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    formData
   })
@@ -38,7 +41,7 @@ export async function insertProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(product)
   })
@@ -52,7 +55,7 @@ export async function updateProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(product)
   })
@@ -66,7 +69,7 @@ export async function deleteProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(product)
   })

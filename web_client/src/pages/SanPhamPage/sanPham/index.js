@@ -176,7 +176,7 @@ function SanPham() {
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
         <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal}/>
         <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete}/>
-        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={onOpenImei}/>
+        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="Xem ds  " onClick={onOpenImei}/>
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel}/>
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel}/>
       </>}
@@ -532,6 +532,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
 
 function ImeiModal({onHide, ...prop}) {
   const [rowClick] = useContext(SanPhamContext)
+
   const [data, setData] = useState({})
   const [form, setForm] = useState({macauhinh: "*", matinhtrang: "*"})
   const [table, setTable] = useState([])
@@ -540,7 +541,7 @@ function ImeiModal({onHide, ...prop}) {
     if (!rowClick) return
     getProductConfigures(rowClick.madanhmucsanpham).then(data => setData(src => ({...src, cauhinh: data.configures})))
     getProductState().then(data => setData(src => ({...src, trangthai: data.itemstate})))
-  }, [])
+  }, [rowClick])
 
   useEffect(() => {
     getProductFromConfigureState({
@@ -548,7 +549,6 @@ function ImeiModal({onHide, ...prop}) {
       madanhmucsanpham: rowClick?.madanhmucsanpham
     })
     .then(({items}) => setTable(items))
-    console.log('ddddd', table)
   }, [form]);
 
   return (<Modal {...prop} scrollable size="xl" centered>

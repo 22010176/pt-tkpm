@@ -4,7 +4,10 @@ async function getEmployees(conn) {
       `SELECT nv.*, nq.*
        FROM nhanvien nv
                 LEFT JOIN taikhoan tk ON nv.manhanvien = tk.nhanvien
-                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen`)
+                LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen
+       WHERE nq.manhomquyen != 1
+          OR nq.manhomquyen IS NULL`)
+    
     return {employees: result, success: true}
   } catch (e) {
     return {employees: [], success: false}

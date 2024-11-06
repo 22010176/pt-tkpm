@@ -1,15 +1,17 @@
-import { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import {useEffect}       from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+  faCircleCheck,
+  faRightToBracket
+}                        from '@fortawesome/free-solid-svg-icons'
 
 import colors from '../../../utilities/colors';
-import styles from './style.module.css'
 
 function DangSuat() {
   useEffect(function () {
-    sessionStorage.removeItem("accountToken")
+    sessionStorage.removeItem("Authorization")
     setTimeout(function () {
-      document.location.replace("/dang-nhap")
+      // document.location.replace("/dang-nhap")
     }, 5000)
   }, [])
 
@@ -21,11 +23,11 @@ function DangSuat() {
       <div className='d-flex h-100'>
         <div className='w-100 bg-light'></div>
         <div className='w-100 d-flex flex-column align-items-center justify-content-center gap-4'>
-          <FontAwesomeIcon icon={faCircleCheck} color={colors.green} size='10x' />
+          <FontAwesomeIcon icon={faCircleCheck} color={colors.green} size='10x'/>
           <h1>Bạn đã đăng xuất thành công</h1>
 
           <div className='d-flex justify-content-center gap-4 align-items-center'>
-            <FontAwesomeIcon icon={faRightToBracket} size='4x' />
+            <FontAwesomeIcon icon={faRightToBracket} size='4x'/>
             <a className='fs-3' href='/dang-nhap'>Đăng nhập</a>
           </div>
         </div>

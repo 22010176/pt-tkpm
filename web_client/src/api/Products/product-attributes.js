@@ -1,11 +1,14 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getProductAttributes(attributes, token) {
   return await fetch(`/api/product-attributes/${attributes}`, {
     method:  "GET",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -17,7 +20,7 @@ export async function insertProductAttributes(attributes, value, token) {
     method:  "POST",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(value)
   })
@@ -30,7 +33,7 @@ export async function updateProductAttributes(attributes, value, token) {
     method:  "PUT",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(value)
   })
@@ -43,7 +46,7 @@ export async function deleteProductAttributes(attributes, value, token) {
     method:  "DELETE",
     headers: {
       "Content-Type":  "application/json",
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     },
     body:    JSON.stringify(value)
   }).then(response => response.json())

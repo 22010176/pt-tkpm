@@ -1,4 +1,7 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export async function getCustomers() {
   return fetch('/api/customers', {
@@ -6,7 +9,7 @@ export async function getCustomers() {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     }
   })
   .then(response => response.json())
@@ -19,7 +22,7 @@ export async function insertCustomer(customer) {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(customer)
   })
@@ -33,7 +36,7 @@ export async function updateCustomer(customer, token = "") {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(customer)
   })
@@ -47,7 +50,7 @@ export async function deleteCustomer(customer, token = "") {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': sessionStorage.getItem('Authorization')
+      'authorization': getToken()
     },
     body:    JSON.stringify(customer)
   })

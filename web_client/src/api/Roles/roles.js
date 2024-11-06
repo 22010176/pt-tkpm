@@ -1,10 +1,13 @@
-import {checkResponse} from "../authentication";
+import {
+  checkResponse,
+  getToken
+} from "../authentication";
 
 export function getRoles() {
   return fetch("/api/roles", {
     method:  "GET",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     }
   })
@@ -16,7 +19,7 @@ export function insertRole(role,) {
   return fetch("/api/roles", {
     method:  "POST",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
@@ -29,7 +32,7 @@ export function updateRole(role,) {
   return fetch("/api/roles", {
     method:  "PUT",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
@@ -42,7 +45,7 @@ export function deleteRole(role,) {
   return fetch("/api/roles", {
     method:  "DELETE",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
@@ -55,7 +58,7 @@ export function getPermissionData() {
   return fetch("/api/roles/permissions", {
     method:  "GET",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     }
   })
@@ -67,7 +70,7 @@ export function getRolePermissions(role,) {
   return fetch(`/api/roles/${role}`, {
     method:  "GET",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
     }
   })
   .then(response => response.json())
@@ -78,7 +81,7 @@ export function insertPermission(data) {
   return fetch(`/api/roles/update-permission`, {
     method:  "POST",
     headers: {
-      'authorization': sessionStorage.getItem('Authorization'),
+      'authorization': getToken(),
       "Content-Type":  "application/json"
     },
     body:    JSON.stringify(data)
