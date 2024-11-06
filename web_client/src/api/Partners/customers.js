@@ -4,21 +4,22 @@ export async function getCustomers() {
   return fetch('/api/customers', {
     method:  'GET',
     headers: {
-      'Accept':       'application/json',
-      'Content-Type': 'application/json'
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
+      'authorization': sessionStorage.getItem('Authorization')
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
-export async function insertCustomer(customer, token = "") {
+export async function insertCustomer(customer) {
   return fetch('/api/customers', {
     method:  'POST',
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(customer)
   })
@@ -32,7 +33,7 @@ export async function updateCustomer(customer, token = "") {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(customer)
   })
@@ -46,7 +47,7 @@ export async function deleteCustomer(customer, token = "") {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(customer)
   })

@@ -1,12 +1,16 @@
 async function getProducts(conn) {
   try {
     const [result] = await conn.query(
-      `SELECT d.*, x.tenxuatxu, h.tenhedieuhanh, t.tenthuonghieu
+      `SELECT d.*, h.*, t.*, x.*, COUNT(s.phieunhap) tonkho
        FROM danhmucsanpham d
+                INNER JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                INNER JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
+                INNER JOIN hedieuhanh h ON d.hedieuhanh = h.mahedieuhanh
+                INNER JOIN thuonghieu t ON d.thuonghieu = t.mathuonghieu
                 INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
-                INNER JOIN hedieuhanh h ON h.mahedieuhanh = d.hedieuhanh
-                INNER JOIN thuonghieu t ON t.mathuonghieu = d.thuonghieu
-       ORDER BY madanhmucsanpham DESC`)
+       WHERE s.phieuxuat IS NULL
+       GROUP BY d.madanhmucsanpham
+       ORDER BY d.madanhmucsanpham DESC`)
     return {products: result, success: true};
   } catch (e) {
     console.log(e)

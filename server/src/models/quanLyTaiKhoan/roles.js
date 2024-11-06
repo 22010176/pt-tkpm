@@ -14,10 +14,10 @@ async function getRoles(conn) {
 
 async function getActionsQuery(conn) {
   try {
-    const [result] = await conn.query(`
-        SELECT *
-        FROM hanhdong
-        ORDER BY mahanhdong;`)
+    const [result] = await conn.query(
+      `SELECT *
+       FROM hanhdong
+       ORDER BY mahanhdong;`)
     return result;
   } catch (err) {
     return []
@@ -72,35 +72,28 @@ async function getRolePermissions(conn, manhomquyen) {
   }
 }
 
-async function insertRole(conn, {tennhomquyen, tenhienthi, ghichu, danhsachquyen = []}) {
+async function insertRole(conn, roles = []) {
   try {
     await conn.query(
       `INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
-       VALUES (?, ?, ?);`, [tennhomquyen, tenhienthi, ghichu])
-
+       VALUES ?`,
+      [roles.map(({tennhomquyen, tenhienthi, ghichu}) => [tennhomquyen, tenhienthi, ghichu])])
+    console.log(roles)
     const [result] = await conn.query(
       `SELECT *
        FROM nhomquyen
-       WHERE tennhomquyen = ?
-         AND tenhienthi = ?
-         AND ghichu = ?
-       ORDER BY manhomquyen DESC
-       LIMIT 1;`, [tennhomquyen, tenhienthi, ghichu])
-    if (danhsachquyen.length === 0) return {message: "Role added", success: true, body: result};
+       WHERE tennhomquyen IN ?
+       ORDER BY manhomquyen DESC`,
+      [[roles.map(({tennhomquyen}) => tennhomquyen)]])
 
-    const {manhomquyen} = result[0]
-    const test = await insertPermissionQuery(
-      conn,
-      danhsachquyen.map(({maquyenhan}) => ({manhomquyen, maquyenhan})))
-
-    return {message: "Role added", success: test, body: [{...result[0], danhsachquyen: test}]};
+    return {message: "Role added", success: true, body: result};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false, body: []};
   }
 }
 
-async function updateRole(conn, {tennhomquyen, tenhienthi, ghichu, manhomquyen, danhsachquyen = []}) {
+async function updateRole(conn, {tennhomquyen, tenhienthi, ghichu, manhomquyen}) {
   try {
     const [result] = await conn.query(
       `UPDATE nhomquyen
@@ -110,12 +103,7 @@ async function updateRole(conn, {tennhomquyen, tenhienthi, ghichu, manhomquyen, 
        WHERE manhomquyen = ?;`,
       [tennhomquyen, tenhienthi, ghichu, manhomquyen]);
 
-    const test = await insertPermissionQuery(
-      conn,
-      danhsachquyen.map(({maquyenhan}) => ({manhomquyen, maquyenhan})))
-
-    return {message: "Role updated", success: test};
-
+    return {message: "Role updated", success: true};
   } catch (e) {
     console.log(e)
     return {message: "Updated fail", success: false};
@@ -137,7 +125,7 @@ async function deleteRole(conn, roles = []) {
   }
 }
 
-async function insertPermissionQuery(conn, perms = []) {
+async function insertPermission(conn, perms = []) {
   try {
     if (perms.length > 0) await conn.query(
       `DELETE
@@ -145,23 +133,25 @@ async function insertPermissionQuery(conn, perms = []) {
        WHERE nhomquyen IN ?`,
       [[perms.map(({manhomquyen}) => manhomquyen)]]);
 
-    const [result] = await conn.query(
+    await conn.query(
       `INSERT INTO ctquyen (nhomquyen, quyenhan)
        VALUES ?`,
       [perms.map(({manhomquyen, maquyenhan}) => [manhomquyen, maquyenhan])]);
 
-    return (await conn.query(
+
+    const [result] = await conn.query(
       `SELECT *
        FROM ctquyen
        WHERE nhomquyen IN ?`,
-      [[perms.map(({manhomquyen}) => manhomquyen)]]
-    ))[0]
+      [[perms.map(({manhomquyen}) => manhomquyen)]])
+    
+    return {success: true, permissions: result}
   } catch (e) {
     console.log(e)
-    return []
+    return {success: true, permissions: []}
   }
 }
 
 module.exports = {
-  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermissionQuery
+  getRoles, insertRole, updateRole, deleteRole, getActionsQuery, getFeaturesQuery, getPermissionsQuery, getRolePermissions, insertPermission
 }

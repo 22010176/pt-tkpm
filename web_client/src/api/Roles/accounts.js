@@ -5,8 +5,8 @@ export async function getAccounts(token = "") {
   return fetch("/api/accounts", {
     method:  "GET",
     headers: {
-      "Content-Type": "application/json",
-      authorization:  token,
+      "Content-Type":  "application/json",
+      'authorization': sessionStorage.getItem('Authorization'),
     },
 
   })
@@ -15,12 +15,12 @@ export async function getAccounts(token = "") {
 }
 
 
-export async function insertAccount(account, token = "") {
+export async function insertAccount(account) {
   return fetch("/api/accounts", {
     method:  "POST",
     headers: {
-      "Content-Type": "application/json",
-      authorization:  token,
+      "Content-Type":  "application/json",
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(account)
   })
@@ -28,12 +28,12 @@ export async function insertAccount(account, token = "") {
   .then(checkResponse)
 }
 
-export async function updateAccount(account, token = "") {
+export async function updateAccount(account) {
   return fetch("/api/accounts", {
     method:  "PUT",
     headers: {
-      "Content-Type": "application/json",
-      authorization:  token,
+      "Content-Type":  "application/json",
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(account)
   })
@@ -41,12 +41,12 @@ export async function updateAccount(account, token = "") {
   .then(checkResponse)
 }
 
-export async function deleteAccount(account, token = "") {
+export async function deleteAccount(account) {
   return fetch("/api/accounts", {
     method:  "DELETE",
     headers: {
-      "Content-Type": "application/json",
-      authorization:  token,
+      "Content-Type":  "application/json",
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(account)
   })

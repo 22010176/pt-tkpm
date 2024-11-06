@@ -314,14 +314,26 @@ FROM sanpham s
 WHERE phieunhap = ?;
 
 
+SELECT d.madanhmucsanpham, d.phienbanhedieuhanh, h.*, t.*, x.*, COUNT(s.phieunhap) tonkho
+FROM danhmucsanpham d
+       INNER JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+       INNER JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
+       INNER JOIN hedieuhanh h ON d.hedieuhanh = h.mahedieuhanh
+       INNER JOIN thuonghieu t ON d.thuonghieu = t.mathuonghieu
+       INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
+WHERE s.phieuxuat IS NULL
+GROUP BY d.madanhmucsanpham
+ORDER BY d.madanhmucsanpham DESC
 
 
 
-
-
-
-
-
+SELECT s.maimei, s.phieunhap, s.phieuxuat, t.tenhienthi tentinhtrang
+FROM sanpham s
+       INNER JOIN ptpm.cauhinh c ON s.cauhinh = c.macauhinh
+       INNER JOIN ptpm.tinhtrang t ON s.tinhtrang = t.matinhtrang
+       INNER JOIN danhmucsanpham d ON d.madanhmucsanpham = c.danhmucsanpham
+WHERE madanhmucsanpham = 2
+ORDER BY masanpham DESC;
 
 
 

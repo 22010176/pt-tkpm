@@ -40,6 +40,7 @@ import {
   getPermissionData,
   getRolePermissions,
   getRoles,
+  insertPermission,
   insertRole,
   updateRole
 }                              from "../../../api/Roles/roles";
@@ -96,18 +97,20 @@ function PhanQuyen() {
     setModal("edit")
   }
 
-  async function onInsertPerm(data) {
-    const result = await insertRole(data)
+  async function onInsertPerm({danhsachquyen, ghichu, tenhienthi, tennhomquyen}) {
+    const result = await insertRole([{tennhomquyen, ghichu, tenhienthi}])
+    if (!result.success) return await deleteRole(result.body)
 
-    if (!result.success) return
+    const perm = await insertPermission(danhsachquyen.map(({maquyenhan}) => ({manhomquyen: result.body[0].manhomquyen, maquyenhan})))
+    if (!perm.success) return await deleteRole(result.body)
+
     updateTableData()
   }
 
-  async function onUpdateRole(data) {
-    // console.log(data)
+  async function onUpdateRole({danhsachquyen, ...data}) {
     const result = await updateRole(data)
-    console.log(result)
-    if (!result.success) return
+    const perm = await insertPermission(danhsachquyen.map(({maquyenhan}) => ({manhomquyen: data.manhomquyen, maquyenhan})))
+    if (!result.success || !perm.success) return
 
     onCloseModal()
     updateTableData()
@@ -118,8 +121,7 @@ function PhanQuyen() {
     const result = await deleteRole([rowClick])
 
     if (!result.success) return
-
-
+    
     updateTableData()
   }
 
@@ -163,7 +165,6 @@ function PhanQuyen() {
 function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
   const rowClick = useContext(FormContext)
 
-
   const [tenhienthi, setTenHienThi] = useState("")
   const [ghichu, setGhiChu] = useState("")
   const [quyenHan, setQuyenHan] = useState({})
@@ -192,19 +193,16 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
   }
 
   async function onFormSubmit() {
-    console.log((rowClick))
-    if (typeof onSubmit === 'function') {
 
-      await onSubmit({
-        manhomquyen:   +rowClick?.manhomquyen,
-        tenhienthi,
-        tennhomquyen:  removeVietnameseTones(tenhienthi).replaceAll(' ', '_'),
-        ghichu,
-        danhsachquyen: Object.entries(quyenHan)
-                             .filter(i => i[1])
-                             .map(i => permissions.find(j => permToStr(j) === i[0]))
-      })
-    }
+    await onSubmit({
+      manhomquyen:   +rowClick?.manhomquyen,
+      tenhienthi,
+      tennhomquyen:  removeVietnameseTones(tenhienthi).replaceAll(' ', '_'),
+      ghichu,
+      danhsachquyen: Object.entries(quyenHan)
+                           .filter(i => i[1])
+                           .map(i => permissions.find(j => permToStr(j) === i[0]))
+    })
 
     await updateInfo()
   }
@@ -264,58 +262,5 @@ function PermissionModal({title, submitBtn, onHide, onSubmit, ...props}) {
     </Modal>
   )
 }
-
-// function EditPermissionModal({onHide, ...props}) {
-//
-//   return (<Modal {...props} scrollable centered backdrop="static" size='xl' className='vh-100'>
-//     <HeaderModalA title="CHỈNH SỬA NHÓM QUYỀN"/>
-//     <ModalBody className='d-flex flex-column _vh-60 overflow-auto px-5 py-3'>
-//       <Form className='d-flex flex-column gap-3 h-100'>
-//         <FormGroup className='d-flex gap-5'>
-//           <FormGroup className='w-50'>
-//             <FormLabel className='fw-bold'>Tên nhóm quyền</FormLabel>
-//             <InputShadow value={tenhienthi} onChange={e => setTenHienThi(e.target.value)}/>
-//           </FormGroup>
-//
-//           <FormGroup className='w-50'>
-//             <FormLabel className='fw-bold'>Ghi chú</FormLabel>
-//             <InputShadow value={ghichu} onChange={e => setGhiChu(e.target.value)}/>
-//           </FormGroup>
-//         </FormGroup>
-//
-//         <ContentA As={FormGroup} className="h-100">
-//           <Table borderless className='w-100 bg-light '>
-//             <thead className='fw-bold text-nowrap '>
-//             <tr>
-//               <th>Danh mục chức năng</th>
-//               {actions.map((i, j) => <th key={j} className='text-center px-3'>{i.tenhienthi}</th>)}
-//             </tr>
-//             </thead>
-//
-//             <tbody>
-//             {features.map((cn, j) => <tr key={j}>
-//               <td>{cn.tenhienthi}</td>
-//               {actions.map((hd, k) => {
-//                 const key = permToStr({...cn, ...hd})
-//                 return <td key={k}>
-//                   {quyenHan?.[key] != null
-//                     && <FormCheck className='text-center' checked={quyenHan[key]}
-//                                   onChange={e => setQuyenHan(src => ({...src, [key]: e.target.checked}))}/>}
-//                 </td>
-//               })}
-//             </tr>)}
-//             </tbody>
-//           </Table>
-//         </ContentA>
-//       </Form>
-//     </ModalBody>
-//
-//     <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-//       <Button className='_w-15 py-2' variant='primary'>Lưu</Button>
-//       <Button className='_w-15 py-2' variant='danger' onClick={onHide}>Hủy</Button>
-//     </ModalFooter>
-//   </Modal>)
-// }
-
 
 export default PhanQuyen

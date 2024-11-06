@@ -17,6 +17,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "concurrently": "^9.0.1",
     "phone-number-generator-js": "^1.2.12",
     "random-email": "^1.0.3",

@@ -19,8 +19,7 @@ function getSecretKey() {
 
 // Generate login token
 function createToken(userID, mail, password) {
-  const token = jwt.sign({userID, mail, password}, getSecretKey())
-  return `Bearer ${token}`;
+  return jwt.sign({userID, mail, password}, getSecretKey());
 }
 
 // return user if true
@@ -29,11 +28,12 @@ async function verifyToken(conn, token) {
   const [result] = await conn.query(
     `SELECT 1
      FROM taikhoan
+              INNER JOIN ptpm.nhanvien n ON taikhoan.nhanvien = n.manhanvien
      WHERE matkhau = ?
-       AND mail = ?
+       AND n.mail = ?
        AND mataikhoan = ?
      LIMIT 1;`,
-    [data.password, data.email, data.userID])
+    [data.password, data.mail, data.userID])
 
   return result.length > 0;
 }

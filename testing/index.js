@@ -115,8 +115,8 @@ async function genSampleData(number) {
 
 // createItems(50).then(console.log)
 async function genData() {
-  for (let i = 0; i < 5; ++i)
     await genSampleData( 500)
+  // for (let i = 0; i < 5; ++i)
   // Promise.all(
   // )
 }

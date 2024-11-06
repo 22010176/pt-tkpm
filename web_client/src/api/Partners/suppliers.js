@@ -5,7 +5,7 @@ export async function getSuppliers(token = '') {
     method:  'GET',
     headers: {
       'Content-Type':  'application/json',
-      'authorization': token
+      'authorization': sessionStorage.getItem('Authorization')
     }
   })
   .then(res => res.json())
@@ -18,7 +18,7 @@ export async function insertSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(supplier)
   })
@@ -33,7 +33,7 @@ export async function updateSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(supplier)
   })
@@ -47,7 +47,7 @@ export async function deleteSupplier(supplier, token = '') {
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      'authorization': token,
+      'authorization': sessionStorage.getItem('Authorization')
     },
     body:    JSON.stringify(supplier)
   })

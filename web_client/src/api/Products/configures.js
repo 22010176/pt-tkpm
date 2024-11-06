@@ -1,10 +1,10 @@
 import {checkResponse} from "../authentication";
 
-export async function getConfigures(token = "") {
+export async function getConfigures() {
   return fetch('api/configures', {
     method:  'GET',
     headers: {
-      'Authorization': token,
+      'authorization': sessionStorage.getItem('Authorization'),
       'Content-Type':  'application/json',
       'Accept':        'application/json',
     }
@@ -17,7 +17,7 @@ export async function getProductConfigures(product, token = "") {
   return fetch(`/api/configures/${product}`, {
     method:  'GET',
     headers: {
-      'Authorization': token,
+      'authorization': sessionStorage.getItem('Authorization'),
       'Content-Type':  'application/json',
       'Accept':        'application/json',
     }
@@ -30,7 +30,7 @@ export async function insertConfigure(config, token = "") {
   return fetch('/api/configures', {
     method:  'POST',
     headers: {
-      'Authorization': token,
+      'authorization': sessionStorage.getItem('Authorization'),
       'Content-Type':  'application/json',
       'Accept':        'application/json',
     },
@@ -44,7 +44,7 @@ export async function updateConfigure(config, token = "") {
   return fetch('/api/configures', {
     method:  'PUT',
     headers: {
-      'Authorization': token,
+      'authorization': sessionStorage.getItem('Authorization'),
       'Content-Type':  'application/json',
       'Accept':        'application/json',
     },
@@ -58,7 +58,7 @@ export async function deleteConfigure(config, token = "") {
   return fetch('/api/configures', {
     method:  'DELETE',
     headers: {
-      'Authorization': token,
+      'authorization': sessionStorage.getItem('Authorization'),
       'Content-Type':  'application/json',
       'Accept':        'application/json',
     },

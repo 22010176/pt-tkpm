@@ -59,13 +59,23 @@ import {
   updateConfigure
 }                             from "../../../api/Products/configures";
 import InputGroupText         from "react-bootstrap/InputGroupText";
+import {
+  getProductFromConfigureState,
+  getProductState
+}                             from "../../../api/Warehouse";
 
 const defaultSanPham = {
   madanhmucsanpham: "", tendanhmucsanpham: "", chipxuly: "", dungluongpin: "", kichthuongmanhinh: "", cameratruoc: "", camerasau: "", phienbanhedieuhanh: "", thoigianbaohanh: "", hinhanh: "", xuatxu: "", hedieuhanh: "", thuonghieu: "",
 }
 
 const spHeader = [
-  {key: "Mã SP", value: "madanhmucsanpham"}, {key: "Tên sản phẩm", value: "tendanhmucsanpham"}, {key: "Phiên bản HĐH", value: "phienbanhedieuhanh"}, {key: "Thương hiệu", value: "tenthuonghieu"}, {key: "Hệ điều hành", value: "tenhedieuhanh"}, {key: "Xuất xứ", value: "tenxuatxu"}, {key: "Tồn kho", value: "soLuong"},
+  {key: "Mã SP", value: "madanhmucsanpham"},
+  {key: "Tên sản phẩm", value: "tendanhmucsanpham"},
+  {key: "Phiên bản HĐH", value: "phienbanhedieuhanh"},
+  {key: "Thương hiệu", value: "tenthuonghieu"},
+  {key: "Hệ điều hành", value: "tenhedieuhanh"},
+  {key: "Xuất xứ", value: "tenxuatxu"},
+  {key: "Tồn kho", value: "tonkho"},
 
 //   hide
   {key: "thuonghieu", value: "thuonghieu", hide: true}, {key: "hedieuhanh", value: "hedieuhanh", hide: true}, {key: "xuatxu", value: "xuatxu", hide: true}, {key: "chipxuly", value: "chipxuly", hide: true}, {key: "dungluongpin", value: "dungluongpin", hide: true}, {key: "kichthuongmanhinh", value: "kichthuongmanhinh", hide: true}, {key: "cameratruoc", value: "cameratruoc", hide: true}, {key: "camerasau", value: "camerasau", hide: true}, {key: "thoigianbaohanh", value: "thoigianbaohanh", hide: true}, {key: "hinhanh", value: "hinhanh", hide: true}
@@ -73,7 +83,10 @@ const spHeader = [
 
 
 const imeiHeader = [
-  {key: "IMEI", value: "imei"}, {key: "Mã phiếu nhập", value: "phieuNhap"}, {key: "Mã phiếu xuất", value: "phieuXuat"}, {key: "Tình trạng", value: "tinhTrang"},
+  {key: "IMEI", value: "maimei"},
+  {key: "Mã phiếu nhập", value: "phieunhap"},
+  {key: "Mã phiếu xuất", value: "phieuxuat"},
+  {key: "Tình trạng", value: "tentinhtrang"},
 ]
 
 const defaultCauHinh = {
@@ -131,6 +144,12 @@ function SanPham() {
     setModal("edit")
   }
 
+  function onOpenImei() {
+    if (!rowClick) return setModal("error")
+    setModal("imei")
+
+  }
+
   async function onInsert() {
     await getSPData()
   }
@@ -157,7 +176,7 @@ function SanPham() {
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
         <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal}/>
         <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete}/>
-        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={setModal.bind({}, "imei")}/>
+        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="DS IMEI" onClick={onOpenImei}/>
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel}/>
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel}/>
       </>}
@@ -166,7 +185,7 @@ function SanPham() {
         <Button className='d-flex gap-2 align-items-center px-4 opacity-2' size='lg' variant='success'>
           <FontAwesomeIcon icon={faMagnifyingGlass}/>
         </Button>
-        <Button className='d-flex gap-2 align-items-center' variant='primary' onClick={getSPData}>
+        <Button className='d-flex gap-2 align-items-center text-nowrap' variant='primary' onClick={getSPData}>
           <FontAwesomeIcon icon={faArrowRotateRight}/>
           <span>Làm mới</span>
         </Button>
@@ -512,6 +531,26 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
 }
 
 function ImeiModal({onHide, ...prop}) {
+  const [rowClick] = useContext(SanPhamContext)
+  const [data, setData] = useState({})
+  const [form, setForm] = useState({macauhinh: "*", matinhtrang: "*"})
+  const [table, setTable] = useState([])
+
+  useEffect(() => {
+    if (!rowClick) return
+    getProductConfigures(rowClick.madanhmucsanpham).then(data => setData(src => ({...src, cauhinh: data.configures})))
+    getProductState().then(data => setData(src => ({...src, trangthai: data.itemstate})))
+  }, [])
+
+  useEffect(() => {
+    getProductFromConfigureState({
+      ...form,
+      madanhmucsanpham: rowClick?.madanhmucsanpham
+    })
+    .then(({items}) => setTable(items))
+    console.log('ddddd', table)
+  }, [form]);
+
   return (<Modal {...prop} scrollable size="xl" centered>
     <HeaderModalA title="DANH SÁCH IMEI"/>
 
@@ -519,19 +558,21 @@ function ImeiModal({onHide, ...prop}) {
       <Form className='d-flex justify-content-between gap-4 mb-3'>
         <FormGroup className='flex-grow-1'>
           <FormLabel className='fw-bold'>Phiên bản</FormLabel>
-          <InputShadow as={FormSelect}>
-            <option>test1</option>
-            <option>test2</option>
-            <option>test3</option>
+          <InputShadow as={FormSelect}
+                       value={form.macauhinh}
+                       onChange={e => setForm(src => ({...src, macauhinh: e.target.value}))}>
+            <option value='*'>Tất cả</option>
+            {data.cauhinh?.map((i, j) => <option key={j} value={i.macauhinh}>{`${i.dungluongrom}GB - ${i.dungluongram}GB - ${i.tenmausac}`}</option>)}
           </InputShadow>
         </FormGroup>
 
         <FormGroup className='flex-grow-1'>
           <FormLabel className='fw-bold'>Tình trạng</FormLabel>
-          <InputShadow as={FormSelect}>
-            <option>test1</option>
-            <option>test2</option>
-            <option>test3</option>
+          <InputShadow as={FormSelect}
+                       value={form.matinhtrang}
+                       onChange={e => setForm(src => ({...src, matinhtrang: e.target.value}))}>
+            <option value='*'>Tất cả</option>
+            {data.trangthai?.map((i, j) => <option key={j} value={i.matinhtrang}>{i.tenhienthi}</option>)}
           </InputShadow>
         </FormGroup>
 
@@ -542,7 +583,7 @@ function ImeiModal({onHide, ...prop}) {
       </Form>
 
       <ContentA style={{height: "40vh"}}>
-        <TableA index headers={imeiHeader}/>
+        <TableA index headers={imeiHeader} data={table}/>
       </ContentA>
     </ModalBody>
 

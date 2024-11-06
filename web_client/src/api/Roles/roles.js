@@ -1,23 +1,23 @@
 import {checkResponse} from "../authentication";
 
-export function getRoles(token = "") {
+export function getRoles() {
   return fetch("/api/roles", {
     method:  "GET",
     headers: {
-      Authorization:  token,
-      "Content-Type": "application/json"
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
-export function insertRole(role, token = "") {
+export function insertRole(role,) {
   return fetch("/api/roles", {
     method:  "POST",
     headers: {
-      Authorization:  token,
-      "Content-Type": "application/json"
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
   })
@@ -25,12 +25,12 @@ export function insertRole(role, token = "") {
   .then(checkResponse)
 }
 
-export function updateRole(role, token = "") {
+export function updateRole(role,) {
   return fetch("/api/roles", {
     method:  "PUT",
     headers: {
-      Authorization:  token,
-      "Content-Type": "application/json"
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
   })
@@ -38,12 +38,12 @@ export function updateRole(role, token = "") {
   .then(checkResponse)
 }
 
-export function deleteRole(role, token = "") {
+export function deleteRole(role,) {
   return fetch("/api/roles", {
     method:  "DELETE",
     headers: {
-      Authorization:  token,
-      "Content-Type": "application/json"
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
     },
     body:    JSON.stringify(role)
   })
@@ -51,26 +51,38 @@ export function deleteRole(role, token = "") {
   .then(checkResponse)
 }
 
-export function getPermissionData(token = "") {
+export function getPermissionData() {
   return fetch("/api/roles/permissions", {
     method:  "GET",
     headers: {
-      Authorization:  token,
-      "Content-Type": "application/json"
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
-export function getRolePermissions(role, token = "") {
+export function getRolePermissions(role,) {
   return fetch(`/api/roles/${role}`, {
     method:  "GET",
     headers: {
-      authorization: token,
+      'authorization': sessionStorage.getItem('Authorization'),
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
+export function insertPermission(data) {
+  return fetch(`/api/roles/update-permission`, {
+    method:  "POST",
+    headers: {
+      'authorization': sessionStorage.getItem('Authorization'),
+      "Content-Type":  "application/json"
+    },
+    body:    JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}

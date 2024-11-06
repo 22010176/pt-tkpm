@@ -1,4 +1,4 @@
-async function getAccounts(conn) {
+async function getEmployeeAccounts(conn) {
   try {
     const [result] = await conn.query(
       `SELECT t.mataikhoan,
@@ -21,7 +21,7 @@ async function getAccounts(conn) {
   }
 }
 
-async function insertAccount(conn, accounts = []) {
+async function insertEmployeeAccount(conn, accounts = []) {
   try {
     await conn.query(
       `INSERT INTO taikhoan (matkhau, vaitro, nhanvien)
@@ -39,7 +39,7 @@ async function insertAccount(conn, accounts = []) {
   }
 }
 
-async function updateAccount(conn, {vaitro, mataikhoan}) {
+async function updateEmployeeAccount(conn, {vaitro, mataikhoan}) {
   try {
     await conn.query(
       `UPDATE taikhoan
@@ -52,7 +52,7 @@ async function updateAccount(conn, {vaitro, mataikhoan}) {
   }
 }
 
-async function deleteAccount(conn, accounts = []) {
+async function deleteEmployeeAccount(conn, accounts = []) {
   try {
     await conn.query(
       `DELETE
@@ -64,6 +64,7 @@ async function deleteAccount(conn, accounts = []) {
   }
 }
 
+
 module.exports = {
-  deleteAccount, insertAccount, updateAccount, getAccounts
+  deleteEmployeeAccount, insertEmployeeAccount, updateEmployeeAccount, getEmployeeAccounts
 }

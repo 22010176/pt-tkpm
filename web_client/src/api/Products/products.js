@@ -6,7 +6,7 @@ export async function getProducts(token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      "Authorization": token
+      'authorization': sessionStorage.getItem('Authorization'),
     }
   })
   .then(response => response.json())
@@ -21,7 +21,11 @@ export async function updateProductImage(product, token = "") {
 
   return await fetch(`/api/products/upload-img/${product.maDanhMucSanPham}`, {
     method:  "POST",
-    headers: {"Authorization": token},
+    headers: {
+      "Content-Type":  "application/json",
+      "Accept":        "application/json",
+      'authorization': sessionStorage.getItem('Authorization'),
+    },
     body:    formData
   })
   .then(response => response.json())
@@ -34,7 +38,7 @@ export async function insertProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      "Authorization": token
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(product)
   })
@@ -48,7 +52,7 @@ export async function updateProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      "Authorization": token
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(product)
   })
@@ -62,10 +66,11 @@ export async function deleteProduct(product, token = "") {
     headers: {
       "Content-Type":  "application/json",
       "Accept":        "application/json",
-      "Authorization": token
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(product)
   })
   .then(response => response.json())
   .then(checkResponse);
 }
+

@@ -251,7 +251,7 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
   }
 
   async function onInsert() {
-    const result = await insertAccount({matkhau, vaitro: vaitro || nhomquyen?.[0]?.manhomquyen, nhanvien: manhanvien})
+    const result = await insertAccount([{matkhau, vaitro: vaitro || nhomquyen?.[0]?.manhomquyen, nhanvien: manhanvien}])
     if (!result.success) return;
 
     if (typeof onSubmit === "function") onSubmit()

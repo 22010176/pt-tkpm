@@ -62,7 +62,8 @@ CREATE TABLE nhomquyen
 (
   manhomquyen  INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   tennhomquyen VARCHAR(255) UNIQUE,
-  tenhienthi   VARCHAR(255),
+  tenhienthi   VARCHAR(255) UNIQUE,
+
   ghichu       VARCHAR(255)
 );
 

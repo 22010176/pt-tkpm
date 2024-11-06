@@ -1,38 +1,38 @@
 import {checkResponse} from "../authentication";
 
-export async function getEmployees(token = "") {
+export async function getEmployees() {
   return fetch('/api/employees', {
     method:  'GET',
     headers: {
-      'Accept':       'application/json',
-      'Content-Type': 'application/json',
-      Authorization:  token
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
+      'authorization': sessionStorage.getItem('Authorization'),
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
-export async function getEmployeeNoAccount(token = "") {
+export async function getEmployeeNoAccount() {
   return fetch('/api/employees/no-account', {
     method:  'GET',
     headers: {
-      'Accept':       'application/json',
-      'Content-Type': 'application/json',
-      Authorization:  token
+      'Accept':        'application/json',
+      'Content-Type':  'application/json',
+      'authorization': sessionStorage.getItem('Authorization'),
     }
   })
   .then(response => response.json())
   .then(checkResponse)
 }
 
-export async function insertEmployee(employee, token = "") {
+export async function insertEmployee(employee,) {
   return fetch('/api/employees', {
     method:  'POST',
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(employee)
   })
@@ -40,13 +40,13 @@ export async function insertEmployee(employee, token = "") {
   .then(checkResponse)
 }
 
-export async function updateEmployee(employee, token = "") {
+export async function updateEmployee(employee,) {
   return fetch('/api/employees', {
     method:  'PUT',
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(employee)
   })
@@ -54,13 +54,13 @@ export async function updateEmployee(employee, token = "") {
   .then(checkResponse)
 }
 
-export async function deleteEmployee(employee, token = "") {
+export async function deleteEmployee(employee,) {
   return fetch('/api/employees', {
     method:  'DELETE',
     headers: {
       'Accept':        'application/json',
       'Content-Type':  'application/json',
-      "authorization": token,
+      'authorization': sessionStorage.getItem('Authorization'),
     },
     body:    JSON.stringify(employee)
   })

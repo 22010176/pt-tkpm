@@ -13,22 +13,81 @@ async function getItems(conn) {
   }
 }
 
+async function getItemsFromConfiguresAndState(conn, {madanhmucsanpham, macauhinh, matinhtrang}) {
+  try {
+    let result;
+    if (macauhinh === '*' && matinhtrang === '*')
+      [result] = await conn.query(
+        `SELECT s.maimei, s.phieunhap, s.phieuxuat, t.tenhienthi tentinhtrang
+         FROM sanpham s
+                  INNER JOIN ptpm.cauhinh c ON s.cauhinh = c.macauhinh
+                  INNER JOIN ptpm.tinhtrang t ON s.tinhtrang = t.matinhtrang
+                  INNER JOIN danhmucsanpham d ON d.madanhmucsanpham = c.danhmucsanpham
+         WHERE d.madanhmucsanpham = ?
+         ORDER BY masanpham DESC;`,
+        [madanhmucsanpham])
+
+    else if (macauhinh === '*' && matinhtrang !== '*')
+      [result] = await conn.query(
+        `SELECT s.maimei, s.phieunhap, s.phieuxuat, t.tenhienthi tentinhtrang
+         FROM sanpham s
+                  INNER JOIN ptpm.cauhinh c ON s.cauhinh = c.macauhinh
+                  INNER JOIN ptpm.tinhtrang t ON s.tinhtrang = t.matinhtrang
+                  INNER JOIN danhmucsanpham d ON d.madanhmucsanpham = c.danhmucsanpham
+         WHERE d.madanhmucsanpham = ?
+           AND t.matinhtrang = ?
+         ORDER BY masanpham DESC;`,
+        [madanhmucsanpham, matinhtrang])
+
+    else if (macauhinh !== '*' && matinhtrang === '*')
+      [result] = await conn.query(
+        `SELECT s.maimei, s.phieunhap, s.phieuxuat, t.tenhienthi tentinhtrang
+         FROM sanpham s
+                  INNER JOIN ptpm.cauhinh c ON s.cauhinh = c.macauhinh
+                  INNER JOIN ptpm.tinhtrang t ON s.tinhtrang = t.matinhtrang
+                  INNER JOIN danhmucsanpham d ON d.madanhmucsanpham = c.danhmucsanpham
+         WHERE d.madanhmucsanpham = ?
+           AND c.macauhinh = ?
+         ORDER BY masanpham DESC;`,
+        [madanhmucsanpham, macauhinh])
+
+    else if (macauhinh !== '*' && matinhtrang !== '*')
+      [result] = await conn.query(
+        `SELECT s.maimei, s.phieunhap, s.phieuxuat, t.tenhienthi tentinhtrang
+         FROM sanpham s
+                  INNER JOIN ptpm.cauhinh c ON s.cauhinh = c.macauhinh
+                  INNER JOIN ptpm.tinhtrang t ON s.tinhtrang = t.matinhtrang
+                  INNER JOIN danhmucsanpham d ON d.madanhmucsanpham = c.danhmucsanpham
+         WHERE d.madanhmucsanpham = ?
+           AND macauhinh = ?
+           AND t.matinhtrang = ?
+         ORDER BY masanpham DESC;`,
+        [madanhmucsanpham, macauhinh, matinhtrang])
+
+    return {items: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {items: [], success: false}
+  }
+}
+
 async function getTinhTrang(conn) {
   try {
     const [result] = await conn.query(
       `SELECT *
        FROM tinhtrang
+       WHERE matinhtrang != 5
        ORDER BY matinhtrang DESC`)
-    return {itemState: result, success: true};
+    return {itemstate: result, success: true};
   } catch (e) {
     console.log(e)
-    return {itemState: [], success: false}
+    return {itemstate: [], success: false}
   }
 }
 
 async function insertItem(conn, items = []) {
   try {
-    
+
     await conn.query(
       `INSERT INTO sanpham (maimei, cauhinh, phieunhap, phieuxuat, tinhtrang)
        VALUES ?`,
@@ -79,5 +138,5 @@ async function deleteItem(conn, items = []) {
 
 
 module.exports = {
-  deleteItem, updateItem, getItems, insertItem, getTinhTrang
+  deleteItem, updateItem, getItems, insertItem, getTinhTrang, getItemsFromConfiguresAndState
 }
