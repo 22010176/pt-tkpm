@@ -39,8 +39,10 @@ async function insertEmployeeAccount(conn, accounts = []) {
       [saveData.map(({matkhau, vaitro, nhanvien}) => [matkhau, vaitro, nhanvien])])
 
     const [result] = await conn.query(
-      `SELECT *
-       FROM taikhoan
+      `SELECT n.hoten, n.sodienthoai, n.mail, nq.tenhienthi
+       FROM taikhoan t
+                INNER JOIN nhanvien n ON t.nhanvien = n.manhanvien
+                INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen
        WHERE nhanvien IN ?`, [[accounts.map(({nhanvien}) => nhanvien)]])
     return {message: "Account added", success: true, accounts: result};
   } catch (e) {

@@ -12,9 +12,9 @@ import {
   FormLabel
 }                        from 'react-bootstrap';
 
-import InputShadow    from '../../../components/Forms/InputShadow';
-import ErrorModal     from '../../../components/modals/errorModal';
-import {loginAccount} from "../../../api/authentication";
+import InputShadow       from '../../../components/Forms/InputShadow';
+import ErrorModal        from '../../../components/modals/errorModal';
+import {registerAccount} from "../../../api/authentication";
 
 function DangNhap() {
   const [formData, setFormData] = useState({mail: "", password: ""});
@@ -22,12 +22,12 @@ function DangNhap() {
 
   async function onSubmit(e) {
     e.preventDefault()
-    const result = await loginAccount(formData)
-
-    if (!result.result) return
-
-    sessionStorage.setItem("Authorization", result.token)
-    document.location.replace("/")
+    const result = await registerAccount(formData)
+    console.log(result)
+    // if (!result.result) return
+    //
+    // sessionStorage.setItem("Authorization", result.token)
+    // document.location.replace("/")
   }
 
   return (<>
@@ -64,7 +64,7 @@ function DangNhap() {
               <FormLabel>
                 <FontAwesomeIcon icon={faKey} width={"40px"}/>
               </FormLabel>
-              <InputShadow placeholder="Nhập lại mật khẩu" type="password" value={formData.password} onChange={e => setFormData(src => ({...src, password: e.target.value}))}/>
+              <InputShadow placeholder="Nhập lại mật khẩu" type="password" value={formData.password2} onChange={e => setFormData(src => ({...src, password2: e.target.value}))}/>
             </FormGroup>
 
             <FormGroup className='d-flex flex-column gap-3 text-center'>

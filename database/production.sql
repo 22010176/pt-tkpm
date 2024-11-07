@@ -136,22 +136,25 @@ VALUES ('Xem', 'Xem'),
        ('XuatFile', 'Xuất tệp');
 
 SELECT *
+FROM hanhdong;
+
+SELECT *
 FROM chucnang;
+
 
 INSERT INTO quyenhan (chucnang, hanhdong)
 SELECT c.machucnang, h.mahanhdong
-FROM chucnang c
-       INNER JOIN hanhdong h
-WHERE (c.machucnang IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-  AND h.mahanhdong = 1)
+FROM chucnang c,
+     hanhdong h
 ORDER BY c.machucnang, h.mahanhdong;
 
 INSERT INTO nhomquyen (tennhomquyen, tenhienthi, ghichu)
 VALUES ('root', 'Quản lý kho', '');
 
 INSERT INTO ctquyen (nhomquyen, quyenhan)
-SELECT 1, maquyenhan
-FROM quyenhan;
+SELECT n.manhomquyen, q.maquyenhan
+FROM nhomquyen n,
+     quyenhan q;
 
 # Khoi tao san pham
 DROP TABLE IF EXISTS xuatxu;
@@ -315,8 +318,6 @@ VALUES ('tonKho', 'tồn kho'),
        ('koTinhTrang', '');
 
 
-INSERT INTO nhanvien (hoten, ngaysinh, mail, sodienthoai)
-VALUES ('test', '2000/1/1', 'root@mail', '333');
 
 
 

@@ -42,3 +42,16 @@ export async function loginAccount({mail, password}) {
   .then(checkResponse)
 }
 
+export async function registerAccount({mail, password}) {
+  return await fetch(`/api/auth/register`, {
+    method:  "POST",
+    headers: {
+      "Content-Type":  "application/json",
+      "authorization": getToken()
+    },
+    body:    JSON.stringify({mail, password})
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}
+

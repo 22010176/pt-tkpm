@@ -369,7 +369,11 @@ FROM taikhoan t
 
 
 
-
+SELECT q.maquyenhan, c.tenhienthi, h.tenhienthi
+FROM quyenhan q
+       INNER JOIN ptpm.chucnang c ON q.chucnang = c.machucnang
+       INNER JOIN hanhdong h ON q.hanhdong = h.mahanhdong
+ORDER BY maquyenhan
 
 
 
