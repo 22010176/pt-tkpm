@@ -3,8 +3,8 @@ async function getProducts(conn) {
     const [result] = await conn.query(
       `SELECT d.*, h.*, t.*, x.*, COUNT(s.phieunhap) tonkho
        FROM danhmucsanpham d
-                INNER JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
-                INNER JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
+                LEFT JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                LEFT JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
                 INNER JOIN hedieuhanh h ON d.hedieuhanh = h.mahedieuhanh
                 INNER JOIN thuonghieu t ON d.thuonghieu = t.mathuonghieu
                 INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
@@ -18,35 +18,78 @@ async function getProducts(conn) {
   }
 }
 
+async function getProductWithConfigures(conn) {
+  try {
+    const [result] = await conn.query(
+      `SELECT d.madanhmucsanpham, d.tendanhmucsanpham, COUNT(s.phieunhap) tonkho
+       FROM danhmucsanpham d
+                LEFT JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                LEFT JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
+                INNER JOIN hedieuhanh h ON d.hedieuhanh = h.mahedieuhanh
+                INNER JOIN thuonghieu t ON d.thuonghieu = t.mathuonghieu
+                INNER JOIN xuatxu x ON d.xuatxu = x.maxuatxu
+       WHERE s.phieuxuat IS NULL
+       GROUP BY d.madanhmucsanpham
+       HAVING COUNT(DISTINCT c.macauhinh) > 0
+       ORDER BY d.madanhmucsanpham DESC`)
+    return {Data: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {Data: [], success: false}
+  }
+}
 
 async function insertProduct(conn, products = []) {
   try {
     await conn.query(`INSERT INTO danhmucsanpham
-                      (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
+                      (tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau,
+                       phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu)
                       VALUES ?`, [
       products.map(({
-        tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu
-      }) => [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu])
+                      tendanhmucsanpham,
+                      chipxuly,
+                      dungluongpin,
+                      kichthuongmanhinh,
+                      cameratruoc,
+                      camerasau,
+                      phienbanhedieuhanh,
+                      thoigianbaohanh,
+                      xuatxu,
+                      hedieuhanh,
+                      thuonghieu
+                    }) => [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu])
     ])
     const arr = {
-      tendanhmucsanpham:  [],
-      chipxuly:           [],
-      dungluongpin:       [],
-      kichthuongmanhinh:  [],
-      cameratruoc:        [],
-      camerasau:          [],
+      tendanhmucsanpham: [],
+      chipxuly: [],
+      dungluongpin: [],
+      kichthuongmanhinh: [],
+      cameratruoc: [],
+      camerasau: [],
       phienbanhedieuhanh: [],
-      thoigianbaohanh:    [],
-      xuatxu:             [],
-      hedieuhanh:         [],
-      thuonghieu:         []
+      thoigianbaohanh: [],
+      xuatxu: [],
+      hedieuhanh: [],
+      thuonghieu: []
     }
     products.forEach(product => {
       const data = Object.entries(product)
       data.forEach(([key, value]) => arr[key]?.push(value))
     })
 
-    const {tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu} = arr
+    const {
+      tendanhmucsanpham,
+      chipxuly,
+      dungluongpin,
+      kichthuongmanhinh,
+      cameratruoc,
+      camerasau,
+      phienbanhedieuhanh,
+      thoigianbaohanh,
+      xuatxu,
+      hedieuhanh,
+      thuonghieu
+    } = arr
     const [result] = await conn.query(
       `SELECT *
        FROM danhmucsanpham
@@ -61,8 +104,7 @@ async function insertProduct(conn, products = []) {
          AND xuatxu IN ?
          AND hedieuhanh IN ?
          AND thuonghieu IN ?
-       ORDER BY madanhmucsanpham DESC
-       LIMIT ?`,
+       ORDER BY madanhmucsanpham DESC LIMIT ?`,
       [[tendanhmucsanpham], [chipxuly], [dungluongpin], [kichthuongmanhinh], [cameratruoc], [camerasau], [phienbanhedieuhanh], [thoigianbaohanh], [xuatxu], [hedieuhanh], [thuonghieu], products.length])
     return {message: "Products added", success: true, products: result};
   } catch (e) {
@@ -72,7 +114,18 @@ async function insertProduct(conn, products = []) {
 }
 
 async function updateProduct(conn, {
-  tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham
+  tendanhmucsanpham,
+  chipxuly,
+  dungluongpin,
+  kichthuongmanhinh,
+  cameratruoc,
+  camerasau,
+  phienbanhedieuhanh,
+  thoigianbaohanh,
+  xuatxu,
+  hedieuhanh,
+  thuonghieu,
+  madanhmucsanpham
 }) {
   try {
     await conn.query(`UPDATE danhmucsanpham
@@ -122,5 +175,5 @@ async function updateProductImage(conn, {madanhmucsanpham, hinhanh}) {
 }
 
 module.exports = {
-  updateProductImage, getProducts, insertProduct, updateProduct, deleteProduct
+  updateProductImage, getProducts, insertProduct, updateProduct, deleteProduct, getProductWithConfigures
 }

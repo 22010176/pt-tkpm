@@ -17,10 +17,11 @@ const mysql2 = require("mysql2/promise")
 
 function getConnection() {
   return mysql2.createConnection({
-    host:     process.env.db_host || 'localhost',
-    user:     process.env.db_user || 'root',
+    host: process.env.db_host || 'localhost',
+    user: process.env.db_user || 'root',
     database: process.env.db_database || 'ptpm',
     password: process.env.db_password || "admin",
+
   })
 }
 

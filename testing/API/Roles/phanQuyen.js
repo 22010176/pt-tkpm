@@ -16,7 +16,7 @@ async function getQuyenHanNhomQuyen(roleID) {
   }).then(a => a.json())
   .then(console.log)
 }
-getQuyenHanNhomQuyen(41)
+// getQuyenHanNhomQuyen(41)
 
 
 async function insertNhomQuyen(nhomQuyen) {

@@ -25,9 +25,6 @@ async function initialDBConnection(req, res, next) {
 
   try {
     res.locals.conn = await pool.getConnection()
-    setTimeout(() => {
-      res.locals.conn.destroy()
-    }, 10000)
   } catch (e) {
     console.error(e)
     return res.json({message: "Connection Error"})

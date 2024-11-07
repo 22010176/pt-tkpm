@@ -24,7 +24,7 @@ const insertTaiKhoan = (accounts) =>
   .then(response => response.json())
   .then(console.log);
 
-insertTaiKhoan([{vaitro: 1, matkhau: "admin", nhanvien: 1}])
+// insertTaiKhoan([{vaitro: 1, matkhau: "admin", nhanvien: 1}])
 // login({mail: "root@mail", password: "admin"})
 
 const updateTaiKhoan = accounts =>
