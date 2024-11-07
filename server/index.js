@@ -56,58 +56,58 @@ app.use("/api/auth",
   require("./src/routes/Auth"))
 
 app.use("/api/roles",
-  authAccount,
-  authPermission(6, false, false),
-  authPermission(7, true, false),
+  // authAccount,
+  // authPermission(6, false, false),
+  // authPermission(7, true, false),
   require("./src/routes/Employees/roles"))
 
 app.use("/api/accounts",
-  authAccount,
-  authPermission(9, false, false),
-  authPermission(4, true, false),
+  // authAccount,
+  // authPermission(9, false, false),
+  // authPermission(4, true, false),
   require("./src/routes/Employees/accounts"))
 
 app.use("/api/products",
-  authAccount,
-  authPermission(8, true, false),
-  authPermission(10, true, false),
+  // authAccount,
+  // authPermission(8, true, false),
+  // authPermission(10, true, false),
   require("./src/routes/Products/products"))
 
 app.use("/api/product-attributes",
-  authAccount,
-  authPermission(10, true, false),
+  // authAccount,
+  // authPermission(10, true, false),
   require("./src/routes/Products/product-attributes"))
 
 app.use("/api/customers",
-  authAccount,
-  authPermission(2, true, false),
+  // authAccount,
+  // authPermission(2, true, false),
   require("./src/routes/Partners/customers"))
 
 app.use("/api/suppliers",
-  authAccount,
-  authPermission(3, true),
+  // authAccount,
+  // authPermission(3, true),
   require("./src/routes/Partners/suppliers"))
 
 app.use("/api/warehouse",
-  authAccount,
-  authPermission(5,),
-  authPermission(11, true),
+  // authAccount,
+  // authPermission(5,),
+  // authPermission(11, true),
   require("./src/routes/Warehouse/warehouse"))
 
 app.use("/api/configures",
-  authAccount,
+  // authAccount,
   require("./src/routes/Products/configures"))
 
 app.use("/api/services",
-  authAccount,
+  // authAccount,
   require("./src/routes/Warehouse/services"))
 
 app.use("/api/statistics",
-  authAccount,
+  // authAccount,
   require("./src/routes/Statistics"))
 
 app.use("/api/employees",
-  authAccount,
+  // authAccount,
   require("./src/routes/Employees/employees"))
 
 app.all('/*', async (req, res) => {
