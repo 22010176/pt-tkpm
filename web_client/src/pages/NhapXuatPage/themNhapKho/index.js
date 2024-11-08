@@ -9,10 +9,10 @@ import BarCodeScanner from '../../../components/barcode'
 import Page4 from '../../../components/layouts/Page4'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
-import {getProductConfigures} from "../../../api/Products/configures";
 import {getProductHasConfigure} from "../../../api/Products/products";
 import {getSuppliers} from "../../../api/Partners/suppliers";
 import {getFreeImport} from "../../../api/Warehouse/imports";
+import {getProductConfigures} from "../../../api/Products/configures";
 
 const spHeader = [
   {key: "Mã SP", value: "madanhmucsanpham"},
@@ -20,7 +20,7 @@ const spHeader = [
   {key: "RAM", value: "dungluongram"},
   {key: "ROM", value: "dungluongrom"},
   {key: "Màu sắc", value: "tenmausac"},
-  {key: "Đơn giá", value: "giaxuat"},
+  {key: "Đơn giá", value: "gianhap"},
   {key: "Số lượng", value: "soluong"},
   {key: "cauhinh", value: "cauhinh", hide: true},
 ]
@@ -32,6 +32,8 @@ const khoHeader = [
 ]
 
 const defaultData = {
+  madanhmucsanpham: "",
+  tendanhmucsanpham: "",
   sanpham: [],
   nhacungcap: [],
   cauhinh: [],
@@ -49,16 +51,12 @@ function ThemNhapKho() {
   const [data, setData] = useState({...defaultData})
   const [form, setForm] = useState({...defaultForm})
 
-  const [imei, setImei] = useState({})
+  const [imei, setImei] = useState([])
   const [sanPhamThem, setSanPhamThem] = useState([])
 
   useEffect(() => {
     reset()
   }, [])
-
-  useEffect(() => {
-    console.log(form.macauhinh)
-  }, [form]);
 
 
   function reset() {
@@ -68,7 +66,7 @@ function ThemNhapKho() {
     getProductHasConfigure().then(({Data}) => setData(data => ({...data, sanpham: Data})))
     getSuppliers().then(({suppliers}) => setData(data => ({...data, nhacungcap: suppliers})))
     getFreeImport().then(({Data}) => setData(src => ({...src, phieunhap: Data[0]})))
-    setImei({})
+    setImei([])
   }
 
   function scanImei(data) {
@@ -86,38 +84,15 @@ function ThemNhapKho() {
     if (!elem.value) return;
 
     const data = elem.value;
-    if (form.madanhmucsanpham.length === 0) return;
+    if (imei.includes(data)) return;
 
-    setImei(src => ({...src, [data]: data}))
+    setImei(src => ([...src, data]))
     elem.value = ""
-  }
-
-  // if (!row)
-
-  function onWarehouseRowClick(row) {
-    // getProductConfigures(row.maDanhMucSanPham).then(data => setCauHinh(data.configurations))
-    if (!row) return
-    setImei({})
-
-    getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
-      setData(src => ({...src, cauhinh: configures}))
-      setForm(src => ({
-        ...src,
-        madanhmucsanpham: row.madanhmucsanpham,
-        tendanhmucsanpham: row.tendanhmucsanpham,
-        macauhinh: configures[0].macauhinh,
-        gianhap: +configures[0].gianhap,
-      }))
-    })
-  }
-
-  function onInsertSanPham() {
-
   }
 
   return (<>
     <Page4
-      count={0}
+      count={sanPhamThem.length}
       sidebar={<SideNavbar/>}
       tableTop={<GroupShadow>
         <InputGroup.Text>Tìm kiếm</InputGroup.Text>
@@ -126,27 +101,58 @@ function ThemNhapKho() {
           <FontAwesomeIcon icon={faMagnifyingGlass}/>
         </Button>
       </GroupShadow>}
-      table={<TableA headers={khoHeader} data={data.sanpham?.slice(0, 100)} onClick={onWarehouseRowClick}/>}
+      table={<TableA headers={khoHeader} data={data.sanpham?.slice(0, 100)} onClick={function (row) {
+        if (!row) return
+
+        // console.log(row)
+        setImei([])
+        getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
+          setData(src => ({
+            ...src,
+            cauhinh: configures,
+            madanhmucsanpham: row.madanhmucsanpham,
+            tendanhmucsanpham: row.tendanhmucsanpham,
+          }))
+          setForm(src => ({
+            ...src,
+            gianhap: configures[0].gianhap,
+            macauhinh: configures[0].macauhinh,
+          }))
+        })
+      }}/>}
       tableForm={<Form className='p-3 d-flex gap-3 w-100 flex-column'>
         <FormGroup className='d-flex justify-content-between gap-4'>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã sp</FormLabel>
-            <InputShadow as={FormControl} type='text' disabled size='sm' value={form.madanhmucsanpham}/>
+            <InputShadow as={FormControl} type='text' disabled size='sm' value={data.madanhmucsanpham}/>
           </FormGroup>
 
           <FormGroup>
             <FormLabel className='fw-bold'>Tên sp</FormLabel>
-            <InputShadow as={FormControl} size='sm' type='text' disabled value={form.tendanhmucsanpham}/>
+            <InputShadow as={FormControl} size='sm' type='text' disabled value={data.tendanhmucsanpham}/>
           </FormGroup>
         </FormGroup>
 
         <FormGroup>
           <FormLabel className='fw-bold'>Cấu hình</FormLabel>
           <InputShadow as={FormSelect} size='sm'
+                       disabled={data.cauhinh.length === 0}
                        value={form.macauhinh}
-                       onChange={e => setForm(src => ({...src, macauhinh: e.target.value}))}>
+                       onChange={e => {
+                         const value = +e.target.value
+                         console.log(value)
+                         setForm(src => ({
+                           ...src,
+                           macauhinh: +value,
+                           gianhap: data.cauhinh.find(i => i.macauhinh === value)?.gianhap
+                         }))
+                         setImei([])
+                       }}>
             {data.cauhinh?.map((i, j) =>
-              <option key={j} value={i.macauhinh}>{i.rom}GB - {i.ram}GB- {i.tenmausac}</option>)}
+              <option key={j} value={i.macauhinh}>
+                {i.macauhinh}
+                {/*{i.dungluongrom}GB - {i.dungluongram}GB- {i.tenmausac}*/}
+              </option>)}
           </InputShadow>
         </FormGroup>
 
@@ -169,8 +175,8 @@ function ThemNhapKho() {
 
         <FormGroup>
           <GroupShadow size='sm'>
-            <FormControl type='text' id='imei-input' size='sm'/>
-            <Button variant='primary' onClick={onInsertIMEICode} disabled={!form.madanhmucsanpham}>
+            <FormControl type='text' id='imei-input' size='sm' disabled={!form.macauhinh}/>
+            <Button variant='primary' onClick={onInsertIMEICode} disabled={!form.macauhinh}>
               <FontAwesomeIcon icon={faPlus}/>
             </Button>
           </GroupShadow>
@@ -180,14 +186,11 @@ function ThemNhapKho() {
                        className='bg-light'
                        onClick={e => {
                          const elem = e.target;
-                         if (elem.getAttribute('data-value') == null) return
-
-                         setImei(src => {
-                           delete src[elem.getAttribute('data-value')]
-                           return {...src}
-                         })
+                         const delItem = elem.getAttribute('data-value')
+                         if (delItem == null) return
+                         setImei(imei.filter(i => i !== delItem))
                        }}>
-              {Object.keys(imei)?.map((i, j) => <ListGroupItem key={j} data-value={i}>{i}</ListGroupItem>)}
+              {imei?.map((i, j) => <ListGroupItem key={j} data-value={i}>{i}</ListGroupItem>)}
             </ListGroup>
           </div>
         </FormGroup>
@@ -199,47 +202,62 @@ function ThemNhapKho() {
                 className='w-25 my-3 fw-semibold'
                 variant='primary'
                 onClick={e => {
-                  const cauhinh = data.cauhinh.find(i => i.macauhinh = form.macauhinh)
+                  const cauhinh = {...data?.cauhinh.find(i => i.macauhinh === form.macauhinh)}
+                  if (!cauhinh) return
 
-                  const item = {
-                    madanhmucsanpham: form.madanhmucsanpham,
-                    tendanhmucsanpham: form.tendanhmucsanpham,
+                  const head = {
+                    madanhmucsanpham: +data.madanhmucsanpham,
+                    tendanhmucsanpham: data.tendanhmucsanpham,
                     dungluongram: cauhinh.dungluongram,
                     dungluongrom: cauhinh.dungluongrom,
                     tenmausac: cauhinh.tenmausac,
-                    giaxuat: cauhinh.giaxuat,
-                    phieunhap: data.phieunhap?.maphieunhap,
-
+                    gianhap: cauhinh.gianhap,
                     cauhinh: cauhinh.macauhinh,
-                    tinhtrang: 1
                   }
 
-                  const sendData = Object.keys(imei)
+                  const items = [...imei]
                   .filter(i => !sanPhamThem.some(j => j.maimei === i))
-                  .map((i, j, arr) => ({maimei: i, ...item}))
+                  .map(i => ({...head, maimei: i}))
 
-                  if (sendData.length === 0) return
-                  setSanPhamThem(src => [...src, ...sendData])
-                  // reset()
-                  setImei({})
+                  setSanPhamThem(src => [...src, ...items])
+                  setImei([])
+
                 }}>Thêm sản phẩm</Button>
         <Button size='sm' className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
-        <Button size='sm' className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
+        <Button size='sm'
+                className='w-25 my-3 fw-semibold'
+                variant='danger'
+                onClick={e => {
+
+                  setSanPhamThem([...sanPhamThem].filter(i => +i.cauhinh !== +form.macauhinh))
+                  reset()
+                }}>Xóa sản phẩm</Button>
       </>}
       table2={<TableA headers={spHeader}
                       data={sanPhamThem.reduce((acc, i) => {
-                        const item = acc.find(j => {
-                          console.log(i, j)
-                          return j.cauhinh === i.cauhinh
-                        })
+                        const item = acc.find(j => j.cauhinh === i.cauhinh)
                         if (!item) acc.push({...i, soluong: 1})
                         else item.soluong++;
 
                         return acc
                       }, [])}
                       onClick={row => {
-                        // console.log(row, form.sanphamthem)
-                        // console.log({row, a: sanPhamThem.filter(i => i.cauhinh === row.cauhinh)})
+                        if (!row) return
+
+                        setImei([...sanPhamThem].filter(i => +i.cauhinh === +row.cauhinh).map(i => i.maimei))
+                        getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
+                          setData(src => ({
+                            ...src,
+                            cauhinh: configures,
+                            madanhmucsanpham: row.madanhmucsanpham,
+                            tendanhmucsanpham: row.tendanhmucsanpham,
+                          }))
+                          setForm(src => ({
+                            ...src,
+                            gianhap: row.gianhap,
+                            macauhinh: row.cauhinh,
+                          }))
+                        })
                       }}/>}
       rightTopForm={<>
         <FormGroup>
@@ -265,7 +283,7 @@ function ThemNhapKho() {
         {/*</FormGroup>*/}
       </>}
       rightBottomForm={<>
-        <h3 className='mb-3 text-danger fw-bold'>Tổng tiền: <span>0</span>đ</h3>
+        <h5 className='mb-3 text-danger fw-bold'>Tổng tiền: {sanPhamThem.reduce((acc, i) => i.gianhap + acc, 0)}đ</h5>
         <Button className='w-100 fw-semibold' variant='success'>Nhập hàng</Button>
       </>}
     />
