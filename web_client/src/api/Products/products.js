@@ -9,11 +9,11 @@ export async function getProducts(token = "") {
       'authorization': getToken(),
     }
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
-export async function getProductConfigure() {
+export async function getProductHasConfigure() {
   return await fetch("/api/products/product-configures", {
     method: "GET",
     headers: {
@@ -22,8 +22,8 @@ export async function getProductConfigure() {
       'authorization': getToken(),
     }
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
 export async function updateProductImage(product, token = "") {
@@ -41,8 +41,8 @@ export async function updateProductImage(product, token = "") {
     },
     body: formData
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
 export async function insertProduct(product, token = "") {
@@ -55,8 +55,8 @@ export async function insertProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
 export async function updateProduct(product, token = "") {
@@ -69,8 +69,8 @@ export async function updateProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 
 export async function deleteProduct(product, token = "") {
@@ -83,7 +83,7 @@ export async function deleteProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-    .then(response => response.json())
-    .then(checkResponse);
+  .then(response => response.json())
+  .then(checkResponse);
 }
 

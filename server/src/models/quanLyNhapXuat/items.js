@@ -85,6 +85,7 @@ async function getTinhTrang(conn) {
   }
 }
 
+
 async function insertItem(conn, items = []) {
   try {
 

@@ -20,6 +20,18 @@ async function insertImport(imports = [], token = "") {
   .then(response => response.json())
 }
 
+async function getFreeImport() {
+  return fetch(`http://localhost:3001/api/warehouse/free-import/`, {
+    method:  'GET',
+    headers: {
+      // 'Authorization': token,
+      'Content-Type':  'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(console.log)
+}
+// getFreeImport()
 async function updateImport(obj, token = "") {
   return fetch(`http://localhost:3001/api/warehouse/import/`, {
     method:  'PUT',

@@ -9,21 +9,14 @@ import BarCodeScanner from '../../../components/barcode'
 import Page4 from '../../../components/layouts/Page4'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
-import {getProductConfigures} from "../../../api/Products/configures";
 import {getProductHasConfigure} from "../../../api/Products/products";
+import {getProductConfigures} from "../../../api/Products/configures";
 import {getSuppliers} from "../../../api/Partners/suppliers";
-import {getFreeImport} from "../../../api/Warehouse/imports";
 
-const spHeader = [
-  {key: "Mã SP", value: "madanhmucsanpham"},
-  {key: "Tên sp", value: "tendanhmucsanpham"},
-  {key: "RAM", value: "dungluongram"},
-  {key: "ROM", value: "dungluongrom"},
-  {key: "Màu sắc", value: "tenmausac"},
-  {key: "Đơn giá", value: "giaxuat"},
-  {key: "Số lượng", value: "soluong"},
-  {key: "cauhinh", value: "cauhinh", hide: true},
-]
+const spHeader = [{key: "Mã SP", value: "ma"}, {key: "Tên sp", value: "tenSP"}, {key: "RAM", value: "ram"}, {
+  key: "ROM",
+  value: "rom"
+}, {key: "Màu sắc", value: "mauSac"}, {key: "Đơn giá", value: "gia"}, {key: "Số lượng", value: "soLuong"},]
 
 const khoHeader = [
   {key: "Tên sp", value: "tendanhmucsanpham"},
@@ -31,45 +24,22 @@ const khoHeader = [
   {key: "madanhmucsanpham", value: "madanhmucsanpham", hide: true}
 ]
 
-const defaultData = {
-  sanpham: [],
-  nhacungcap: [],
-  cauhinh: [],
-  sanphamthem: [],
-}
-const defaultForm = {
-  madanhmucsanpham: "",
-  tendanhmucsanpham: "",
-  macauhinh: "",
-  gianhap: ""
-}
-
-function ThemNhapKho() {
+function SuaNhapKho() {
   const [modal, setModal] = useState("")
-  const [data, setData] = useState({...defaultData})
-  const [form, setForm] = useState({...defaultForm})
-
+  const [data, setData] = useState({})
+  const [form, setForm] = useState({
+    madanhmucsanpham: "",
+    tendanhmucsanpham: "",
+    macauhinh: "",
+    gianhap: ""
+  })
   const [imei, setImei] = useState({})
-  const [sanPhamThem, setSanPhamThem] = useState([])
 
   useEffect(() => {
-    reset()
-  }, [])
-
-  useEffect(() => {
-    console.log(form.macauhinh)
-  }, [form]);
-
-
-  function reset() {
-    setData({...defaultData})
-    setForm({...defaultForm})
-
     getProductHasConfigure().then(({Data}) => setData(data => ({...data, sanpham: Data})))
     getSuppliers().then(({suppliers}) => setData(data => ({...data, nhacungcap: suppliers})))
-    getFreeImport().then(({Data}) => setData(src => ({...src, phieunhap: Data[0]})))
-    setImei({})
-  }
+  }, [])
+
 
   function scanImei(data) {
     openModal("")
@@ -99,20 +69,19 @@ function ThemNhapKho() {
     if (!row) return
     setImei({})
 
+    setForm(src => ({
+      ...src,
+      madanhmucsanpham: row.madanhmucsanpham,
+      tendanhmucsanpham: row.tendanhmucsanpham
+    }))
     getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
       setData(src => ({...src, cauhinh: configures}))
       setForm(src => ({
         ...src,
-        madanhmucsanpham: row.madanhmucsanpham,
-        tendanhmucsanpham: row.tendanhmucsanpham,
         macauhinh: configures[0].macauhinh,
         gianhap: +configures[0].gianhap,
       }))
     })
-  }
-
-  function onInsertSanPham() {
-
   }
 
   return (<>
@@ -126,7 +95,7 @@ function ThemNhapKho() {
           <FontAwesomeIcon icon={faMagnifyingGlass}/>
         </Button>
       </GroupShadow>}
-      table={<TableA headers={khoHeader} data={data.sanpham?.slice(0, 100)} onClick={onWarehouseRowClick}/>}
+      table={<TableA headers={khoHeader} data={data.sanpham} onClick={onWarehouseRowClick}/>}
       tableForm={<Form className='p-3 d-flex gap-3 w-100 flex-column'>
         <FormGroup className='d-flex justify-content-between gap-4'>
           <FormGroup>
@@ -142,11 +111,8 @@ function ThemNhapKho() {
 
         <FormGroup>
           <FormLabel className='fw-bold'>Cấu hình</FormLabel>
-          <InputShadow as={FormSelect} size='sm'
-                       value={form.macauhinh}
-                       onChange={e => setForm(src => ({...src, macauhinh: e.target.value}))}>
-            {data.cauhinh?.map((i, j) =>
-              <option key={j} value={i.macauhinh}>{i.rom}GB - {i.ram}GB- {i.tenmausac}</option>)}
+          <InputShadow as={FormSelect} size='sm'>
+            {data.cauhinh?.map((i, j) => <option key={j} value={i.macauhinh}>{i.rom}GB - {i.ram}GB - {i.tenmausac}</option>)}
           </InputShadow>
         </FormGroup>
 
@@ -180,12 +146,8 @@ function ThemNhapKho() {
                        className='bg-light'
                        onClick={e => {
                          const elem = e.target;
-                         if (elem.getAttribute('data-value') == null) return
-
-                         setImei(src => {
-                           delete src[elem.getAttribute('data-value')]
-                           return {...src}
-                         })
+                         if (elem.getAttribute('data-value') == null) return;
+                         elem?.remove()
                        }}>
               {Object.keys(imei)?.map((i, j) => <ListGroupItem key={j} data-value={i}>{i}</ListGroupItem>)}
             </ListGroup>
@@ -195,56 +157,15 @@ function ThemNhapKho() {
       }
       toolBtn={<>
         <Button size='sm' className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
-        <Button size='sm'
-                className='w-25 my-3 fw-semibold'
-                variant='primary'
-                onClick={e => {
-                  const cauhinh = data.cauhinh.find(i => i.macauhinh = form.macauhinh)
-
-                  const item = {
-                    madanhmucsanpham: form.madanhmucsanpham,
-                    tendanhmucsanpham: form.tendanhmucsanpham,
-                    dungluongram: cauhinh.dungluongram,
-                    dungluongrom: cauhinh.dungluongrom,
-                    tenmausac: cauhinh.tenmausac,
-                    giaxuat: cauhinh.giaxuat,
-                    phieunhap: data.phieunhap?.maphieunhap,
-
-                    cauhinh: cauhinh.macauhinh,
-                    tinhtrang: 1
-                  }
-
-                  const sendData = Object.keys(imei)
-                  .filter(i => !sanPhamThem.some(j => j.maimei === i))
-                  .map((i, j, arr) => ({maimei: i, ...item}))
-
-                  if (sendData.length === 0) return
-                  setSanPhamThem(src => [...src, ...sendData])
-                  // reset()
-                  setImei({})
-                }}>Thêm sản phẩm</Button>
+        <Button size='sm' className='w-25 my-3 fw-semibold' variant='primary'>Thêm sản phẩm</Button>
         <Button size='sm' className='w-25 my-3 fw-semibold' variant='warning'>Sửa sản phẩm</Button>
         <Button size='sm' className='w-25 my-3 fw-semibold' variant='danger'>Xóa sản phẩm</Button>
       </>}
-      table2={<TableA headers={spHeader}
-                      data={sanPhamThem.reduce((acc, i) => {
-                        const item = acc.find(j => {
-                          console.log(i, j)
-                          return j.cauhinh === i.cauhinh
-                        })
-                        if (!item) acc.push({...i, soluong: 1})
-                        else item.soluong++;
-
-                        return acc
-                      }, [])}
-                      onClick={row => {
-                        // console.log(row, form.sanphamthem)
-                        // console.log({row, a: sanPhamThem.filter(i => i.cauhinh === row.cauhinh)})
-                      }}/>}
+      table2={<TableA headers={spHeader}/>}
       rightTopForm={<>
         <FormGroup>
           <FormLabel className='fw-bold'>Mã phiếu nhập</FormLabel>
-          <InputShadow as={FormControl} disabled value={data?.phieunhap?.maphieunhap}/>
+          <InputShadow as={FormControl} disabled/>
         </FormGroup>
 
         <FormGroup>
@@ -259,10 +180,10 @@ function ThemNhapKho() {
           </InputShadow>
         </FormGroup>
 
-        {/*<FormGroup>*/}
-        {/*  <FormLabel className="fw-bold">Nhân viên chỉnh sửa cuối </FormLabel>*/}
-        {/*  <InputShadow as={FormControl} disabled/>*/}
-        {/*</FormGroup>*/}
+        <FormGroup>
+          <FormLabel className="fw-bold">Nhân viên chỉnh sửa cuối </FormLabel>
+          <InputShadow as={FormControl} disabled/>
+        </FormGroup>
       </>}
       rightBottomForm={<>
         <h3 className='mb-3 text-danger fw-bold'>Tổng tiền: <span>0</span>đ</h3>
@@ -285,4 +206,4 @@ function ThemNhapKho() {
   </>)
 }
 
-export default ThemNhapKho
+export default SuaNhapKho

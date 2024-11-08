@@ -1,14 +1,11 @@
-import {
-  checkResponse,
-  getToken
-} from "../authentication";
+import {checkResponse, getToken} from "../authentication";
 
 export async function findImports({manhacungcap, manhanvien, tungay, denngay, tusotien, densotien}) {
   return fetch(`/api/warehouse/import?manhacungcap=${manhacungcap}&manhanvien=${manhanvien}&tungay=${tungay}&denngay=${denngay}&tusotien=${tusotien}&densotien=${densotien}`, {
-    method:  'GET',
+    method: 'GET',
     headers: {
-      'Content-Type':  'application/json',
-      'Accept':        'application/json',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       'authorization': getToken(),
     }
   })
@@ -16,13 +13,38 @@ export async function findImports({manhacungcap, manhanvien, tungay, denngay, tu
   .then(checkResponse)
 }
 
+export async function getFreeImport() {
+  return fetch(`/api/warehouse/free-import/`, {
+    method: 'GET',
+    headers: {
+      'Authorization': getToken(),
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}
+
 export async function findImportProducts({maphieunhap}, token) {
   return fetch(`/api/warehouse/import/${maphieunhap}`, {
-    method:  "GET",
+    method: "GET",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       'authorization': getToken(),
     }
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}
+
+export async function insertImport(imports) {
+  return fetch(`/api/warehouse/import/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      'authorization': getToken(),
+    },
+    body: JSON.stringify(imports)
   })
   .then(response => response.json())
   .then(checkResponse)

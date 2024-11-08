@@ -98,6 +98,34 @@ async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tus
   }
 }
 
+async function getFreeImport(conn) {
+  try {
+    let [result] = await conn.query(
+      `SELECT p.*
+       FROM phieunhapkho p
+                LEFT JOIN sanpham s ON s.phieuxuat = p.maphieunhap
+       WHERE p.nhacungcap IS NULL
+         AND p.nhanviennhap IS NULL
+       GROUP BY p.maphieunhap
+       HAVING COUNT(DISTINCT s.masanpham) = 0
+       LIMIT 1;`)
+
+    if (result.length) return {Data: result, success: true, message: "success"};
+
+    [result] = await conn.query(`INSERT INTO phieunhapkho (nhacungcap, nhanviennhap)
+                                 VALUES (NULL, NULL);`)
+
+    const [temp] = await conn.query(
+      `SELECT *
+       FROM phieunhapkho
+       WHERE maphieunhap = ?`,
+      [result.insertId])
+    return {Data: temp, success: true}
+  } catch (err) {
+    console.error(err);
+    return {success: false, Data: []};
+  }
+}
 
 async function insertImport(conn, imports = []) {
   try {
@@ -159,5 +187,5 @@ async function deleteImport(conn, imports = []) {
 }
 
 module.exports = {
-  getImports, insertImport, updateImport, deleteImport, findImports, findImportProduct
+  getImports, insertImport, updateImport, deleteImport, findImports, findImportProduct, getFreeImport
 }
