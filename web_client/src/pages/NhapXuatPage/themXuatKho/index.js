@@ -48,6 +48,7 @@ const defaultData = {
   nhacungcap: [],
   cauhinh: [],
   sanphamthem: [],
+
 }
 const defaultForm = {
   timkiemkhachang: "",
@@ -57,7 +58,9 @@ const defaultForm = {
   gianhap: "",
   giaxuat: "",
   soluong: 0,
-  tonkho: 0
+  tonkho: 0,
+  tenkhachhang: "",
+  makhachhang: ""
 }
 
 
@@ -80,21 +83,14 @@ function ThemXuatKho() {
     setData({...defaultData})
     setForm({...defaultForm})
 
-    Promise.all([
-      getProductHasConfigure(),
-      getCustomers()
-    ]).then(data => {
-      const [{Data: products}, {customers}] = data
-      setData(src => ({...src, sanpham: products, khachhang: customers}))
-    })
-
-    // setImei([])
+    getProductHasConfigure().then(({Data}) => setData(src => ({...src, sanpham: Data})))
     setBtnState(true)
   }
 
   return (
     <>
       <Page4
+        count={sanPhamThem.reduce((acc, i) => acc + i.soluong, 0)}
         sidebar={<SideNavbar/>}
         tableTop={
           <InputGroup>
@@ -290,7 +286,7 @@ function ThemXuatKho() {
                             }))
                           })
                         }}/>}
-        count={3}
+
         rightTopForm={<>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã phiếu xuất</FormLabel>
@@ -306,7 +302,7 @@ function ThemXuatKho() {
             <FormLabel className='fw-bold'>Khách hàng</FormLabel>
             <GroupShadow>
               <Button onClick={setModal.bind({}, "chonKhachHang")}><FontAwesomeIcon icon={faPlus}/></Button>
-              <FormControl disabled/>
+              <FormControl disabled value={form.tenkhachhang}/>
             </GroupShadow>
           </FormGroup>
 
@@ -316,37 +312,61 @@ function ThemXuatKho() {
           {/*</FormGroup>*/}
         </>}
         rightBottomForm={<>
-          <h3 className='mb-3 text-danger fw-bold'>Tổng tiền: <span>0</span>đ</h3>
-          <Button className='w-100 fw-semibold' variant='success'>Nhập hàng</Button>
+          <h3 className='mb-3 text-danger fw-bold'>Tổng tiền: {sanPhamThem.reduce((acc, i) => acc + i.soluong * i.giaxuat, 0)}đ</h3>
+          <Button className='w-100 fw-semibold'
+                  variant='success'
+                  onClick={e => {
+                    console.log(sanPhamThem)
+                  }}>Nhập hàng</Button>
         </>}
       />
-
-      <Modal show={modal === "chonKhachHang"} backdrop='static' scrollable size='xl'>
-        <HeaderModalA title="CHỌN KHÁCH HÀNG"/>
-
-        <ModalBody className='d-flex flex-column gap-3'>
-          <Form>
-            <GroupShadow>
-              <InputGroup.Text>
-                <FontAwesomeIcon icon={faMagnifyingGlass}/>
-              </InputGroup.Text>
-              <FormControl
-                value={form.timkiemkhachang}
-                onChange={e => {
-                  setForm(src => ({...src, timkiemkhachang: e.target.value}))
-                }}/>
-              <Button onClick={setModal.bind({}, "")}>Chọn khách hàng</Button>
-            </GroupShadow>
-          </Form>
-
-          <ContentA>
-            <TableA headers={khachHangHeader} data={data.khachhang?.filter(i => i.tenkhachhang.includes(form.timkiemkhachang))}/>
-            {/*<div style={{height: "1000px"}}></div>*/}
-          </ContentA>
-        </ModalBody>
-      </Modal>
+      <KhachHangModal show={modal === 'chonKhachHang'}
+                      onHide={setModal.bind({}, "")}
+                      onSelected={e => setForm(src => ({...src, makhachhang: e.makhachhang, tenkhachhang: e.tenkhachhang}))}/>
 
     </>
+  )
+}
+
+
+function KhachHangModal({show, onHide, onSelected}) {
+  const [table, setTable] = useState([])
+  const [search, setSearch] = useState('')
+
+  const [khachhang, setKhachhang] = useState()
+
+  useEffect(() => {
+    getCustomers().then(({customers}) => setTable(customers))
+  }, []);
+
+  return (
+    <Modal show={show} backdrop='static' scrollable size='xl'>
+      <HeaderModalA title="CHỌN KHÁCH HÀNG"/>
+
+      <ModalBody className='d-flex flex-column gap-3'>
+        <Form>
+          <GroupShadow>
+            <InputGroup.Text>
+              <FontAwesomeIcon icon={faMagnifyingGlass}/>
+            </InputGroup.Text>
+            <FormControl
+              // value={form.timkiemkhachang}
+              onChange={e => setSearch(e.target.value)}/>
+            <Button onClick={e => {
+              if (typeof onSelected === 'function') onSelected(khachhang)
+              if (typeof onHide === 'function') onHide()
+            }}>Chọn khách hàng</Button>
+          </GroupShadow>
+        </Form>
+
+        <ContentA>
+          <TableA headers={khachHangHeader}
+                  data={table.filter(i => i.tenkhachhang.includes(search))}
+                  onClick={setKhachhang}/>
+          {/*<div style={{height: "1000px"}}></div>*/}
+        </ContentA>
+      </ModalBody>
+    </Modal>
   )
 }
 

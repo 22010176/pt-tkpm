@@ -141,7 +141,7 @@ function ThemNhapKho() {
         <FormGroup>
           <FormLabel className='fw-bold'>Cấu hình</FormLabel>
           <InputShadow as={FormSelect} size='sm'
-                       disabled={data.cauhinh.length === 0}
+                       disabled={data.cauhinh.length === 0 || !btnState}
                        value={form.macauhinh}
                        onChange={e => {
                          const value = +e.target.value
