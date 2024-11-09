@@ -47,6 +47,7 @@ async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tus
                   RIGHT JOIN sanpham s ON p.maphieunhap = s.phieunhap
                   INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
          GROUP BY p.maphieunhap, thoigiannhap
+         HAVING COUNT(DISTINCT masanpham) > 0
          ORDER BY thoigian DESC`)
     else if (manhacungcap === '*')
       [result] = await conn.query(
@@ -60,7 +61,9 @@ async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tus
            AND p.thoigiannhap BETWEEN ? AND ?
          GROUP BY p.maphieunhap, thoigiannhap
          HAVING tongtien BETWEEN ? AND ?
-         ORDER BY thoigian DESC`,
+            AND COUNT(DISTINCT masanpham) > 0
+         ORDER BY thoigian
+                 DESC`,
         [manhanvien, tungay, denngay, tusotien, densotien])
     else if (manhanvien === '*')
       [result] = await conn.query(
@@ -74,6 +77,7 @@ async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tus
            AND p.thoigiannhap BETWEEN ? AND ?
          GROUP BY p.maphieunhap, thoigiannhap
          HAVING tongtien BETWEEN ? AND ?
+            AND COUNT(DISTINCT masanpham) > 0
          ORDER BY thoigian DESC`,
         [manhacungcap, tungay, denngay, tusotien, densotien])
     else [result] = await conn.query(

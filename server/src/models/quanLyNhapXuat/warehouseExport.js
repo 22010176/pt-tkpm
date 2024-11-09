@@ -23,6 +23,7 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
                   INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
                   INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
          GROUP BY p.maphieuxuat, p.thoigianxuat
+         HAVING COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`)
 
     else if (makhachhang === '*')
@@ -37,6 +38,7 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
            AND p.thoigianxuat BETWEEN ? AND ?
          GROUP BY p.maphieuxuat, p.thoigianxuat
          HAVING tongtien BETWEEN ? AND ?
+            AND COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`,
         [manhanvien, tungay, denngay, tusotien, densotien])
     else if (manhanvien === '*')
@@ -51,6 +53,7 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
            AND p.thoigianxuat BETWEEN ? AND ?
          GROUP BY p.maphieuxuat, p.thoigianxuat
          HAVING tongtien BETWEEN ? AND ?
+            AND COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`,
         [makhachhang, tungay, denngay, tusotien, densotien])
     else [result] = await conn.query(
@@ -65,10 +68,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
            AND p.thoigianxuat BETWEEN ? AND ?
          GROUP BY p.maphieuxuat, p.thoigianxuat
          HAVING tongtien BETWEEN ? AND ?
+            AND COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`,
         [makhachhang, manhanvien, tungay, denngay, tusotien, densotien])
-
-
+    
     return {entries: result, success: true}
   } catch (e) {
     console.log(e)
