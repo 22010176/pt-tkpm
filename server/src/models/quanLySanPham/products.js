@@ -18,10 +18,11 @@ async function getProducts(conn) {
   }
 }
 
+
 async function getProductWithConfigures(conn) {
   try {
     const [result] = await conn.query(
-      `SELECT d.madanhmucsanpham, d.tendanhmucsanpham, COUNT(s.phieunhap) tonkho
+      `SELECT d.madanhmucsanpham, d.tendanhmucsanpham, COUNT(s.phieunhap) tonkho, COUNT(DISTINCT c.macauhinh) socauhinh
        FROM danhmucsanpham d
                 LEFT JOIN ptpm.cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
                 LEFT JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
@@ -104,7 +105,8 @@ async function insertProduct(conn, products = []) {
          AND xuatxu IN ?
          AND hedieuhanh IN ?
          AND thuonghieu IN ?
-       ORDER BY madanhmucsanpham DESC LIMIT ?`,
+       ORDER BY madanhmucsanpham DESC
+       LIMIT ?`,
       [[tendanhmucsanpham], [chipxuly], [dungluongpin], [kichthuongmanhinh], [cameratruoc], [camerasau], [phienbanhedieuhanh], [thoigianbaohanh], [xuatxu], [hedieuhanh], [thuonghieu], products.length])
     return {message: "Products added", success: true, products: result};
   } catch (e) {

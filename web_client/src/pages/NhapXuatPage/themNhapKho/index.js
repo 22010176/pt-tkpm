@@ -123,6 +123,7 @@ function ThemNhapKho() {
                            macauhinh: configures[0].macauhinh,
                          }))
                        })
+                       setBtnState(true)
                      }}/>}
       tableForm={<Form className='p-3 d-flex gap-3 w-100 flex-column'>
         <FormGroup className='d-flex justify-content-between gap-4'>

@@ -15,12 +15,15 @@ async function getConfigures(conn) {
 async function getProductConfigures(conn, danhmucsanpham) {
   try {
     const [result] = await conn.query(
-      `SELECT c.*, ra.dungluongram, ro.dungluongrom, m.tenmausac
+      `SELECT c.*, ra.dungluongram, ro.dungluongrom, m.tenmausac, COUNT(DISTINCT s.masanpham) tonkho
        FROM cauhinh c
                 INNER JOIN ram ra ON c.ram = ra.maram
                 INNER JOIN rom ro ON ro.marom = c.rom
                 INNER JOIN mausac m ON m.mamausac = c.mausac
+                LEFT JOIN sanpham s ON s.cauhinh = c.macauhinh
        WHERE danhmucsanpham = ?
+         AND s.phieuxuat IS NULL
+       GROUP BY c.macauhinh
        ORDER BY macauhinh DESC;`, [danhmucsanpham])
 
     return {configures: result, success: true};
@@ -41,12 +44,12 @@ async function insertConfigure(conn, configures = []) {
           [gianhap, giaxuat, danhmucsanpham, ram, rom, mausac])
       ])
     const arr = {
-      gianhap:        [],
-      giaxuat:        [],
+      gianhap: [],
+      giaxuat: [],
       danhmucsanpham: [],
-      ram:            [],
-      rom:            [],
-      mausac:         [],
+      ram: [],
+      rom: [],
+      mausac: [],
     }
     configures.forEach(configure => {
       const data = Object.entries(configure)

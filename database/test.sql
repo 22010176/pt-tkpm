@@ -386,6 +386,11 @@ HAVING COUNT(DISTINCT s.masanpham) = 0;
 
 
 
+SELECT * FROM danhmucsanpham d
+INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
+INNER JOIN sanpham s ON c.macauhinh = s.cauhinh
+WHERE s.phieuxuat IS NULL
+GROUP BY d.madanhmucsanpham;
 
 
 

@@ -2,7 +2,6 @@ import Table from 'react-bootstrap/Table'
 
 import styles from './style.module.css'
 import {useEffect, useRef} from 'react'
-import {v4} from "uuid";
 
 
 // const clr = "table-active" //styles.tableActive
@@ -46,7 +45,11 @@ function TableA({index = true, onClick, data = [], headers = [], subtable = fals
       {data.map((item, j) =>
         <tr className={[styles.table_row].join(" ")} key={j}>
           {!!index && <td>{j + 1}</td>}
-          {headers.map(({value, hide}, _j) => <td key={_j} className={hide && "d-none"} data-key={value} data-value={item[value]}>{item[value]}</td>)}
+          {headers.map(({value, hide, format}, _j) => (
+            <td key={_j} className={hide && "d-none"} data-key={value} data-value={item[value]}>
+              {typeof format === 'function' ? format(item[value]) : item[value]}
+            </td>)
+          )}
         </tr>
       )}
       </tbody>
