@@ -1,28 +1,10 @@
 import './style.module.css'
-import {
-  Button,
-  Form,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  Nav,
-  Tab
-}             from 'react-bootstrap'
-import Chart  from 'react-apexcharts'
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-}             from "react";
+import {Button, Form, FormGroup, FormLabel, FormSelect, Nav, Tab} from 'react-bootstrap'
+import Chart from 'react-apexcharts'
+import {createContext, useContext, useEffect, useState} from "react";
 import TableA from "../../../components/tables/tableA";
 import colors from "../../../utilities/colors";
-import {
-  getDayProfit,
-  getMaxAndDay,
-  getMonthProfits,
-  getYearProfits
-}             from "../../../api/statistics";
+import {getDayProfit, getMaxAndDay, getMonthProfits, getYearProfits} from "../../../api/statistics";
 
 const DayContext = createContext({});
 
@@ -69,18 +51,22 @@ function ThongKeDoanhThu() {
 }
 
 const defaultOptions = {
-  chart:         {toolbar: {show: false}}, plotOptions: {
+  chart: {toolbar: {show: false}}, plotOptions: {
     bar: {horizontal: false, columnWidth: '70%', endingShape: 'rounded'},
   }, dataLabels: {enabled: false}, stroke: {show: true, width: 2, colors: ['transparent']}, xaxis: {categories: new Array(10).fill(0).map((_, j) => 2010 + j),}, // yaxis:       {title: {text: '$ (thousands)'}},
-  colors:        [colors.red, colors.orange, colors.green], // fill:    {opacity: 1},
-  tooltip:       {
-    y: {formatter(val) { return val + " VND" }}
+  colors: [colors.red, colors.orange, colors.green], // fill:    {opacity: 1},
+  tooltip: {
+    y: {
+      formatter(val) {
+        return val + " VND"
+      }
+    }
   }
 }
 
 function NgayTab() {
   const header = [
-    {key: "Ngày", value: "thoigian"},
+    {key: "Ngày", value: "thoigian", format: t => new Date(t).toISOString().split("T")[0]},
     {key: "Chi phí", value: "von"},
     {key: "Doanh thu", value: "doanhthu"},
     {key: "Lợi nhuận", value: "loinhuan"},
@@ -238,7 +224,7 @@ function NamTab() {
   const [data, setData] = useState([])
 
   let options = {...defaultOptions},
-      series  = []
+    series = []
 
   useEffect(() => {
     getYearProfits().then(({data}) => setData(data))

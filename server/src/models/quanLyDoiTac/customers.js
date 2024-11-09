@@ -11,6 +11,23 @@ async function getCustomers(conn) {
   }
 }
 
+async function getCustomerCarts(conn, {makhachhang}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT p.maphieuxuat, p.thoigianxuat, COUNT(DISTINCT sanpham.masanpham) soluong, SUM(c.giaxuat) thanhtien
+       FROM phieuxuatkho p
+                INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+                INNER JOIN sanpham ON p.maphieuxuat = sanpham.phieuxuat
+                INNER JOIN cauhinh c ON sanpham.cauhinh = c.macauhinh
+       WHERE makhachhang = ?
+       GROUP BY p.maphieuxuat;`, [makhachhang])
+    return {Data: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {Data: [], success: false}
+  }
+}
+
 async function insertCustomer(conn, customers = []) {
   try {
     await conn.query(
@@ -68,5 +85,5 @@ async function deleteCustomer(conn, customers = []) {
 }
 
 module.exports = {
-  getCustomers, insertCustomer, updateCustomer, deleteCustomer
+  getCustomers, insertCustomer, updateCustomer, deleteCustomer, getCustomerCarts
 }

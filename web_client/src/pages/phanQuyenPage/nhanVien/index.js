@@ -1,43 +1,20 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-}                        from 'react'
-import {UserContext}     from "../../../api/authentication";
-import {
-  faArrowRotateRight,
-  faCirclePlus,
-  faFileExcel,
-  faFileExport,
-  faMagnifyingGlass,
-  faPencil,
-  faTrashCan
-}                        from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormSelect,
-  Modal
-}                        from 'react-bootstrap'
+import {createContext, useContext, useEffect, useState} from 'react'
+import {UserContext} from "../../../api/authentication";
+import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, FormSelect, Modal} from 'react-bootstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
-import InputShadow  from '../../../components/Forms/InputShadow'
-import TableA       from '../../../components/tables/tableA'
-import Page2        from '../../../components/layouts/Page2'
-import SideNavbar   from '../../../components/layouts/sideBar'
-import ToolBtn      from '../../../components/buttons/toolBtn'
-import FlexForm     from '../../../components/Forms/FlexForm'
-import colors       from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
+import TableA from '../../../components/tables/tableA'
+import Page2 from '../../../components/layouts/Page2'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import FlexForm from '../../../components/Forms/FlexForm'
+import colors from '../../../utilities/colors'
 import HeaderModalA from '../../../components/modals/headerA'
-import {
-  deleteEmployee,
-  getEmployees,
-  insertEmployee,
-  updateEmployee
-}                   from "../../../api/Roles/employees";
-import ErrorModal   from "../../../components/modals/errorModal";
+import {deleteEmployee, getEmployees, insertEmployee, updateEmployee} from "../../../api/Roles/employees";
+import ErrorModal from "../../../components/modals/errorModal";
+import {formatDate} from "../../../utilities/others";
 
 const nhanVienContext = createContext()
 
@@ -45,7 +22,7 @@ const nhanVienHeader = [
   {key: "Mã NV", value: "manhanvien"},
   {key: "Tên nhân viên", value: "hoten"},
   {key: "Giới tính", value: "gioitinh"},
-  {key: "Ngày sinh", value: "ngaysinh"},
+  {key: "Ngày sinh", value: "ngaysinh", format: formatDate},
   {key: "Email", value: "mail"},
   {key: "Số điện thoại", value: "sodienthoai"},
   {key: "Vai trò", value: "tenhienthi"},

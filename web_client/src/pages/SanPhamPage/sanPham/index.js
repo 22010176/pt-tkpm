@@ -1,68 +1,28 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-}                        from 'react'
+import {createContext, useContext, useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {
-  faArrowRotateRight,
-  faCirclePlus,
-  faFileExcel,
-  faFileExport,
-  faMagnifyingGlass,
-  faPencil,
-  faRectangleList,
-  faTrashCan
-}                        from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  Image,
-  InputGroup,
-  Modal,
-  ModalBody,
-  ModalFooter
-}                        from 'react-bootstrap'
+import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faRectangleList, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Image, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
 
-import SideNavbar   from '../../../components/layouts/sideBar'
-import ToolBtn      from '../../../components/buttons/toolBtn'
-import Page2        from '../../../components/layouts/Page2'
-import TableA       from '../../../components/tables/tableA'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import Page2 from '../../../components/layouts/Page2'
+import TableA from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
-import ContentA     from '../../../components/layouts/blockContent'
-import ErrorModal   from '../../../components/modals/errorModal'
-import exportExcel  from '../../../components/excel'
-import FlexForm     from '../../../components/Forms/FlexForm'
+import ContentA from '../../../components/layouts/blockContent'
+import ErrorModal from '../../../components/modals/errorModal'
+import exportExcel from '../../../components/excel'
+import FlexForm from '../../../components/Forms/FlexForm'
 
-import colors      from '../../../utilities/colors'
+import colors from '../../../utilities/colors'
 import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 
-import {colToName}            from "../../../utilities/others";
-import {
-  deleteProduct,
-  getProducts,
-  insertProduct,
-  updateProduct,
-  updateProductImage
-}                             from "../../../api/Products/products";
+import {colToName} from "../../../utilities/others";
+import {deleteProduct, getProducts, insertProduct, updateProduct, updateProductImage} from "../../../api/Products/products";
 import {getProductAttributes} from "../../../api/Products/product-attributes";
-import {
-  deleteConfigure,
-  getProductConfigures,
-  insertConfigure,
-  updateConfigure
-}                             from "../../../api/Products/configures";
-import InputGroupText         from "react-bootstrap/InputGroupText";
-import {
-  getProductFromConfigureState,
-  getProductState
-}                             from "../../../api/Warehouse";
+import {deleteConfigure, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/Products/configures";
+import InputGroupText from "react-bootstrap/InputGroupText";
+import {getProductFromConfigureState, getProductState} from "../../../api/Warehouse";
 
 const defaultSanPham = {
   madanhmucsanpham: "", tendanhmucsanpham: "", chipxuly: "", dungluongpin: "", kichthuongmanhinh: "", cameratruoc: "", camerasau: "", phienbanhedieuhanh: "", thoigianbaohanh: "", hinhanh: "", xuatxu: "", hedieuhanh: "", thuonghieu: "",
@@ -78,7 +38,16 @@ const spHeader = [
   {key: "Tồn kho", value: "tonkho"},
 
 //   hide
-  {key: "thuonghieu", value: "thuonghieu", hide: true}, {key: "hedieuhanh", value: "hedieuhanh", hide: true}, {key: "xuatxu", value: "xuatxu", hide: true}, {key: "chipxuly", value: "chipxuly", hide: true}, {key: "dungluongpin", value: "dungluongpin", hide: true}, {key: "kichthuongmanhinh", value: "kichthuongmanhinh", hide: true}, {key: "cameratruoc", value: "cameratruoc", hide: true}, {key: "camerasau", value: "camerasau", hide: true}, {key: "thoigianbaohanh", value: "thoigianbaohanh", hide: true}, {key: "hinhanh", value: "hinhanh", hide: true}
+  {key: "thuonghieu", value: "thuonghieu", hide: true},
+  {key: "hedieuhanh", value: "hedieuhanh", hide: true},
+  {key: "xuatxu", value: "xuatxu", hide: true},
+  {key: "chipxuly", value: "chipxuly", hide: true},
+  {key: "dungluongpin", value: "dungluongpin", hide: true},
+  {key: "kichthuongmanhinh", value: "kichthuongmanhinh", hide: true},
+  {key: "cameratruoc", value: "cameratruoc", hide: true},
+  {key: "camerasau", value: "camerasau", hide: true},
+  {key: "thoigianbaohanh", value: "thoigianbaohanh", hide: true},
+  {key: "hinhanh", value: "hinhanh", hide: true}
 ]
 
 

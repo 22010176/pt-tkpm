@@ -12,6 +12,8 @@ import {useEffect, useState} from "react";
 import {getProductHasConfigure} from "../../../api/Products/products";
 import {getProductConfigures} from "../../../api/Products/configures";
 import {getCustomers} from "../../../api/Partners/customers";
+import {getFreeExport} from "../../../api/Warehouse/exports";
+import {formatDate} from "../../../utilities/others";
 
 const spHeader = [
   {key: "Mã SP", value: "madanhmucsanpham"},
@@ -35,7 +37,7 @@ const khoHeader = [
 const khachHangHeader = [
   {key: "Mã KH", value: "makhachhang", format: t => "KH-" + t},
   {key: "Tên khách hàng", value: "tenkhachhang"},
-  {key: "Ngày sinh", value: "ngaysinh", format: t => new Date(t).toISOString().split('T')[0]},
+  {key: "Ngày sinh", value: "ngaysinh", format: formatDate},
   {key: "Địa chỉ", value: "diachi"},
   {key: "Email", value: "mail"},
   {key: "Số điện thoại", value: "sodienthoai"},
@@ -84,6 +86,7 @@ function ThemXuatKho() {
     setForm({...defaultForm})
 
     getProductHasConfigure().then(({Data}) => setData(src => ({...src, sanpham: Data})))
+    getFreeExport().then(({Data}) => setData(src => ({...src, phieuxuat: Data[0]})))
     setBtnState(true)
   }
 
@@ -290,7 +293,7 @@ function ThemXuatKho() {
         rightTopForm={<>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã phiếu xuất</FormLabel>
-            <FormControl disabled/>
+            <FormControl disabled value={data?.phieuxuat?.maphieuxuat}/>
           </FormGroup>
 
           <FormGroup>

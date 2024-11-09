@@ -1,13 +1,10 @@
-import {
-  checkResponse,
-  getToken
-} from "../authentication";
+import {checkResponse, getToken} from "../authentication";
 
 export async function getSuppliers(token = '') {
   return fetch('/api/suppliers', {
-    method:  'GET',
+    method: 'GET',
     headers: {
-      'Content-Type':  'application/json',
+      'Content-Type': 'application/json',
       'authorization': getToken()
     }
   })
@@ -15,15 +12,28 @@ export async function getSuppliers(token = '') {
   .then(checkResponse)
 }
 
+export async function getSupplierCart({manhacungcap}) {
+  return fetch(`/api/customers/${manhacungcap}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'authorization': getToken()
+    }
+  })
+  .then(response => response.json())
+  .then(checkResponse)
+}
+
 export async function insertSupplier(supplier, token = '') {
   return fetch('/api/suppliers', {
-    method:  'POST',
+    method: 'POST',
     headers: {
-      'Accept':        'application/json',
-      'Content-Type':  'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'authorization': getToken()
     },
-    body:    JSON.stringify(supplier)
+    body: JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)
@@ -32,13 +42,13 @@ export async function insertSupplier(supplier, token = '') {
 export async function updateSupplier(supplier, token = '') {
   console.log(supplier)
   return fetch('/api/suppliers', {
-    method:  'PUT',
+    method: 'PUT',
     headers: {
-      'Accept':        'application/json',
-      'Content-Type':  'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'authorization': getToken()
     },
-    body:    JSON.stringify(supplier)
+    body: JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)
@@ -46,13 +56,13 @@ export async function updateSupplier(supplier, token = '') {
 
 export async function deleteSupplier(supplier, token = '') {
   return fetch('/api/suppliers', {
-    method:  'DELETE',
+    method: 'DELETE',
     headers: {
-      'Accept':        'application/json',
-      'Content-Type':  'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
       'authorization': getToken()
     },
-    body:    JSON.stringify(supplier)
+    body: JSON.stringify(supplier)
   })
   .then(res => res.json())
   .then(checkResponse)

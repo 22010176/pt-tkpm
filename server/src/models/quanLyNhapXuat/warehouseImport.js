@@ -107,7 +107,7 @@ async function getFreeImport(conn) {
     let [result] = await conn.query(
       `SELECT p.*
        FROM phieunhapkho p
-                LEFT JOIN sanpham s ON s.phieuxuat = p.maphieunhap
+                LEFT JOIN sanpham s ON s.phieunhap = p.maphieunhap
        WHERE p.nhacungcap IS NULL
          AND p.nhanviennhap IS NULL
        GROUP BY p.maphieunhap

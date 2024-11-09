@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { Button, Form, FormControl, FormGroup, FormLabel, Modal, ModalBody, ModalFooter, FormSelect, InputGroup } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faPencil, faTrashCan, faCircleInfo, faArrowRotateRight, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import {useState} from 'react'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faArrowRotateRight, faCircleInfo, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
 import Page2 from '../../../components/layouts/Page2'
@@ -12,18 +12,17 @@ import HeaderModalA from '../../../components/modals/headerA'
 import InputShadow from '../../../components/Forms/InputShadow'
 import FlexForm from '../../../components/Forms/FlexForm'
 import GroupShadow from '../../../components/Forms/GroupShadow'
-
-import styles from './style.module.css'
+import {formatDate} from "../../../utilities/others";
 
 const doiTraHeader = [
-  { key: "Mã phiếu đổi trả", value: "" },
-  { key: "Mã khách hàng", value: "" },
-  { key: "Tên khách hàng", value: "" },
-  { key: "Số lượng đổi trả", value: "" },
-  { key: "Ngày đổi trả", value: "" },
-  { key: "Mã NV CSKH", value: "" },
-  { key: "Tên NV", value: "" },
-  { key: "Ghi chú", value: "" },
+  {key: "Mã phiếu đổi trả", value: ""},
+  {key: "Mã khách hàng", value: ""},
+  {key: "Tên khách hàng", value: ""},
+  {key: "Số lượng đổi trả", value: ""},
+  {key: "Ngày đổi trả", value: "", format: formatDate},
+  {key: "Mã NV CSKH", value: ""},
+  {key: "Tên NV", value: ""},
+  {key: "Ghi chú", value: ""},
 ]
 
 function DoiTraHang() {
@@ -37,33 +36,33 @@ function DoiTraHang() {
   return (
     <>
       <Page2
-        sidebar={<SideNavbar />}
+        sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={openModal.bind({}, "them")} />
-          <ToolBtn color={colors.orange} icon={faPencil} title="Sửa" onClick={openModal.bind({}, "edit")} />
-          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" />
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "doiTra")} />
+          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={openModal.bind({}, "them")}/>
+          <ToolBtn color={colors.orange} icon={faPencil} title="Sửa" onClick={openModal.bind({}, "edit")}/>
+          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa"/>
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "doiTra")}/>
         </>}
         rightSec={
           <FlexForm>
-            <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm" />
-            <Button className='d-flex gap-2 align-items-center px-4 opacity-2' size='lg' variant='success' >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm"/>
+            <Button className='d-flex gap-2 align-items-center px-4 opacity-2' size='lg' variant='success'>
+              <FontAwesomeIcon icon={faMagnifyingGlass}/>
             </Button>
             <Button className='d-flex gap-2 align-items-center' variant='primary'>
-              <FontAwesomeIcon icon={faArrowRotateRight} />
+              <FontAwesomeIcon icon={faArrowRotateRight}/>
               <span>Làm mới</span>
             </Button>
           </FlexForm>
         }
-        dataTable={<TableA headers={doiTraHeader} />}
+        dataTable={<TableA headers={doiTraHeader}/>}
       />
 
       <Modal centered show={modal === "them"} size='lg'>
-        <HeaderModalA title={"THÊM GIAO DỊCH ĐỔI TRẢ"} />
+        <HeaderModalA title={"THÊM GIAO DỊCH ĐỔI TRẢ"}/>
 
         <ModalBody>
-          <PhieuDoiTraForm />
+          <PhieuDoiTraForm/>
         </ModalBody>
 
         <ModalFooter className='d-flex gap-5 justify-content-center'>
@@ -73,10 +72,10 @@ function DoiTraHang() {
       </Modal>
 
       <Modal centered show={modal === "edit"} scrollable size='lg'>
-        <HeaderModalA title={"SỬA GIAO DỊCH ĐỔI TRẢ"} />
+        <HeaderModalA title={"SỬA GIAO DỊCH ĐỔI TRẢ"}/>
 
         <ModalBody>
-          <PhieuDoiTraForm phieuDoiTraID='E' />
+          <PhieuDoiTraForm phieuDoiTraID='E'/>
         </ModalBody>
 
         <ModalFooter className='d-flex gap-5 justify-content-center'>
@@ -86,25 +85,25 @@ function DoiTraHang() {
       </Modal>
 
       <Modal size='xl' show={modal === "doiTra"} centered scrollable backdrop="static" className='vh-100'>
-        <HeaderModalA title={"Phiếu đổi trả"} />
+        <HeaderModalA title={"Phiếu đổi trả"}/>
 
         <ModalBody className='d-flex flex-column gap-3 h-100 px-5 py-4'>
           <Form className='d-flex justify-content-between border-bottom pb-3 border-3 border-dark'>
             <FormGroup>
               <FormLabel className='fw-bold'>Mã phiếu đổi trả</FormLabel>
-              <InputShadow disabled />
+              <InputShadow disabled/>
             </FormGroup>
             <FormGroup>
               <FormLabel className='fw-bold'>Mã phiếu đổi trả</FormLabel>
-              <InputShadow disabled />
+              <InputShadow disabled/>
             </FormGroup>
             <FormGroup>
               <FormLabel className='fw-bold'>Mã phiếu đổi trả</FormLabel>
-              <InputShadow disabled />
+              <InputShadow disabled/>
             </FormGroup>
             <FormGroup>
               <FormLabel className='fw-bold'>Mã phiếu đổi trả</FormLabel>
-              <InputShadow disabled />
+              <InputShadow disabled/>
             </FormGroup>
           </Form>
 
@@ -114,31 +113,31 @@ function DoiTraHang() {
               <FormGroup className='d-flex flex-column gap-3 w-100'>
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Mã IMEI</FormLabel>
-                  <InputShadow />
+                  <InputShadow/>
                 </FormGroup>
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Tên sản phẩm</FormLabel>
-                  <InputShadow />
+                  <InputShadow/>
                 </FormGroup>
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Phiên bản</FormLabel>
-                  <InputShadow />
+                  <InputShadow/>
                 </FormGroup>
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Ngày mua</FormLabel>
-                  <InputShadow />
+                  <InputShadow/>
                 </FormGroup>
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Mã phiếu xuất</FormLabel>
-                  <InputShadow />
+                  <InputShadow/>
                 </FormGroup>
               </FormGroup>
 
-              <div className='h-auto bg-dark' style={{ width: "3px" }} ></div>
+              <div className='h-auto bg-dark' style={{width: "3px"}}></div>
               <FormGroup className='d-flex flex-column gap-4 w-100'>
                 <FormGroup className='d-flex w-100 justify-content-between'>
                   <FormLabel className='fw-bold w-50'>Lý do muốn đổi trả</FormLabel>
-                  <InputShadow as="textarea" style={{ height: "80px" }} />
+                  <InputShadow as="textarea" style={{height: "80px"}}/>
                 </FormGroup>
 
                 <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
@@ -151,37 +150,37 @@ function DoiTraHang() {
                 {+choies === 1 &&
                   <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                     <FormLabel className='fw-bold w-50'>Mã IMEI đổi</FormLabel>
-                    <InputShadow />
+                    <InputShadow/>
                   </FormGroup>
                 }
 
                 {+choies === 2 && <>
                   <FormGroup className='d-flex gap-2 w-100 align-items-center justify-content-between'>
                     <FormLabel className='fw-bold w-100'>Tên sản phẩm muốn đổi</FormLabel>
-                    <InputShadow />
+                    <InputShadow/>
                   </FormGroup>
                   <FormGroup className='d-flex w-100 align-items-center justify-content-between'>
                     <FormLabel className='fw-bold w-100'>Số tiền đền bù</FormLabel>
                     <GroupShadow>
-                      <FormControl type='number' />
+                      <FormControl type='number'/>
                       <InputGroup.Text>VNĐ</InputGroup.Text>
                     </GroupShadow>
                   </FormGroup>
                   <FormGroup className='d-flex w-100 justify-content-between'>
                     <FormGroup>
                       <FormLabel className='fw-bold w-50'>Phân loại</FormLabel>
-                      <InputShadow />
+                      <InputShadow/>
                     </FormGroup>
                     <FormGroup>
                       <FormLabel className='fw-bold w-50'>Mã IMEI</FormLabel>
-                      <InputShadow />
+                      <InputShadow/>
                     </FormGroup>
                   </FormGroup>
                 </>}
 
                 <FormGroup className='d-flex justify-content-end w-100'>
-                  <Button variant='outline' className='w-auto _border-yellow-focus-2' >
-                    <FontAwesomeIcon icon={faTrashCan} color={colors.yellow_2} size='2x' />
+                  <Button variant='outline' className='w-auto _border-yellow-focus-2'>
+                    <FontAwesomeIcon icon={faTrashCan} color={colors.yellow_2} size='2x'/>
                     {/* <p className='m-0 _text-yellow-2'>Xóa</p> */}
                   </Button>
                 </FormGroup>
@@ -190,8 +189,8 @@ function DoiTraHang() {
 
           </Form>
           <FormGroup>
-            <Button variant='outline' className='w-auto _border-green-focus' >
-              <FontAwesomeIcon icon={faCirclePlus} color={colors.green} size='2x' />
+            <Button variant='outline' className='w-auto _border-green-focus'>
+              <FontAwesomeIcon icon={faCirclePlus} color={colors.green} size='2x'/>
               {/* <p className='m-0 _text-green'>Thêm<br /> sản phẩm</p> */}
             </Button>
           </FormGroup>
@@ -207,43 +206,43 @@ function DoiTraHang() {
   )
 }
 
-function PhieuDoiTraForm({ phieuDoiTraID = "" }) {
+function PhieuDoiTraForm({phieuDoiTraID = ""}) {
   return (
     <Form className='d-flex flex-column gap-3 py-3 px-5 mx-5 h-100 justify-content-center'>
       <FormGroup className='d-flex w-100 align-items-between gap-5'>
         <FormGroup>
           <FormLabel className='fw-bold'>Mã khách hàng</FormLabel>
-          <InputShadow as={FormControl} className="_w-100" />
+          <InputShadow as={FormControl} className="_w-100"/>
         </FormGroup>
 
         {!!phieuDoiTraID && <FormGroup>
           <FormLabel className='fw-bold'>Mã phiếu đổi trả</FormLabel>
-          <InputShadow as={FormControl} className="_w-100" disabled value={phieuDoiTraID} />
+          <InputShadow as={FormControl} className="_w-100" disabled value={phieuDoiTraID}/>
         </FormGroup>}
       </FormGroup>
       <FormGroup>
         <FormLabel className='fw-bold'>Tên khách hàng</FormLabel>
-        <InputShadow className="_w-100" as={FormControl} />
+        <InputShadow className="_w-100" as={FormControl}/>
       </FormGroup>
       <FormGroup>
         <FormLabel className='fw-bold'>Số lượng đổi trả</FormLabel>
-        <InputShadow className="_w-100" as={FormControl} type="number" />
+        <InputShadow className="_w-100" as={FormControl} type="number"/>
       </FormGroup>
       <FormGroup>
         <FormLabel className='fw-bold'>Ngày đổi trả</FormLabel>
-        <InputShadow className="_w-100" as={FormControl} type="date" />
+        <InputShadow className="_w-100" as={FormControl} type="date"/>
       </FormGroup>
       <FormGroup>
         <FormLabel className='fw-bold'>Ghi chú</FormLabel>
-        <InputShadow className="_w-100" as={FormControl} />
+        <InputShadow className="_w-100" as={FormControl}/>
       </FormGroup>
       <FormGroup>
         <FormLabel className='fw-bold'>Mã nhân viên CSKH</FormLabel>
-        <InputShadow as={FormControl} className=" w-auto" />
+        <InputShadow as={FormControl} className=" w-auto"/>
       </FormGroup>
       <FormGroup>
-        <FormLabel className='fw-bold'>Tên nhân viên  </FormLabel>
-        <InputShadow className="_w-100" as={FormControl} />
+        <FormLabel className='fw-bold'>Tên nhân viên </FormLabel>
+        <InputShadow className="_w-100" as={FormControl}/>
       </FormGroup>
     </Form>
   )

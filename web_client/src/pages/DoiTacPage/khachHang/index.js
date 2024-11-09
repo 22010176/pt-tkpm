@@ -1,64 +1,41 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
-import {
-  faArrowRotateRight,
-  faCircleInfo,
-  faCirclePlus,
-  faMagnifyingGlass,
-  faPencil,
-  faTrashCan
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  Modal,
-  ModalBody,
-  ModalFooter
-} from 'react-bootstrap'
-
-import ContentA     from '../../../components/layouts/blockContent'
-import SideNavbar   from '../../../components/layouts/sideBar'
-import ToolBtn      from '../../../components/buttons/toolBtn'
-import Page2        from '../../../components/layouts/Page2'
-import TableA       from '../../../components/tables/tableA'
-import IconBtn      from '../../../components/buttons/iconBtn'
+import {createContext, useContext, useEffect, useState} from 'react'
+import {faArrowRotateRight, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, Modal} from 'react-bootstrap'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import Page2 from '../../../components/layouts/Page2'
+import TableA from '../../../components/tables/tableA'
+import IconBtn from '../../../components/buttons/iconBtn'
 import HeaderModalA from '../../../components/modals/headerA'
-import ErrorModal   from '../../../components/modals/errorModal'
-import FlexForm     from '../../../components/Forms/FlexForm'
-import InputShadow  from '../../../components/Forms/InputShadow'
-import colors       from '../../../utilities/colors'
-import {
-  deleteCustomer,
-  getCustomers,
-  insertCustomer,
-  updateCustomer
-}                   from "../../../api/Partners/customers";
+import ErrorModal from '../../../components/modals/errorModal'
+import FlexForm from '../../../components/Forms/FlexForm'
+import colors from '../../../utilities/colors'
+import {deleteCustomer, getCustomers, insertCustomer, updateCustomer} from "../../../api/Partners/customers";
+import {formatDate} from "../../../utilities/others";
 
 const KhachHangContext = createContext()
 
 const defaultKhachHang = {
-  makhachhang: undefined, tenkhachhang: "", ngaysinh: new Date().toISOString().split('T')[0], diachi: "", mail: "", sodienthoai: ""
+  makhachhang: undefined,
+  tenkhachhang: "",
+  ngaysinh: new Date().toISOString().split('T')[0],
+  diachi: "",
+  mail: "",
+  sodienthoai: ""
 }
 
 const khachHangHeader = [
   {key: "Mã KH", value: "makhachhang"},
   {key: "Tên khách hàng", value: "tenkhachhang"},
-  {key: "Ngày sinh", value: "ngaysinh"},
+  {key: "Ngày sinh", value: "ngaysinh", format: formatDate},
   {key: "Địa chỉ", value: "diachi"},
   {key: "Email", value: "mail"},
   {key: "Số điện thoại", value: "sodienthoai"},
-  {key: "Ngày tham gia", value: "ngaythamgia"},
+  {key: "Ngày tham gia", value: "ngaythamgia", format: formatDate},
 ]
 
 const lichSuMuaHangHeader = [
-  {key: "Ngày mua hàng", value: "ma"},
+  {key: "Ngày mua hàng", value: "ma", format: formatDate},
   {key: "Mã phiếu xuất hàng", value: "tenNCC"},
   {key: "Số lượng", value: "diachi"},
   {key: "Thành tiền", value: "mail"},
@@ -184,7 +161,6 @@ function KhachHang() {
           <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal}/>
           <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal}/>
           <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang}/>
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "lichSu")}/>
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm'/>
@@ -227,59 +203,6 @@ function KhachHang() {
           Hãy chọn một khách hàng!!!
         </ErrorModal>
       </KhachHangContext.Provider>
-
-
-      <Modal centered size="xl" show={modal === "lichSu"} backdrop="static" className='vh-100' scrollable>
-        <HeaderModalA title="LỊCH SỬ MUA HÀNG"/>
-
-        <ModalBody className='d-flex flex-column h-100 gap-4 px-5 py-4'>
-          <Form className='d-flex flex-column gap-4'>
-            <FormGroup className='d-flex gap-5'>
-              <FormGroup className='_w-20'>
-                <FormLabel className='fw-bold'>Mã khách hàng</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-              <FormGroup className='_w-40'>
-                <FormLabel className='fw-bold'>Tên khách hàng</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-              <FormGroup className='_w-20'>
-                <FormLabel className='fw-bold'>Ngày sinh</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-              <FormGroup className='_w-20'>
-                <FormLabel className='fw-bold'>Ngày tham gia</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-            </FormGroup>
-
-            <FormGroup className='d-flex gap-5'>
-              <FormGroup className='_w-60'>
-                <FormLabel className='fw-bold'>Địa chỉ</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-              <FormGroup className='_w-20'>
-                <FormLabel className='fw-bold'>Số điện thoại</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-              <FormGroup className='_w-20'>
-                <FormLabel className='fw-bold'>Email</FormLabel>
-                <InputShadow as={FormControl} size="sm" disabled/>
-              </FormGroup>
-            </FormGroup>
-          </Form>
-
-          <ContentA>
-            <TableA headers={lichSuMuaHangHeader}/>
-            <div style={{height: "10000px"}}></div>
-          </ContentA>
-        </ModalBody>
-
-        <ModalFooter className='d-flex justify-content-center gap-5'>
-          <Button className='_w-15' variant='primary'>Xuất PDF</Button>
-          <Button className='_w-15' variant='danger' onClick={openModal.bind({}, "")}>Đóng</Button>
-        </ModalFooter>
-      </Modal>
     </>
   )
 }

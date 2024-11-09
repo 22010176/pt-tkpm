@@ -71,7 +71,7 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
             AND COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`,
         [makhachhang, manhanvien, tungay, denngay, tusotien, densotien])
-    
+
     return {entries: result, success: true}
   } catch (e) {
     console.log(e)
@@ -98,12 +98,40 @@ async function insertExport(conn, imports = []) {
         [imports.map(({khachhang}) => khachhang)],
         imports.length
       ])
-    // console.log(result, imports)
 
     return {message: "Export added", success: true, entries: result}
   } catch (err) {
     console.error(err);
     return {message: "Added fail", success: false, entries: []};
+  }
+}
+
+async function getFreeExport(conn) {
+  try {
+    let [result] = await conn.query(
+      `SELECT p.*
+       FROM phieuxuatkho p
+                LEFT JOIN sanpham s ON s.phieuxuat = p.maphieuxuat
+       WHERE p.khachhang IS NULL
+         AND p.nhanvienxuat IS NULL
+       GROUP BY p.maphieuxuat
+       HAVING COUNT(DISTINCT s.masanpham) = 0
+       LIMIT 1;`)
+
+    if (result.length) return {Data: result, success: true, message: "success"};
+
+    [result] = await conn.query(`INSERT INTO phieuxuatkho (khachhang, nhanvienxuat)
+                                 VALUES (NULL, NULL);`)
+
+    const [temp] = await conn.query(
+      `SELECT *
+       FROM phieuxuatkho
+       WHERE maphieuxuat = ?`,
+      [result.insertId])
+    return {Data: temp, success: true}
+  } catch (err) {
+    console.error(err);
+    return {success: false, Data: []};
   }
 }
 
@@ -139,5 +167,5 @@ async function deleteExport(conn, imports = []) {
 }
 
 module.exports = {
-  getExports, insertExport, updateExport, deleteExport, findExports
+  getExports, insertExport, updateExport, deleteExport, findExports, getFreeExport
 }

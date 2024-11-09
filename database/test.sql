@@ -382,15 +382,55 @@ FROM phieuxuatkho p
 GROUP BY p.maphieuxuat
 HAVING COUNT(DISTINCT s.masanpham) = 0;
 
-
-
-
-
-SELECT * FROM danhmucsanpham d
-INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
-INNER JOIN sanpham s ON c.macauhinh = s.cauhinh
+SELECT *
+FROM danhmucsanpham d
+         INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
+         INNER JOIN sanpham s ON c.macauhinh = s.cauhinh
 WHERE s.phieuxuat IS NULL
 GROUP BY d.madanhmucsanpham;
+
+
+SELECT p.maphieuxuat, p.thoigianxuat, COUNT(DISTINCT sanpham.masanpham) soluong, SUM(c.giaxuat) thanhtien
+FROM phieuxuatkho p
+         INNER JOIN khachhang k ON p.khachhang = k.makhachhang
+         INNER JOIN sanpham ON p.maphieuxuat = sanpham.phieuxuat
+         INNER JOIN cauhinh c ON sanpham.cauhinh = c.macauhinh
+WHERE makhachhang = ?
+GROUP BY p.maphieuxuat;
+
+SELECT p.maphieunhap, p.thoigiannhap, COUNT(DISTINCT sanpham.masanpham) soluong, SUM(c.giaxuat) thanhtien
+FROM phieunhapkho p
+         INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+         INNER JOIN sanpham ON p.maphieunhap = sanpham.phieuxuat
+         INNER JOIN cauhinh c ON sanpham.cauhinh = c.macauhinh
+WHERE manhacungcap = ?
+GROUP BY p.maphieunhap;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

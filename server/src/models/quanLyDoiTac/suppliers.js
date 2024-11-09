@@ -12,6 +12,24 @@ async function getSuppliers(conn) {
   }
 }
 
+async function getSuppliersCarts(conn, {manhacungcap}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT p.maphieunhap, p.thoigiannhap, COUNT(DISTINCT sanpham.masanpham) soluong, SUM(c.giaxuat) thanhtien
+       FROM phieunhapkho p
+                INNER JOIN nhacungcap n ON p.nhacungcap = n.manhacungcap
+                INNER JOIN sanpham ON p.maphieunhap = sanpham.phieuxuat
+                INNER JOIN cauhinh c ON sanpham.cauhinh = c.macauhinh
+       WHERE manhacungcap = ?
+       GROUP BY p.maphieunhap`,
+      [manhacungcap])
+    return {Data: result, success: true};
+  } catch (e) {
+    console.log(e)
+    return {Data: [], success: false}
+  }
+}
+
 async function insertSupplier(conn, suppliers = []) {
   try {
     await conn.query(`INSERT INTO nhacungcap (tennhacungcap, diachi, mail, sodienthoai)
@@ -51,9 +69,11 @@ async function updateSupplier(conn, {tennhacungcap, diachi, mail, sodienthoai, m
 
 async function deleteSupplier(conn, suppliers = []) {
   try {
-    await conn.query(`DELETE
-                      FROM nhacungcap
-                      WHERE manhacungcap IN ?;`, [[suppliers.map(({manhacungcap}) => manhacungcap)]]);
+    await conn.query(
+      `DELETE
+       FROM nhacungcap
+       WHERE manhacungcap IN ?;`,
+      [[suppliers.map(({manhacungcap}) => manhacungcap)]]);
 
     return {message: "Supplier deleted", success: true};
   } catch (e) {
@@ -61,4 +81,4 @@ async function deleteSupplier(conn, suppliers = []) {
   }
 }
 
-module.exports = {deleteSupplier, getSuppliers, insertSupplier, updateSupplier}
+module.exports = {deleteSupplier, getSuppliers, insertSupplier, updateSupplier, getSuppliersCarts}

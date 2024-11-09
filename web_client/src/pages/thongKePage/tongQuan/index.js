@@ -1,50 +1,42 @@
 import './style.module.css'
-import Layout1           from "../../../components/layouts/layout1";
+import Layout1 from "../../../components/layouts/layout1";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-  faMobileScreen,
-  faUserGear,
-  faUserGroup
-}                        from "@fortawesome/free-solid-svg-icons";
-import {Button}          from "react-bootstrap";
-import TableA            from "../../../components/tables/tableA";
+import {faMobileScreen, faUserGear, faUserGroup} from "@fortawesome/free-solid-svg-icons";
+import {Button} from "react-bootstrap";
+import TableA from "../../../components/tables/tableA";
 
-import Chart        from 'react-apexcharts'
-import {
-  useEffect,
-  useRef,
-  useState
-}                   from "react";
-import colors       from "../../../utilities/colors";
+import Chart from 'react-apexcharts'
+import {useEffect, useRef, useState} from "react";
+import colors from "../../../utilities/colors";
 import {getOverall} from "../../../api/statistics";
 
 const tableHD = [
-  {key: "Ngày", value: "thoigian"},
+  {key: "Ngày", value: "thoigian", format: t => new Date(t).toISOString().split("T")[0]},
   {key: "Vốn (VNĐ)", value: "von"},
   {key: "Doanh thu (VNĐ)", value: "doanhthu"},
   {key: "Lợi nhuận (VNĐ)", value: "loinhuan"},
 ]
 
 const defaultOptions = {
-  chart:      {
+  chart: {
     type: 'line',
     // dropShadow: {enabled: true, color: '#000', top: 18, left: 7, blur: 10, opacity: 0.2},
-    zoom:    {enabled: false},
+    zoom: {enabled: false},
     toolbar: {show: false}
   },
-  colors:     [colors.orange, colors.green, colors.blue],
+  colors: [colors.orange, colors.green, colors.blue],
   dataLabels: {enabled: true},
-  stroke:     {curve: 'smooth'},
+  stroke: {curve: 'smooth'},
   // title:      {text: 'Thống kê doanh thu 7 ngày gần nhất', align: 'center'},
   markers: {size: 1},
-  xaxis:   {
-    title:      {text: "Ngày"},
+  xaxis: {
+    title: {text: "Ngày"},
     categories: [],
   },
-  yaxis:   {
+  yaxis: {
     title: {text: 'Số tiền'},
   },
-  legend:  {position: 'bottom', horizontalAlign: 'center', offsetY: 0, offsetX: 0}
+  legend: {position: 'bottom', horizontalAlign: 'center', offsetY: 0, offsetX: 0}
 }
 
 function ThongKeTongQuan() {
@@ -57,12 +49,12 @@ function ThongKeTongQuan() {
     })
   }, []);
   let options = {},
-      series  = []
+    series = []
   try {
     options = {
       ...defaultOptions,
       xaxis: {
-        title:      {text: "Ngày"},
+        title: {text: "Ngày"},
         categories: data.doanhthu.map(i => i.thoigian.split("T")[0]),
       },
     }

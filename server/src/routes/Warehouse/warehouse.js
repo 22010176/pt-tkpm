@@ -1,29 +1,9 @@
 const express = require("express")
 const router = express.Router({mergeParams: true})
 
-const {
-  deleteImport,
-  updateImport,
-  insertImport,
-  getImports,
-  findImports,
-  findImportProduct, getFreeImport
-} = require("../../models/quanLyNhapXuat/warehouseImport");
-const {
-  getExports,
-  insertExport,
-  updateExport,
-  deleteExport,
-  findExports
-} = require("../../models/quanLyNhapXuat/warehouseExport");
-const {
-  getItems,
-  insertItem,
-  updateItem,
-  deleteItem,
-  getTinhTrang,
-  getItemsFromConfiguresAndState
-} = require("../../models/quanLyNhapXuat/items");
+const {deleteImport, updateImport, insertImport, getImports, findImports, findImportProduct, getFreeImport} = require("../../models/quanLyNhapXuat/warehouseImport");
+const {getExports, insertExport, updateExport, deleteExport, findExports, getFreeExport} = require("../../models/quanLyNhapXuat/warehouseExport");
+const {getItems, insertItem, updateItem, deleteItem, getTinhTrang, getItemsFromConfiguresAndState} = require("../../models/quanLyNhapXuat/items");
 
 router.route("/import")
 .get(async function (req, res) {
@@ -110,6 +90,13 @@ router.route("/items")
 router.get("/free-import", async function (req, res) {
   const conn = res.locals.conn;
   const result = await getFreeImport(res.locals.conn)
+  await conn.destroy();
+  res.json(result)
+})
+
+router.get("/free-export", async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await getFreeExport(res.locals.conn)
   await conn.destroy();
   res.json(result)
 })

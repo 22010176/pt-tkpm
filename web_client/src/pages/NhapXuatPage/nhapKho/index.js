@@ -1,53 +1,27 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  InputGroup,
-  Modal,
-  ModalBody,
-  ModalFooter
-} from 'react-bootstrap'
-import {
-  faArrowRotateRight,
-  faCircleInfo,
-  faCirclePlus,
-  faCircleXmark,
-  faFileExport,
-  faMagnifyingGlass,
-  faPencil
-} from '@fortawesome/free-solid-svg-icons'
+import {createContext, useContext, useEffect, useState} from 'react'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass, faPencil} from '@fortawesome/free-solid-svg-icons'
 
-import ToolBtn        from '../../../components/buttons/toolBtn'
-import IconBtn        from '../../../components/buttons/iconBtn'
-import HeaderModalA   from '../../../components/modals/headerA'
-import SideNavbar     from '../../../components/layouts/sideBar'
-import TableA         from '../../../components/tables/tableA'
-import ContentA       from '../../../components/layouts/blockContent'
-import Page3          from '../../../components/layouts/Page3'
-import colors         from '../../../utilities/colors'
-import InputShadow    from '../../../components/Forms/InputShadow'
-import GroupShadow    from '../../../components/Forms/GroupShadow'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import IconBtn from '../../../components/buttons/iconBtn'
+import HeaderModalA from '../../../components/modals/headerA'
+import SideNavbar from '../../../components/layouts/sideBar'
+import TableA from '../../../components/tables/tableA'
+import ContentA from '../../../components/layouts/blockContent'
+import Page3 from '../../../components/layouts/Page3'
+import colors from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
+import GroupShadow from '../../../components/Forms/GroupShadow'
 import {getSuppliers} from "../../../api/Partners/suppliers";
 import {getEmployees} from "../../../api/Roles/employees";
-import {
-  findImportProducts,
-  findImports
-}                     from "../../../api/Warehouse/imports";
+import {findImportProducts, findImports} from "../../../api/Warehouse/imports";
+import {formatDate} from "../../../utilities/others";
 
 const phieuNhapHd = [
   {key: "Mã phiếu nhập", value: "maphieunhap"},
   {key: "Nhà cung cấp", value: "tennhacungcap"},
   {key: "Nhân viên nhập", value: "hoten"},
-  {key: "Thời gian", value: "thoigian"},
+  {key: "Thời gian", value: "thoigian", format: formatDate},
   {key: "Tổng tiền", value: "tongtien"},
 ]
 
@@ -62,20 +36,20 @@ const chiTietPhieuHd = [
 
 const defaultForm = {
   manhacungcap: "*",
-  manhanvien:   "*",
-  tungay:       new Date(2010, 0, 2).toISOString().split("T")[0],
-  denngay:      new Date().toISOString().split("T")[0],
-  tusotien:     0,
-  densotien:    100_000_000_000,
-  timkiem:      ""
+  manhanvien: "*",
+  tungay: formatDate(new Date(2010, 0, 2)),
+  denngay: formatDate(new Date()),
+  tusotien: 0,
+  densotien: 100_000_000_000,
+  timkiem: ""
 }
 
 const defaultData = {
-  nhanvien:   [],
+  nhanvien: [],
   nhacungcap: [],
-  table:      [],
-  rowClick:   undefined,
-  modal:      ""
+  table: [],
+  rowClick: undefined,
+  modal: ""
 }
 
 const DataContext = createContext({})

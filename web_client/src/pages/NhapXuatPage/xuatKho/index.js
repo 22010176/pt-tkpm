@@ -1,49 +1,28 @@
-import {
-  useEffect,
-  useState
-} from 'react'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  InputGroup,
-  Modal,
-  ModalBody,
-  ModalFooter
-} from 'react-bootstrap'
-import {
-  faArrowRotateRight,
-  faCircleInfo,
-  faCirclePlus,
-  faCircleXmark,
-  faFileExport,
-  faMagnifyingGlass,
-  faPencil
-} from '@fortawesome/free-solid-svg-icons'
+import {useEffect, useState} from 'react'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass, faPencil} from '@fortawesome/free-solid-svg-icons'
 
-import ToolBtn        from '../../../components/buttons/toolBtn'
-import HeaderModalA   from '../../../components/modals/headerA'
-import IconBtn        from '../../../components/buttons/iconBtn'
-import ContentA       from '../../../components/layouts/blockContent'
-import TableA         from '../../../components/tables/tableA'
-import Page3          from '../../../components/layouts/Page3'
-import SideNavbar     from '../../../components/layouts/sideBar'
-import colors         from '../../../utilities/colors'
-import InputShadow    from '../../../components/Forms/InputShadow'
-import HeaderModalB   from "../../../components/modals/headerB";
-import GroupShadow    from "../../../components/Forms/GroupShadow";
+import ToolBtn from '../../../components/buttons/toolBtn'
+import HeaderModalA from '../../../components/modals/headerA'
+import IconBtn from '../../../components/buttons/iconBtn'
+import ContentA from '../../../components/layouts/blockContent'
+import TableA from '../../../components/tables/tableA'
+import Page3 from '../../../components/layouts/Page3'
+import SideNavbar from '../../../components/layouts/sideBar'
+import colors from '../../../utilities/colors'
+import InputShadow from '../../../components/Forms/InputShadow'
+import HeaderModalB from "../../../components/modals/headerB";
+import GroupShadow from "../../../components/Forms/GroupShadow";
 import {getCustomers} from "../../../api/Partners/customers";
 import {getEmployees} from "../../../api/Roles/employees";
-import {findExports}  from "../../../api/Warehouse/exports";
+import {findExports} from "../../../api/Warehouse/exports";
+import {formatDate} from "../../../utilities/others";
 
 const phieuNhapHd = [
   {key: "Mã phiếu xuất", value: "maphieuxuat"},
   {key: "Khách hàng", value: "tenkhachhang"},
   {key: "Nhân viên xuất", value: "hoten"},
-  {key: "Thời gian", value: "thoigian"},
+  {key: "Thời gian", value: "thoigian", format: formatDate},
   {key: "Tổng tiền", value: "tongtien"},
 ]
 
@@ -69,11 +48,11 @@ const phieuBaoHanhHD = [
 ]
 const defaultForm = {
   makhachhang: "*",
-  manhanvien:  "*",
-  tungay:      new Date(2010, 0, 1).toISOString().split("T")[0],
-  denngay:     new Date().toISOString().split("T")[0],
-  tusotien:    0,
-  densotien:   10_000_000_000
+  manhanvien: "*",
+  tungay: new Date(2010, 0, 1).toISOString().split("T")[0],
+  denngay: new Date().toISOString().split("T")[0],
+  tusotien: 0,
+  densotien: 10_000_000_000
 }
 
 function XuatKho() {
@@ -167,7 +146,7 @@ function XuatKho() {
       />
 
 
-      <Modal centered scrollable size='xl' show={modal === "info"} className='vh-100'>
+      <Modal centered scrollable size='xl' show={modal === "info" || true} className='vh-100'>
         <HeaderModalA title="THÔNG TIN PHIẾU XUẤT"/>
 
         <ModalBody className='d-flex flex-column gap-5 p-5'>

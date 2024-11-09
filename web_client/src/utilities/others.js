@@ -27,4 +27,9 @@ export function removeVietnameseTones(str) {
   return str;
 }
 
+export function formatDate(date) {
+  const a = new Date(date);
+  return `${a.getDate()}-${a.getMonth() + 1}-${a.getFullYear()}`
+}
+
 export const colToName = headers => Object.fromEntries(headers.map(({key, value}) => [value, key]))

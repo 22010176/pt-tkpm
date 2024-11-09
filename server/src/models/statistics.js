@@ -48,7 +48,7 @@ async function getOverall(conn) {
 async function getNhaCungCapStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc = "3000-01-01"}) {
   try {
     const [result] = await conn.query(
-      `SELECT n.manhacungcap, n.tennhacungcap, COUNT(DISTINCT d.madanhmucsanpham) lannhap, SUM(c.gianhap) tongtien
+      `SELECT n.*, COUNT(DISTINCT d.madanhmucsanpham) lannhap, SUM(c.gianhap) tongtien
        FROM nhacungcap n
                 INNER JOIN phieunhapkho p ON n.manhacungcap = p.nhacungcap
                 INNER JOIN sanpham s ON p.maphieunhap = s.phieunhap
@@ -67,7 +67,7 @@ async function getNhaCungCapStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc =
 async function getKhachHangStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc = "3000-01-01"}) {
   try {
     const [result] = await conn.query(
-      `SELECT k.makhachhang, k.tenkhachhang, COUNT(DISTINCT p.maphieuxuat) muahang, SUM(c.giaxuat) tongtien
+      `SELECT k.*, COUNT(DISTINCT p.maphieuxuat) muahang, SUM(c.giaxuat) tongtien
        FROM khachhang k
                 INNER JOIN phieuxuatkho p ON k.makhachhang = p.khachhang
                 INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
