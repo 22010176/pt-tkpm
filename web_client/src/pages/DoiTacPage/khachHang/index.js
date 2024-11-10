@@ -34,14 +34,6 @@ const khachHangHeader = [
   {key: "Ngày tham gia", value: "ngaythamgia", format: formatDate},
 ]
 
-const lichSuMuaHangHeader = [
-  {key: "Ngày mua hàng", value: "ma", format: formatDate},
-  {key: "Mã phiếu xuất hàng", value: "tenNCC"},
-  {key: "Số lượng", value: "diachi"},
-  {key: "Thành tiền", value: "mail"},
-  {key: "Ghi chú", value: "sdt"},
-]
-
 function KhachHangForm() {
   const [data, setData] = useContext(KhachHangContext)
 
@@ -93,13 +85,7 @@ function KhachHang() {
 
   function updateTableData() {
     setTableData([])
-    getCustomers().then(data => setTableData(data.customers.map(customer => {
-
-      customer.ngaysinh = customer.ngaysinh.split('T')[0]
-      customer.ngaythamgia = customer.ngaythamgia.split('T')[0]
-      return customer;
-    })))
-
+    getCustomers().then(data => setTableData(data.Data))
   }
 
   function onRowClick(data) {
@@ -111,17 +97,15 @@ function KhachHang() {
     setModal("add")
   }
 
-  function onOpenUpdateModal() {
-    if (!rowClick) return openModal("error")
-
-    setFormData({...rowClick})
-    openModal("edit")
-  }
+  // function onOpenUpdateModal() {
+  //   if (!rowClick) return openModal("error")
+  //
+  //   setFormData({...rowClick})
+  //   openModal("edit")
+  // }
 
   async function onInsertKhachHang() {
     const result = await insertCustomer([formData])
-    console.log(result)
-
     if (!result.success) return
 
     setFormData({...defaultKhachHang})
@@ -130,8 +114,6 @@ function KhachHang() {
 
   async function onUpdateKhachHang() {
     const result = await updateCustomer(formData)
-    console.log(result)
-
     if (!result.success) return
 
     setFormData({...defaultKhachHang})
@@ -140,15 +122,7 @@ function KhachHang() {
   }
 
   async function onDeleteKhachHang() {
-    if (!rowClick) return openModal("error")
 
-    const result = await deleteCustomer([rowClick])
-
-    if (!result.success) return
-
-    setFormData({...defaultKhachHang})
-    updateTableData()
-    setModal("")
   }
 
   return (
@@ -158,16 +132,37 @@ function KhachHang() {
         toolbarHeight={15}
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm" onClick={onOpenInsertModal}/>
-          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal}/>
-          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDeleteKhachHang}/>
+          <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm"
+                   onClick={e => {
+                     setFormData({...defaultKhachHang})
+                     setModal("add")
+                   }}/>
+          <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa"
+                   onClick={e => {
+                     if (!rowClick) return openModal("error")
+
+                     setFormData({...rowClick})
+                     openModal("edit")
+                   }}/>
+          <ToolBtn color={colors.yellow_2} icon={faTrashCan} title="Xóa"
+                   onClick={async e => {
+                     if (!rowClick) return openModal("error")
+
+                     const result = await deleteCustomer([rowClick])
+
+                     if (!result.success) return
+
+                     setFormData({...defaultKhachHang})
+                     updateTableData()
+                     setModal("")
+                   }}/>
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm'/>
           <IconBtn className='w-auto btn-primary btn-lg btn-success' icon={faMagnifyingGlass}/>
-          <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"}/>
+          <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"} onClick={updateTableData}/>
         </FlexForm>}
-        dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={onRowClick}/>}
+        dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={data => data && setRowClick(data)}/>}
       />
 
       <KhachHangContext.Provider value={[formData, setFormData]}>

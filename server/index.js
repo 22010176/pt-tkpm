@@ -35,7 +35,7 @@ async function initialDBConnection(req, res, next) {
 
 async function getPermission(req, res, next) {
   if (!res.locals.user) return next()
-  res.locals.permissions = await getAccountPermisisonsQuery(res.locals.conn, {mataikhoan: res.locals.user.userID})
+  res.locals.permissions = await getAccountPermisisonsQuery(res.locals.conn, res.locals.user)
 
   next()
 }
@@ -53,58 +53,58 @@ app.use("/api/auth",
   require("./src/routes/Auth"))
 
 app.use("/api/roles",
-  // authAccount,
+  authAccount,
   // authPermission(6, false, false),
   // authPermission(7, true, false),
   require("./src/routes/Employees/roles"))
 
 app.use("/api/accounts",
-  // authAccount,
+  authAccount,
   // authPermission(9, false, false),
   // authPermission(4, true, false),
   require("./src/routes/Employees/accounts"))
 
 app.use("/api/products",
-  // authAccount,
+  authAccount,
   // authPermission(8, true, false),
   // authPermission(10, true, false),
   require("./src/routes/Products/products"))
 
 app.use("/api/product-attributes",
-  // authAccount,
+  authAccount,
   // authPermission(10, true, false),
   require("./src/routes/Products/product-attributes"))
 
 app.use("/api/customers",
-  // authAccount,
+  authAccount,
   // authPermission(2, true, false),
   require("./src/routes/Partners/customers"))
 
 app.use("/api/suppliers",
-  // authAccount,
+  authAccount,
   // authPermission(3, true),
   require("./src/routes/Partners/suppliers"))
 
 app.use("/api/warehouse",
-  // authAccount,
+  authAccount,
   // authPermission(5,),
   // authPermission(11, true),
   require("./src/routes/Warehouse/warehouse"))
 
 app.use("/api/configures",
-  // authAccount,
+  authAccount,
   require("./src/routes/Products/configures"))
 
 app.use("/api/services",
-  // authAccount,
+  authAccount,
   require("./src/routes/Warehouse/services"))
 
 app.use("/api/statistics",
-  // authAccount,
+  authAccount,
   require("./src/routes/Statistics"))
 
 app.use("/api/employees",
-  // authAccount,
+  authAccount,
   require("./src/routes/Employees/employees"))
 
 app.all('/*', async (req, res) => {

@@ -11,10 +11,10 @@ async function getProducts(conn) {
        WHERE s.phieuxuat IS NULL
        GROUP BY d.madanhmucsanpham
        ORDER BY d.madanhmucsanpham DESC`)
-    return {products: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {products: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -108,10 +108,10 @@ async function insertProduct(conn, products = []) {
        ORDER BY madanhmucsanpham DESC
        LIMIT ?`,
       [[tendanhmucsanpham], [chipxuly], [dungluongpin], [kichthuongmanhinh], [cameratruoc], [camerasau], [phienbanhedieuhanh], [thoigianbaohanh], [xuatxu], [hedieuhanh], [thuonghieu], products.length])
-    return {message: "Products added", success: true, products: result};
+    return {message: "Products added", success: true, Data: result};
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false, products: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
@@ -130,19 +130,20 @@ async function updateProduct(conn, {
   madanhmucsanpham
 }) {
   try {
-    await conn.query(`UPDATE danhmucsanpham
-                      SET tendanhmucsanpham  = ?,
-                          chipxuly           = ?,
-                          dungluongpin       = ?,
-                          kichthuongmanhinh  = ?,
-                          cameratruoc        = ?,
-                          camerasau          = ?,
-                          phienbanhedieuhanh = ?,
-                          thoigianbaohanh    = ?,
-                          xuatxu             = ?,
-                          hedieuhanh         = ?,
-                          thuonghieu         = ?
-                      WHERE madanhmucsanpham = ?;`,
+    await conn.query(
+      `UPDATE danhmucsanpham
+       SET tendanhmucsanpham  = ?,
+           chipxuly           = ?,
+           dungluongpin       = ?,
+           kichthuongmanhinh  = ?,
+           cameratruoc        = ?,
+           camerasau          = ?,
+           phienbanhedieuhanh = ?,
+           thoigianbaohanh    = ?,
+           xuatxu             = ?,
+           hedieuhanh         = ?,
+           thuonghieu         = ?
+       WHERE madanhmucsanpham = ?;`,
       [tendanhmucsanpham, chipxuly, dungluongpin, kichthuongmanhinh, cameratruoc, camerasau, phienbanhedieuhanh, thoigianbaohanh, xuatxu, hedieuhanh, thuonghieu, madanhmucsanpham])
     return {message: "Product updated", success: true}
   } catch (e) {

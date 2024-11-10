@@ -5,14 +5,14 @@ async function getConfigures(conn) {
       `SELECT *
        FROM cauhinh
        ORDER BY macauhinh DESC;`)
-    return {configures: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {configures: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
-async function getProductConfigures(conn, danhmucsanpham) {
+async function getProductConfigures(conn, {madanhmucsanpham}) {
   try {
     const [result] = await conn.query(
       `SELECT c.*, ra.dungluongram, ro.dungluongrom, m.tenmausac, COUNT(DISTINCT s.masanpham) tonkho
@@ -24,12 +24,12 @@ async function getProductConfigures(conn, danhmucsanpham) {
        WHERE danhmucsanpham = ?
          AND s.phieuxuat IS NULL
        GROUP BY c.macauhinh
-       ORDER BY macauhinh DESC;`, [danhmucsanpham])
+       ORDER BY macauhinh DESC;`, [madanhmucsanpham])
 
-    return {configures: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {configures: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -68,11 +68,11 @@ async function insertConfigure(conn, configures = []) {
        LIMIT ?`,
       [[gianhap], [giaxuat], [danhmucsanpham], [ram], [rom], [mausac], configures.length]
     )
-    return {message: "Configures added", success: true, configures: result};
+    return {message: "Configures added", success: true, Data: result};
 
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false, configures: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 

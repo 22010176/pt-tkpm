@@ -17,10 +17,10 @@ async function getEmployeeAccounts(conn) {
                 INNER JOIN nhanvien nv ON t.nhanvien = nv.manhanvien
                 INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen
        WHERE nq.manhomquyen != 1;`)
-    return {accounts: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {accounts: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -29,8 +29,8 @@ async function insertEmployeeAccount(conn, accounts = []) {
     const saveData = []
     for (const account of accounts) saveData.push({
       nhanvien: account.nhanvien,
-      vaitro:   account.vaitro,
-      matkhau:  await bcrypt.hash(account.matkhau, account.vaitro === 1 ? 12 : 10),
+      vaitro: account.vaitro,
+      matkhau: await bcrypt.hash(account.matkhau, 10),
     })
 
     await conn.query(
@@ -44,7 +44,7 @@ async function insertEmployeeAccount(conn, accounts = []) {
                 INNER JOIN nhanvien n ON t.nhanvien = n.manhanvien
                 INNER JOIN nhomquyen nq ON t.vaitro = nq.manhomquyen
        WHERE nhanvien IN ?`, [[accounts.map(({nhanvien}) => nhanvien)]])
-    return {message: "Account added", success: true, accounts: result};
+    return {message: "Account added", success: true, Data: result};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};

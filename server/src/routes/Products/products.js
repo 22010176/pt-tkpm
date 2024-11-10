@@ -23,30 +23,30 @@ const upload = multer({
 })
 
 router.route("/")
-  .get(async function (req, res) {
-    const result = await getProducts(res.locals.conn);
-    await res.locals.conn.destroy()
+.get(async function (req, res) {
+  const result = await getProducts(res.locals.conn);
+  await res.locals.conn.destroy()
 
-    res.json(result)
-  })
-  .post(async function (req, res) {
-    const conn = res.locals.conn;
-    const result = await insertProduct(conn, req.body);
-    await res.locals.conn.destroy()
-    res.json(result)
-  })
-  .put(async function (req, res) {
-    const conn = res.locals.conn;
-    const result = await updateProduct(conn, req.body);
-    await res.locals.conn.destroy()
-    res.json(result)
-  })
-  .delete(async function (req, res) {
-    const conn = res.locals.conn;
-    const result = await deleteProduct(conn, req.body);
-    await res.locals.conn.destroy()
-    res.json(result)
-  })
+  res.json(result)
+})
+.post(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await insertProduct(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+.put(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await updateProduct(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
+.delete(async function (req, res) {
+  const conn = res.locals.conn;
+  const result = await deleteProduct(conn, req.body);
+  await res.locals.conn.destroy()
+  res.json(result)
+})
 
 router.get("/product-configures", async function (req, res) {
   const conn = res.locals.conn;
@@ -55,11 +55,11 @@ router.get("/product-configures", async function (req, res) {
   res.json(result)
 })
 
-router.post("/upload-img/:maDanhMucSanPham",
+router.post("/upload-img/:madanhmucsanpham",
   upload.single("hinhAnh"),
   async function (req, res) {
     const result = await updateProductImage(res.locals.conn, {
-      maDanhMucSanPham: req.params.maDanhMucSanPham,
+      madanhmucsanpham: req.params.madanhmucsanpham,
       hinhAnh: '/api/images/products/' + req.file.filename
     })
     console.log(result)

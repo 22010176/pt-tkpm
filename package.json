@@ -19,6 +19,9 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "concurrently": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.11.4",
     "phone-number-generator-js": "^1.2.12",
     "random-email": "^1.0.3",
     "uuid": "^11.0.2"

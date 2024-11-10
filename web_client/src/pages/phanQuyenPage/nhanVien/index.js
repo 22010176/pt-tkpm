@@ -19,7 +19,7 @@ import {formatDate} from "../../../utilities/others";
 const nhanVienContext = createContext()
 
 const nhanVienHeader = [
-  {key: "Mã NV", value: "manhanvien"},
+  {key: "Mã NV", value: "manhanvien", format: t => "NV-" + t},
   {key: "Tên nhân viên", value: "hoten"},
   {key: "Giới tính", value: "gioitinh"},
   {key: "Ngày sinh", value: "ngaysinh", format: formatDate},
@@ -47,11 +47,7 @@ function NhanVien() {
 
   function updateTableData() {
     setTableData([])
-    getEmployees().then(data => setTableData(data.employees.map(i => {
-        i.ngaysinh = i.ngaysinh?.split('T')[0]
-        return i;
-      }))
-    )
+    getEmployees().then(data => setTableData(data.Data))
   }
 
   async function onRowClick(row) {

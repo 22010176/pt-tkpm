@@ -7,10 +7,10 @@ async function getEmployees(conn) {
                 LEFT JOIN nhomquyen nq ON tk.vaitro = nq.manhomquyen
        WHERE nq.manhomquyen != 1
           OR nq.manhomquyen IS NULL`)
-    
-    return {employees: result, success: true}
+
+    return {Data: result, success: true}
   } catch (e) {
-    return {employees: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -22,9 +22,9 @@ async function getEmployeeWithoutAccount(conn) {
                 LEFT JOIN taikhoan t ON t.nhanvien = n.manhanvien
        WHERE t.mataikhoan IS NULL
        LIMIT 100;`)
-    return {employees: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
-    return {employees: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -36,9 +36,9 @@ async function getEmployeeWithAccount(conn) {
                 LEFT JOIN taikhoan t ON t.nhanvien = n.manhanvien
        WHERE t.mataikhoan IS NOT NULL
        LIMIT 100;`)
-    return {employees: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
-    return {employees: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -60,7 +60,7 @@ async function insertEmployee(conn, employees = []) {
       [[employees.map(({mail}) => mail)]]
     )
 
-    return {message: "Customers added", success: true, employees: res};
+    return {message: "Customers added", success: true, Data: res};
   } catch (e) {
     console.log(e)
     return {message: "Added fail", success: false};

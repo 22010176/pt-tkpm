@@ -1,13 +1,8 @@
-const pool = require('../../models')
 const jwt = require('jsonwebtoken')
-
-const {permissions} = require('./permissions')
-const {v4} = require("uuid");
 
 function parseToken(token) {
   if (!token || token.length < 1) return
-  const realToken = token?.replaceAll("Bearer ", "")
-  return jwt.verify(realToken, getSecretKey())
+  return jwt.verify(token?.replaceAll("Bearer ", ""), getSecretKey())
 }
 
 function getSecretKey() {
@@ -15,13 +10,8 @@ function getSecretKey() {
 }
 
 // Generate login token
-function createToken(userID, mail, password) {
-  return jwt.sign({userID, mail, password}, getSecretKey());
+function createToken(userID, mail) {
+  return jwt.sign({mataikhoan: userID, mail}, getSecretKey());
 }
 
-// return user if true
-async function verifyToken(conn, token) {
-  return 0;
-}
-
-module.exports = {createToken, verifyToken, parseToken, getSecretKey}
+module.exports = {createToken, parseToken, getSecretKey}

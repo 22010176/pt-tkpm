@@ -76,8 +76,11 @@ const chHeader = [
 const SanPhamContext = createContext({})
 
 async function getSanPhamFormData() {
-  return Object.fromEntries(await Promise.all(['xuatxu', 'thuonghieu', 'hedieuhanh', 'ram', 'rom', 'mausac']
-  .map(async i => [i, await getProductAttributes(i).then(i => i.attributes)])));
+  return Object.fromEntries(await Promise
+  .all(
+    ['xuatxu', 'thuonghieu', 'hedieuhanh', 'ram', 'rom', 'mausac']
+    .map(async i => [i, await getProductAttributes(i).then(i => i.Data)])
+  ));
 }
 
 function SanPham() {
@@ -94,7 +97,7 @@ function SanPham() {
 
   async function getSPData() {
     setTable([])
-    getProducts().then(data => setTable(data.products))
+    getProducts().then(data => setTable(data.Data))
   }
 
   function onImportExcel() {
@@ -198,9 +201,9 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
     let result = await insertProduct([data])
     console.log(result)
 
-    if (!result.success || result.products.length === 0) return;
+    if (!result.success || result.Data.length === 0) return;
 
-    setData(result.products[0])
+    setData(result.Data[0])
     if (typeof onSubmit === 'function') onSubmit()
     setModal('cauHinh')
   }
@@ -380,7 +383,7 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
 
   function updateInfo() {
     setTableData([])
-    getProductConfigures(sanPham?.madanhmucsanpham).then(data => setTableData(data.configures))
+    getProductConfigures(sanPham?.madanhmucsanpham).then(data => setTableData(data.Data))
   }
 
   function onHide() {
@@ -508,16 +511,13 @@ function ImeiModal({onHide, ...prop}) {
 
   useEffect(() => {
     if (!rowClick) return
-    getProductConfigures(rowClick.madanhmucsanpham).then(data => setData(src => ({...src, cauhinh: data.configures})))
-    getProductState().then(data => setData(src => ({...src, trangthai: data.itemstate})))
+    getProductConfigures(rowClick.madanhmucsanpham).then(data => setData(src => ({...src, cauhinh: data.Data})))
+    getProductState().then(data => setData(src => ({...src, trangthai: data.Data})))
   }, [rowClick])
 
   useEffect(() => {
-    getProductFromConfigureState({
-      ...form,
-      madanhmucsanpham: rowClick?.madanhmucsanpham
-    })
-    .then(({items}) => setTable(items))
+    getProductFromConfigureState({...form, madanhmucsanpham: rowClick?.madanhmucsanpham})
+    .then(({Data}) => setTable(Data))
   }, [form]);
 
   return (<Modal {...prop} scrollable size="xl" centered>

@@ -1,46 +1,21 @@
-import {
-  createContext,
-  useEffect,
-  useState
-}                        from 'react'
-import {
-  faArrowRotateRight,
-  faCirclePlus,
-  faMagnifyingGlass,
-  faPencil,
-  faTrashCan
-}                        from '@fortawesome/free-solid-svg-icons'
+import {createContext, useEffect, useState} from 'react'
+import {faArrowRotateRight, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {
-  Button,
-  Form,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  FormSelect,
-  Modal,
-  ModalBody,
-  ModalFooter
-}                        from 'react-bootstrap'
+import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
 
-import TableA                 from '../../../components/tables/tableA'
-import Page2                  from '../../../components/layouts/Page2'
-import SideNavbar             from '../../../components/layouts/sideBar'
-import ToolBtn                from '../../../components/buttons/toolBtn'
-import InputShadow            from '../../../components/Forms/InputShadow'
-import FlexForm               from '../../../components/Forms/FlexForm'
-import colors                 from '../../../utilities/colors'
-import HeaderModalA           from '../../../components/modals/headerA'
-import ContentA               from '../../../components/layouts/blockContent'
+import TableA from '../../../components/tables/tableA'
+import Page2 from '../../../components/layouts/Page2'
+import SideNavbar from '../../../components/layouts/sideBar'
+import ToolBtn from '../../../components/buttons/toolBtn'
+import InputShadow from '../../../components/Forms/InputShadow'
+import FlexForm from '../../../components/Forms/FlexForm'
+import colors from '../../../utilities/colors'
+import HeaderModalA from '../../../components/modals/headerA'
+import ContentA from '../../../components/layouts/blockContent'
 import {getEmployeeNoAccount} from "../../../api/Roles/employees";
-import {getRoles}             from "../../../api/Roles/roles";
-import {
-  deleteAccount,
-  getAccounts,
-  insertAccount,
-  updateAccount
-}                             from "../../../api/Roles/accounts";
-import ErrorModal             from "../../../components/modals/errorModal";
+import {getRoles} from "../../../api/Roles/roles";
+import {deleteAccount, getAccounts, insertAccount, updateAccount} from "../../../api/Roles/accounts";
+import ErrorModal from "../../../components/modals/errorModal";
 
 const tableHd = [
   {key: "Mã tài khoản", value: "mataikhoan"},
@@ -74,7 +49,7 @@ function QuanLyTaiKhoan() {
 
   function updateTableData() {
     setTable([])
-    getAccounts().then(data => setTable(data.accounts))
+    getAccounts().then(data => setTable(data.Data))
   }
 
   function onRowClick(row) {
@@ -229,8 +204,8 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
   }, []);
 
   function setUp() {
-    getEmployeeNoAccount().then(data => setNhanVien(data.employees))
-    getRoles().then(data => setNhomQuyen(data.roles))
+    getEmployeeNoAccount().then(data => setNhanVien(data.Data))
+    getRoles().then(data => setNhomQuyen(data.Data))
     setMaNhanVien(undefined)
     setHoTen("")
     setMail("")

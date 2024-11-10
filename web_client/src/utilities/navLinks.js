@@ -18,7 +18,7 @@ import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
 
 import DoiTraHang from "../pages/NhapXuatPage/doiTraHang"
 import DangSuat from "../pages/OtherPage/dangSuat"
-import QuanLyTaiKhoang from "../pages/phanQuyenPage/qlTaiKhoang"
+import QuanLyTaiKhoang from "../pages/phanQuyenPage/taiKhoan"
 import DangNhap from "../pages/OtherPage/dangNhap"
 
 export const navLinks = [

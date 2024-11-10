@@ -9,9 +9,10 @@ import Chart from 'react-apexcharts'
 import {useEffect, useRef, useState} from "react";
 import colors from "../../../utilities/colors";
 import {getOverall} from "../../../api/statistics";
+import {formatDate} from "../../../utilities/others";
 
 const tableHD = [
-  {key: "Ngày", value: "thoigian", format: t => new Date(t).toISOString().split("T")[0]},
+  {key: "Ngày", value: "thoigian", format: formatDate},
   {key: "Vốn (VNĐ)", value: "von"},
   {key: "Doanh thu (VNĐ)", value: "doanhthu"},
   {key: "Lợi nhuận (VNĐ)", value: "loinhuan"},
@@ -43,11 +44,12 @@ function ThongKeTongQuan() {
   const [data, setData] = useState({})
   const chart = useRef(null)
   useEffect(() => {
-    getOverall().then(({data}) => {
+    getOverall().then(({Data}) => {
       // data.doanhthu.forEach(item => item.thoigian = item.thoigian.split("T")[0])
-      setData(data)
+      setData(Data)
     })
   }, []);
+  console.log('dddddd', data)
   let options = {},
     series = []
   try {
@@ -55,7 +57,7 @@ function ThongKeTongQuan() {
       ...defaultOptions,
       xaxis: {
         title: {text: "Ngày"},
-        categories: data.doanhthu.map(i => i.thoigian.split("T")[0]),
+        categories: data.doanhthu.map(formatDate),
       },
     }
 

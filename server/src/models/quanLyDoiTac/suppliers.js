@@ -5,10 +5,10 @@ async function getSuppliers(conn) {
        FROM nhacungcap
        ORDER BY manhacungcap;`);
 
-    return {suppliers: result, success: true};
+    return {Data: result, success: true};
 
   } catch (e) {
-    return {suppliers: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -30,54 +30,56 @@ async function getSuppliersCarts(conn, {manhacungcap}) {
   }
 }
 
-async function insertSupplier(conn, suppliers = []) {
+async function insertSupplier(conn, Data = []) {
   try {
     await conn.query(`INSERT INTO nhacungcap (tennhacungcap, diachi, mail, sodienthoai)
                       VALUES ?`, [
-      suppliers.map(({tennhacungcap, diachi, mail, sodienthoai}) => [tennhacungcap, diachi, mail, sodienthoai])
+      Data.map(({tennhacungcap, diachi, mail, sodienthoai}) => [tennhacungcap, diachi, mail, sodienthoai])
     ]);
     const [result] = await conn.query(
       `SELECT *
        FROM nhacungcap
        WHERE mail IN ?
          AND sodienthoai IN ?;`,
-      [[suppliers.map(({mail}) => mail)], [suppliers.map(({sodienthoai}) => sodienthoai)]])
-    return {message: "Supplier added", success: true, suppliers: result};
+      [[Data.map(({mail}) => mail)], [Data.map(({sodienthoai}) => sodienthoai)]])
+    return {message: "Supplier added", success: true, Data: result};
 
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false, suppliers: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
 
 async function updateSupplier(conn, {tennhacungcap, diachi, mail, sodienthoai, manhacungcap}) {
   try {
-    const [result] = await conn.query(`UPDATE nhacungcap
-                                       SET tennhacungcap = ?,
-                                           diachi        = ?,
-                                           mail          = ?,
-                                           sodienthoai   = ?
-                                       WHERE manhacungcap = ?;`, [tennhacungcap, diachi, mail, sodienthoai, manhacungcap]);
+    const [result] = await conn.query(
+      `UPDATE nhacungcap
+       SET tennhacungcap = ?,
+           diachi        = ?,
+           mail          = ?,
+           sodienthoai   = ?
+       WHERE manhacungcap = ?;`,
+      [tennhacungcap, diachi, mail, sodienthoai, manhacungcap]);
 
-    return {message: "Supplier updated", success: true};
+    return {message: "Supplier updated", success: true, Data: []};
 
   } catch (e) {
-    return {message: "Updated fail", success: false};
+    return {message: "Updated fail", success: false, Data: []};
   }
 }
 
-async function deleteSupplier(conn, suppliers = []) {
+async function deleteSupplier(conn, Data = []) {
   try {
     await conn.query(
       `DELETE
        FROM nhacungcap
        WHERE manhacungcap IN ?;`,
-      [[suppliers.map(({manhacungcap}) => manhacungcap)]]);
+      [[Data.map(({manhacungcap}) => manhacungcap)]]);
 
-    return {message: "Supplier deleted", success: true};
+    return {message: "Supplier deleted", success: true, Data: []};
   } catch (e) {
-    return {message: "Deleted fail", success: false};
+    return {message: "Deleted fail", success: false, Data: []};
   }
 }
 

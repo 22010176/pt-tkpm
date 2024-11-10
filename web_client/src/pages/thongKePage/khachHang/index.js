@@ -49,7 +49,14 @@ function ThongKeKhachHang() {
 
   function updateInfo() {
     setTable([])
-    getCustomerStat(startDate, endDate).then(({data}) => setTable(data))
+    try {
+      getCustomerStat(startDate, endDate)
+      .then(data => {
+        console.log(data)
+        setTable(data.Data ?? [])
+      })
+    } catch (e) {
+    }
   }
 
   return (

@@ -18,13 +18,13 @@ router.post("/login", async function (req, res) {
 
 router.post("/register", async function (req, res) {
   const emp = await insertEmployee(res.locals.conn, [
-    {hoten: "", ngaysinh: new Date().toISOString().split("T")[0], sodienthoai: v4(), gioitinh: "Nam", mail: req.body.mail}
+    {hoten: "", ngaysinh: new Date().toISOString().split("T")[0], gioitinh: "Nam", mail: req.body.mail}
   ])
   console.log(emp)
   if (!emp.success) return res.json({message: "Fail create your account", success: false})
 
   const acc = await insertEmployeeAccount(res.locals.conn, [
-    {matkhau: req.body.password, vaitro: 1, nhanvien: emp.employees[0].manhanvien}
+    {matkhau: req.body.password, vaitro: 1, nhanvien: emp.Data[0].manhanvien}
   ])
   res.json(acc)
 })

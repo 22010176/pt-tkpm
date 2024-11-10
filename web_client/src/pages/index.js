@@ -1,43 +1,33 @@
-import {
-  useEffect,
-  useState
-} from 'react';
-import {
-  BrowserRouter,
-  Route,
-  Routes
-} from 'react-router-dom'
+import {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 
 // import { navLinks } from '../utilities/navLinks';
-import {
-  getToken,
-  UserContext
-} from '../api/authentication';
+import {getToken, UserContext} from '../api/authentication';
 
-import TrangChu  from "../pages/OtherPage/trangChu"
-import NhanVien  from "./phanQuyenPage/nhanVien"
+import TrangChu from "../pages/OtherPage/trangChu"
+import NhanVien from "./phanQuyenPage/nhanVien"
 import PhanQuyen from "./phanQuyenPage/phanQuyen"
-import TaiKhoan  from "../pages/OtherPage/TaiKhoanPage"
+import TaiKhoan from "../pages/OtherPage/TaiKhoanPage"
 
-import SanPham   from "../pages/SanPhamPage/sanPham"
+import SanPham from "../pages/SanPhamPage/sanPham"
 import ThuocTinh from "../pages/SanPhamPage/thuocTinh"
 
-import NhapKho     from "./NhapXuatPage/nhapKho"
+import NhapKho from "./NhapXuatPage/nhapKho"
 import ThemNhapKho from "./NhapXuatPage/themNhapKho"
-import XuatKho     from "./NhapXuatPage/xuatKho"
+import XuatKho from "./NhapXuatPage/xuatKho"
 import ThemXuatKho from "./NhapXuatPage/themXuatKho"
 
-import KhachHang  from "../pages/DoiTacPage/khachHang"
+import KhachHang from "../pages/DoiTacPage/khachHang"
 import NhaCungCap from "../pages/DoiTacPage/nhaCungCap"
 
-import DoiTraHang     from "./NhapXuatPage/doiTraHang"
-import DangSuat       from "../pages/OtherPage/dangSuat"
-import QuanLyTaiKhoan from "./phanQuyenPage/qlTaiKhoang"
-import DangNhap       from "../pages/OtherPage/dangNhap"
-import ErrorPage      from './UtilitesPage/error';
-import ThongKe        from "./thongKePage";
-import DangKi         from "./OtherPage/dangKi";
+import DoiTraHang from "./NhapXuatPage/doiTraHang"
+import DangSuat from "../pages/OtherPage/dangSuat"
+import QuanLyTaiKhoan from "./phanQuyenPage/taiKhoan"
+import DangNhap from "../pages/OtherPage/dangNhap"
+import ErrorPage from './UtilitesPage/error';
+import ThongKe from "./thongKePage";
+import DangKi from "./OtherPage/dangKi";
 
 
 const pagePerm = {
@@ -45,19 +35,17 @@ const pagePerm = {
     Xem: [
       {path: "/san-pham", element: SanPham}
     ],
-  }
-  ,
+  },
   QuanLyThuocTinh: {
     Xem: [{path: "/thuoc-tinh", element: ThuocTinh}]
-  }
-  ,
-  QuanLyNhapKho:    {
+  },
+  QuanLyNhapKho: {
     Xem: [
       {path: "/nhap-kho", element: NhapKho},
       {path: "/nhap-kho/them", element: ThemNhapKho},
     ]
   },
-  QuanLyXuatKho:    {
+  QuanLyXuatKho: {
     Xem: [
       {path: "/xuat-kho", element: XuatKho},
       {path: "/xuat-kho/them", element: ThemXuatKho}
@@ -68,7 +56,7 @@ const pagePerm = {
       {path: "/doi-tra-hang", element: DoiTraHang},
     ]
   },
-  QuanLyKhachHang:  {
+  QuanLyKhachHang: {
     Xem: [
       {path: "/khach-hang", element: KhachHang}
     ]
@@ -76,26 +64,26 @@ const pagePerm = {
   QuanLyNhaCungCap: {
     Xem: [{path: "/nha-cung-cap", element: NhaCungCap},]
   },
-  QuanLyNhanVien:   {
+  QuanLyNhanVien: {
     Xem: [
       {path: "/nhan-vien", element: NhanVien}
     ]
   },
-  QuanLyTaiKhoan:   {
+  QuanLyTaiKhoan: {
     XemCaNhan: [
       {path: "/tai-khoan-ca-nhan", element: TaiKhoan},
     ],
-    Xem:       [
+    Xem: [
       {path: "/tai-khoan-ca-nhan", element: TaiKhoan},
       {path: "/tai-khoan", element: QuanLyTaiKhoan},
     ]
   },
-  ThongKe:          {
+  ThongKe: {
     Xem: [
       {path: "/thong-ke", element: ThongKe}
     ]
   },
-  QuanLyQuyenHan:   {
+  QuanLyQuyenHan: {
     Xem: [
       {path: "/phan-quyen", element: PhanQuyen}
     ]
@@ -106,12 +94,12 @@ function App() {
   const [auth, setAuth] = useState({token: "", perm: [], user: {}})
 
   useEffect(function () {
-    // const token = getToken()
-    //
-    // if (token == null && !["/dang-nhap", "/dang-ki"].includes(document.location.pathname))
-    //   document.location.replace("/dang-nhap")
-    //
-    // if (token != null && document.location.pathname === "/dang-nhap") document.location.replace("/")
+    const token = getToken()
+
+    if (token == null && !["/dang-nhap", "/dang-ki"].includes(document.location.pathname))
+      document.location.replace("/dang-nhap")
+
+    if (token != null && document.location.pathname === "/dang-nhap") document.location.replace("/")
   }, [])
 
   return (

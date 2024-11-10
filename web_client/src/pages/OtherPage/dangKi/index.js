@@ -1,22 +1,13 @@
-import {useState}        from 'react';
+import {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-  faCaretRight,
-  faEnvelope,
-  faKey
-}                        from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  Form,
-  FormGroup,
-  FormLabel
-}                        from 'react-bootstrap';
+import {faCaretRight, faEnvelope, faKey} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormGroup, FormLabel} from 'react-bootstrap';
 
-import InputShadow       from '../../../components/Forms/InputShadow';
-import ErrorModal        from '../../../components/modals/errorModal';
+import InputShadow from '../../../components/Forms/InputShadow';
+import ErrorModal from '../../../components/modals/errorModal';
 import {registerAccount} from "../../../api/authentication";
 
-function DangNhap() {
+function DangKi() {
   const [formData, setFormData] = useState({mail: "", password: ""});
   const [modal, setModal] = useState('')
 
@@ -24,10 +15,10 @@ function DangNhap() {
     e.preventDefault()
     const result = await registerAccount(formData)
     console.log(result)
-    // if (!result.result) return
+    if (!result.success) return
     //
     // sessionStorage.setItem("Authorization", result.token)
-    // document.location.replace("/")
+    document.location.replace("/dang-nhap")
   }
 
   return (<>
@@ -84,4 +75,4 @@ function DangNhap() {
 }
 
 
-export default DangNhap;
+export default DangKi;

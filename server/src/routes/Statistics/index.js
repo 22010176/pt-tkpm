@@ -22,6 +22,7 @@ router.get('/customers', async function (req, res) {
   const conn = res.locals.conn;
   const result = await getKhachHangStat(conn, req.query);
   await res.locals.conn.destroy()
+  console.log(result)
   res.json(result)
 })
 

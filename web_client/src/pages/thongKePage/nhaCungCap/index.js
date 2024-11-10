@@ -26,7 +26,7 @@ const tableHD = [
 
 const lichSuMuaHangHeader = [
   {key: "Ngày nhập hàng", value: "thoigianxuat", format: formatDate},
-  {key: "Mã phiếu nhập hàng", value: "maphieuxuat"},
+  {key: "Mã phiếu nhập hàng", value: "maphieuxuat", format: t => "PN-" + t},
   {key: "Số lượng", value: "soluong"},
   {key: "Thành tiền", value: "thanhtien"},
   {key: "Ghi chú", value: "sdt"},
@@ -52,7 +52,7 @@ function ThongKeNhaCungCap() {
 
   function updateData() {
     setTable([])
-    getSupplierStat(startDate, endDate).then(data => setTable(data.data))
+    getSupplierStat(startDate, endDate).then(data => setTable(data.Data))
   }
 
   return (
@@ -66,6 +66,7 @@ function ThongKeNhaCungCap() {
                 <InputGroupText>
                   <FontAwesomeIcon icon={faMagnifyingGlass}/>
                 </InputGroupText>
+                
                 <FormControl value={search} onChange={e => setSearch(e.target.value)}/>
               </InputGroup>
             </GroupShadow>
@@ -80,6 +81,7 @@ function ThongKeNhaCungCap() {
             <FormLabel className="fw-bold">Đến ngày</FormLabel>
             <InputShadow type="date" value={endDate} onChange={e => setEndDate(e.target.value)}/>
           </FormGroup>
+
           <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
             <Button className="w-75" variant="success">Xuất excel</Button>
             <Button className="w-75" variant="primary" onClick={() => {
@@ -105,13 +107,14 @@ function ThongKeNhaCungCap() {
                   {tableHD.map((hd, k) => <td key={k}>{ncc[hd.value]}</td>)}
                   <td className="text-center">
                     {/*<Button className="rounded-5">*/}
-                    <FontAwesomeIcon icon={faInfoCircle}
-                                     size="lg"
-                                     color={colors.blue}
-                                     onClick={e => {
-                                       setNCC(ncc)
-                                       setModal("lichSu")
-                                     }}/>
+                    <FontAwesomeIcon
+                      icon={faInfoCircle}
+                      size="lg"
+                      color={colors.blue}
+                      onClick={e => {
+                        setNCC(ncc)
+                        setModal("lichSu")
+                      }}/>
                     {/*</Button>*/}
                   </td>
                 </tr>
@@ -140,7 +143,7 @@ function NhaCungCapChiTiet({show, onHide, nhacungcap}) {
     <Modal centered size="xl" show={show} backdrop="static" className='vh-100' scrollable>
       <HeaderModalA title="LỊCH SỬ NHẬP HÀNG"/>
 
-      <ModalBody className='d-flex flex-column h-100 gap-4 px-5 py-4'>
+      <ModalBody className='d-flex flex-column vh-100 gap-4 px-5 py-4'>
         <Form className='d-flex flex-column gap-4'>
           <FormGroup className='d-flex gap-5'>
             <FormGroup className='_w-40'>
@@ -170,9 +173,9 @@ function NhaCungCapChiTiet({show, onHide, nhacungcap}) {
           </FormGroup>
         </Form>
 
-        <ContentA>
+        <ContentA className="h-100">
           <TableA headers={lichSuMuaHangHeader} data={data}/>
-          <div style={{height: "10000px"}}></div>
+          {/*<div style={{height: "10000px"}}></div>*/}
         </ContentA>
       </ModalBody>
 

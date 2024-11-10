@@ -6,10 +6,10 @@ async function getItems(conn) {
       `SELECT *
        FROM sanpham
        ORDER BY masanpham DESC`)
-    return {items: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {items: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -64,10 +64,10 @@ async function getItemsFromConfiguresAndState(conn, {madanhmucsanpham, macauhinh
          ORDER BY masanpham DESC;`,
         [madanhmucsanpham, macauhinh, matinhtrang])
 
-    return {items: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {items: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -78,31 +78,33 @@ async function getTinhTrang(conn) {
        FROM tinhtrang
        WHERE matinhtrang != 5
        ORDER BY matinhtrang DESC`)
-    return {itemstate: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {itemstate: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
 
-async function insertItem(conn, items = []) {
+async function insertItem(conn, Data = []) {
   try {
 
     await conn.query(
       `INSERT INTO sanpham (maimei, cauhinh, phieunhap, phieuxuat, tinhtrang)
        VALUES ?`,
-      [items.map(({maimei, cauhinh, phieunhap, phieuxuat, tinhtrang}) => [maimei, cauhinh, phieunhap, phieuxuat, tinhtrang])])
+      [Data.map(({maimei, cauhinh, phieunhap, phieuxuat, tinhtrang}) =>
+        [maimei, cauhinh, phieunhap, phieuxuat, tinhtrang]
+      )])
 
     const [result] = await conn.query(
       `SELECT *
        FROM sanpham
        WHERE maimei IN ?`,
-      [[items.map(({maimei}) => maimei)]])
-    return {message: "Items added", success: true, items: result};
+      [[Data.map(({maimei}) => maimei)]])
+    return {message: "Items added", success: true, Data: result};
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false, items: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
@@ -124,13 +126,13 @@ async function updateItem(conn, {maimei, cauhinh, phieunhap, phieuxuat, tinhtran
   }
 }
 
-async function deleteItem(conn, items = []) {
+async function deleteItem(conn, Data = []) {
   try {
     await conn.query(
       `DELETE
        FROM sanpham
        WHERE masanpham IN ?`,
-      [[items.map(({masanpham}) => masanpham)]])
+      [[Data.map(({masanpham}) => masanpham)]])
     return {message: "Item deleted", success: true}
   } catch (e) {
     return {message: "Deleted fail", success: false}

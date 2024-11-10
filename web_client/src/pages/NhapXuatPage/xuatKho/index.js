@@ -3,9 +3,7 @@ import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup,
 import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass, faPencil} from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
-import HeaderModalA from '../../../components/modals/headerA'
 import IconBtn from '../../../components/buttons/iconBtn'
-import ContentA from '../../../components/layouts/blockContent'
 import TableA from '../../../components/tables/tableA'
 import Page3 from '../../../components/layouts/Page3'
 import SideNavbar from '../../../components/layouts/sideBar'
@@ -17,6 +15,8 @@ import {getCustomers} from "../../../api/Partners/customers";
 import {getEmployees} from "../../../api/Roles/employees";
 import {findExports} from "../../../api/Warehouse/exports";
 import {formatDate} from "../../../utilities/others";
+import HeaderModalA from "../../../components/modals/headerA";
+import ContentA from "../../../components/layouts/blockContent";
 
 const phieuNhapHd = [
   {key: "Mã phiếu xuất", value: "maphieuxuat"},
@@ -62,13 +62,13 @@ function XuatKho() {
   const [modal, setModal] = useState("")
 
   useEffect(() => {
-    getCustomers().then(({customers}) => setData(src => ({...src, customers})))
-    getEmployees().then(({employees}) => setData(src => ({...src, employees})))
+    getCustomers().then(({Data}) => setData(src => ({...src, Data})))
+    getEmployees().then(({Data}) => setData(src => ({...src, Data})))
 
   }, [])
 
   useEffect(() => {
-    findExports(form).then(({entries}) => setData(src => ({...src, table: entries})))
+    findExports(form).then(({Data}) => setData(src => ({...src, table: Data})))
   }, [form])
 
   return (
@@ -77,7 +77,7 @@ function XuatKho() {
         sidebar={<SideNavbar/>}
         tools={<>
           <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm"/>
-          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết"/>
+          <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={setModal.bind({}, "info")}/>
           <ToolBtn as="a" className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"/>
           <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy"/>
           <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel"/>
@@ -145,101 +145,117 @@ function XuatKho() {
         table={<TableA headers={phieuNhapHd} data={data.table?.slice(0, 100)}/>}
       />
 
-
-      <Modal centered scrollable size='xl' show={modal === "info" || true} className='vh-100'>
-        <HeaderModalA title="THÔNG TIN PHIẾU XUẤT"/>
-
-        <ModalBody className='d-flex flex-column gap-5 p-5'>
-          <Form className='d-flex gap-5 justify-content-between'>
-            <FormGroup>
-              <FormLabel className='fw-bold'>Mã phiếu</FormLabel>
-              <InputShadow disabled/>
-            </FormGroup>
-            <FormGroup>
-              <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
-              <InputShadow disabled/>
-            </FormGroup>
-            <FormGroup>
-              <FormLabel className='fw-bold'>Khách hàng</FormLabel>
-              <InputShadow disabled/>
-            </FormGroup>
-            <FormGroup>
-              <FormLabel className='fw-bold'>Thời gian</FormLabel>
-              <InputShadow disabled type="date"/>
-            </FormGroup>
-          </Form>
-
-          <ContentA>
-            <TableA headers={phieuXuatHeader}/>
-            <div style={{height: "1000px"}}></div>
-          </ContentA>
-        </ModalBody>
-
-        <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-          <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
-          <Button variant='danger' style={{width: "20%"}}>Hủy</Button>
-          <Button variant='success' style={{width: "20%"}}>Xem phiếu bảo
-            hành</Button>
-        </ModalFooter>
-      </Modal>
-
-      <Modal show={modal === "baoHanh"} size='xl' className='vh-100' centered scrollable>
-        <HeaderModalB className={"d-flex flex-column gap-2 text-center"}>
-          <h1 className={"fs-3"}> PHIẾU BẢO HÀNH </h1>
-          <h2 className="fs-5 fst-italic">Vui lòng trình phiếu bảo hành khi có nhu cầu sửa chữa, bảo hành!</h2>
-        </HeaderModalB>
-
-        <ModalBody className="_vh-70 d-flex flex-column gap-2">
-          <div className="mx-5">
-            <h3 className="text-center mb-4 fw-bold">Thông tin khách hàng</h3>
-            <div className="d-flex justify-content-between">
-              <div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Họ và tên: </p>
-                  <span>Tst</span>
-                </div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Email: </p>
-                  <span>Tst</span>
-                </div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Số điện thoại:</p>
-                  <span>Tst</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Mã khách hàng: </p>
-                  <span>Tst</span>
-                </div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Mã hóa đơn mua hàng: </p>
-                  <span>Tst</span>
-                </div>
-                <div className="d-flex gap-2 fs-5">
-                  <p className="fw-bold">Ngày mua hàng: </p>
-                  <span>Tst</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="d-flex h-100 w-100 flex-column overflow-hidden">
-            <h3 className="text-center mb-4 fw-bold">Danh sách sản phẩm đã mua</h3>
-            <div className="h-100 overflow-auto border">
-              <TableA headers={phieuBaoHanhHD}/>
-              <div style={{height: "1000px"}}></div>
-            </div>
-          </div>
-        </ModalBody>
-
-        <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
-          <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
-          <Button variant='danger' style={{width: "20%"}}>Hủy</Button>
-        </ModalFooter>
-      </Modal>
+      <PhieuXuatModal show={modal === "info"} onHide={setModal.bind({}, "")}/>
+      {/*<BaoHanhModal show={modal === "baoHanh"} onHide={setModal.bind({}, "")}/>*/}
     </>
+  )
+}
+
+function PhieuXuatModal({show, onHide}) {
+  return (
+    <Modal show={show} centered scrollable size='xl' className='vh-100'>
+      <HeaderModalA title="THÔNG TIN PHIẾU XUẤT"/>
+
+      <ModalBody className='d-flex flex-column gap-5 p-5'>
+        <Form className='d-flex gap-5 justify-content-between'>
+          <FormGroup>
+            <FormLabel className='fw-bold'>Mã phiếu</FormLabel>
+            <InputShadow disabled/>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
+            <InputShadow disabled/>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel className='fw-bold'>Khách hàng</FormLabel>
+            <InputShadow disabled/>
+          </FormGroup>
+          <FormGroup>
+            <FormLabel className='fw-bold'>Thời gian</FormLabel>
+            <InputShadow disabled type="date"/>
+          </FormGroup>
+        </Form>
+
+        <ContentA>
+          <TableA headers={phieuXuatHeader}/>
+          <div style={{height: "1000px"}}></div>
+        </ContentA>
+      </ModalBody>
+
+      <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+        <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
+        <Button variant='danger' style={{width: "20%"}}
+                onClick={e => {
+                  if (typeof onHide === 'function') onHide();
+                }}>Hủy</Button>
+        <Button variant='success' style={{width: "20%"}}>Xem phiếu bảo
+          hành</Button>
+      </ModalFooter>
+    </Modal>
+  )
+}
+
+function BaoHanhModal({onHide, show}) {
+  return (
+    <Modal show={show} size='xl' className='vh-100' centered scrollable>
+      <HeaderModalB className={"d-flex flex-column gap-2 text-center"}>
+        <h1 className={"fs-3"}> PHIẾU BẢO HÀNH </h1>
+        <h2 className="fs-5 fst-italic">Vui lòng trình phiếu bảo hành khi có nhu cầu sửa chữa, bảo hành!</h2>
+      </HeaderModalB>
+
+      <ModalBody className="_vh-70 d-flex flex-column gap-2">
+        <div className="mx-5">
+          <h3 className="text-center mb-4 fw-bold">Thông tin khách hàng</h3>
+          <div className="d-flex justify-content-between">
+            <div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Họ và tên: </p>
+                <span>Tst</span>
+              </div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Email: </p>
+                <span>Tst</span>
+              </div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Số điện thoại:</p>
+                <span>Tst</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Mã khách hàng: </p>
+                <span>Tst</span>
+              </div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Mã hóa đơn mua hàng: </p>
+                <span>Tst</span>
+              </div>
+              <div className="d-flex gap-2 fs-5">
+                <p className="fw-bold">Ngày mua hàng: </p>
+                <span>Tst</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="d-flex h-100 w-100 flex-column overflow-hidden">
+          <h3 className="text-center mb-4 fw-bold">Danh sách sản phẩm đã mua</h3>
+          <div className="h-100 overflow-auto border">
+            <TableA headers={phieuBaoHanhHD}/>
+            <div style={{height: "1000px"}}></div>
+          </div>
+        </div>
+      </ModalBody>
+
+      <ModalFooter className='justify-content-center p-3 d-flex gap-5'>
+        <Button variant='primary' style={{width: "20%"}}>Xuất PDF</Button>
+        <Button variant='danger' style={{width: "20%"}}
+                onChange={e => {
+                  if (typeof onHide === 'function') onHide();
+                }}>Hủy</Button>
+      </ModalFooter>
+    </Modal>
   )
 }
 

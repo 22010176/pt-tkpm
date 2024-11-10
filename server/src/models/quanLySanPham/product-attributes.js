@@ -24,11 +24,11 @@ async function getAttributes(conn, attribute) {
        FROM ${attribute}
        ORDER BY ma${attribute} DESC`,
       [prefix])
-    return {attributes: result, success: true}
+    return {Data: result, success: true}
 
   } catch (e) {
     console.log(e)
-    return {attributes: [], success: false}
+    return {Data: [], success: false}
   }
 
 }
@@ -60,8 +60,7 @@ async function insertAttribute(conn, attribute, data) {
           `SELECT *
            FROM hedieuhanh
            WHERE tenhedieuhanh IN ?`,
-          [[data.map(({tenhedieuhanh}) => tenhedieuhanh)]]
-        )
+          [[data.map(({tenhedieuhanh}) => tenhedieuhanh)]])
         break;
 
       case "thuonghieu":
@@ -114,14 +113,14 @@ async function insertAttribute(conn, attribute, data) {
         break;
 
       default:
-        return {error: "Add failed", success: false, attributes: []};
+        return {error: "Add failed", success: false, Data: []};
     }
   } catch (e) {
     console.log(e)
-    return {error: "Add failed", success: false, attributes: []};
+    return {error: "Add failed", success: false, Data: []};
   }
 
-  return {message: "Attribute added", success: true, attributes: result};
+  return {message: "Attribute added", success: true, Data: result};
 }
 
 async function updateAttribute(conn, attribute, data) {

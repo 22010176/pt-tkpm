@@ -3,7 +3,7 @@ async function getOverall(conn) {
     const [[sanpham], [khachhang], [nhanvien], [doanhthu]] = await Promise.all([
       conn.query(
         `SELECT COUNT(*) sanpham
-         FROM (SELECT madanhmucsanpham, COUNT(s.masanpham) soluongsanpham
+         FROM (SELECT madanhmucsanpham
                FROM danhmucsanpham d
                         LEFT JOIN cauhinh c ON c.danhmucsanpham = d.madanhmucsanpham
                         LEFT JOIN ptpm.sanpham s ON c.macauhinh = s.cauhinh
@@ -11,13 +11,13 @@ async function getOverall(conn) {
                HAVING COUNT(s.masanpham) > 0) a;`),
       conn.query(
         `SELECT COUNT(*) khachhang
-         FROM (SELECT k.makhachhang, COUNT(p.maphieuxuat) donmua
+         FROM (SELECT k.makhachhang
                FROM khachhang k
                         INNER JOIN ptpm.phieuxuatkho p ON k.makhachhang = p.khachhang
                GROUP BY makhachhang) a`),
       conn.query(
         `SELECT COUNT(*) nhanvien
-         FROM (SELECT manhanvien, hoten
+         FROM (SELECT manhanvien
                FROM nhanvien
                ORDER BY manhanvien) a`),
       conn.query(
@@ -33,15 +33,15 @@ async function getOverall(conn) {
                         INNER JOIN cauhinh c ON c.macauhinh = s.cauhinh
                GROUP BY thoigiannhap) v
          WHERE d.thoigian = v.thoigian
-         GROUP BY v.thoigian
+         GROUP BY v.thoigian, d.thoigian
          ORDER BY d.thoigian DESC, v.thoigian DESC
          LIMIT 7;`),
     ])
 
-    return {data: {khachhang, doanhthu, nhanvien, sanpham}, success: true}
+    return {Data: {khachhang, doanhthu, nhanvien, sanpham}, success: true}
   } catch (err) {
     console.log(err);
-    return {data: {}, success: false}
+    return {Data: {}, success: false}
   }
 }
 
@@ -57,10 +57,10 @@ async function getNhaCungCapStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc =
        WHERE p.thoigiannhap BETWEEN ? AND ?
        GROUP BY n.manhacungcap;`, [ngaybatdau, ngayketthuc])
 
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -74,10 +74,10 @@ async function getKhachHangStat(conn, {ngaybatdau = '1990-01-01', ngayketthuc = 
                 INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
        WHERE p.thoigianxuat BETWEEN ? AND ?
        GROUP BY k.makhachhang`, [ngaybatdau, ngayketthuc])
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -97,10 +97,10 @@ async function getYearProfit(conn) {
              GROUP BY nam) b
        WHERE a.nam = b.nam
        ORDER BY a.nam;`)
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -122,10 +122,10 @@ async function getMonthProfit(conn, {nam = 2024}) {
          AND YEAR(a.thoigian) = ?
        GROUP BY thang
        ORDER BY thang;`, [nam])
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -147,10 +147,10 @@ async function getDayProfit(conn, {nam = 2024, thang = 1}) {
          AND MONTH(a.thoigian) = ?
          AND YEAR(a.thoigian) = ?
        ORDER BY thoigian;`, [thang, nam])
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -172,10 +172,10 @@ async function getLastAndFirstDay(conn) {
        ORDER BY thoigian DESC
        LIMIT 1) maxdate;`)
 
-    return {data: result, success: true}
+    return {Data: result, success: true}
   } catch (e) {
     console.log(e)
-    return {data: [], success: false}
+    return {Data: [], success: false}
   }
 }
 

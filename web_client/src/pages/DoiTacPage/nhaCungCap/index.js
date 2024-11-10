@@ -25,14 +25,6 @@ const nhaCungCapHeader = [
   {key: "Số điện thoại", value: "sodienthoai"},
 ]
 
-const lichSuMuaHangHeader = [
-  {key: "Ngày nhập hàng", value: "ma"},
-  {key: "Mã phiếu nhập hàng", value: "tenNCC"},
-  {key: "Số lượng", value: "diachi"},
-  {key: "Thành tiền", value: "mail"},
-  {key: "Ghi chú", value: "sdt"},
-]
-
 function NhaCungCapForm() {
   const [data, setData] = useContext(NCCContext)
 
@@ -75,7 +67,7 @@ function NhaCungCap() {
 
   function updateTableData() {
     setTableData([])
-    getSuppliers().then(data => setTableData(data.suppliers))
+    getSuppliers().then(data => setTableData(data.Data))
   }
 
   function openModal(modal) {
@@ -141,8 +133,8 @@ function NhaCungCap() {
         </>}
         rightSec={<FlexForm>
           <FormControl className='w-auto' type='text' placeholder='Tìm kiếm'/>
-          <IconBtn className='w-auto btn-primary' icon={faMagnifyingGlass} title={"Tìm kiếm"}/>
-          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"}/>
+          <IconBtn className='w-auto btn-primary btn-lg' icon={faMagnifyingGlass}/>
+          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} onClick={updateTableData}/>
         </FlexForm>}
         dataTable={<TableA headers={nhaCungCapHeader} data={tableData} onClick={onRowClick}/>}
       />

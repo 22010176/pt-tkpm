@@ -11,9 +11,9 @@ const DayContext = createContext({});
 function ThongKeDoanhThu() {
   const [day, setDay] = useState({})
   useEffect(() => {
-    getMaxAndDay().then(({data}) => {
-      // console.log(data[0])
-      setDay({max: new Date(data[0].maxdate), min: new Date(data[0].mindate)})
+    getMaxAndDay().then(({Data}) => {
+      // console.log(Data[0])
+      setDay({max: new Date(Data[0].maxdate), min: new Date(Data[0].mindate)})
     })
   }, [])
 
@@ -85,11 +85,11 @@ function NgayTab() {
   ])
 
   useEffect(function () {
-    getDayProfit(new Date(year, month - 1)).then(({data}) => setData(data))
+    getDayProfit(new Date(year, month - 1)).then(({Data}) => setData(Data))
   }, [])
 
   useEffect(() => {
-    getDayProfit(new Date(year, month - 1)).then(({data}) => setData(data))
+    getDayProfit(new Date(year, month - 1)).then(({Data}) => setData(Data))
   }, [month, year]);
 
   useEffect(() => {
@@ -163,11 +163,11 @@ function ThangTab() {
   const [series, setSeries] = useState([{data: [], name: ''}])
 
   useEffect(() => {
-    getMonthProfits(year).then(({data}) => {
-      setData(data)
+    getMonthProfits(year).then(({Data}) => {
+      setData(Data)
       setOptions({
         ...defaultOptions,
-        xaxis: {categories: data.map(i => i.thang),}
+        xaxis: {categories: Data.map(i => i.thang),}
       })
     })
   }, [year])
@@ -227,7 +227,7 @@ function NamTab() {
     series = []
 
   useEffect(() => {
-    getYearProfits().then(({data}) => setData(data))
+    getYearProfits().then(({Data}) => setData(Data))
   }, [])
 
   options = {

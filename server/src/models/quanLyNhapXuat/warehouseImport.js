@@ -4,10 +4,10 @@ async function getImports(conn) {
       `SELECT *
        FROM phieunhapkho
        ORDER BY maphieunhap DESC`)
-    return {success: true, entries: result}
+    return {success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {success: false, entries: []};
+    return {success: false, Data: []};
   }
 }
 
@@ -28,10 +28,10 @@ async function findImportProduct(conn, {maphieunhap}) {
                 INNER JOIN rom ON c.rom = rom.marom
                 INNER JOIN mausac ON c.mausac = mausac.mamausac
        WHERE phieunhap = ?;`, [maphieunhap])
-    return {success: true, entries: result}
+    return {success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {success: false, entries: []};
+    return {success: false, Data: []};
   }
 }
 
@@ -95,10 +95,10 @@ async function findImports(conn, {manhacungcap, manhanvien, tungay, denngay, tus
          ORDER BY thoigian DESC`,
         [manhacungcap, manhanvien, tungay, denngay, tusotien, densotien])
 
-    return {success: true, entries: result}
+    return {success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {success: false, entries: []};
+    return {success: false, Data: []};
   }
 }
 
@@ -124,7 +124,7 @@ async function getFreeImport(conn) {
        FROM phieunhapkho
        WHERE maphieunhap = ?`,
       [result.insertId])
-    return {Data: temp, success: true}
+    return {success: true, Data: temp}
   } catch (err) {
     console.error(err);
     return {success: false, Data: []};
@@ -152,10 +152,10 @@ async function insertImport(conn, imports = []) {
       ])
     // console.log(result, imports)
 
-    return {message: "Import added", success: true, entries: result}
+    return {message: "Import added", success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {message: "Added fail", success: false, entries: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
@@ -168,10 +168,10 @@ async function updateImport(conn, {maphieunhap, nhacungcap, nhanviennhap}) {
        WHERE maphieunhap = ?`,
       [nhacungcap, nhanviennhap, maphieunhap])
 
-    return {message: "Import updated", success: true}
+    return {message: "Import updated", success: true, Data: []}
   } catch (e) {
     console.log(e)
-    return {message: "Updated fail", success: false, suppliers: []};
+    return {message: "Updated fail", success: false, Data: []};
   }
 }
 

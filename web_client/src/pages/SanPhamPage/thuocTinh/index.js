@@ -1,47 +1,24 @@
-import {
-  useEffect,
-  useState
-}                        from 'react'
+import {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {
-  faAndroid,
-  faEmpire,
-}                        from '@fortawesome/free-brands-svg-icons'
-import {
-  faBrush,
-  faComputer,
-  faMemory,
-  faMountainCity,
-  faX
-}                        from '@fortawesome/free-solid-svg-icons'
-import {
-  Button,
-  Form,
-  FormControl,
-  InputGroup,
-  Modal
-}                        from 'react-bootstrap'
+import {faAndroid, faEmpire,} from '@fortawesome/free-brands-svg-icons'
+import {faBrush, faComputer, faMemory, faMountainCity, faX} from '@fortawesome/free-solid-svg-icons'
+import {Button, Form, FormControl, InputGroup, Modal} from 'react-bootstrap'
 
-import Page1        from '../../../components/layouts/Page1'
+import Page1 from '../../../components/layouts/Page1'
 import ThuocTinhBtn from '../../../components/buttons/thuocTinhBtn'
-import TableA       from '../../../components/tables/tableA'
+import TableA from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
-import SideNavbar   from '../../../components/layouts/sideBar'
-import GroupShadow  from '../../../components/Forms/GroupShadow'
-import {
-  deleteProductAttributes,
-  getProductAttributes,
-  insertProductAttributes,
-  updateProductAttributes
-}                   from "../../../api/Products/product-attributes";
+import SideNavbar from '../../../components/layouts/sideBar'
+import GroupShadow from '../../../components/Forms/GroupShadow'
+import {deleteProductAttributes, getProductAttributes, insertProductAttributes, updateProductAttributes} from "../../../api/Products/product-attributes";
 
 const keys = {
   thuongHieu: "thuongHieu",
-  xuatXu:     "xuatXu",
+  xuatXu: "xuatXu",
   heDieuHanh: "heDieuHanh",
-  ram:        "ram",
-  rom:        "rom",
-  mauSac:     "mauSac"
+  ram: "ram",
+  rom: "rom",
+  mauSac: "mauSac"
 }
 
 const headers = {
@@ -50,7 +27,7 @@ const headers = {
     {key: "Tên thương hiệu", value: "tenthuonghieu"},
     {key: "mathuonghieu", value: "mathuonghieu", hide: true},
   ],
-  [keys.xuatXu]:     [
+  [keys.xuatXu]: [
     {key: "Mã xuất xứ", value: "ma"},
     {key: "Tên xuất xứ", value: "tenxuatxu"},
     {key: "maxuatxu", value: "maxuatxu", hide: true},
@@ -60,17 +37,17 @@ const headers = {
     {key: "Tên hệ điều hành", value: "tenhedieuhanh"},
     {key: "mahedieuhanh", value: "mahedieuhanh", hide: true},
   ],
-  [keys.ram]:        [
+  [keys.ram]: [
     {key: "Mã ram", value: "ma"},
     {key: "Dung lượng ram (GB)", value: "dungluongram"},
     {key: "maram", value: "maram", hide: true},
   ],
-  [keys.rom]:        [
+  [keys.rom]: [
     {key: "Mã rom", value: "ma"},
     {key: "Dung lượng rom (GB)", value: "dungluongrom"},
     {key: "marom", value: "marom", hide: true},
   ],
-  [keys.mauSac]:     [
+  [keys.mauSac]: [
     {key: "Mã màu sắc", value: "ma"},
     {key: "Tên màu sắc", value: "tenmausac"},
     {key: "mamausac", value: "mamausac"},
@@ -79,11 +56,11 @@ const headers = {
 
 const defaultValues = {
   [keys.thuongHieu]: {mathuonghieu: undefined, tenthuonghieu: "",},
-  [keys.xuatXu]:     {maxuatxu: undefined, tenxuatxu: ""},
+  [keys.xuatXu]: {maxuatxu: undefined, tenxuatxu: ""},
   [keys.heDieuHanh]: {mahedieuhanh: undefined, tenhedieuhanh: ""},
-  [keys.ram]:        {maram: undefined, dungluongram: ""},
-  [keys.rom]:        {marom: undefined, dungluongrom: ""},
-  [keys.mauSac]:     {mamausac: undefined, tenmausac: ""}
+  [keys.ram]: {maram: undefined, dungluongram: ""},
+  [keys.rom]: {marom: undefined, dungluongrom: ""},
+  [keys.mauSac]: {mamausac: undefined, tenmausac: ""}
 }
 
 function ThuocTinh() {
@@ -91,11 +68,11 @@ function ThuocTinh() {
 
   const formData = {
     [keys.thuongHieu]: useState({...defaultValues[keys.thuongHieu]}),
-    [keys.xuatXu]:     useState({...defaultValues[keys.xuatXu]}),
+    [keys.xuatXu]: useState({...defaultValues[keys.xuatXu]}),
     [keys.heDieuHanh]: useState({...defaultValues[keys.heDieuHanh]}),
-    [keys.ram]:        useState({...defaultValues[keys.ram]}),
-    [keys.rom]:        useState({...defaultValues[keys.rom]}),
-    [keys.mauSac]:     useState({...defaultValues[keys.mauSac]})
+    [keys.ram]: useState({...defaultValues[keys.ram]}),
+    [keys.rom]: useState({...defaultValues[keys.rom]}),
+    [keys.mauSac]: useState({...defaultValues[keys.mauSac]})
   }
 
   const [tableData, setTableData] = useState([])
@@ -104,7 +81,7 @@ function ThuocTinh() {
     setTableData([])
 
     getProductAttributes(modal)
-    .then(response => setTableData(response.attributes))
+    .then(response => setTableData(response.Data))
   }
 
   useEffect(() => {
@@ -130,9 +107,9 @@ function ThuocTinh() {
   }
 
   async function onInsert(e) {
-    console.log('ddd', formData[modal][0])
+    // console.log('ddd', formData[modal][0])
     const result = await insertProductAttributes(modal, [formData[modal][0]], "")
-    console.log({result, a: formData[modal][0]})
+    // console.log({result, a: formData[modal][0]})
     if (!result) return
 
     formData[modal]?.[1]({...defaultValues[modal]})

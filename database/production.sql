@@ -118,9 +118,9 @@ VALUES ('QuanLySanPham', 'Quản lý sản phẩm'),
        ('QuanLyDichVu', 'Quản lý dịch vụ'),
        ('QuanLyKhachHang', 'Quản lý khách hàng'),
        ('QuanLyNhaCungCap', 'Quản lý Nhà cung cấp'),
+       ('ThongKe', 'Thống kê'),
        ('QuanLyNhanVien', 'Quản lý nhân viên'),
        ('QuanLyTaiKhoan', 'Quản lý tài khoản'),
-       ('ThongKe', 'Thống kê'),
        ('QuanLyNhomQuyen', 'Quản lý nhóm quyền'),
        ('QuanLyQuyenHan', 'Quản lý quyền hạn');
 

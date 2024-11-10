@@ -59,19 +59,19 @@ function NhapKho() {
   const [data, setData] = useState(defaultData)
 
   useEffect(() => {
-    findImports(form).then(data => setData(d => ({...d, table: data.entries})))
+    findImports(form).then(data => setData(d => ({...d, table: data.Data})))
 
-    getSuppliers().then(({suppliers}) => {
-      setData(data => ({...data, nhacungcap: suppliers}))
+    getSuppliers().then(({Data}) => {
+      setData(data => ({...data, nhacungcap: Data}))
     })
     //
-    getEmployees().then(({employees}) => {
-      setData(data => ({...data, nhanvien: employees}))
+    getEmployees().then(({Data}) => {
+      setData(data => ({...data, nhanvien: Data}))
     })
   }, []);
 
   useEffect(() => {
-    findImports(form).then(data => setData(d => ({...d, table: data.entries})))
+    findImports(form).then(data => setData(d => ({...d, table: data.Data})))
   }, [form])
 
   useEffect(() => {
@@ -174,7 +174,7 @@ function InfoModal({onHide, ...props}) {
   const [products, setProducts] = useState([])
 
   useEffect(function () {
-    findImportProducts({maphieunhap: data?.rowClick?.maphieunhap}).then(({entries}) => setProducts(entries))
+    findImportProducts({maphieunhap: data?.rowClick?.maphieunhap}).then(({Data}) => setProducts(Data))
   }, [data?.rowClick?.maphieunhap])
 
   function onModalHide() {

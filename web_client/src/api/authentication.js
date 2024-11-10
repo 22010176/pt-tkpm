@@ -10,8 +10,9 @@ export async function checkResponse(response) {
       document.location.replace('/')
       break
     case 'Invalid Token':
+    case'User is not authenticated.':
       sessionStorage.removeItem('Authorization')
-      // document.location.replace('/dang-suat')
+      document.location.replace('/dang-suat')
       break
   }
 }
@@ -21,22 +22,14 @@ export function getToken() {
   return "Bearer " + sessionStorage.getItem('Authorization')
 }
 
-export async function getPermissions(token) {
-
-}
-
-export async function getUserData(token) {
-
-}
-
 export async function loginAccount({mail, password}) {
   return await fetch(`/api/auth/login`, {
-    method:  "POST",
+    method: "POST",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       "authorization": getToken()
     },
-    body:    JSON.stringify({mail, password})
+    body: JSON.stringify({mail, password})
   })
   .then(response => response.json())
   .then(checkResponse)
@@ -44,12 +37,12 @@ export async function loginAccount({mail, password}) {
 
 export async function registerAccount({mail, password}) {
   return await fetch(`/api/auth/register`, {
-    method:  "POST",
+    method: "POST",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       "authorization": getToken()
     },
-    body:    JSON.stringify({mail, password})
+    body: JSON.stringify({mail, password})
   })
   .then(response => response.json())
   .then(checkResponse)

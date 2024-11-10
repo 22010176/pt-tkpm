@@ -4,10 +4,10 @@ async function getCustomers(conn) {
       `SELECT *
        FROM khachhang
        ORDER BY makhachhang;`)
-    return {customers: result, success: true};
+    return {Data: result, success: true};
   } catch (e) {
     console.log(e)
-    return {customers: [], success: false}
+    return {Data: [], success: false}
   }
 }
 
@@ -28,28 +28,26 @@ async function getCustomerCarts(conn, {makhachhang}) {
   }
 }
 
-async function insertCustomer(conn, customers = []) {
+async function insertCustomer(conn, Data = []) {
   try {
     await conn.query(
       `INSERT INTO khachhang (tenkhachhang, ngaysinh, diachi, sodienthoai, mail)
        VALUES ?`,
-      [
-        customers.map(({tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) => [
-          tenkhachhang, ngaysinh, diachi, sodienthoai, mail
-        ])
-      ]
+      [Data.map(({tenkhachhang, ngaysinh, diachi, sodienthoai, mail}) =>
+        [tenkhachhang, ngaysinh, diachi, sodienthoai, mail]
+      )]
     )
     const [result] = await conn.query(
       `SELECT *
        FROM khachhang
        WHERE sodienthoai IN ?`,
-      [[customers.map(({sodienthoai}) => sodienthoai)]]
+      [[Data.map(({sodienthoai}) => sodienthoai)]]
     )
     // console.log(result)
-    return {message: "Customers added", success: true, customers: result};
+    return {message: "Customers added", success: true, Data: result};
   } catch (e) {
     console.log(e)
-    return {message: "Added fail", success: false, customers: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
@@ -64,23 +62,23 @@ async function updateCustomer(conn, {tenkhachhang, ngaysinh, diachi, sodienthoai
            mail         = ?
        WHERE makhachhang = ?;`,
       [tenkhachhang, ngaysinh, diachi, sodienthoai, mail, makhachhang])
-    return {message: "Customer updated", success: true}
+    return {message: "Customer updated", success: true, Data: []}
   } catch (e) {
     console.log((e))
-    return {message: "Updated fail", success: false};
+    return {message: "Updated fail", success: false, Data: []};
   }
 }
 
-async function deleteCustomer(conn, customers = []) {
+async function deleteCustomer(conn, Data = []) {
   try {
     await conn.query(
       `DELETE
        FROM khachhang
        WHERE makhachhang IN ?;`,
-      [[customers.map(({makhachhang}) => makhachhang)]])
-    return {message: "Customer deleted", success: true}
+      [[Data.map(({makhachhang}) => makhachhang)]])
+    return {message: "Customer deleted", success: true, Data: []}
   } catch (e) {
-    return {message: "Deleted fail", success: false}
+    return {message: "Deleted fail", success: false, Data: []}
   }
 }
 

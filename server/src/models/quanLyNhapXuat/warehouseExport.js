@@ -4,10 +4,10 @@ async function getExports(conn) {
       `SELECT *
        FROM phieuxuatkho
        ORDER BY maphieuxuat DESC`)
-    return {success: true, entries: result}
+    return {success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {success: false, entries: []};
+    return {success: false, Data: []};
   }
 }
 
@@ -72,10 +72,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
          ORDER BY p.thoigianxuat DESC`,
         [makhachhang, manhanvien, tungay, denngay, tusotien, densotien])
 
-    return {entries: result, success: true}
+    return {success: true, Data: result}
   } catch (e) {
     console.log(e)
-    return {success: false, entries: []};
+    return {success: false, Data: []};
   }
 }
 
@@ -99,10 +99,10 @@ async function insertExport(conn, imports = []) {
         imports.length
       ])
 
-    return {message: "Export added", success: true, entries: result}
+    return {message: "Export added", success: true, Data: result}
   } catch (err) {
     console.error(err);
-    return {message: "Added fail", success: false, entries: []};
+    return {message: "Added fail", success: false, Data: []};
   }
 }
 
@@ -128,7 +128,7 @@ async function getFreeExport(conn) {
        FROM phieuxuatkho
        WHERE maphieuxuat = ?`,
       [result.insertId])
-    return {Data: temp, success: true}
+    return {success: true, Data: temp}
   } catch (err) {
     console.error(err);
     return {success: false, Data: []};
@@ -147,7 +147,7 @@ async function updateExport(conn, {maphieunhap, khachhang, nhanvienxuat}) {
     return {message: "Export updated", success: true}
   } catch (e) {
     console.log(e)
-    return {message: "Updated fail", success: false, suppliers: []};
+    return {message: "Updated fail", success: false};
   }
 }
 
