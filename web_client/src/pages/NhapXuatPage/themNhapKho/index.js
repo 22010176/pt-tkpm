@@ -89,6 +89,7 @@ function ThemNhapKho() {
       setForm(src => ({...src, nhacungcap: Data[0]?.manhacungcap}))
     })
     getEmployees().then(({Data}) => {
+      if (Data.length === 0) return;
       const nv = Data[Math.floor(Math.random() * Data.length)]
       setForm(src => ({...src, manhanvien: nv.manhanvien, hoten: nv.hoten}));
     })

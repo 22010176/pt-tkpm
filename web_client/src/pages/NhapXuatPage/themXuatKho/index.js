@@ -96,6 +96,7 @@ function ThemXuatKho() {
     setData({...defaultData})
     setForm({...defaultForm})
     getEmployees().then(({Data}) => {
+      if (Data.length === 0) return;
       const nv = Data[Math.floor(Math.random() * Data.length)]
       setForm(src => ({...src, manhanvien: nv.manhanvien, hoten: nv.hoten}));
     })
