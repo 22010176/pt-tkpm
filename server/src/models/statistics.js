@@ -179,6 +179,51 @@ async function getLastAndFirstDay(conn) {
   }
 }
 
+async function getTonKho(conn, {ngaybatdau, ngayketthuc}) {
+  try {
+    const [result] = await conn.query(
+      `SELECT d.madanhmucsanpham,
+              d.tendanhmucsanpham,
+              d2.tondauki                                                                        tondau,
+              COUNT(DISTINCT s.masanpham)                                                        tongnhap,
+              SUM(IF(s.phieuxuat IS NOT NULL, 1, 0))                                             tongxuat,
+              d2.tondauki + COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) toncuoi
+       FROM danhmucsanpham d
+                LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+                LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+                LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+                LEFT JOIN
+            (SELECT d.madanhmucsanpham,
+                    COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) tondauki
+             FROM danhmucsanpham d
+                      LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                      LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+                      LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+                      LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+             WHERE n.thoigiannhap < ?
+               AND x.thoigianxuat < ?
+             GROUP BY d.madanhmucsanpham) d2 ON d2.madanhmucsanpham = d.madanhmucsanpham
+       #        WHERE n.thoigiannhap BETWEEN ? AND ?
+#          AND x.thoigianxuat BETWEEN ? AND ?
+       GROUP BY d.madanhmucsanpham;`,
+      [ngaybatdau, ngaybatdau, ngaybatdau, ngayketthuc, ngaybatdau, ngayketthuc])
+    console.log(result)
+    return {Data: result, success: true}
+  } catch (e) {
+    return {Data: [], success: false}
+  }
+  // return {Data: [], success: true}
+}
+
+
 module.exports = {
-  getOverall, getNhaCungCapStat, getKhachHangStat, getYearProfit, getMonthProfit, getDayProfit, getLastAndFirstDay
+  getOverall,
+  getNhaCungCapStat,
+  getKhachHangStat,
+  getYearProfit,
+  getMonthProfit,
+  getDayProfit,
+  getLastAndFirstDay,
+  getTonKho
 }

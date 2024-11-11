@@ -423,7 +423,7 @@ SET phieuxuat = ?
 WHERE masanpham IN
       (SELECT *
        FROM (SELECT masanpham
-             FROM  sanpham
+             FROM sanpham
              WHERE phieuxuat IS NULL
                AND cauhinh = ?
              LIMIT ?) a);
@@ -434,9 +434,38 @@ FROM sanpham;
 
 
 
+SELECT d.madanhmucsanpham,
+       d2.tondauki                                                                        tondau,
+       COUNT(DISTINCT s.masanpham)                                                        tongnhap,
+       SUM(IF(s.phieuxuat IS NOT NULL, 1, 0))                                             tongxuat,
+       d2.tondauki + COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) toncuoi
+FROM danhmucsanpham d
+         LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+         LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+         LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+         LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+         LEFT JOIN (SELECT d.madanhmucsanpham,
+                           COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) tondauki
+                    FROM danhmucsanpham d
+                             LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+                             LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+                             LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+                             LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+                    WHERE n.thoigiannhap < ?
+                      AND x.thoigianxuat < ?
+                    GROUP BY d.madanhmucsanpham) d2 ON d2.madanhmucsanpham = d.madanhmucsanpham
+WHERE n.thoigiannhap BETWEEN ? AND ?
+  AND x.thoigianxuat BETWEEN ? AND ?
+GROUP BY d.madanhmucsanpham;
 
 
 
+SELECT d.madanhmucsanpham, count(distinct s.masanpham)
+FROM danhmucsanpham d
+         LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+         LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+WHERE s.phieuxuat IS NOT NULL
+GROUP BY d.madanhmucsanpham;
 
 
 

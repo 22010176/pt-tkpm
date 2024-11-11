@@ -1,29 +1,44 @@
 import './style.module.css'
-import Layout2             from "../../../components/layouts/layout2";
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  InputGroup
-}                          from "react-bootstrap";
-import GroupShadow         from "../../../components/Forms/GroupShadow";
-import InputGroupText      from "react-bootstrap/InputGroupText";
-import {FontAwesomeIcon}   from "@fortawesome/react-fontawesome";
+import Layout2 from "../../../components/layouts/layout2";
+import {Button, FormControl, FormGroup, FormLabel, InputGroup} from "react-bootstrap";
+import GroupShadow from "../../../components/Forms/GroupShadow";
+import InputGroupText from "react-bootstrap/InputGroupText";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import InputShadow         from "../../../components/Forms/InputShadow";
-import TableA              from "../../../components/tables/tableA";
+import InputShadow from "../../../components/Forms/InputShadow";
+import TableA from "../../../components/tables/tableA";
+import {useEffect, useState} from "react";
+import {getMaxAndDay, getTonKho} from "../../../api/statistics";
 
 const tableHD = [
-  {key: "Mã sản phẩm", value: ""},
-  {key: "Tên sản phẩm", value: ""},
-  {key: "Tồn đầu kỳ", value: ""},
-  {key: "Nhập trong kỳ", value: ""},
-  {key: "Xuất trong kỳ", value: ""},
-  {key: "Tồn cuối kì", value: ""},
+  {key: "Mã sản phẩm", value: "madanhmucsanpham"},
+  {key: "Tên sản phẩm", value: "tendanhmucsanpham"},
+  {key: "Tồn đầu kỳ", value: "tondau"},
+  {key: "Nhập trong kỳ", value: "tongnhap"},
+  {key: "Xuất trong kỳ", value: "tongxuat"},
+  {key: "Tồn cuối kì", value: "toncuoi"},
 ]
 
 function ThongKeTonKho() {
+  const [form, setForm] = useState({ngaybatdau: "", ngayketthuc: ""})
+  const [table, setTable] = useState([])
+
+  useEffect(() => {
+    getMaxAndDay().then(({Data}) => {
+      setForm({
+        ngaybatdau: Data[0].mindate.split("T")[0],
+        ngayketthuc: Data[0].maxdate.split("T")[0]
+      })
+    })
+  }, []);
+  useEffect(() => {
+    console.log(form)
+    getTonKho(form.ngaybatdau, form.ngayketthuc).then(data => {
+      setTable(data.Data)
+      // console.log('dddddd', data)
+    })
+
+  }, [form])
   return (
     <Layout2
       leftPart={<>
@@ -41,12 +56,12 @@ function ThongKeTonKho() {
 
         <FormGroup>
           <FormLabel className="fw-bold">Từ ngày</FormLabel>
-          <InputShadow type="date"/>
+          <InputShadow type="date" value={form.ngaybatdau}/>
         </FormGroup>
 
         <FormGroup>
           <FormLabel className="fw-bold">Đến ngày</FormLabel>
-          <InputShadow type="date"/>
+          <InputShadow type="date" value={form.ngayketthuc}/>
         </FormGroup>
         <div className="d-flex flex-column gap-2 justify-content-center align-items-center">
           <Button className="w-75" variant="success">Xuất excel</Button>
@@ -55,10 +70,10 @@ function ThongKeTonKho() {
       </>}
       rightPart={<>
         <div className="h-100 overflow-auto border">
-          <TableA headers={tableHD}/>
-          <div style={{height: "1000px"}}></div>
+          <TableA headers={tableHD} data={table}/>
+          {/*<div style={{height: "1000px"}}></div>*/}
         </div>
-        <h2 className="text-end text-danger pb-3">Tổng số lượng tồn kho: 25</h2>
+        <h2 className="text-end text-danger pb-3">Tổng số lượng tồn kho: {table.length}</h2>
       </>}
     />
   )
