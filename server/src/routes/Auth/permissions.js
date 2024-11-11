@@ -6,9 +6,9 @@ async function getAllPerm() {
   const conn = await pool.getConnection()
   const [res] = await conn.query(
     `SELECT q.maquyenhan, cn.tenchucnang chucnang, hd.tenhanhdong hanhdong
-     FROM ptpm_taikhoan.quyenhan q
-              INNER JOIN ptpm_taikhoan.chucnang cn ON q.chucnang = cn.machucnang
-              INNER JOIN ptpm_taikhoan.hanhdong hd ON q.hanhdong = hd.mahanhdong
+     FROM quyenhan q
+              INNER JOIN chucnang cn ON q.chucnang = cn.machucnang
+              INNER JOIN hanhdong hd ON q.hanhdong = hd.mahanhdong
      ORDER BY cn.machucnang, hd.mahanhdong;`)
   await conn.destroy()
   return Object.freeze(res)
