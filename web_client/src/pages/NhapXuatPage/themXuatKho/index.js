@@ -328,11 +328,6 @@ function ThemXuatKho() {
               <FormControl disabled value={form.tenkhachhang}/>
             </GroupShadow>
           </FormGroup>
-
-          {/*<FormGroup>*/}
-          {/*  <FormLabel className="fw-bold">Nhân viên chỉnh sửa cuối </FormLabel>*/}
-          {/*  <InputShadow as={FormControl} disabled/>*/}
-          {/*</FormGroup>*/}
         </>}
         rightBottomForm={<>
           <h3 className='mb-3 text-danger fw-bold'>Tổng
@@ -357,7 +352,7 @@ function ThemXuatKho() {
               }))
               const result = await updateItemOrder(sent)
               document.location.replace('/xuat-kho')
-            }}>Nhập hàng</Button>
+            }}>Xuất hàng</Button>
         </>}
       />
       <KhachHangModal

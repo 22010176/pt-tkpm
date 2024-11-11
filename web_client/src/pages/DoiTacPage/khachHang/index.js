@@ -1,5 +1,11 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {faArrowRotateRight, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import {Button, Form, FormControl, Modal} from 'react-bootstrap'
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
@@ -74,10 +80,11 @@ function KhachHang() {
   const [formData, setFormData] = useState({...defaultKhachHang})
   const [rowClick, setRowClick] = useState()
 
+  const [search, setSearch] = useState('')
+
   useEffect(function () {
     updateTableData()
   }, [])
-
 
   function openModal(modal) {
     setModal(modal)
@@ -121,10 +128,6 @@ function KhachHang() {
     setModal("")
   }
 
-  async function onDeleteKhachHang() {
-
-  }
-
   return (
     <>
       <Page2
@@ -158,9 +161,14 @@ function KhachHang() {
                    }}/>
         </>}
         rightSec={<FlexForm>
-          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm'/>
-          <IconBtn className='w-auto btn-primary btn-lg btn-success' icon={faMagnifyingGlass}/>
-          <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"} onClick={updateTableData}/>
+          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' value={search}
+                       onChange={e => setSearch(e.target.value)}/>
+          <IconBtn className='w-auto btn-primary btn-lg btn-success' icon={faMagnifyingGlass}
+                   onClick={e => {
+                     setTableData(src => [...src].filter(i => i.tenkhachhang.includes(search)))
+                   }}/>
+          <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"}
+                   onClick={updateTableData}/>
         </FlexForm>}
         dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={data => data && setRowClick(data)}/>}
       />

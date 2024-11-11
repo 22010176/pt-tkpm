@@ -77,6 +77,7 @@ function NhapKho() {
   const [form, setForm] = useState(defaultForm)
   const [data, setData] = useState(defaultData)
 
+
   useEffect(() => {
     findImports(form).then(data => setData(d => ({...d, table: data.Data})))
 
@@ -121,7 +122,14 @@ function NhapKho() {
         <InputShadow type='text' className="w-auto" placeholder='Tìm kiếm'
                      value={form.timkiem}
                      onChange={e => setForm(src => ({...src, timkiem: e.target.value}))}/>
-        <IconBtn icon={faMagnifyingGlass} className="btn-success btn-lg"/>
+        <IconBtn icon={faMagnifyingGlass} className="btn-success btn-lg" onClick={e => {
+          const table = [...data.table];
+          const timkiem = form.timkiem || '';
+          setData(da => ({
+            ...da,
+            table: table.filter(i => i.tennhacungcap?.includes(timkiem) || i.hoten?.includes(timkiem))
+          }))
+        }}/>
         <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-primary"/>
       </>}
       leftForm={<>

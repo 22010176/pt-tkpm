@@ -1,6 +1,25 @@
 import {useEffect, useState} from 'react'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
-import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass, faPencil} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
+import {
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faCircleXmark,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil
+} from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
 import IconBtn from '../../../components/buttons/iconBtn'
@@ -76,15 +95,25 @@ function XuatKho() {
       <Page3
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm"/>
+          <ToolBtn as="a" className="_border-focus-green" href="/xuat-kho/them" color={colors.green} icon={faCirclePlus}
+                   title="Thêm"/>
           <ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={setModal.bind({}, "info")}/>
           <ToolBtn as="a" className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"/>
           <ToolBtn color={colors.red} icon={faCircleXmark} title="Hủy"/>
           <ToolBtn color={colors.green} icon={faFileExport} title="Xuất Excel"/>
         </>}
         rightForm={<>
-          <InputShadow as={FormControl} className='w-auto' type='text' placeholder='Tìm kiếm'/>
-          <IconBtn icon={faMagnifyingGlass} className="btn-primary w-auto btn-lg"/>
+          <InputShadow as={FormControl} className='w-auto' type='text' placeholder='Tìm kiếm'
+                       value={form.timkiem}
+                       onChange={e => setForm(src => ({...src, timkiem: e.target.value}))}/>
+          <IconBtn icon={faMagnifyingGlass} className="btn-primary w-auto btn-lg" onClick={e => {
+            const table = [...data.table];
+            const timkiem = form.timkiem || '';
+            setData(da => ({
+              ...da,
+              table: table.filter(i => i.tennhacungcap?.includes(timkiem) || i.hoten?.includes(timkiem))
+            }))
+          }}/>
           <IconBtn icon={faArrowRotateRight} title={"Làm mới"} className="btn-success w-auto'"/>
         </>}
         leftForm={<>

@@ -1,5 +1,11 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {faArrowRotateRight, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import {Button, Form, FormControl, Modal} from 'react-bootstrap'
 
 
@@ -60,6 +66,7 @@ function NhaCungCap() {
 
   const [formData, setFormData] = useState({...defaultNCC})
   const [rowClick, setRowClick] = useState()
+  const [search, setSearch] = useState('')
 
   useEffect(function () {
     updateTableData()
@@ -132,9 +139,13 @@ function NhaCungCap() {
           {/*<ToolBtn color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={openModal.bind({}, "lichSu")}/>*/}
         </>}
         rightSec={<FlexForm>
-          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm'/>
-          <IconBtn className='w-auto btn-primary btn-lg' icon={faMagnifyingGlass}/>
-          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"} onClick={updateTableData}/>
+          <FormControl className='w-auto' type='text' placeholder='Tìm kiếm' value={search}
+                       onChange={e => setSearch(e.target.value)}/>
+          <IconBtn className='w-auto btn-primary btn-lg' icon={faMagnifyingGlass} onClick={e => {
+            setTableData(src => [...src].filter(i => i.tennhacungcap.includes(search)))
+          }}/>
+          <IconBtn className='w-auto btn-success' icon={faArrowRotateRight} title={"Làm mới"}
+                   onClick={updateTableData}/>
         </FlexForm>}
         dataTable={<TableA headers={nhaCungCapHeader} data={tableData} onClick={onRowClick}/>}
       />
