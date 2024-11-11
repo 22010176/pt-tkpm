@@ -584,8 +584,14 @@ function ImeiModal({onHide, ...prop}) {
   const [rowClick] = useContext(SanPhamContext)
 
   const [data, setData] = useState({})
-  const [form, setForm] = useState({macauhinh: "*", matinhtrang: "*"})
+  const [form, setForm] = useState({macauhinh: "", matinhtrang: ""})
   const [table, setTable] = useState([])
+
+  useEffect(() => {
+    setForm({macauhinh: "*", matinhtrang: "*"})
+    getProductFromConfigureState({...form, madanhmucsanpham: rowClick?.madanhmucsanpham})
+      .then(({Data}) => setTable(Data))
+  }, []);
 
   useEffect(() => {
     if (!rowClick) return
