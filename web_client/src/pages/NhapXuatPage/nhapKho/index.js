@@ -1,6 +1,25 @@
 import {createContext, useContext, useEffect, useState} from 'react'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
-import {faArrowRotateRight, faCircleInfo, faCirclePlus, faCircleXmark, faFileExport, faMagnifyingGlass, faPencil} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
+import {
+  faArrowRotateRight,
+  faCircleInfo,
+  faCirclePlus,
+  faCircleXmark,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil
+} from '@fortawesome/free-solid-svg-icons'
 
 import ToolBtn from '../../../components/buttons/toolBtn'
 import IconBtn from '../../../components/buttons/iconBtn'
@@ -22,7 +41,7 @@ const phieuNhapHd = [
   {key: "Nhà cung cấp", value: "tennhacungcap"},
   {key: "Nhân viên nhập", value: "hoten"},
   {key: "Thời gian", value: "thoigian", format: formatDate},
-  {key: "Tổng tiền", value: "tongtien"},
+  {key: "Tổng tiền", value: "tongtien", format: t => t + "đ"},
 ]
 
 const chiTietPhieuHd = [
@@ -90,8 +109,10 @@ function NhapKho() {
     <Page3
       sidebar={<SideNavbar/>}
       tools={<>
-        <ToolBtn as="a" className="_border-green-focus" href="/nhap-kho/them" color={colors.green} icon={faCirclePlus} title="Thêm"/>
-        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faCircleInfo} title="Chi tiết" onClick={onOpenInfo}/>
+        <ToolBtn as="a" className="_border-green-focus" href="/nhap-kho/them" color={colors.green} icon={faCirclePlus}
+                 title="Thêm"/>
+        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faCircleInfo} title="Chi tiết"
+                 onClick={onOpenInfo}/>
         <ToolBtn as="a" className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"/>
         <ToolBtn className="_border-red-focus" color={colors.red} icon={faCircleXmark} title="Hủy"/>
         <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel"/>

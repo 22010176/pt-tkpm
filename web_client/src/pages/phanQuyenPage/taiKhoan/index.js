@@ -1,7 +1,23 @@
 import {createContext, useEffect, useState} from 'react'
-import {faArrowRotateRight, faCirclePlus, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
 
 import TableA from '../../../components/tables/tableA'
 import Page2 from '../../../components/layouts/Page2'
@@ -80,9 +96,12 @@ function QuanLyTaiKhoan() {
       <Page2
         sidebar={<SideNavbar/>}
         tools={<>
-          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
-          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenEditModal}/>
-          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete}/>
+          <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm"
+                   onClick={setModal.bind({}, "add")}/>
+          <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"
+                   onClick={onOpenEditModal}/>
+          <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa"
+                   onClick={onDelete}/>
         </>}
         rightSec={<FlexForm>
           <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm"/>
@@ -103,7 +122,8 @@ function QuanLyTaiKhoan() {
           <AddTaiKhoanModal show={modal === "add"} onSubmit={updateTableData} onHide={setModal.bind({}, "")}/>
 
           {/*Sua tai khoan*/}
-          <EditTaiKhoanModal account={row} show={modal === "edit"} onSubmit={updateInfo} onHide={setModal.bind({}, "")}/>
+          <EditTaiKhoanModal account={row} show={modal === "edit"} onSubmit={updateInfo}
+                             onHide={setModal.bind({}, "")}/>
         </FormContext.Provider>
       </InfoContext.Provider>
 
@@ -167,7 +187,8 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
               <InputShadow as={FormSelect} value={vaitro} onChange={e => setVaiTro(e.target.value)}>
-                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j} value={manhomquyen}>{tenhienthi}</option>)}
+                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j}
+                                                                          value={manhomquyen}>{tenhienthi}</option>)}
               </InputShadow>
             </FormGroup>
           </FormGroup>
@@ -205,7 +226,9 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
 
   function setUp() {
     getEmployeeNoAccount().then(data => setNhanVien(data.Data))
-    getRoles().then(data => setNhomQuyen(data.Data))
+    getRoles().then(data => {
+      setNhomQuyen(data.roles)
+    })
     setMaNhanVien(undefined)
     setHoTen("")
     setMail("")
@@ -248,8 +271,9 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
           </FormGroup>
 
           <ContentA className="h-100">
-            <TableA subtable index={false} headers={chonNhanVienHD} data={nhanVien.filter(i => (i.hoten + i.mail).includes(filterForm))} onClick={onRowClick}/>
-            <div style={{height: "10000px"}}></div>
+            <TableA subtable index={false} headers={chonNhanVienHD}
+                    data={nhanVien.filter(i => (i.hoten + i.mail).includes(filterForm))} onClick={onRowClick}/>
+            {/*<div style={{height: "10000px"}}></div>*/}
           </ContentA>
         </div>
 
@@ -282,7 +306,8 @@ function AddTaiKhoanModal({onSubmit, onHide, ...props}) {
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
               <InputShadow as={FormSelect} value={vaitro} onChange={onChange.bind({}, setVaiTro)}>
-                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j} value={manhomquyen}>{tenhienthi}</option>)}
+                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j}
+                                                                          value={manhomquyen}>{tenhienthi}</option>)}
               </InputShadow>
             </FormGroup>
           </FormGroup>

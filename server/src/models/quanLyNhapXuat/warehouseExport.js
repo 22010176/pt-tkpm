@@ -135,14 +135,14 @@ async function getFreeExport(conn) {
   }
 }
 
-async function updateExport(conn, {maphieunhap, khachhang, nhanvienxuat}) {
+async function updateExport(conn, {maphieuxuat, khachhang, nhanvienxuat}) {
   try {
     await conn.query(
       `UPDATE phieuxuatkho
        SET khachhang    = ?,
            nhanvienxuat = ?
        WHERE maphieuxuat = ?`,
-      [khachhang, nhanvienxuat, maphieunhap])
+      [khachhang, nhanvienxuat, maphieuxuat])
 
     return {message: "Export updated", success: true}
   } catch (e) {

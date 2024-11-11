@@ -9,8 +9,8 @@ export async function findImports({manhacungcap, manhanvien, tungay, denngay, tu
       'authorization': getToken(),
     }
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function getFreeImport() {
@@ -21,8 +21,8 @@ export async function getFreeImport() {
       'Content-Type': 'application/json',
     },
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function findImportProducts({maphieunhap}, token) {
@@ -33,8 +33,8 @@ export async function findImportProducts({maphieunhap}, token) {
       'authorization': getToken(),
     }
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function insertImport(imports) {
@@ -46,6 +46,19 @@ export async function insertImport(imports) {
     },
     body: JSON.stringify(imports)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
+}
+
+export async function updateImport(data) {
+  return fetch(`/api/warehouse/import/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      'authorization': getToken(),
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(checkResponse)
 }

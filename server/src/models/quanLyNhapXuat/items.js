@@ -138,7 +138,27 @@ async function deleteItem(conn, Data = []) {
   }
 }
 
+async function updateItemOrder(conn, Data = []) {
+  try {
+    await Promise.all(Data.map(({cauhinh, soluong, phieuxuat}) => conn.query(
+      `UPDATE sanpham
+       SET phieuxuat = ?
+       WHERE masanpham IN
+             (SELECT *
+              FROM (SELECT masanpham
+                    FROM sanpham
+                    WHERE phieuxuat IS NULL
+                      AND cauhinh = ?
+                    LIMIT ?) a);`,
+      [phieuxuat, cauhinh, soluong]).then(i => i[0])))
+    // console.log(result)
+    return {success: true}
+  } catch (e) {
+    console.log(e)
+    return {success: false}
+  }
+}
 
 module.exports = {
-  deleteItem, updateItem, getItems, insertItem, getTinhTrang, getItemsFromConfiguresAndState
+  deleteItem, updateItem, getItems, insertItem, getTinhTrang, getItemsFromConfiguresAndState, updateItemOrder
 }

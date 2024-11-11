@@ -9,8 +9,8 @@ export async function findExports({makhachhang, manhanvien, tungay, denngay, tus
       'authorization': sessionStorage.getItem('Authorization')
     }
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function getFreeExport() {
@@ -21,6 +21,19 @@ export async function getFreeExport() {
       'Content-Type': 'application/json',
     },
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
+}
+
+export async function updateExport(data) {
+  return fetch(`/api/warehouse/export`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': getToken(),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  })
+    .then(response => response.json())
+    .then(checkResponse)
 }

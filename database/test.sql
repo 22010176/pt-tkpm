@@ -407,32 +407,30 @@ WHERE manhacungcap = ?
 GROUP BY p.maphieunhap;
 
 
-SELECT * FROM danhmucsanpham d
-INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
+SELECT *
+FROM danhmucsanpham d
+         INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
 
 
 
+SELECT *
+FROM phieuxuatkho;
 
 
 
+UPDATE sanpham
+SET phieuxuat = ?
+WHERE masanpham IN
+      (SELECT *
+       FROM (SELECT masanpham
+             FROM  sanpham
+             WHERE phieuxuat IS NULL
+               AND cauhinh = ?
+             LIMIT ?) a);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT *
+FROM sanpham;
 
 
 

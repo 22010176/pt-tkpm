@@ -22,8 +22,10 @@ import {useEffect, useState} from "react";
 import {getProductHasConfigure} from "../../../api/Products/products";
 import {getProductConfigures} from "../../../api/Products/configures";
 import {getCustomers} from "../../../api/Partners/customers";
-import {getFreeExport} from "../../../api/Warehouse/exports";
+import {getFreeExport, updateExport} from "../../../api/Warehouse/exports";
 import {formatDate} from "../../../utilities/others";
+import {updateItemOrder} from "../../../api/Warehouse";
+import {getEmployees} from "../../../api/Roles/employees";
 
 const spHeader = [
   {key: "Mã SP", value: "madanhmucsanpham"},
@@ -90,7 +92,6 @@ function ThemXuatKho() {
     reset()
   }, [])
 
-
   function reset() {
     setData({...defaultData})
     setForm({...defaultForm})
@@ -120,15 +121,17 @@ function ThemXuatKho() {
             ?.slice(0, 100)
             .filter(i => {
                 const a = sanPhamThem.filter(j => +j.madanhmucsanpham === +i.madanhmucsanpham).length
+                // console.log({i, a}, a < i.socauhinh && i.tonkho > 0)
+                // console.log(a)
                 // if (a) console.log(a, i)
-                return (a === 0 || a < i.socauhinh) && i.tonkho > 0;
+                return a < i.socauhinh && i.tonkho > 0;
               }
             )}
           onClick={function (row) {
             if (!row) return
 
-            getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
-              const ch = configures.filter(i => !(sanPhamThem.some(k => k.cauhinh === i.macauhinh)))
+            getProductConfigures(row.madanhmucsanpham).then(({Data}) => {
+              const ch = Data.filter(i => !(sanPhamThem.some(k => k.cauhinh === i.macauhinh)) && i.tonkho > 0)
               setData(src => ({
                 ...src,
                 cauhinh: ch,
@@ -164,22 +167,22 @@ function ThemXuatKho() {
 
             <FormGroup>
               <FormLabel className='fw-bold'>Cấu hình</FormLabel>
-              <FormSelect disabled={data.cauhinh.length === 0 || !btnState}
-                          value={form.macauhinh}
-                          onChange={e => {
-                            const value = +e.target.value
-                            const ch = data.cauhinh.find(i => i.macauhinh === value)
-                            setForm(src => ({
-                              ...src,
-                              macauhinh: +ch.macauhinh,
-                              giaxuat: ch.giaxuat,
-                              tonkho: ch.tonkho
-                            }))
-                          }}>
+              <FormSelect
+                disabled={data.cauhinh?.length === 0 || !btnState}
+                value={form.macauhinh}
+                onChange={e => {
+                  const value = +e.target.value
+                  const ch = data.cauhinh.find(i => i.macauhinh === value)
+                  setForm(src => ({
+                    ...src,
+                    macauhinh: +ch.macauhinh,
+                    giaxuat: ch.giaxuat,
+                    tonkho: ch.tonkho
+                  }))
+                }}>
                 {data.cauhinh?.map((i, j) =>
                   <option key={j} value={i.macauhinh}>
-                    {i.macauhinh}
-                    {/*{i.dungluongrom}GB - {i.dungluongram}GB- {i.tenmausac}*/}
+                    {i.dungluongrom}GB - {i.dungluongram}GB- {i.tenmausac}
                   </option>)}
               </FormSelect>
             </FormGroup>
@@ -219,87 +222,90 @@ function ThemXuatKho() {
         }
         toolBtn={<>
           <Button className='w-25 my-3 fw-semibold' variant='success'>Nhập excel</Button>
-          <Button className='w-25 my-3 fw-semibold'
-                  variant='primary'
-                  disabled={!btnState}
-                  onClick={e => {
-                    // console.log(form, data)
-                    const cauhinh = data.cauhinh.find(i => +i.macauhinh === +form.macauhinh);
-                    console.log(cauhinh)
-                    if (!cauhinh || !form.soluong) return;
+          <Button
+            className='w-25 my-3 fw-semibold'
+            variant='primary'
+            disabled={!btnState}
+            onClick={e => {
+              // console.log(form, data)
+              const cauhinh = data.cauhinh.find(i => +i.macauhinh === +form.macauhinh);
+              console.log(cauhinh)
+              if (!cauhinh || !form.soluong) return;
 
-                    // console.log(cauhinh);
-                    const sanpham = {
-                      madanhmucsanpham: cauhinh.danhmucsanpham,
-                      tendanhmucsanpham: data.tendanhmucsanpham,
-                      dungluongram: cauhinh.dungluongram,
-                      dungluongrom: cauhinh.dungluongrom,
-                      mausac: cauhinh.tenmausac,
-                      giaxuat: cauhinh.giaxuat,
-                      soluong: form.soluong,
-                      cauhinh: cauhinh.macauhinh,
-                      tonkho: +cauhinh.tonkho
-                    }
+              // console.log(cauhinh);
+              const sanpham = {
+                madanhmucsanpham: cauhinh.danhmucsanpham,
+                tendanhmucsanpham: data.tendanhmucsanpham,
+                dungluongram: cauhinh.dungluongram,
+                dungluongrom: cauhinh.dungluongrom,
+                mausac: cauhinh.tenmausac,
+                giaxuat: cauhinh.giaxuat,
+                soluong: form.soluong,
+                cauhinh: cauhinh.macauhinh,
+                tonkho: +cauhinh.tonkho
+              }
 
-                    setSanPhamThem(src => [...src, sanpham])
-                    reset()
-                  }}>Thêm sản phẩm</Button>
-          <Button className='w-25 my-3 fw-semibold'
-                  variant='warning'
-                  disabled={btnState}
-                  onClick={e => {
-                    const cauhinh = data.cauhinh.find(i => +i.macauhinh === +form.macauhinh);
-                    if (!cauhinh || !form.soluong) return;
+              setSanPhamThem(src => [...src, sanpham])
+              reset()
+            }}>Thêm sản phẩm</Button>
+          <Button
+            className='w-25 my-3 fw-semibold'
+            variant='warning'
+            disabled={btnState}
+            onClick={e => {
+              const cauhinh = data.cauhinh?.find(i => +i.macauhinh === +form.macauhinh);
+              if (!cauhinh || !form.soluong) return;
 
-                    const sanpham = {
-                      madanhmucsanpham: cauhinh.danhmucsanpham,
-                      tendanhmucsanpham: data.tendanhmucsanpham,
-                      dungluongram: cauhinh.dungluongram,
-                      dungluongrom: cauhinh.dungluongrom,
-                      mausac: cauhinh.tenmausac,
-                      giaxuat: cauhinh.giaxuat,
-                      soluong: form.soluong,
-                      cauhinh: cauhinh.macauhinh,
-                      tonkho: +cauhinh.tonkho
-                    }
+              const sanpham = {
+                madanhmucsanpham: cauhinh.danhmucsanpham,
+                tendanhmucsanpham: data.tendanhmucsanpham,
+                dungluongram: cauhinh.dungluongram,
+                dungluongrom: cauhinh.dungluongrom,
+                mausac: cauhinh.tenmausac,
+                giaxuat: cauhinh.giaxuat,
+                soluong: form.soluong,
+                cauhinh: cauhinh.macauhinh,
+                tonkho: +cauhinh.tonkho
+              }
 
-                    setSanPhamThem([...sanPhamThem.filter(i => i.cauhinh !== sanpham.cauhinh), sanpham])
-                    setBtnState(true)
-                    reset()
-                  }}>Sửa sản phẩm</Button>
-          <Button className='w-25 my-3 fw-semibold'
-                  variant='danger'
-                  disabled={btnState}
-                  onClick={e => {
-                    setSanPhamThem([...sanPhamThem.filter(i => i.cauhinh !== +form.macauhinh)])
-                    setBtnState(true)
-                    reset()
-                  }}>Xóa sản phẩm</Button>
+              setSanPhamThem([...sanPhamThem.filter(i => i.cauhinh !== sanpham.cauhinh), sanpham])
+              setBtnState(true)
+              reset()
+            }}>Sửa sản phẩm</Button>
+          <Button
+            className='w-25 my-3 fw-semibold'
+            variant='danger'
+            disabled={btnState}
+            onClick={e => {
+              setSanPhamThem([...sanPhamThem.filter(i => i.cauhinh !== +form.macauhinh)])
+              setBtnState(true)
+              reset()
+            }}>Xóa sản phẩm</Button>
         </>}
-        table2={<TableA headers={spHeader}
-                        data={sanPhamThem}
-                        onClick={row => {
-                          if (!row) return
-                          setBtnState(false)
-                          // setImei([...sanPhamThem].filter(i => +i.cauhinh === +row.cauhinh).map(i => i.maimei))
-                          getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
-                            setData(src => ({
-                              ...src,
-                              cauhinh: configures,
-                              madanhmucsanpham: row.madanhmucsanpham,
-                              tendanhmucsanpham: row.tendanhmucsanpham,
-                              tonkho: +row.tonkho,
-                            }))
-                            setForm(src => ({
-                              ...src,
-                              giaxuat: row.giaxuat,
-                              macauhinh: row.cauhinh,
-                              soluong: row.soluong,
-                              tonkho: +row.tonkho
-                            }))
-                          })
-                        }}/>}
-
+        table2={<TableA
+          headers={spHeader}
+          data={sanPhamThem}
+          onClick={row => {
+            if (!row) return
+            setBtnState(false)
+            // setImei([...sanPhamThem].filter(i => +i.cauhinh === +row.cauhinh).map(i => i.maimei))
+            getProductConfigures(row.madanhmucsanpham).then(({Data}) => {
+              setData(src => ({
+                ...src,
+                cauhinh: Data,
+                madanhmucsanpham: row.madanhmucsanpham,
+                tendanhmucsanpham: row.tendanhmucsanpham,
+                tonkho: +row.tonkho,
+              }))
+              setForm(src => ({
+                ...src,
+                giaxuat: row.giaxuat,
+                macauhinh: row.cauhinh,
+                soluong: row.soluong,
+                tonkho: +row.tonkho
+              }))
+            })
+          }}/>}
         rightTopForm={<>
           <FormGroup>
             <FormLabel className='fw-bold'>Mã phiếu xuất</FormLabel>
@@ -327,21 +333,38 @@ function ThemXuatKho() {
         rightBottomForm={<>
           <h3 className='mb-3 text-danger fw-bold'>Tổng
             tiền: {sanPhamThem.reduce((acc, i) => acc + i.soluong * i.giaxuat, 0)}đ</h3>
-          <Button className='w-100 fw-semibold'
-                  variant='success'
-                  onClick={e => {
-                    console.log(sanPhamThem)
-                  }}>Nhập hàng</Button>
+          <Button
+            className='w-100 fw-semibold'
+            variant='success'
+            onClick={async e => {
+              const emp = await getEmployees().then(a => a.Data)
+              const updateData = {
+                maphieuxuat: +data?.phieuxuat?.maphieuxuat,
+                khachhang: +form.makhachhang,
+                nhanvienxuat: emp[0].manhanvien
+              }
+
+              if (!form.makhachhang) return setModal("chonKhachHang")
+              await updateExport(updateData)
+
+              const sent = sanPhamThem.map(i => ({
+                cauhinh: i.cauhinh,
+                soluong: i.soluong,
+                phieuxuat: +data?.phieuxuat?.maphieuxuat
+              }))
+              const result = await updateItemOrder(sent)
+              document.location.replace('/xuat-kho')
+            }}>Nhập hàng</Button>
         </>}
       />
-      <KhachHangModal show={modal === 'chonKhachHang'}
-                      onHide={setModal.bind({}, "")}
-                      onSelected={e => setForm(src => ({
-                        ...src,
-                        makhachhang: e.makhachhang,
-                        tenkhachhang: e.tenkhachhang
-                      }))}/>
-
+      <KhachHangModal
+        show={modal === 'chonKhachHang'}
+        onHide={setModal.bind({}, "")}
+        onSelected={e => setForm(src => ({
+          ...src,
+          makhachhang: e.makhachhang,
+          tenkhachhang: e.tenkhachhang
+        }))}/>
     </>
   )
 }

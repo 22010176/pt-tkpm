@@ -26,8 +26,10 @@ import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 import {getProductHasConfigure} from "../../../api/Products/products";
 import {getSuppliers} from "../../../api/Partners/suppliers";
-import {getFreeImport} from "../../../api/Warehouse/imports";
+import {getFreeImport, updateImport} from "../../../api/Warehouse/imports";
 import {getProductConfigures} from "../../../api/Products/configures";
+import {getEmployees} from "../../../api/Roles/employees";
+import {insertProduct} from "../../../api/Warehouse";
 
 const spHeader = [
   {key: "Mã SP", value: "madanhmucsanpham"},
@@ -57,6 +59,7 @@ const defaultData = {
 const defaultForm = {
   madanhmucsanpham: "",
   tendanhmucsanpham: "",
+  nhacungcap: "",
   macauhinh: "",
   gianhap: ""
 }
@@ -81,7 +84,10 @@ function ThemNhapKho() {
     setForm({...defaultForm})
 
     getProductHasConfigure().then(({Data}) => setData(data => ({...data, sanpham: Data})))
-    getSuppliers().then(({Data}) => setData(data => ({...data, nhacungcap: Data})))
+    getSuppliers().then(({Data}) => {
+      setData(data => ({...data, nhacungcap: Data}))
+      setForm(src => ({...src, nhacungcap: Data[0]?.manhacungcap}))
+    })
     getFreeImport().then(({Data}) => setData(src => ({...src, phieunhap: Data[0]})))
     setImei([])
   }
@@ -324,15 +330,33 @@ function ThemNhapKho() {
 
         <FormGroup>
           <FormLabel className='fw-bold'>Nhà cung cấp</FormLabel>
-          <InputShadow as={FormSelect}>
+          <InputShadow as={FormSelect} value={form.nhacungcap}
+                       onChange={e => setForm(src => ({...src, nhacungcap: e.target.value}))}>
             {data.nhacungcap?.map((i, j) => <option key={j} value={i.manhacungcap}>{i.tennhacungcap}</option>)}
           </InputShadow>
         </FormGroup>
       </>}
       rightBottomForm={<>
         <h5 className='mb-3 text-danger fw-bold'>Tổng tiền: {sanPhamThem.reduce((acc, i) => i.gianhap + acc, 0)}đ</h5>
-        <Button className='w-100 fw-semibold' variant='success' onClick={e => {
-          console.log(sanPhamThem)
+        <Button className='w-100 fw-semibold' variant='success' onClick={async e => {
+          const emp = await getEmployees().then(a => a.Data)
+          const updateData = {
+            maphieunhap: data?.phieunhap?.maphieunhap,
+            nhacungcap: form.nhacungcap,
+            nhanviennhap: emp[0].manhanvien
+          }
+
+          await updateImport(updateData)
+
+          const send = sanPhamThem.map(i => ({
+            maimei: i.maimei,
+            cauhinh: i.cauhinh,
+            phieunhap: data?.phieunhap?.maphieunhap,
+            phieuxuat: null,
+            tinhtrang: 1
+          }))
+          const result = await insertProduct(send);
+          document.location.replace('/nhap-kho')
         }}>Nhập hàng</Button>
       </>}
     />

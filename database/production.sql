@@ -321,7 +321,8 @@ VALUES ('tonKho', 'tồn kho'),
        ('koTinhTrang', '');
 
 
-
+SELECT *
+FROM tinhtrang;
 
 
 

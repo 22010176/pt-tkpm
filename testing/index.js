@@ -63,7 +63,7 @@ async function createThuocTinh(number) {
 
 async function createDanhMucSanPham(number) {
   const [xuatXu, heDieuHanh, thuongHieu] = await Promise.all([
-    testGetThuocTinh("xuatXu").then(i => i.attributes), testGetThuocTinh("heDieuHanh").then(i => i.attributes), testGetThuocTinh("thuongHieu").then(i => i.attributes),
+    testGetThuocTinh("xuatXu").then(i => i.Data), testGetThuocTinh("heDieuHanh").then(i => i.Data), testGetThuocTinh("thuongHieu").then(i => i.Data),
   ])
   // console.log(xuatXu, heDieuHanh, thuongHieu)
 
@@ -76,18 +76,18 @@ async function createDanhMucSanPham(number) {
 
 async function createCauHinh(number) {
   const [ram, rom, mauSac] = await Promise.all([
-    testGetThuocTinh("ram").then(i => i.attributes),
-    testGetThuocTinh("rom").then(i => i.attributes),
-    testGetThuocTinh("mauSac").then(i => i.attributes),
+    testGetThuocTinh("ram").then(i => i.Data),
+    testGetThuocTinh("rom").then(i => i.Data),
+    testGetThuocTinh("mauSac").then(i => i.Data),
   ])
-  const danhMucSanPham = await getDanhMucSanPham().then(i => i.products)
+  const danhMucSanPham = await getDanhMucSanPham().then(i => i.Data)
 
   return insertConfigure(new Array(number).fill(0).map(genCauHinh.bind({}, danhMucSanPham, rom, ram, mauSac)))
 }
 
 async function createPhieuNhap(number) {
   const [nhaCungCap, nhanVien] = await Promise.all([
-    getNCC().then(i => i.suppliers), getNhanVien().then(i => i.employees)
+    getNCC().then(i => i.Data), getNhanVien().then(i => i.Data)
   ])
 
   return insertImport(new Array(number).fill(0).map(genPhieuNhapKho.bind({}, nhaCungCap, nhanVien)))
@@ -95,17 +95,17 @@ async function createPhieuNhap(number) {
 
 async function createPhieuXuat(number) {
   const [khachHang, nhanVien] = await Promise.all([
-    getKhachHang().then(i => i.customers), getNhanVien().then(i => i.employees)
+    getKhachHang().then(i => i.Data), getNhanVien().then(i => i.Data)
   ])
   return insertExport(new Array(number).fill(0).map(genPhieuXuatKho.bind({}, khachHang, nhanVien)))
 }
 
 async function createItems(number) {
   const [cauHinh, nhapKho, xuatKho, tinhTrang] = await Promise.all([
-    getConfigures().then(i => i.configures),
-    getImports().then(i => i.entries),
-    getExports().then(i => i.entries),
-    getTinhTrang().then(i => i.itemstate)
+    getConfigures().then(i => i.Data),
+    getImports().then(i => i.Data),
+    getExports().then(i => i.Data),
+    getTinhTrang().then(i => i.Data)
   ])
 
   return insertItem(new Array(number).fill(0).map(genSanPham.bind({}, cauHinh, nhapKho, xuatKho, tinhTrang)))
@@ -117,19 +117,19 @@ async function genSampleData(number) {
     createKhachHang(10),
     createNhaCungCap(10),
     createNhanVien(10),
-    createThuocTinh(10)
+    createThuocTinh(5)
   ]).then(a => a.map(i => i.success)))
 
   console.log("Create DanhMucSanPham, PhieuNhap, PhieuXuat")
   console.log(await Promise.all([
-    createDanhMucSanPham(number),
-    createPhieuNhap(number * 10),
-    createPhieuXuat(number * 10),
+    createDanhMucSanPham(10),
+    createPhieuNhap( 10),
+    createPhieuXuat( 10),
   ]).then(a => a.map(i => i.success)))
 
   console.log("Create Items")
-  await createCauHinh(number * 10).then(A => console.log(A.success))
-  await createItems(number * 100).then(A => console.log(A.success))
+  await createCauHinh(50).then(A => console.log(A.success))
+  await createItems(1000).then(A => console.log(A.success))
 }
 
 // createItems(50).then(console.log)
