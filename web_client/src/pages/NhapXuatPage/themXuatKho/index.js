@@ -95,7 +95,10 @@ function ThemXuatKho() {
   function reset() {
     setData({...defaultData})
     setForm({...defaultForm})
-
+    getEmployees().then(({Data}) => {
+      const nv = Data[Math.floor(Math.random() * Data.length)]
+      setForm(src => ({...src, manhanvien: nv.manhanvien, hoten: nv.hoten}));
+    })
     getProductHasConfigure().then(({Data}) => setData(src => ({...src, sanpham: Data})))
     getFreeExport().then(({Data}) => setData(src => ({...src, phieuxuat: Data[0]})))
     setBtnState(true)
@@ -314,7 +317,7 @@ function ThemXuatKho() {
 
           <FormGroup>
             <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
-            <FormControl disabled/>
+            <FormControl disabled value={form.hoten}/>
           </FormGroup>
 
           <FormGroup>
@@ -337,11 +340,10 @@ function ThemXuatKho() {
             className='w-100 fw-semibold'
             variant='success'
             onClick={async e => {
-              const emp = await getEmployees().then(a => a.Data)
               const updateData = {
                 maphieuxuat: +data?.phieuxuat?.maphieuxuat,
                 khachhang: +form.makhachhang,
-                nhanvienxuat: emp[0].manhanvien
+                nhanvienxuat: form.manhanvien
               }
 
               if (!form.makhachhang) return setModal("chonKhachHang")

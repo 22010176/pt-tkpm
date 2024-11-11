@@ -88,6 +88,10 @@ function ThemNhapKho() {
       setData(data => ({...data, nhacungcap: Data}))
       setForm(src => ({...src, nhacungcap: Data[0]?.manhacungcap}))
     })
+    getEmployees().then(({Data}) => {
+      const nv = Data[Math.floor(Math.random() * Data.length)]
+      setForm(src => ({...src, manhanvien: nv.manhanvien, hoten: nv.hoten}));
+    })
     getFreeImport().then(({Data}) => setData(src => ({...src, phieunhap: Data[0]})))
     setImei([])
   }
@@ -325,7 +329,7 @@ function ThemNhapKho() {
 
         <FormGroup>
           <FormLabel className='fw-bold'>Nhân viên nhập</FormLabel>
-          <InputShadow as={FormControl} disabled/>
+          <InputShadow as={FormControl} disabled value={form.hoten}/>
         </FormGroup>
 
         <FormGroup>
@@ -339,15 +343,12 @@ function ThemNhapKho() {
       rightBottomForm={<>
         <h5 className='mb-3 text-danger fw-bold'>Tổng tiền: {sanPhamThem.reduce((acc, i) => i.gianhap + acc, 0)}đ</h5>
         <Button className='w-100 fw-semibold' variant='success' onClick={async e => {
-          const emp = await getEmployees().then(a => a.Data)
           const updateData = {
             maphieunhap: data?.phieunhap?.maphieunhap,
             nhacungcap: form.nhacungcap,
-            nhanviennhap: emp[0].manhanvien
+            nhanviennhap: form.manhanvien
           }
-
           await updateImport(updateData)
-
           const send = sanPhamThem.map(i => ({
             maimei: i.maimei,
             cauhinh: i.cauhinh,

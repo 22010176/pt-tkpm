@@ -187,8 +187,8 @@ function EditTaiKhoanModal({onSubmit, onHide, account, ...props}) {
             <FormGroup className='_w-50'>
               <FormLabel className='fw-bold'>Nhóm quyền</FormLabel>
               <InputShadow as={FormSelect} value={vaitro} onChange={e => setVaiTro(e.target.value)}>
-                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) => <option key={j}
-                                                                          value={manhomquyen}>{tenhienthi}</option>)}
+                {nhomquyen?.map(({manhomquyen, tenhienthi}, j) =>
+                  <option key={j} value={manhomquyen}>{tenhienthi}</option>)}
               </InputShadow>
             </FormGroup>
           </FormGroup>
