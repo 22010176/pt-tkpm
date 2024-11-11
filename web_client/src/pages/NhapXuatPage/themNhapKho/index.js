@@ -330,7 +330,7 @@ function ThemNhapKho() {
 
         <FormGroup>
           <FormLabel className='fw-bold'>Nhân viên nhập</FormLabel>
-          <InputShadow as={FormControl} disabled value={form.hoten}/>
+          <InputShadow as={FormControl} disabled value={""}/>
         </FormGroup>
 
         <FormGroup>

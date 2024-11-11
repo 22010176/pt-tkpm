@@ -444,16 +444,17 @@ FROM danhmucsanpham d
          LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
          LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
          LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
-         LEFT JOIN (SELECT d.madanhmucsanpham,
-                           COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) tondauki
-                    FROM danhmucsanpham d
-                             LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
-                             LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
-                             LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
-                             LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
-                    WHERE n.thoigiannhap < ?
-                      AND x.thoigianxuat < ?
-                    GROUP BY d.madanhmucsanpham) d2 ON d2.madanhmucsanpham = d.madanhmucsanpham
+         LEFT JOIN
+     (SELECT d.madanhmucsanpham,
+             COUNT(DISTINCT s.masanpham) - SUM(IF(s.phieuxuat IS NOT NULL, 1, 0)) tondauki
+      FROM danhmucsanpham d
+               LEFT JOIN cauhinh c ON d.madanhmucsanpham = c.danhmucsanpham
+               LEFT JOIN sanpham s ON c.macauhinh = s.cauhinh
+               LEFT JOIN phieunhapkho n ON s.phieunhap = n.maphieunhap
+               LEFT JOIN phieuxuatkho x ON s.phieuxuat = x.maphieuxuat
+      WHERE n.thoigiannhap < ?
+        AND x.thoigianxuat < ?
+      GROUP BY d.madanhmucsanpham) d2 ON d2.madanhmucsanpham = d.madanhmucsanpham
 WHERE n.thoigiannhap BETWEEN ? AND ?
   AND x.thoigianxuat BETWEEN ? AND ?
 GROUP BY d.madanhmucsanpham;

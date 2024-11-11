@@ -36,8 +36,8 @@ const spHeader = [
   {key: "Đơn giá", value: "giaxuat"},
   {key: "Số lượng", value: "soluong"},
   {key: "cauhinh", value: "cauhinh", hide: true},
-  {key: "tonkho", value: "tonkho", hide: false},
-  {key: "cauhinh", value: "cauhinh", hide: false},
+  {key: "tonkho", value: "tonkho", hide: true},
+  {key: "cauhinh", value: "cauhinh", hide: true},
 ]
 
 const khoHeader = [
@@ -318,7 +318,7 @@ function ThemXuatKho() {
 
           <FormGroup>
             <FormLabel className='fw-bold'>Nhân viên xuất</FormLabel>
-            <FormControl disabled value={form.hoten}/>
+            <FormControl disabled value={""}/>
           </FormGroup>
 
           <FormGroup>

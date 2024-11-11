@@ -1,15 +1,8 @@
-import {
-  useContext,
-  useEffect,
-  useState
-}                           from 'react';
-import Accordion            from 'react-bootstrap/Accordion'
+import {useContext, useEffect, useState} from 'react';
+import Accordion from 'react-bootstrap/Accordion'
 import {useAccordionButton} from 'react-bootstrap/esm/AccordionButton';
-import {
-  AccordionContext,
-  Image
-}                           from 'react-bootstrap';
-import {FontAwesomeIcon}    from '@fortawesome/react-fontawesome';
+import {AccordionContext, Image} from 'react-bootstrap';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faAngleRight,
   faCircleCheck,
@@ -22,10 +15,10 @@ import {
   faShieldHalved,
   faUnlockKeyhole,
   faWarehouse
-}                           from "@fortawesome/free-solid-svg-icons"
+} from "@fortawesome/free-solid-svg-icons"
 
 import {UserContext} from '../../../api/authentication';
-import styles        from './style.module.css'
+import styles from './style.module.css'
 
 
 const navLinks = [
@@ -54,7 +47,14 @@ const navLinks = [
   {title: "Nhân viên", force: true, eventKey: "QuanLyNhanVien", link: "/nhan-vien", icon: faClipboardUser, links: []},
   {title: "Tài khoản", force: true, eventKey: "QuanLyTaiKhoan", link: "/tai-khoan", icon: faCircleUser, links: []},
   {title: "Thống kê", force: true, eventKey: "ThongKe", link: "/thong-ke", icon: faCircleCheck, links: []},
-  {title: "Phân quyền", force: true, eventKey: "QuanLyNhomQuyen", link: "/phan-quyen", icon: faUnlockKeyhole, links: []},
+  {
+    title: "Phân quyền",
+    force: true,
+    eventKey: "QuanLyNhomQuyen",
+    link: "/phan-quyen",
+    icon: faUnlockKeyhole,
+    links: []
+  },
 ];
 
 function NavLinks({className, icon, link, eventKey, title, links = [], onClick, perm, force, icon_angle = 0}) {
@@ -134,7 +134,7 @@ export default function SideNavbar({navItem = navLinks}) {
           <Image className='bg-primary' src={""} roundedCircle/>
         </a>
         <a href='/tai-khoan-ca-nhan' className={["text-decoration-none text-dark"].join(" ")}>
-          <p className={["fs-5 fw-bold m-0"].join(" ")}>{user?.hoTen || "User"}</p>
+          <p className={["fs-5 fw-bold m-0"].join(" ")}>{user?.hoTen || "Nguyễn Văn A"}</p>
           <p className={["fs-6 m-0"].join(" ")}>{user?.tenNhomQuyen || "Quản lý kho"}</p>
         </a>
       </div>
@@ -144,8 +144,8 @@ export default function SideNavbar({navItem = navLinks}) {
         {/* nav link */}
         <Accordion flush activeKey={activeTab}>
           {navItem
-          .filter(i => i.force || accessPage.includes(i.eventKey) || i.links?.some(j => accessPage.includes(j.eventKey)))
-          .map((i, j) => <NavLinks {...i} key={j} onClick={onNavlinkClick} perm={accessPage}/>)}
+            .filter(i => i.force || accessPage.includes(i.eventKey) || i.links?.some(j => accessPage.includes(j.eventKey)))
+            .map((i, j) => <NavLinks {...i} key={j} onClick={onNavlinkClick} perm={accessPage}/>)}
         </Accordion>
 
         {/* Đăng xuất */}

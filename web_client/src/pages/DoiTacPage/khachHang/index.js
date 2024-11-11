@@ -99,17 +99,13 @@ function KhachHang() {
     if (data) setRowClick(data)
   }
 
-  function onOpenInsertModal() {
-    setFormData({...defaultKhachHang})
-    setModal("add")
-  }
 
-  // function onOpenUpdateModal() {
-  //   if (!rowClick) return openModal("error")
-  //
-  //   setFormData({...rowClick})
-  //   openModal("edit")
-  // }
+  function onOpenUpdateModal() {
+    if (!rowClick) return openModal("error")
+
+    setFormData({...rowClick})
+    openModal("edit")
+  }
 
   async function onInsertKhachHang() {
     const result = await insertCustomer([formData])
@@ -170,7 +166,20 @@ function KhachHang() {
           <IconBtn className='w-auto btn-primary' icon={faArrowRotateRight} title={"Làm mới"}
                    onClick={updateTableData}/>
         </FlexForm>}
-        dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={data => data && setRowClick(data)}/>}
+        dataTable={<TableA headers={khachHangHeader} data={tableData} onClick={data => {
+          console.log(data)
+          if (!data) return
+          const newOne = {
+            diachi: data.diachi,
+            mail: data.mail,
+            makhachhang: +data.makhachhang,
+            ngaysinh: data.ngaysinh.split("T")[0],
+            ngaythamgia: data.ngaythamgia.split("T")[0],
+            sodienthoai: data.sodienthoai,
+            tenkhachhang: data.tenkhachhang,
+          }
+          setRowClick(newOne)
+        }}/>}
       />
 
       <KhachHangContext.Provider value={[formData, setFormData]}>
