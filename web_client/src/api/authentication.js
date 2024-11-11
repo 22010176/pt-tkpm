@@ -10,11 +10,12 @@ export async function checkResponse(response) {
       document.location.replace('/')
       break
     case 'Invalid Token':
-    case'User is not authenticated.':
+    case 'User is not authenticated.':
       sessionStorage.removeItem('Authorization')
       document.location.replace('/dang-suat')
       break
   }
+  return response
 }
 
 export function getToken() {
@@ -31,8 +32,8 @@ export async function loginAccount({mail, password}) {
     },
     body: JSON.stringify({mail, password})
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function registerAccount({mail, password}) {
@@ -44,7 +45,7 @@ export async function registerAccount({mail, password}) {
     },
     body: JSON.stringify({mail, password})
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 

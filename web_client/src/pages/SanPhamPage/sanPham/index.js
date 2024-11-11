@@ -1,7 +1,28 @@
 import {createContext, useContext, useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faRectangleList, faTrashCan} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, Image, InputGroup, Modal, ModalBody, ModalFooter} from 'react-bootstrap'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faFileExcel,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil,
+  faRectangleList,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  Image,
+  InputGroup,
+  Modal,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import ToolBtn from '../../../components/buttons/toolBtn'
@@ -18,14 +39,37 @@ import InputShadow from '../../../components/Forms/InputShadow'
 import GroupShadow from '../../../components/Forms/GroupShadow'
 
 import {colToName} from "../../../utilities/others";
-import {deleteProduct, getProducts, insertProduct, updateProduct, updateProductImage} from "../../../api/Products/products";
+import {
+  deleteProduct,
+  getProducts,
+  insertProduct,
+  updateProduct,
+  updateProductImage
+} from "../../../api/Products/products";
 import {getProductAttributes} from "../../../api/Products/product-attributes";
-import {deleteConfigure, getProductConfigures, insertConfigure, updateConfigure} from "../../../api/Products/configures";
+import {
+  deleteConfigure,
+  getProductConfigures,
+  insertConfigure,
+  updateConfigure
+} from "../../../api/Products/configures";
 import InputGroupText from "react-bootstrap/InputGroupText";
 import {getProductFromConfigureState, getProductState} from "../../../api/Warehouse";
 
 const defaultSanPham = {
-  madanhmucsanpham: "", tendanhmucsanpham: "", chipxuly: "", dungluongpin: "", kichthuongmanhinh: "", cameratruoc: "", camerasau: "", phienbanhedieuhanh: "", thoigianbaohanh: "", hinhanh: "", xuatxu: "", hedieuhanh: "", thuonghieu: "",
+  madanhmucsanpham: "",
+  tendanhmucsanpham: "",
+  chipxuly: "",
+  dungluongpin: "",
+  kichthuongmanhinh: "",
+  cameratruoc: "",
+  camerasau: "",
+  phienbanhedieuhanh: "",
+  thoigianbaohanh: "",
+  hinhanh: "",
+  xuatxu: "",
+  hedieuhanh: "",
+  thuonghieu: "",
 }
 
 const spHeader = [
@@ -77,10 +121,10 @@ const SanPhamContext = createContext({})
 
 async function getSanPhamFormData() {
   return Object.fromEntries(await Promise
-  .all(
-    ['xuatxu', 'thuonghieu', 'hedieuhanh', 'ram', 'rom', 'mausac']
-    .map(async i => [i, await getProductAttributes(i).then(i => i.Data)])
-  ));
+    .all(
+      ['xuatxu', 'thuonghieu', 'hedieuhanh', 'ram', 'rom', 'mausac']
+        .map(async i => [i, await getProductAttributes(i).then(i => i.Data)])
+    ));
 }
 
 function SanPham() {
@@ -145,12 +189,20 @@ function SanPham() {
       sidebar={<SideNavbar/>}
       tools={<>
         <FormControl id='input-xlms' className='d-none'/>
-        <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm" onClick={setModal.bind({}, "add")}/>
-        <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa" onClick={onOpenUpdateModal}/>
-        <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa" onClick={onDelete}/>
-        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="Xem ds  " onClick={onOpenImei}/>
-        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel" onClick={onImportExcel}/>
-        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel" onClick={onExportExcel}/>
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faCirclePlus} title="Thêm"
+                 onClick={e => {
+                   setModal("add")
+                 }}/>
+        <ToolBtn className="_border-orange-focus-2" color={colors.orange_2} icon={faPencil} title="Sửa"
+                 onClick={onOpenUpdateModal}/>
+        <ToolBtn className="_border-yellow-focus-2" color={colors.yellow_2} icon={faTrashCan} title="Xóa"
+                 onClick={onDelete}/>
+        <ToolBtn className="_border-blue-focus" color={colors.blue} icon={faRectangleList} title="Xem ds  "
+                 onClick={onOpenImei}/>
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExcel} title="Nhập Excel"
+                 onClick={onImportExcel}/>
+        <ToolBtn className="_border-green-focus" color={colors.green} icon={faFileExport} title="Xuất Excel"
+                 onClick={onExportExcel}/>
       </>}
       rightSec={<FlexForm>
         <InputShadow as={FormControl} className="w-auto" placeholder="Tìm kiếm"/>
@@ -167,10 +219,12 @@ function SanPham() {
 
     <SanPhamContext.Provider value={[rowClick, setRowClick]}>
       {/* Add SanPham */}
-      <InsertSanPhamModal formData={formData} show={modal === 'add'} onSubmit={onInsert} onHide={setModal.bind({}, "")}/>
+      <InsertSanPhamModal formData={formData} show={modal === 'add'} onSubmit={onInsert}
+                          onHide={setModal.bind({}, "")}/>
 
       {/* Update SanPham */}
-      <UpdateSanPhamModal formData={formData} show={modal === 'edit'} onSubmit={onUpdate} onHide={setModal.bind({}, "")}/>
+      <UpdateSanPhamModal formData={formData} show={modal === 'edit'} onSubmit={onUpdate}
+                          onHide={setModal.bind({}, "")}/>
 
       {/* IMEI */}
       <ImeiModal show={modal === 'imei'} onHide={setModal.bind({}, "")}/>
@@ -227,7 +281,11 @@ function InsertSanPhamModal({onHide, onSubmit, formData, ...props}) {
       </ModalFooter>
     </Modal>
 
-    <CauHinhModal {...formData} sanPham={data} show={modal === 'cauHinh'} onSubmit={onHide} onModalHide={setModal.bind({}, "")}/>
+    <CauHinhModal {...formData}
+                  sanPham={data}
+                  show={modal === 'cauHinh'}
+                  onSubmit={onHide}
+                  onModalHide={setModal.bind({}, "")}/>
   </>)
 }
 
@@ -273,7 +331,12 @@ function UpdateSanPhamModal({onHide, onSubmit, formData, ...prop}) {
 
 function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = []}) {
   useEffect(() => {
-    setData(data => ({...data, xuatxu: xuatxu[0]?.maxuatxu, hedieuhanh: hedieuhanh[0]?.mahedieuhanh, thuonghieu: thuonghieu[0]?.mathuonghieu}))
+    setData(data => ({
+      ...data,
+      xuatxu: xuatxu[0]?.maxuatxu,
+      hedieuhanh: hedieuhanh[0]?.mahedieuhanh,
+      thuonghieu: thuonghieu[0]?.mathuonghieu
+    }))
   }, [xuatxu, hedieuhanh, thuonghieu])
 
   function onDataChange(key, e) {
@@ -309,7 +372,8 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Dung lượng pin</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.dungluongpin} onChange={onDataChange.bind({}, "dungluongpin")}/>
+          <FormControl type='number' min={0} value={data?.dungluongpin}
+                       onChange={onDataChange.bind({}, "dungluongpin")}/>
           <InputGroup.Text>mAh</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -317,7 +381,8 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Kích thước màn</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.kichthuongmanhinh} onChange={onDataChange.bind({}, "kichthuongmanhinh")}/>
+          <FormControl type='number' min={0} value={data?.kichthuongmanhinh}
+                       onChange={onDataChange.bind({}, "kichthuongmanhinh")}/>
           <InputGroup.Text>inch</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -347,13 +412,15 @@ function SanPhamForm({data, setData, xuatxu = [], hedieuhanh = [], thuonghieu = 
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Phiên bản hệ điều hành</FormLabel>
-        <InputShadow type='text' value={data?.phienbanhedieuhanh} onChange={onDataChange.bind({}, "phienbanhedieuhanh")}/>
+        <InputShadow type='text' value={data?.phienbanhedieuhanh}
+                     onChange={onDataChange.bind({}, "phienbanhedieuhanh")}/>
       </FormGroup>
 
       <FormGroup className=' my-3' style={{width: "30%"}}>
         <FormLabel className='fs-6 fw-bold'>Thời gian bảo hành</FormLabel>
         <GroupShadow>
-          <FormControl type='number' min={0} value={data?.thoigianbaohanh} onChange={onDataChange.bind({}, "thoigianbaohanh")}/>
+          <FormControl type='number' min={0} value={data?.thoigianbaohanh}
+                       onChange={onDataChange.bind({}, "thoigianbaohanh")}/>
           <InputGroup.Text>Tháng</InputGroup.Text>
         </GroupShadow>
       </FormGroup>
@@ -378,7 +445,14 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
   }, [sanPham])
 
   function resetCauHinh() {
-    setData({macauhinh: undefined, ram: ram[0]?.maram, rom: rom[0]?.marom, mausac: mausac[0]?.mamausac, gianhap: "", giaxuat: ""})
+    setData({
+      macauhinh: undefined,
+      ram: ram[0]?.maram,
+      rom: rom[0]?.marom,
+      mausac: mausac[0]?.mamausac,
+      gianhap: "",
+      giaxuat: ""
+    })
   }
 
   function updateInfo() {
@@ -487,16 +561,20 @@ function CauHinhModal({sanPham, onSubmit, onModalHide, show, ram = [], rom = [],
           <TableA index headers={chHeader} data={tableData} onClick={setData}/>
         </ContentA>
         <div className='d-flex flex-column justify-content-around flex-grow-1'>
-          <Button className='py-2 fw-semibold shadow-sm' variant='primary' onClick={onInsertCauHinh}>Thêm cấu hình</Button>
-          <Button className='py-2 fw-semibold shadow-sm' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu hình</Button>
-          <Button className='py-2 fw-semibold shadow-sm' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='primary' onClick={onInsertCauHinh}>Thêm cấu
+            hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='warning' onClick={onUpdateCauHinh}>Sửa cấu
+            hình</Button>
+          <Button className='py-2 fw-semibold shadow-sm' variant='danger' onClick={onDeleteCauHinh}>Xóa cấu
+            hình</Button>
           <Button className='py-2 fw-semibold shadow-sm' variant='success' onClick={updateInfo}>Làm mới</Button>
         </div>
       </div>
     </ModalBody>
 
     <ModalFooter className='justify-content-center gap-5'>
-      <Button className="shadow-sm" variant='primary' style={{width: "15%"}} onClick={onFormSubmit}>Tạo cấu hình</Button>
+      <Button className="shadow-sm" variant='primary' style={{width: "15%"}} onClick={onFormSubmit}>Tạo cấu
+        hình</Button>
       <Button className="shadow-sm" variant='danger' style={{width: "15%"}} onClick={onHide}>Hủy bỏ</Button>
     </ModalFooter>
   </Modal>)
@@ -517,7 +595,7 @@ function ImeiModal({onHide, ...prop}) {
 
   useEffect(() => {
     getProductFromConfigureState({...form, madanhmucsanpham: rowClick?.madanhmucsanpham})
-    .then(({Data}) => setTable(Data))
+      .then(({Data}) => setTable(Data))
   }, [form]);
 
   return (<Modal {...prop} scrollable size="xl" centered>
@@ -531,7 +609,8 @@ function ImeiModal({onHide, ...prop}) {
                        value={form.macauhinh}
                        onChange={e => setForm(src => ({...src, macauhinh: e.target.value}))}>
             <option value='*'>Tất cả</option>
-            {data.cauhinh?.map((i, j) => <option key={j} value={i.macauhinh}>{`${i.dungluongrom}GB - ${i.dungluongram}GB - ${i.tenmausac}`}</option>)}
+            {data.cauhinh?.map((i, j) => <option key={j}
+                                                 value={i.macauhinh}>{`${i.dungluongrom}GB - ${i.dungluongram}GB - ${i.tenmausac}`}</option>)}
           </InputShadow>
         </FormGroup>
 

@@ -1,6 +1,14 @@
 import {createContext, useContext, useEffect, useState} from 'react'
 import {UserContext} from "../../../api/authentication";
-import {faArrowRotateRight, faCirclePlus, faFileExcel, faFileExport, faMagnifyingGlass, faPencil, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {
+  faArrowRotateRight,
+  faCirclePlus,
+  faFileExcel,
+  faFileExport,
+  faMagnifyingGlass,
+  faPencil,
+  faTrashCan
+} from '@fortawesome/free-solid-svg-icons'
 import {Button, Form, FormControl, FormSelect, Modal} from 'react-bootstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
@@ -66,17 +74,16 @@ function NhanVien() {
   async function onInsert() {
     const result = await insertEmployee([formData])
     console.log(result)
-    if (!result.success) return
+    if (!result?.success) return
 
     setFormData({...defaultNhanVien})
     updateTableData()
-
   }
 
   async function onUpdate() {
     const result = await updateEmployee(formData)
 
-    if (!result.success) return
+    if (!result?.success) return
 
     setFormData({...defaultNhanVien})
     updateTableData()
@@ -163,7 +170,8 @@ function NhanVien() {
 
             <Modal.Footer className='d-flex justify-content-center gap-5 py-3'>
               <Button variant='primary' style={{width: "25%"}} onClick={onInsert}>Thêm nhân viên</Button>
-              <Button variant='danger' style={{width: "25%"}} onClick={setModal.bind({}, "")}>Hủy bỏ</Button>
+              <Button variant='danger' style={{width: "25%"}} onClick={setModal.bind({}, "")}>Hủy
+                bỏ</Button>
             </Modal.Footer>
           </Modal>}
 
@@ -178,7 +186,8 @@ function NhanVien() {
 
             <Modal.Footer className='d-flex justify-content-center gap-5 py-3'>
               <Button variant='primary' style={{width: "25%"}} onClick={onUpdate}>Lưu thông tin</Button>
-              <Button variant='danger' style={{width: "25%"}} onClick={setModal.bind({}, "")}>Hủy bỏ</Button>
+              <Button variant='danger' style={{width: "25%"}} onClick={setModal.bind({}, "")}>Hủy
+                bỏ</Button>
             </Modal.Footer>
           </Modal>}
 

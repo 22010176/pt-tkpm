@@ -407,6 +407,8 @@ WHERE manhacungcap = ?
 GROUP BY p.maphieunhap;
 
 
+SELECT * FROM danhmucsanpham d
+INNER JOIN ptpm.cauhinh c on d.madanhmucsanpham = c.danhmucsanpham
 
 
 

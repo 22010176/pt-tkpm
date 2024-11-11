@@ -1,7 +1,22 @@
 import {useEffect, useState} from 'react'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Button, ButtonGroup, CloseButton, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, ListGroup, ListGroupItem, Modal, ModalBody, ModalHeader} from 'react-bootstrap'
+import {
+  Button,
+  ButtonGroup,
+  CloseButton,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  ModalBody,
+  ModalHeader
+} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
@@ -66,7 +81,7 @@ function ThemNhapKho() {
     setForm({...defaultForm})
 
     getProductHasConfigure().then(({Data}) => setData(data => ({...data, sanpham: Data})))
-    getSuppliers().then(({suppliers}) => setData(data => ({...data, nhacungcap: suppliers})))
+    getSuppliers().then(({Data}) => setData(data => ({...data, nhacungcap: Data})))
     getFreeImport().then(({Data}) => setData(src => ({...src, phieunhap: Data[0]})))
     setImei([])
   }
@@ -85,6 +100,7 @@ function ThemNhapKho() {
     if (!elem.value) return;
 
     const data = elem.value;
+    console.log(data)
     if (imei.includes(data)) return;
 
     setImei(src => ([...src, data]))
@@ -110,17 +126,17 @@ function ThemNhapKho() {
 
                        // console.log(row)
                        setImei([])
-                       getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
+                       getProductConfigures(row.madanhmucsanpham).then(({Data}) => {
                          setData(src => ({
                            ...src,
-                           cauhinh: configures,
+                           cauhinh: Data,
                            madanhmucsanpham: row.madanhmucsanpham,
                            tendanhmucsanpham: row.tendanhmucsanpham,
                          }))
                          setForm(src => ({
                            ...src,
-                           gianhap: configures[0].gianhap,
-                           macauhinh: configures[0].macauhinh,
+                           gianhap: Data[0].gianhap,
+                           macauhinh: Data[0].macauhinh,
                          }))
                        })
                        setBtnState(true)
@@ -141,7 +157,7 @@ function ThemNhapKho() {
         <FormGroup>
           <FormLabel className='fw-bold'>Cấu hình</FormLabel>
           <InputShadow as={FormSelect} size='sm'
-                       disabled={data.cauhinh.length === 0 || !btnState}
+                       disabled={data.cauhinh?.length === 0 || !btnState}
                        value={form.macauhinh}
                        onChange={e => {
                          const value = +e.target.value
@@ -221,8 +237,8 @@ function ThemNhapKho() {
                   }
 
                   const items = [...imei]
-                  .filter(i => !sanPhamThem.some(j => j.maimei === i))
-                  .map(i => ({...head, maimei: i}))
+                    .filter(i => !sanPhamThem.some(j => j.maimei === i))
+                    .map(i => ({...head, maimei: i}))
 
                   setSanPhamThem(src => [...src, ...items])
                   setImei([])
@@ -235,7 +251,8 @@ function ThemNhapKho() {
                 onClick={e => {
 
                   // if (imei.length === 0) return onDeleteProduct();
-                  const cauhinh = data?.cauhinh.find(i => +i.macauhinh === +form.macauhinh)
+                  console.log(data.cauhinh)
+                  const cauhinh = data?.cauhinh?.find(i => +i.macauhinh === +form.macauhinh)
                   if (!cauhinh) return
 
                   const head = {
@@ -250,7 +267,7 @@ function ThemNhapKho() {
                   // console.log({head, cauhinh})
                   const temp = sanPhamThem.filter(i => i.cauhinh !== cauhinh.macauhinh || imei.includes(i.maimei))
                   const insert = imei.filter(i => temp.every(j => j.maimei !== i)).map(i => ({...head, maimei: i}))
-
+                  console.log(temp, insert)
                   setSanPhamThem([...temp, ...insert])
                   reset()
                   setBtnState(true)
@@ -277,10 +294,10 @@ function ThemNhapKho() {
                         if (!row) return
                         setBtnState(false)
                         setImei([...sanPhamThem].filter(i => +i.cauhinh === +row.cauhinh).map(i => i.maimei))
-                        getProductConfigures(row.madanhmucsanpham).then(({configures}) => {
+                        getProductConfigures(row.madanhmucsanpham).then(({Data}) => {
                           setData(src => ({
                             ...src,
-                            cauhinh: configures,
+                            cauhinh: Data,
                             madanhmucsanpham: row.madanhmucsanpham,
                             tendanhmucsanpham: row.tendanhmucsanpham,
                           }))

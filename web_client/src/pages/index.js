@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 
 // import { navLinks } from '../utilities/navLinks';
-import {getToken, UserContext} from '../api/authentication';
+import {UserContext} from '../api/authentication';
 
 import TrangChu from "../pages/OtherPage/trangChu"
 import NhanVien from "./phanQuyenPage/nhanVien"
@@ -94,12 +94,12 @@ function App() {
   const [auth, setAuth] = useState({token: "", perm: [], user: {}})
 
   useEffect(function () {
-    const token = getToken()
-
-    if (token == null && !["/dang-nhap", "/dang-ki"].includes(document.location.pathname))
-      document.location.replace("/dang-nhap")
-
-    if (token != null && document.location.pathname === "/dang-nhap") document.location.replace("/")
+    // const token = getToken()
+    //
+    // if (token == null && !["/dang-nhap", "/dang-ki"].includes(document.location.pathname))
+    //   document.location.replace("/dang-nhap")
+    //
+    // if (token != null && document.location.pathname === "/dang-nhap") document.location.replace("/")
   }, [])
 
   return (

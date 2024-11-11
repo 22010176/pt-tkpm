@@ -1,5 +1,7 @@
 async function getProducts(conn) {
   try {
+    
+
     const [result] = await conn.query(
       `SELECT d.*, h.*, t.*, x.*, COUNT(s.phieunhap) tonkho
        FROM danhmucsanpham d

@@ -1,6 +1,16 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faMagnifyingGlass, faPlus} from '@fortawesome/free-solid-svg-icons'
-import {Button, Form, FormControl, FormGroup, FormLabel, FormSelect, InputGroup, Modal, ModalBody} from 'react-bootstrap'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Modal,
+  ModalBody
+} from 'react-bootstrap'
 
 import SideNavbar from '../../../components/layouts/sideBar'
 import TableA from '../../../components/tables/tableA'
@@ -107,13 +117,13 @@ function ThemXuatKho() {
         table={<TableA
           headers={khoHeader}
           data={data.sanpham
-          ?.slice(0, 100)
-          .filter(i => {
-              const a = sanPhamThem.filter(j => +j.madanhmucsanpham === +i.madanhmucsanpham).length
-              // if (a) console.log(a, i)
-              return a === 0 || a < i.socauhinh;
-            }
-          )}
+            ?.slice(0, 100)
+            .filter(i => {
+                const a = sanPhamThem.filter(j => +j.madanhmucsanpham === +i.madanhmucsanpham).length
+                // if (a) console.log(a, i)
+                return (a === 0 || a < i.socauhinh) && i.tonkho > 0;
+              }
+            )}
           onClick={function (row) {
             if (!row) return
 
@@ -315,7 +325,8 @@ function ThemXuatKho() {
           {/*</FormGroup>*/}
         </>}
         rightBottomForm={<>
-          <h3 className='mb-3 text-danger fw-bold'>Tổng tiền: {sanPhamThem.reduce((acc, i) => acc + i.soluong * i.giaxuat, 0)}đ</h3>
+          <h3 className='mb-3 text-danger fw-bold'>Tổng
+            tiền: {sanPhamThem.reduce((acc, i) => acc + i.soluong * i.giaxuat, 0)}đ</h3>
           <Button className='w-100 fw-semibold'
                   variant='success'
                   onClick={e => {
@@ -325,7 +336,11 @@ function ThemXuatKho() {
       />
       <KhachHangModal show={modal === 'chonKhachHang'}
                       onHide={setModal.bind({}, "")}
-                      onSelected={e => setForm(src => ({...src, makhachhang: e.makhachhang, tenkhachhang: e.tenkhachhang}))}/>
+                      onSelected={e => setForm(src => ({
+                        ...src,
+                        makhachhang: e.makhachhang,
+                        tenkhachhang: e.tenkhachhang
+                      }))}/>
 
     </>
   )
@@ -339,7 +354,7 @@ function KhachHangModal({show, onHide, onSelected}) {
   const [khachhang, setKhachhang] = useState()
 
   useEffect(() => {
-    getCustomers().then(({customers}) => setTable(customers))
+    getCustomers().then(({Data}) => setTable(Data))
   }, []);
 
   return (
@@ -364,7 +379,7 @@ function KhachHangModal({show, onHide, onSelected}) {
 
         <ContentA>
           <TableA headers={khachHangHeader}
-                  data={table.filter(i => i.tenkhachhang.includes(search))}
+                  data={table?.filter(i => i.tenkhachhang?.includes(search))}
                   onClick={setKhachhang}/>
           {/*<div style={{height: "1000px"}}></div>*/}
         </ContentA>

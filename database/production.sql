@@ -238,6 +238,8 @@ CREATE TABLE cauhinh
     rom            INT UNSIGNED NOT NULL,
     mausac         INT UNSIGNED NOT NULL,
 
+    UNIQUE (danhmucsanpham, ram, rom, mausac),
+
     FOREIGN KEY (danhmucsanpham) REFERENCES danhmucsanpham (madanhmucsanpham)
         ON UPDATE CASCADE ON DELETE CASCADE,
 
