@@ -88,7 +88,6 @@ async function getTinhTrang(conn) {
 
 async function insertItem(conn, Data = []) {
   try {
-
     await conn.query(
       `INSERT INTO sanpham (maimei, cauhinh, phieunhap, phieuxuat, tinhtrang)
        VALUES ?`,

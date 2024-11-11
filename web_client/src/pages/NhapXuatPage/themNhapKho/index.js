@@ -87,10 +87,13 @@ function ThemNhapKho() {
   }
 
   function scanImei(data) {
+    if (imei.includes(data)) return;
+
+    setImei(src => ([...src, data]))
     openModal("")
   }
 
-  function openModal(key, e) {
+  function openModal(key) {
     setModal(key)
   }
 
@@ -187,9 +190,9 @@ function ThemNhapKho() {
         <FormGroup className='d-flex gap-2 justify-content-between align-items-center'>
           <FormLabel className='fw-bold'>Mã IMEI</FormLabel>
           <ButtonGroup>
-            <Button variant='primary' size="sm"
-                    onClick={openModal.bind({}, "scanIMEI")}>Scan</Button>
-            <Button variant='success' size="sm">Excel</Button>
+            <Button variant='primary' size="sm" disabled={!data.cauhinh?.length}
+                    onClick={setModal.bind({}, "scanIMEI")}>Scan</Button>
+            <Button variant='success' size="sm" disabled={!data.cauhinh?.length}>Excel</Button>
           </ButtonGroup>
         </FormGroup>
 
@@ -339,7 +342,7 @@ function ThemNhapKho() {
         <Modal.Title className='text-center w-100 fw-bold fs-2 text-light'>
           QUÉT MÃ IMEI
         </Modal.Title>
-        <CloseButton onClick={openModal.bind({}, "")}/>
+        <CloseButton onClick={setModal.bind({}, "")}/>
       </ModalHeader>
 
       <ModalBody className='vh-100 p-3'>
