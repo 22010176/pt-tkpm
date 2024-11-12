@@ -1,34 +1,35 @@
-const {v4} = require('uuid');
+const { v4 } = require('uuid');
+const { url } = require('..');
 
-const insertDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method:  'POST', headers: {
+const insertDanhMucSanPham = sp => fetch(url + '/api/products', {
+  method: 'POST', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
 
-const getDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
+const getDanhMucSanPham = sp => fetch(url + '/api/products', {
   method: 'GET', headers: {
     'Content-Type': 'application/json'
   }
 })
-.then(response => response.json())
+  .then(response => response.json())
 
 
-const updateDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method:  'PUT', headers: {
+const updateDanhMucSanPham = sp => fetch(url + '/api/products', {
+  method: 'PUT', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
-const deleteDanhMucSanPham = sp => fetch('http://localhost:3001/api/products', {
-  method:  'DELETE', headers: {
+const deleteDanhMucSanPham = sp => fetch(url + '/api/products', {
+  method: 'DELETE', headers: {
     'Content-Type': 'application/json'
   }, body: JSON.stringify(sp)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
 function genSanPham(maDanhMucSanPham = 0) {
   return {

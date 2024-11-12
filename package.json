@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "front_end": "cd web_client && set HTTPS=true && npm run start",
+    "front_end": "cd web_client && npm run start",
     "back_end": "cd web_client && npm run start",
     "init_front": "cd web_client && npm i",
     "init_back": "cd server && npm i",

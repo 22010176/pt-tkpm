@@ -1,44 +1,45 @@
-const {v4} = require('uuid');
-const {randDate, randInt} = require('../../utitlies');
+const { v4 } = require('uuid');
+const { randDate, randInt } = require('../../utitlies');
+const { url } = require('..');
 
 
-const getKhachHang = () => fetch('http://localhost:3001/api/customers', {
+const getKhachHang = () => fetch(url + '/api/customers', {
   method: 'GET', headers: {
     'Accept': 'application/json', 'Content-Type': 'application/json'
   }
 })
-.then(response => response.json())
+  .then(response => response.json())
 
-const insertKhachHang = (customer) => fetch('http://localhost:3001/api/customers', {
-  method:  'POST', headers: {
+const insertKhachHang = (customer) => fetch(url + '/api/customers', {
+  method: 'POST', headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   }, body: JSON.stringify(customer)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
-const insertMultipleKhachHang = (customer) => fetch('http://localhost:3001/api/customers/add-multiple', {
-  method:  'POST', headers: {
+const insertMultipleKhachHang = (customer) => fetch(url + '/api/customers/add-multiple', {
+  method: 'POST', headers: {
     'Accept': 'application/json', 'Content-Type': 'application/json'
   }, body: JSON.stringify(customer)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
 // insertMultipleKhachHang(new Array(100).fill().map(genKhachHang))
 
-const updateKhachHang = khachHang => fetch('http://localhost:3001/api/customers', {
-  method:  'PUT', headers: {
+const updateKhachHang = khachHang => fetch(url + '/api/customers', {
+  method: 'PUT', headers: {
     'Accept': 'application/json', 'Content-Type': 'application/json'
   }, body: JSON.stringify(khachHang)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
-const deleteKhachHang = khachHang => fetch('http://localhost:3001/api/customers', {
-  method:  'DELETE', headers: {
+const deleteKhachHang = khachHang => fetch(url + '/api/customers', {
+  method: 'DELETE', headers: {
     'Accept': 'application/json', 'Content-Type': 'application/json'
   }, body: JSON.stringify(khachHang)
 })
-.then(response => response.json())
+  .then(response => response.json())
 
 function genKhachHang() {
   return {

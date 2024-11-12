@@ -19,6 +19,7 @@ import ErrorModal from '../../../components/modals/errorModal'
 import FlexForm from '../../../components/Forms/FlexForm'
 import colors from '../../../utilities/colors'
 import {deleteSupplier, getSuppliers, insertSupplier, updateSupplier} from "../../../api/Partners/suppliers";
+import AlertModal from "../../../components/modals/alertModal";
 
 const NCCContext = createContext()
 const defaultNCC = {ma: undefined, tennhacungcap: "", diachi: "", mail: "", sodienthoai: ""}
@@ -62,6 +63,13 @@ function NhaCungCapForm() {
 
 function NhaCungCap() {
   const [modal, setModal] = useState("")
+  const [premodal, setPreModal] = useState("")
+
+  function openModal(NewModal) {
+    setPreModal(modal)
+    setModal(NewModal)
+  }
+
   const [tableData, setTableData] = useState([])
 
   const [formData, setFormData] = useState({...defaultNCC})
@@ -77,12 +85,10 @@ function NhaCungCap() {
     getSuppliers().then(data => setTableData(data.Data))
   }
 
-  function openModal(modal) {
-    setModal(modal)
-  }
 
   function onRowClick(data) {
-    if (data) setRowClick(data)
+    if (!data) return
+    setRowClick(data)
   }
 
   function onOpenInsertModal() {
@@ -98,23 +104,29 @@ function NhaCungCap() {
   }
 
   async function onInsert() {
+
+    if (Object.values(formData).reduce((acc, i) => i == null || acc * (i?.length ?? 0), 1) === 0)
+      return openModal("addFail")
+    // return
     const result = await insertSupplier([formData])
-    console.log(result)
+
     if (!result.success) return
 
     setFormData({...defaultNCC})
     updateTableData()
+    openModal("insertSuccess")
   }
 
   async function onUpdate() {
-    const result = await updateSupplier(formData)
-    console.log(result)
-    if (!result.success) return
+    if (Object.values(formData).reduce((acc, i) => acc * (i?.length ?? 0), 1) === 0)
+      return openModal("editFail")
 
-    console.log(formData)
+    const result = await updateSupplier(formData)
+    if (!result.success) return openModal("editFail")
+
     setFormData({...defaultNCC})
     updateTableData()
-    setModal("")
+    setModal("editSuccess")
   }
 
   async function onDelete() {
@@ -124,6 +136,8 @@ function NhaCungCap() {
 
     setFormData({...defaultNCC})
     updateTableData()
+    setRowClick(undefined)
+    openModal("deleteSuccess")
   }
 
   return (
@@ -182,6 +196,14 @@ function NhaCungCap() {
         <ErrorModal show={modal === "error"} onHide={openModal.bind({})}>
           Phải chọn 1 nhà cung cấp!!!
         </ErrorModal>
+
+        <AlertModal show={modal === "insertSuccess"} message={"Thêm thành công"} onHide={openModal.bind({}, "")}/>
+        <AlertModal show={modal === "editSuccess"} message={"Sửa thành công"} onHide={openModal.bind({}, "")}/>
+        <AlertModal show={modal === "addFail"} message={"Hãy điền đầy đủ thông tin!!!"}
+                    onHide={openModal.bind({}, premodal)}/>
+        <AlertModal show={modal === "editFail"} message={"Hãy kiểm tra lại thông tin đã điền!!!"}
+                    onHide={openModal.bind({}, premodal)}/>
+        <AlertModal show={modal === "deleteSuccess"} message={"Xóa thành công!"} onHide={openModal.bind({}, "")}/>
       </NCCContext.Provider>
     </>
   )

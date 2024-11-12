@@ -1,25 +1,26 @@
-const {randInt} = require('../../utitlies');
-const {v4} = require('uuid');
+const { url } = require('..');
+const { randInt } = require('../../utitlies');
+const { v4 } = require('uuid');
 
 async function getRoles() {
-  return fetch("http://localhost:3001/api/roles", {
-    method:  "GET",
+  return fetch(url + "/api/roles", {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     }
   })
-  .then(response => response.json());
+    .then(response => response.json());
 }
 
 async function insertRole(roles = []) {
-  const result = await Promise.all(roles.map(role => fetch("http://localhost:3001/api/roles", {
-      method:  "POST",
-      headers: {"Content-Type": "application/json",},
-      body:    JSON.stringify(role)
-    })
+  const result = await Promise.all(roles.map(role => fetch(url + "/api/roles", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", },
+    body: JSON.stringify(role)
+  })
     .then(response => response.json())
   ))
-  return {roles: result.map(role => role.body).flat()}
+  return { roles: result.map(role => role.body).flat() }
 }
 
 // insertRole(new Array(20).fill().map(i => {

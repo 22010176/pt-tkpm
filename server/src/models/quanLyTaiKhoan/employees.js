@@ -82,7 +82,7 @@ async function updateEmployee(conn, {hoten, ngaysinh, sodienthoai, gioitinh, mai
     return {message: "Employee updated", success: true}
   } catch (e) {
     console.log(e)
-    return {message: "Updated failed", success: true}
+    return {message: "Updated failed", success: false}
   }
 }
 

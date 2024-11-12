@@ -10,7 +10,13 @@ import TableA from '../../../components/tables/tableA'
 import HeaderModalA from '../../../components/modals/headerA'
 import SideNavbar from '../../../components/layouts/sideBar'
 import GroupShadow from '../../../components/Forms/GroupShadow'
-import {deleteProductAttributes, getProductAttributes, insertProductAttributes, updateProductAttributes} from "../../../api/Products/product-attributes";
+import {
+  deleteProductAttributes,
+  getProductAttributes,
+  insertProductAttributes,
+  updateProductAttributes
+} from "../../../api/Products/product-attributes";
+import AlertModal from "../../../components/modals/alertModal";
 
 const keys = {
   thuongHieu: "thuongHieu",
@@ -65,6 +71,7 @@ const defaultValues = {
 
 function ThuocTinh() {
   const [modal, setModal] = useState("")
+  const [premodal, setPreModal] = useState("")
 
   const formData = {
     [keys.thuongHieu]: useState({...defaultValues[keys.thuongHieu]}),
@@ -81,7 +88,7 @@ function ThuocTinh() {
     setTableData([])
 
     getProductAttributes(modal)
-    .then(response => setTableData(response.Data))
+      .then(response => setTableData(response.Data))
   }
 
   useEffect(() => {
@@ -89,6 +96,12 @@ function ThuocTinh() {
     updateTableData()
 
   }, [modal]);
+
+  function openModal(newModal) {
+    setPreModal(modal)
+    setModal(newModal);
+  }
+
 
   function onRowclick(row) {
     if (row) return formData[modal]?.[1](row)
@@ -103,36 +116,48 @@ function ThuocTinh() {
   }
 
   function onCloseModal() {
+
     setModal("")
   }
 
   async function onInsert(e) {
-    // console.log('ddd', formData[modal][0])
+    // console.log('ddd', Object.values(formData[modal][0]))
+    // return;
+    if (Object.values(formData[modal][0])[1].length === 0)
+      return openModal("failAdd")
+
     const result = await insertProductAttributes(modal, [formData[modal][0]], "")
-    // console.log({result, a: formData[modal][0]})
     if (!result) return
 
     formData[modal]?.[1]({...defaultValues[modal]})
     updateTableData()
+    openModal("successAdd")
   }
 
   async function onUpdate(e) {
+    if (Object.values(formData[modal][0]).reduce((acc, i) => acc * (i?.length ?? 0), 1) === 0)
+      return openModal("failEdit")
+
     const result = await updateProductAttributes(modal, formData[modal][0], "")
     console.log({result, a: formData[modal][0]})
     if (!result) return
 
     formData[modal][1]({...defaultValues[modal]})
     updateTableData()
-
+    openModal("successUpdate")
   }
 
   async function onDelete(e) {
+
+    if (Object.values(formData[modal][0])[0] == null) return openModal("failDelete")
+
     const result = await deleteProductAttributes(modal, [formData[modal][0]], "")
     console.log({result, a: formData[modal][0]})
     if (!result) return
 
     formData[modal][1]({...defaultValues[modal]})
     updateTableData()
+    openModal("successDelete")
   }
 
   return (
@@ -140,27 +165,33 @@ function ThuocTinh() {
       <Page1 sidebar={<SideNavbar/>}>
         <div className='d-flex flex-wrap flex-grow-1 h-100'>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-green-1 _bg-green-hover-0 w-100 h-100"].join(" ")} icon={faEmpire} title="Thương hiệu" onClick={setModal.bind({}, keys.thuongHieu)}/>
+            <ThuocTinhBtn className={["_bg-green-1 _bg-green-hover-0 w-100 h-100"].join(" ")} icon={faEmpire}
+                          title="Thương hiệu" onClick={openModal.bind({}, keys.thuongHieu)}/>
           </div>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-red-1 _bg-red-hover-0 w-100 h-100"].join(" ")} icon={faMountainCity} title="Xuất xứ" onClick={setModal.bind({}, keys.xuatXu)}/>
+            <ThuocTinhBtn className={["_bg-red-1 _bg-red-hover-0 w-100 h-100"].join(" ")} icon={faMountainCity}
+                          title="Xuất xứ" onClick={openModal.bind({}, keys.xuatXu)}/>
           </div>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-orange-1 _bg-orange-hover-0 w-100 h-100"].join(" ")} icon={faAndroid} title="Hệ điều hành" onClick={setModal.bind({}, keys.heDieuHanh)}/>
+            <ThuocTinhBtn className={["_bg-orange-1 _bg-orange-hover-0 w-100 h-100"].join(" ")} icon={faAndroid}
+                          title="Hệ điều hành" onClick={openModal.bind({}, keys.heDieuHanh)}/>
           </div>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-purple-1 _bg-purple-hover-0 w-100 h-100"].join(" ")} icon={faComputer} title="Ram" onClick={setModal.bind({}, keys.ram)}/>
+            <ThuocTinhBtn className={["_bg-purple-1 _bg-purple-hover-0 w-100 h-100"].join(" ")} icon={faComputer}
+                          title="Ram" onClick={openModal.bind({}, keys.ram)}/>
           </div>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-pink-1 _bg-pink-hover-0 w-100 h-100"].join(" ")} icon={faMemory} title="Rom" onClick={setModal.bind({}, keys.rom)}/>
+            <ThuocTinhBtn className={["_bg-pink-1 _bg-pink-hover-0 w-100 h-100"].join(" ")} icon={faMemory} title="Rom"
+                          onClick={openModal.bind({}, keys.rom)}/>
           </div>
           <div className="d-flex w-50 p-5">
-            <ThuocTinhBtn className={["_bg-yellow-1 _bg-yellow-hover-0 w-100 h-100"].join(" ")} icon={faBrush} title="Màu sắc" onClick={setModal.bind({}, keys.mauSac)}/>
+            <ThuocTinhBtn className={["_bg-yellow-1 _bg-yellow-hover-0 w-100 h-100"].join(" ")} icon={faBrush}
+                          title="Màu sắc" onClick={openModal.bind({}, keys.mauSac)}/>
           </div>
         </div>
       </Page1>
 
-      <Modal backdrop="static" show={modal?.length} scrollable centered size='lg'>
+      <Modal backdrop="static" show={Object.values(keys).includes(modal)} scrollable centered size='lg'>
         {modal === keys.thuongHieu && <HeaderModalA title="Thương hiệu"/>}
         {modal === keys.xuatXu && <HeaderModalA title="Xuất xứ"/>}
         {modal === keys.heDieuHanh && <HeaderModalA title="Hệ điều hành"/>}
@@ -233,9 +264,20 @@ function ThuocTinh() {
           <Button className='shadow-sm' style={{width: "15%"}} variant='info' onClick={onInsert}>Thêm</Button>
           <Button className='shadow-sm' style={{width: "15%"}} variant='success' onClick={onUpdate}>Sửa</Button>
           <Button className='shadow-sm' style={{width: "15%"}} variant='danger' onClick={onDelete}>Xóa</Button>
-          <Button className='shadow-sm' style={{width: "15%"}} variant='dark' onClick={onCloseModal}>Đóng</Button>
+          <Button className='shadow-sm' style={{width: "15%"}} variant='dark'
+                  onClick={openModal.bind({}, "")}>Đóng</Button>
         </Modal.Footer>
       </Modal>
+
+      <AlertModal show={modal === 'successAdd'} onHide={openModal.bind({}, premodal)} message={'Thêm thành công'}/>
+      <AlertModal show={modal === 'successUpdate'} onHide={openModal.bind({}, premodal)} message={'Sửa thành công'}/>
+      <AlertModal show={modal === 'failAdd'} onHide={openModal.bind({}, premodal)} message={'Hãy điền đủ thông tin.'}/>
+      <AlertModal show={['failDelete', 'failEdit'].includes(modal)}
+                  onHide={openModal.bind({}, premodal)}
+                  message={'Hãy chọn 1 thuộc tính!!!'}/>
+      <AlertModal show={modal === 'successDelete'} onHide={openModal.bind({}, premodal)}
+                  message={'Hãy điền đủ thông tin!!!'}/>
+      {/*<AlertModal show={show === 'failEdit'} onHide={onCloseModal} message={'Hãy điền đủ thông tin!!!'}/>*/}
     </>
   )
 }

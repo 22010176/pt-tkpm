@@ -1,38 +1,40 @@
+const { url } = require("..")
+
 const testGetThuocTinh = thuocTinh =>
-  fetch(`http://localhost:3001/api/product-attributes/${thuocTinh}`, {
+  fetch(url + `/api/product-attributes/${thuocTinh}`, {
     method: "GET",
   })
-  .then(response => response.json())
+    .then(response => response.json())
 
 const testInsertThuocTinh = (thuocTinh, value) =>
-  fetch(`http://localhost:3001/api/product-attributes/${thuocTinh}`, {
-    method:  "POST",
+  fetch(url + `/api/product-attributes/${thuocTinh}`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body:    JSON.stringify(value)
+    body: JSON.stringify(value)
   })
-  .then(response => response.json())
+    .then(response => response.json())
 
 const testUpdateThuocTinh = (thuocTinh, value) =>
-  fetch(`http://localhost:3001/api/product-attributes/${thuocTinh}`, {
-    method:  "PUT",
+  fetch(url + `/api/product-attributes/${thuocTinh}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body:    JSON.stringify(value)
+    body: JSON.stringify(value)
   })
-  .then(response => response.json())
+    .then(response => response.json())
 
 const testDeletethuocTinh = (thuocTinh, value) =>
-  fetch(`http://localhost:3001/api/product-attributes/${thuocTinh}`, {
-    method:  "DELETE",
+  fetch(url + `/api/product-attributes/${thuocTinh}`, {
+    method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    body:    JSON.stringify(value)
+    body: JSON.stringify(value)
   })
-  .then(response => response.json())
+    .then(response => response.json())
 
 const getAllThuocTinh = async () => {
   const [xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac] = await Promise.all([
@@ -44,7 +46,7 @@ const getAllThuocTinh = async () => {
     testGetThuocTinh('mauSac'),
   ])
 
-  return {xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac};
+  return { xuatXu, heDieuHanh, thuongHieu, Rom, Ram, mauSac };
 }
 
 const insertAllThuocTinh = async (genRam, genRom, genXuatXu, genHeDieuHanh, genThuongHieu, genMauSac, num = 100) =>

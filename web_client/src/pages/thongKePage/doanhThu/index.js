@@ -33,15 +33,18 @@ function ThongKeDoanhThu() {
 
       <DayContext.Provider value={day}>
         <Tab.Content className="h-100 w-100  ">
-          <Tab.Pane eventKey="nam" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0 ">
+          <Tab.Pane eventKey="nam"
+                    className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0 ">
             <NamTab/>
           </Tab.Pane>
 
-          <Tab.Pane eventKey="thang" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
+          <Tab.Pane eventKey="thang"
+                    className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
             <ThangTab/>
           </Tab.Pane>
 
-          <Tab.Pane eventKey="ngay" className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
+          <Tab.Pane eventKey="ngay"
+                    className="_h-95 w-100 overflow-auto rounded-bottom rounded-end border border-top-0">
             <NgayTab/>
           </Tab.Pane>
         </Tab.Content>
@@ -51,9 +54,13 @@ function ThongKeDoanhThu() {
 }
 
 const defaultOptions = {
-  chart: {toolbar: {show: false}}, plotOptions: {
+  chart: {toolbar: {show: false}},
+  plotOptions: {
     bar: {horizontal: false, columnWidth: '70%', endingShape: 'rounded'},
-  }, dataLabels: {enabled: false}, stroke: {show: true, width: 2, colors: ['transparent']}, xaxis: {categories: new Array(10).fill(0).map((_, j) => 2010 + j),}, // yaxis:       {title: {text: '$ (thousands)'}},
+  },
+  dataLabels: {enabled: false},
+  stroke: {show: true, width: 2, colors: ['transparent']},
+  xaxis: {categories: new Array(10).fill(0).map((_, j) => 2010 + j),}, // yaxis:       {title: {text: '$ (thousands)'}},
   colors: [colors.red, colors.orange, colors.green], // fill:    {opacity: 1},
   tooltip: {
     y: {
@@ -111,7 +118,7 @@ function NgayTab() {
     })
   }, [data]);
 
-console.log(data)
+  console.log(data)
   return (<div className="d-flex flex-column h-100 w-100  p-3 flex-grow-1 gap-3">
     <Form className="d-flex gap-3 justify-content-around">
       <FormGroup className="d-flex gap-2 align-items-center">
@@ -125,7 +132,8 @@ console.log(data)
         <FormLabel className="fw-bold text-nowrap">Chọn năm</FormLabel>
         <FormSelect value={year} onChange={e => setYear(e.target.value)}>
 
-          {!!day.max && new Array(day.max?.getFullYear() - day.min?.getFullYear() + 1).fill().map((_, j) => <option key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)}
+          {!!day.max && new Array(day.max?.getFullYear() - day.min?.getFullYear() + 1).fill().map((_, j) => <option
+            key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)}
         </FormSelect>
       </FormGroup>
 
@@ -193,10 +201,10 @@ function ThangTab() {
         <FormSelect value={year} onChange={e => setYear(e.target.value)}>
           {!!day.max
             && new Array(day.max?.getFullYear() - day.min?.getFullYear() + 1)
-            .fill(0)
-            .map((_, j) => (
-              <option key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)
-            )}
+              .fill(0)
+              .map((_, j) => (
+                <option key={j} value={j + day.min?.getFullYear()}>{day.min?.getFullYear() + j}</option>)
+              )}
         </FormSelect>
       </FormGroup>
 
@@ -215,6 +223,7 @@ function ThangTab() {
 }
 
 function NamTab() {
+  const day = useContext(DayContext)
   const namHD = [
     {key: "Năm", value: "nam"},
     {key: "Chi phí", value: "von"},
@@ -222,40 +231,54 @@ function NamTab() {
     {key: "Lợi nhuận", value: "loinhuan"},
   ]
   const [data, setData] = useState([])
-
+  const [form, setForm] = useState({nambd: 0, namkt: 0})
   let options = {...defaultOptions},
     series = []
 
   useEffect(() => {
-    getYearProfits().then(({Data}) => setData(Data))
+    getYearProfits().then(({Data}) => {
+      
+      setForm({nambd: Data[0].nam, namkt: Data[Data.length - 1].nam})
+      setData(Data)
+    })
+    // getMaxAndDay().then(a => console.log('ddd', a))
+    setForm({nambd: new Date(day.min).getFullYear(), namkt: new Date(day.max).getFullYear()})
   }, [])
 
+  const temp = data.filter(i => form.nambd <= +i.nam && +i.nam <= form.namkt)
   options = {
     ...defaultOptions,
-    xaxis: {categories: data.map(i => +i.nam)}
+    xaxis: {categories: temp.map(i => +i.nam)}
   }
   series = [
-    {name: 'Chi phí', data: data.map(i => +i.von)},
-    {name: 'Doanh thu', data: data.map(i => +i.doanhthu)},
-    {name: 'Lợi nhuận', data: data.map(i => +i.loinhuan)},
+    {name: 'Chi phí', data: temp.map(i => +i.von)},
+    {name: 'Doanh thu', data: temp.map(i => +i.doanhthu)},
+    {name: 'Lợi nhuận', data: temp.map(i => +i.loinhuan)},
   ]
   return (<div className="d-flex flex-column h-100 w-100  p-3 flex-grow-1 gap-3">
     <Form className="d-flex gap-3 justify-content-around">
-      {/*<FormGroup className="d-flex gap-2 align-items-center">*/}
-      {/*  <FormLabel className="fw-bold text-nowrap">Từ năm</FormLabel>*/}
-      {/*  <FormSelect value={startYear} onChange={e => {*/}
-      {/*    setStartYear(+e.target.value)*/}
-      {/*    setEndYear(Math.min(endYear, +e.target.value))*/}
-      {/*  }}>*/}
-      {/*    {data.map((i, j) => <option key={j} value={+i.nam}>{i.nam}</option>)}*/}
-      {/*  </FormSelect>*/}
-      {/*</FormGroup>*/}
-      {/*<FormGroup className="d-flex gap-2 align-items-center">*/}
-      {/*  <FormLabel className="fw-bold text-nowrap">Đến năm</FormLabel>*/}
-      {/*  <FormSelect value={endYear} onChange={e => setEndYear(e.target.value)}>*/}
-      {/*    {data.map((i, j) => <option key={j} value={+i.nam}>{i.nam}</option>)}*/}
-      {/*  </FormSelect>*/}
-      {/*</FormGroup>*/}
+      <FormGroup className="d-flex gap-2 align-items-center">
+        <FormLabel className="fw-bold text-nowrap">Từ năm</FormLabel>
+        <FormSelect value={form.nambd} onChange={e => {
+          setForm(src => ({
+            ...src,
+            nambd: Math.min(e.target.value, form.namkt)
+          }))
+        }}>
+          {data.map((i, j) => <option key={j} value={+i.nam}>{i.nam}</option>)}
+        </FormSelect>
+      </FormGroup>
+      <FormGroup className="d-flex gap-2 align-items-center">
+        <FormLabel className="fw-bold text-nowrap">Đến năm</FormLabel>
+        <FormSelect value={form.namkt} onChange={e => {
+          setForm(src => ({
+            ...src,
+            namkt: Math.max(form.nambd, e.target.value)
+          }))
+        }}>
+          {data.map((i, j) => <option key={j} value={+i.nam}>{i.nam}</option>)}
+        </FormSelect>
+      </FormGroup>
 
       <Button className=" _w-15 text-nowrap" variant="primary">Thống kê</Button>
       <Button className="_w-15 text-nowrap" variant="success">Excel</Button>

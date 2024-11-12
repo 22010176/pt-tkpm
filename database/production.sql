@@ -129,8 +129,6 @@ VALUES ('QuanLySanPham', 'Quản lý sản phẩm'),
 # Them gia tri hanh dong
 INSERT INTO hanhdong (tenhanhdong, tenhienthi)
 VALUES ('Xem', 'Xem'),
-       ('XemCaNhan', 'Xem cá nhân'),
-       ('XemChiTiet', 'Xem chi tiết'),
        ('Them', 'Thêm'),
        ('Sua', 'Sửa'),
        ('Xoa', 'Xóa'),

@@ -125,6 +125,6 @@ app.all('/*', async (req, res) => {
 const server = https.createServer(options, app)
 
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Example app listening on port https://localhost:${port}`)
 })

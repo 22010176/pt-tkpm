@@ -18,6 +18,7 @@ import FlexForm from '../../../components/Forms/FlexForm'
 import colors from '../../../utilities/colors'
 import {deleteCustomer, getCustomers, insertCustomer, updateCustomer} from "../../../api/Partners/customers";
 import {formatDate} from "../../../utilities/others";
+import AlertModal from "../../../components/modals/alertModal";
 
 const KhachHangContext = createContext()
 
@@ -75,6 +76,13 @@ function KhachHangForm() {
 
 function KhachHang() {
   const [modal, setModal] = useState("")
+  const [premodal, setPreModal] = useState("")
+
+  function openModal(NewModal) {
+    setPreModal(modal)
+    setModal(NewModal)
+  }
+
   const [tableData, setTableData] = useState([])
 
   const [formData, setFormData] = useState({...defaultKhachHang})
@@ -86,9 +94,6 @@ function KhachHang() {
     updateTableData()
   }, [])
 
-  function openModal(modal) {
-    setModal(modal)
-  }
 
   function updateTableData() {
     setTableData([])
@@ -99,7 +104,6 @@ function KhachHang() {
     if (data) setRowClick(data)
   }
 
-
   function onOpenUpdateModal() {
     if (!rowClick) return openModal("error")
 
@@ -108,20 +112,29 @@ function KhachHang() {
   }
 
   async function onInsertKhachHang() {
+
+    const {tenkhachhang, makhachhang, ngaysinh, diachi, mail, sodienthoai} = formData
+    if (tenkhachhang.length * diachi.length * mail.length * sodienthoai.length === 0) return openModal("addFail")
+    // return
     const result = await insertCustomer([formData])
     if (!result.success) return
 
     setFormData({...defaultKhachHang})
     updateTableData()
+    openModal("addSuccess")
   }
 
   async function onUpdateKhachHang() {
+    const {tenkhachhang, makhachhang, ngaysinh, diachi, mail, sodienthoai} = formData
+    if (tenkhachhang.length * diachi.length * mail.length * sodienthoai.length === 0) return openModal("editFail")
+
     const result = await updateCustomer(formData)
     if (!result.success) return
 
     setFormData({...defaultKhachHang})
     updateTableData()
     setModal("")
+    openModal("editSuccess")
   }
 
   return (
@@ -134,7 +147,7 @@ function KhachHang() {
           <ToolBtn color={colors.green} icon={faCirclePlus} title="Thêm"
                    onClick={e => {
                      setFormData({...defaultKhachHang})
-                     setModal("add")
+                     openModal("add")
                    }}/>
           <ToolBtn color={colors.orange_2} icon={faPencil} title="Sửa"
                    onClick={e => {
@@ -153,7 +166,7 @@ function KhachHang() {
 
                      setFormData({...defaultKhachHang})
                      updateTableData()
-                     setModal("")
+                     openModal("deleteSuccess")
                    }}/>
         </>}
         rightSec={<FlexForm>
@@ -214,6 +227,14 @@ function KhachHang() {
         <ErrorModal show={modal === "error"} onHide={openModal.bind({})}>
           Hãy chọn một khách hàng!!!
         </ErrorModal>
+
+        <AlertModal show={modal === "addSuccess"} message={"Thêm thành công"} onHide={openModal.bind({}, "")}/>
+        <AlertModal show={modal === "editSuccess"} message={"Sửa thành công"} onHide={openModal.bind({}, "")}/>
+        <AlertModal show={modal === "addFail"} message={"Hãy điền đầy đủ thông tin!!!"}
+                    onHide={openModal.bind({}, premodal)}/>
+        <AlertModal show={modal === "editFail"} message={"Hãy điền đầy đủ thông tin!!!"}
+                    onHide={openModal.bind({}, premodal)}/>
+        <AlertModal show={modal === "deleteSuccess"} message={"Xóa thành công!"} onHide={openModal.bind({}, "")}/>
       </KhachHangContext.Provider>
     </>
   )
