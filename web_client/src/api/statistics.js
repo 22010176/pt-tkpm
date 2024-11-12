@@ -1,7 +1,8 @@
-import {checkResponse, getToken} from "./authentication";
+import { url } from ".";
+import { checkResponse, getToken } from "./authentication";
 
 export async function getOverall() {
-  return fetch('/api/statistics/overall', {
+  return fetch(url + '/api/statistics/overall', {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -12,7 +13,7 @@ export async function getOverall() {
 }
 
 export async function getSupplierStat(startDate = '1900-1-1', endDate = '3000-01-01', token = '') {
-  return fetch(`/api/statistics/suppliers?ngaybatdau=${startDate}&ngayketthuc=${endDate}`, {
+  return fetch(url + `/api/statistics/suppliers?ngaybatdau=${startDate}&ngayketthuc=${endDate}`, {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -23,7 +24,7 @@ export async function getSupplierStat(startDate = '1900-1-1', endDate = '3000-01
 }
 
 export async function getCustomerStat(startDate = '1900-1-1', endDate = '3000-01-01', token = '') {
-  return fetch(`/api/statistics/customers?ngaybatdau=${startDate}&ngayketthuc=${endDate}`, {
+  return fetch(url + `/api/statistics/customers?ngaybatdau=${startDate}&ngayketthuc=${endDate}`, {
     method: 'GET',
   })
     .then((response) => response.json())
@@ -31,7 +32,7 @@ export async function getCustomerStat(startDate = '1900-1-1', endDate = '3000-01
 }
 
 export async function getYearProfits(token = '') {
-  return fetch(`/api/statistics/profits/year`, {
+  return fetch(url + `/api/statistics/profits/year`, {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -42,7 +43,7 @@ export async function getYearProfits(token = '') {
 }
 
 export async function getMonthProfits(nam = 2024, token = '') {
-  return fetch(`/api/statistics/profits/month?nam=${nam}`, {
+  return fetch(url + `/api/statistics/profits/month?nam=${nam}`, {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -53,7 +54,7 @@ export async function getMonthProfits(nam = 2024, token = '') {
 }
 
 export async function getDayProfit(date = new Date(), token = '') {
-  return fetch(`/api/statistics/profits/date?nam=${date.getFullYear()}&thang=${date.getMonth() + 1}`, {
+  return fetch(url + `/api/statistics/profits/date?nam=${date.getFullYear()}&thang=${date.getMonth() + 1}`, {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -64,7 +65,7 @@ export async function getDayProfit(date = new Date(), token = '') {
 }
 
 export async function getMaxAndDay(token = '') {
-  return fetch(`/api/statistics/date`, {
+  return fetch(url + `/api/statistics/date`, {
     method: 'GET',
     headers: {
       'authorization': getToken()
@@ -75,10 +76,10 @@ export async function getMaxAndDay(token = '') {
 }
 
 export async function getTonKho(token = '',
-                                ngaybatdau = "2000-01-01",
-                                ngayketthuc = new Date().toISOString().split('T')[0]
+  ngaybatdau = "2000-01-01",
+  ngayketthuc = new Date().toISOString().split('T')[0]
 ) {
-  return fetch(`/api/statistics/getTonKho?ngaybatdau=${ngaybatdau}&ngayketthuc=${ngayketthuc}`, {
+  return fetch(url + `/api/statistics/getTonKho?ngaybatdau=${ngaybatdau}&ngayketthuc=${ngayketthuc}`, {
     method: 'GET',
     headers: {
       'authorization': getToken()

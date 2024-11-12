@@ -1,3 +1,4 @@
+import { url } from "..";
 import {
   checkResponse,
   getToken
@@ -5,54 +6,54 @@ import {
 
 
 export async function getAccounts(token = "") {
-  return fetch("/api/accounts", {
-    method:  "GET",
+  return fetch(url + "/api/accounts", {
+    method: "GET",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       'authorization': getToken(),
     },
 
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 
 export async function insertAccount(account) {
-  return fetch("/api/accounts", {
-    method:  "POST",
+  return fetch(url + "/api/accounts", {
+    method: "POST",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       'authorization': getToken(),
     },
-    body:    JSON.stringify(account)
+    body: JSON.stringify(account)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function updateAccount(account) {
-  return fetch("/api/accounts", {
-    method:  "PUT",
+  return fetch(url + "/api/accounts", {
+    method: "PUT",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       'authorization': getToken(),
     },
-    body:    JSON.stringify(account)
+    body: JSON.stringify(account)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function deleteAccount(account) {
-  return fetch("/api/accounts", {
-    method:  "DELETE",
+  return fetch(url + "/api/accounts", {
+    method: "DELETE",
     headers: {
-      "Content-Type":  "application/json",
+      "Content-Type": "application/json",
       'authorization': getToken(),
     },
-    body:    JSON.stringify(account)
+    body: JSON.stringify(account)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }

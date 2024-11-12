@@ -1,7 +1,8 @@
-import {checkResponse, getToken} from "../authentication";
+import { url } from "..";
+import { checkResponse, getToken } from "../authentication";
 
 export async function getProducts(token = "") {
-  return await fetch("/api/products", {
+  return await fetch(url + "/api/products", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -9,12 +10,12 @@ export async function getProducts(token = "") {
       'authorization': getToken(),
     }
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 
 export async function getProductHasConfigure() {
-  return await fetch("/api/products/product-configures", {
+  return await fetch(url + "/api/products/product-configures", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -22,8 +23,8 @@ export async function getProductHasConfigure() {
       'authorization': getToken(),
     }
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 
 export async function updateProductImage(product, token = "") {
@@ -32,7 +33,7 @@ export async function updateProductImage(product, token = "") {
   const formData = new FormData();
   formData.append("hinhAnh", product.hinhAnh);
 
-  return await fetch(`/api/products/upload-img/${product.maDanhMucSanPham}`, {
+  return await fetch(url + `/api/products/upload-img/${product.maDanhMucSanPham}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -41,12 +42,12 @@ export async function updateProductImage(product, token = "") {
     },
     body: formData
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 
 export async function insertProduct(product, token = "") {
-  return await fetch("/api/products", {
+  return await fetch(url + "/api/products", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -55,12 +56,12 @@ export async function insertProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 
 export async function updateProduct(product, token = "") {
-  return await fetch("/api/products", {
+  return await fetch(url + "/api/products", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -69,12 +70,12 @@ export async function updateProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 
 export async function deleteProduct(product, token = "") {
-  return await fetch(`/api/products`, {
+  return await fetch(url + `/api/products`, {
     method: 'DELETE',
     headers: {
       "Content-Type": "application/json",
@@ -83,7 +84,7 @@ export async function deleteProduct(product, token = "") {
     },
     body: JSON.stringify(product)
   })
-  .then(response => response.json())
-  .then(checkResponse);
+    .then(response => response.json())
+    .then(checkResponse);
 }
 

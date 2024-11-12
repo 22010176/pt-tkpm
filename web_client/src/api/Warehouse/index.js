@@ -1,8 +1,9 @@
-import {checkResponse, getToken} from "../authentication";
+import { url } from "..";
+import { checkResponse, getToken } from "../authentication";
 
 export async function getProductState() {
 
-  return fetch(`/api/warehouse/item-state`, {
+  return fetch(url + `/api/warehouse/item-state`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -13,8 +14,8 @@ export async function getProductState() {
     .then(checkResponse)
 }
 
-export async function getProductFromConfigureState({madanhmucsanpham, macauhinh, matinhtrang}) {
-  return fetch(`/api/warehouse/items?madanhmucsanpham=${madanhmucsanpham}&macauhinh=${macauhinh}&matinhtrang=${matinhtrang}`, {
+export async function getProductFromConfigureState({ madanhmucsanpham, macauhinh, matinhtrang }) {
+  return fetch(url + `/api/warehouse/items?madanhmucsanpham=${madanhmucsanpham}&macauhinh=${macauhinh}&matinhtrang=${matinhtrang}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -26,7 +27,7 @@ export async function getProductFromConfigureState({madanhmucsanpham, macauhinh,
 }
 
 export async function insertProduct(data) {
-  return fetch("/api/warehouse/items", {
+  return fetch(url + "/api/warehouse/items", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +40,7 @@ export async function insertProduct(data) {
 }
 
 export async function updateItemOrder(data) {
-  return fetch("/api/warehouse/update-orders", {
+  return fetch(url + "/api/warehouse/update-orders", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

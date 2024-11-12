@@ -18,10 +18,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
       [result] = await conn.query(
         `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
          FROM phieuxuatkho p
-                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
-                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
-                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
-                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                  LEFT JOIN khachhang k ON p.khachhang = k.makhachhang
+                  LEFT JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  LEFT JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  LEFT JOIN cauhinh c ON s.cauhinh = c.macauhinh
          GROUP BY p.maphieuxuat, p.thoigianxuat
          HAVING COUNT(DISTINCT masanpham) > 0
          ORDER BY p.thoigianxuat DESC`)
@@ -30,10 +30,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
       [result] = await conn.query(
         `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
          FROM phieuxuatkho p
-                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
-                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
-                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
-                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                  LEFT JOIN khachhang k ON p.khachhang = k.makhachhang
+                  LEFT JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  LEFT JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  LEFT JOIN cauhinh c ON s.cauhinh = c.macauhinh
          WHERE n.manhanvien = ?
            AND p.thoigianxuat BETWEEN ? AND ?
          GROUP BY p.maphieuxuat, p.thoigianxuat
@@ -45,10 +45,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
       [result] = await conn.query(
         `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
          FROM phieuxuatkho p
-                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
-                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
-                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
-                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                  LEFT JOIN khachhang k ON p.khachhang = k.makhachhang
+                  LEFT JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  LEFT JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  LEFT JOIN cauhinh c ON s.cauhinh = c.macauhinh
          WHERE k.makhachhang = ?
            AND p.thoigianxuat BETWEEN ? AND ?
          GROUP BY p.maphieuxuat, p.thoigianxuat
@@ -59,10 +59,10 @@ async function findExports(conn, {makhachhang, manhanvien, tungay, denngay, tuso
     else [result] = await conn.query(
         `SELECT p.maphieuxuat, k.tenkhachhang, n.hoten, p.thoigianxuat thoigian, SUM(c.giaxuat) tongtien
          FROM phieuxuatkho p
-                  INNER JOIN khachhang k ON p.khachhang = k.makhachhang
-                  INNER JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
-                  INNER JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
-                  INNER JOIN cauhinh c ON s.cauhinh = c.macauhinh
+                  LEFT JOIN khachhang k ON p.khachhang = k.makhachhang
+                  LEFT JOIN nhanvien n ON p.nhanvienxuat = n.manhanvien
+                  LEFT JOIN sanpham s ON p.maphieuxuat = s.phieuxuat
+                  LEFT JOIN cauhinh c ON s.cauhinh = c.macauhinh
          WHERE k.makhachhang = ?
            AND n.manhanvien = ?
            AND p.thoigianxuat BETWEEN ? AND ?

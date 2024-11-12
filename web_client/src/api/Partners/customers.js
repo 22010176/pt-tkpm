@@ -1,7 +1,8 @@
-import {checkResponse, getToken} from "../authentication";
+import { url } from "..";
+import { checkResponse, getToken } from "../authentication";
 
 export async function getCustomers() {
-  return fetch('/api/customers', {
+  return fetch(url + '/api/customers', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -9,12 +10,12 @@ export async function getCustomers() {
       'authorization': getToken()
     }
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
-export async function getCustomerCart({makhachhang}) {
-  return fetch(`/api/customers/${makhachhang}`, {
+export async function getCustomerCart({ makhachhang }) {
+  return fetch(url + `/api/customers/${makhachhang}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -22,12 +23,12 @@ export async function getCustomerCart({makhachhang}) {
       'authorization': getToken()
     }
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function insertCustomer(customer) {
-  return fetch('/api/customers', {
+  return fetch(url + '/api/customers', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -36,12 +37,12 @@ export async function insertCustomer(customer) {
     },
     body: JSON.stringify(customer)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function updateCustomer(customer, token = "") {
-  return fetch('/api/customers', {
+  return fetch(url + '/api/customers', {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
@@ -50,12 +51,12 @@ export async function updateCustomer(customer, token = "") {
     },
     body: JSON.stringify(customer)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }
 
 export async function deleteCustomer(customer, token = "") {
-  return fetch('/api/customers', {
+  return fetch(url + '/api/customers', {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
@@ -64,6 +65,6 @@ export async function deleteCustomer(customer, token = "") {
     },
     body: JSON.stringify(customer)
   })
-  .then(response => response.json())
-  .then(checkResponse)
+    .then(response => response.json())
+    .then(checkResponse)
 }

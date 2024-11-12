@@ -2,6 +2,8 @@ DROP DATABASE IF EXISTS ptpm;
 CREATE DATABASE ptpm;
 USE ptpm;
 
+SHOW TABLES;
+
 # Khoi tao doi tac
 DROP TABLE IF EXISTS khachhang;
 CREATE TABLE khachhang
