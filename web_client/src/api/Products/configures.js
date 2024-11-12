@@ -5,7 +5,7 @@ import {
 } from "../authentication";
 
 export async function getConfigures() {
-  return fetch(url + 'api/configures', {
+  return fetch(url + '/api/configures', {
     method: 'GET',
     headers: {
       'authorization': getToken(),
