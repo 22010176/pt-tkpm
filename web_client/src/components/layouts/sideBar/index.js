@@ -135,7 +135,7 @@ export default function SideNavbar({navItem = navLinks}) {
         </a>
         <a href='/tai-khoan-ca-nhan' className={["text-decoration-none text-dark"].join(" ")}>
           <p className={["fs-5 fw-bold m-0"].join(" ")}>{user?.hoTen || "Nguyễn Văn A"}</p>
-          <p className={["fs-6 m-0"].join(" ")}>{user?.tenNhomQuyen || "Quản lý kho"}</p>
+          <p className={["fs-6 m-0"].join(" ")}>{user?.tenNhomQuyen || "Quản lí kho"}</p>
         </a>
       </div>
 

@@ -123,13 +123,13 @@ async function genSampleData(number) {
   console.log("Create DanhMucSanPham, PhieuNhap, PhieuXuat")
   console.log(await Promise.all([
     createDanhMucSanPham(10),
-    createPhieuNhap( 10),
-    createPhieuXuat( 10),
+    createPhieuNhap( 100),
+    createPhieuXuat( 100),
   ]).then(a => a.map(i => i.success)))
 
   console.log("Create Items")
-  await createCauHinh(50).then(A => console.log(A.success))
-  await createItems(1000).then(A => console.log(A.success))
+  await createCauHinh(100).then(A => console.log(A.success))
+  await createItems(50000).then(A => console.log(A.success))
 }
 
 // createItems(50).then(console.log)

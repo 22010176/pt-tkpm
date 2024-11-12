@@ -111,7 +111,7 @@ function NgayTab() {
     })
   }, [data]);
 
-
+console.log(data)
   return (<div className="d-flex flex-column h-100 w-100  p-3 flex-grow-1 gap-3">
     <Form className="d-flex gap-3 justify-content-around">
       <FormGroup className="d-flex gap-2 align-items-center">
