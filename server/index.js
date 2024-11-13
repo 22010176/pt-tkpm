@@ -10,9 +10,9 @@ const path = require("path");
 const fs = require('fs')
 const https = require('https')
 
-const { authAccount, authPermission, getAllPerm } = require('./src/routes/Auth/permissions')
-const { parseToken, getSecretKey } = require('./src/routes/Auth/validateToken')
-const { getAccountPermisisonsQuery } = require("./src/models/quanLyTaiKhoan/roles");
+const {authAccount, authPermission, getAllPerm} = require('./src/routes/Auth/permissions')
+const {parseToken, getSecretKey} = require('./src/routes/Auth/validateToken')
+const {getAccountPermisisonsQuery} = require("./src/models/quanLyTaiKhoan/roles");
 const pool = require('./src/models')
 
 const options = {
@@ -37,7 +37,7 @@ async function initialDBConnection(req, res, next) {
     res.locals.conn = await pool.getConnection()
   } catch (e) {
     console.error(e)
-    return res.json({ message: "Connection Error" })
+    return res.json({message: "Connection Error"})
   }
 
   next();
@@ -51,8 +51,8 @@ async function getPermission(req, res, next) {
 }
 
 app.use(cors())
-app.use(express.urlencoded({ extended: true, limit: "500mb" }))
-app.use(express.json({ limit: "500mb" }))
+app.use(express.urlencoded({extended: true, limit: "500mb"}))
+app.use(express.json({limit: "500mb"}))
 app.use('/api/images', express.static(path.join(__dirname, 'images')))
 
 app.use(parseAccountData)
@@ -119,12 +119,12 @@ app.use("/api/employees",
 
 app.all('/*', async (req, res) => {
   await res.locals.conn.destroy()
-  res.json({ success: false, message: "not found entry" })
+  res.json({success: false, message: "not found entry"})
 });
 
 const server = https.createServer(options, app)
 
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port https://localhost:${port}`)
 })
