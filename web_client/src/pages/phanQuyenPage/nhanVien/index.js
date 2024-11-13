@@ -48,6 +48,7 @@ function NhanVien() {
   const [premodal, setPreModal] = useState("")
 
   function openModal(NewModal) {
+    if (NewModal === '') setRowClick(undefined)
     setPreModal(modal)
     setModal(NewModal)
   }
@@ -127,7 +128,10 @@ function NhanVien() {
               // !perm.find(i => i.tenHanhDong === 'Them' && i.tenChucNang === 'QuanLyNhanVien') && 'pe-none opacity-50',
               "_border-green-focus"
             ].join(' ')}
-            color={colors.green} icon={faCirclePlus} title="Thêm" onClick={openModal.bind({}, "add")}/>
+            color={colors.green} icon={faCirclePlus} title="Thêm" onClick={e => {
+            setFormData({...defaultNhanVien})
+            openModal("add")
+          }}/>
 
           {/*Sua btn*/}
           <ToolBtn
